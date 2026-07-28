@@ -267,10 +267,11 @@
     <div class="navgroup">
       <h4>Masters</h4>
       <button class="navitem" data-tab="brands">1. Brand Master</button>
-      <button class="navitem" data-tab="partnerModels">2. Partner-Model Master</button>
-      <button class="navitem" data-tab="brandPartnerMapping">3. Brand → Partner Mapping</button>
-      <button class="navitem" data-tab="expenseLineItems">4. Expense Line Item Master</button>
-      <button class="navitem" data-tab="codbDeductionMapping">5. CODB Deduction Mapping</button>
+      <button class="navitem" data-tab="partnerGroups">2. Partner Group Master</button>
+      <button class="navitem" data-tab="partnerModels">3. Partner-Model Master</button>
+      <button class="navitem" data-tab="brandPartnerMapping">4. Brand → Partner Mapping</button>
+      <button class="navitem" data-tab="expenseLineItems">5. Expense Line Item Master</button>
+      <button class="navitem" data-tab="codbDeductionMapping">6. CODB Deduction Mapping</button>
       <button class="navitem" data-tab="skuMaster">SKU Master</button>
     </div>
 
@@ -318,13 +319,14 @@ let DATA = null;
 const MONTHS = ["Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec","Jan","Feb","Mar"];
 const BRAND_GROUP_OPTIONS = ["Focus","Rainbow"];
 const MODEL_OPTIONS = ["B2C","B2B"];
-const PARTNER_GROUP_OPTIONS = ["Website","FAM","MAN","Stores","Other MP","Other Offline","QCK"];
+const DEFAULT_PARTNER_GROUPS = ["Website","FAM","MAN","Stores","Other MP","Other Offline","QCK"];
 const GMV_GROUPING_OPTIONS = ["GMV","Pry"];
 
 const SEED = {
   meta:{fyLabel:"FY 2026-27", months:MONTHS, savedAt:null},
   channels:[{id:"CH1",name:"General Trade"},{id:"CH2",name:"Modern Trade"},{id:"CH3",name:"E-commerce"}],
   brands:[{id:"BR1",name:"Brand A",brandGroup:"Focus"}],
+  partnerGroups: DEFAULT_PARTNER_GROUPS.map(n=>({id:n, name:n, description:""})),
   partnerModels:[{id:"PM1",partner:"Website",model:"B2C",partnerGroup:"Website"}],
   brandPartnerMapping:[{id:"BPM1",brandId:"BR1",partner:"Website",model:"B2C",creditDays:30,gmvGrouping:"Pry"}],
   expenseLineItems:[
@@ -371,6 +373,12 @@ async function loadData(){
   // Migration: backfill any fields/arrays introduced after this data.json was last saved,
   // so older saved files keep working without losing existing rows.
   ['codbRateCard','cidbRateCard','cashFlowItems','codbLineItems','marketplaceDeductionMapping'].forEach(k=>{ if(!DATA[k]) DATA[k]=[]; });
+  if(!DATA.partnerGroups) DATA.partnerGroups = DEFAULT_PARTNER_GROUPS.map(n=>({id:n, name:n, description:""}));
+  (DATA.partnerModels||[]).forEach(p=>{
+    if(p.partnerGroup && !DATA.partnerGroups.some(g=>g.id===p.partnerGroup)){
+      DATA.partnerGroups.push({id:p.partnerGroup, name:p.partnerGroup, description:""});
+    }
+  });
   (DATA.brands||[]).forEach(b=>{
     if(b.brandGroup===undefined) b.brandGroup = '';
   });
@@ -651,10 +659,11 @@ const optList = (arr, labelFn)=> arr.map(x=>({id:x.id, label:labelFn(x)}));
 
 const MASTER_TABS = [
   {key:'brands', num:1, label:'Brand master'},
-  {key:'partnerModels', num:2, label:'Partner-Model master'},
-  {key:'brandPartnerMapping', num:3, label:'Brand → Partner mapping'},
-  {key:'expenseLineItems', num:4, label:'Expense line item master'},
-  {key:'codbDeductionMapping', num:5, label:'CODB deduction mapping'}
+  {key:'partnerGroups', num:2, label:'Partner Group master'},
+  {key:'partnerModels', num:3, label:'Partner-Model master'},
+  {key:'brandPartnerMapping', num:4, label:'Brand → Partner mapping'},
+  {key:'expenseLineItems', num:5, label:'Expense line item master'},
+  {key:'codbDeductionMapping', num:6, label:'CODB deduction mapping'}
 ];
 
 function renderMasterTabBar(activeKey){
@@ -777,12 +786,19 @@ const TABS = {
     ], {prefix:'BR', addLabel:'Add brand'})
   },
   partnerModels:{
-    title:'Partner-Model Master', desc:'Partner is the channel (e.g. Myntra). Model is the commercial arrangement (e.g. B2C/B2B). Partner Group is for roll-up reporting.',
+    title:'Partner-Model Master', desc:'Partner is the channel (e.g. Myntra). Model is the commercial arrangement (e.g. B2C/B2B). Partner Group comes from the Partner Group Master.',
     render:(el)=> renderMasterTable(el, DATA.partnerModels, [
       {key:'partner', label:'Partner', width:260},
       {key:'model', label:'Model', type:'select', options:()=>MODEL_OPTIONS.map(v=>({id:v,label:v})), width:120},
-      {key:'partnerGroup', label:'Partner group', type:'select', options:()=>PARTNER_GROUP_OPTIONS.map(v=>({id:v,label:v})), width:160}
+      {key:'partnerGroup', label:'Partner group', type:'select', options:()=>optList(DATA.partnerGroups, g=>g.name), width:160}
     ], {prefix:'PM', addLabel:'Add'})
+  },
+  partnerGroups:{
+    title:'Partner Group Master', desc:'Partner Group is free-text; Description is optional context for what the group covers.',
+    render:(el)=> renderMasterTable(el, DATA.partnerGroups, [
+      {key:'name', label:'Partner Group', width:220},
+      {key:'description', label:'Description', width:340}
+    ], {prefix:'PG', addLabel:'Add'})
   },
   brandPartnerMapping:{
     title:'Brand → Partner-Model Mapping', desc:'Brand and Partner-Model are selected from their masters above. Credit period is in days. GMV grouping is either GMV or Pry.',
