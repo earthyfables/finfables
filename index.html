@@ -1130,10 +1130,28 @@ document.querySelectorAll('.navitem').forEach(btn=>{
   btn.addEventListener('click', ()=>{ setActiveTab(btn.dataset.tab); });
 });
 
-document.getElementById('sidebarSaveBtn').addEventListener('click', ()=>{
-  doAutosave();
+document.getElementById('sidebarSaveBtn').addEventListener('click', async ()=>{
+  doAutosave(); // fast local safety-net in case the network call below fails
   const el = document.getElementById('sidebarSaveStatus');
-  if(el) el.textContent = 'Saved ' + new Date().toLocaleTimeString();
+  const btn = document.getElementById('sidebarSaveBtn');
+  if(el) el.textContent = 'Saving to GitHub…';
+  if(btn) btn.disabled = true;
+  try{
+    DATA.meta = DATA.meta || {};
+    DATA.meta.savedAt = new Date().toISOString();
+    const resp = await fetch('/api/save', {
+      method: 'POST',
+      headers: {'Content-Type': 'application/json'},
+      body: JSON.stringify(DATA)
+    });
+    const result = await resp.json();
+    if(!resp.ok) throw new Error(result.error || 'Save failed');
+    if(el) el.textContent = 'Saved to GitHub ' + new Date().toLocaleTimeString();
+  }catch(e){
+    if(el) el.textContent = 'Could not save to GitHub (' + e.message + ') — kept in this browser only';
+  }finally{
+    if(btn) btn.disabled = false;
+  }
 });
 
 loadData();
