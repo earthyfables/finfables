@@ -74,6 +74,9 @@
   .navitem:hover{background:rgba(255,255,255,0.05); color:#fff;}
   .navitem.active{background:linear-gradient(90deg, rgba(43,68,148,0.35), rgba(43,68,148,0.05)); border-left-color:#6C8CE0; color:#fff; font-weight:700;}
 
+  .sidebarsave{margin-top:auto; padding:18px 22px 4px 22px; border-top:1px solid rgba(255,255,255,0.1);}
+  .sidebarsave-status{font-size:10.5px; color:#8590B3; margin-top:8px; text-align:center; font-style:italic; line-height:1.4;}
+
   /* Main */
   .main{flex:1; min-width:0; padding:30px 38px 60px 38px;}
   .topbar{
@@ -257,6 +260,11 @@
       <button class="navitem" data-tab="outputPL">Profit &amp; Loss</button>
       <button class="navitem" data-tab="outputCF">Cash Flow</button>
     </div>
+
+    <div class="sidebarsave">
+      <button class="btn primary" id="sidebarSaveBtn" style="width:100%;">💾 Save</button>
+      <div class="sidebarsave-status" id="sidebarSaveStatus">Everything you enter auto-saves in this browser</div>
+    </div>
   </nav>
 
   <main class="main">
@@ -307,13 +315,31 @@ const SEED = {
 
 function uid(prefix){ return prefix + "_" + Math.random().toString(36).slice(2,8); }
 
+const LOCAL_STORAGE_KEY = 'finfables_data_v1';
+
 async function loadData(){
+  let fromFile = null;
   try{
     const res = await fetch('data.json', {cache:'no-store'});
-    if(!res.ok) throw new Error('no file');
-    DATA = await res.json();
-  }catch(e){
-    DATA = JSON.parse(JSON.stringify(SEED));
+    if(res.ok) fromFile = await res.json();
+  }catch(e){ /* ignore — file may not be reachable (e.g. file:// or first deploy) */ }
+
+  let fromLocal = null;
+  try{
+    const raw = localStorage.getItem(LOCAL_STORAGE_KEY);
+    if(raw) fromLocal = JSON.parse(raw);
+  }catch(e){ /* ignore corrupt localStorage */ }
+
+  // Prefer whichever copy was saved more recently. Auto-save writes to
+  // localStorage on every change, so it is usually the freshest source —
+  // but if this browser has never auto-saved, fall back to the committed
+  // data.json, and finally to the built-in seed.
+  if(fromLocal && fromFile){
+    const localTime = fromLocal.meta?.savedAt ? new Date(fromLocal.meta.savedAt).getTime() : 0;
+    const fileTime = fromFile.meta?.savedAt ? new Date(fromFile.meta.savedAt).getTime() : 0;
+    DATA = localTime >= fileTime ? fromLocal : fromFile;
+  } else {
+    DATA = fromLocal || fromFile || JSON.parse(JSON.stringify(SEED));
   }
   // Migration: backfill any fields/arrays introduced after this data.json was last saved,
   // so older saved files keep working without losing existing rows.
@@ -406,7 +432,22 @@ function renderEditableTable(container, arr, cols, opts){
   });
 }
 
+let autosaveTimer = null;
 function markDirty(){
+  if(autosaveTimer) clearTimeout(autosaveTimer);
+  autosaveTimer = setTimeout(doAutosave, 400);
+}
+function doAutosave(){
+  try{
+    DATA.meta = DATA.meta || {};
+    DATA.meta.savedAt = new Date().toISOString();
+    localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(DATA));
+    const el = document.getElementById('sidebarSaveStatus');
+    if(el) el.textContent = 'Autosaved ' + new Date().toLocaleTimeString();
+  }catch(e){
+    const el = document.getElementById('sidebarSaveStatus');
+    if(el) el.textContent = 'Autosave failed — storage may be full or blocked';
+  }
 }
 
 /* ---------------------------------------------------------------
@@ -994,6 +1035,18 @@ function render(){
 
 document.querySelectorAll('.navitem').forEach(btn=>{
   btn.addEventListener('click', ()=>{ activeTab = btn.dataset.tab; render(); });
+});
+
+document.getElementById('sidebarSaveBtn').addEventListener('click', ()=>{
+  doAutosave();
+  const blob = new Blob([JSON.stringify(DATA, null, 2)], {type:'application/json'});
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url; a.download = 'data.json';
+  document.body.appendChild(a); a.click(); document.body.removeChild(a);
+  URL.revokeObjectURL(url);
+  const el = document.getElementById('sidebarSaveStatus');
+  if(el) el.textContent = 'Saved in this browser + downloaded data.json (' + new Date().toLocaleTimeString() + ') — send it over to commit permanently';
 });
 
 loadData();
