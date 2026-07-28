@@ -320,7 +320,6 @@ const MONTHS = ["Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec","Jan","Feb
 const BRAND_GROUP_OPTIONS = ["Focus","Rainbow"];
 const MODEL_OPTIONS = ["B2C","B2B"];
 const DEFAULT_PARTNER_GROUPS = ["Website","FAM","MAN","Stores","Other MP","Other Offline","QCK"];
-const GMV_GROUPING_OPTIONS = ["GMV","Pry"];
 
 const SEED = {
   meta:{fyLabel:"FY 2026-27", months:MONTHS, savedAt:null},
@@ -328,7 +327,7 @@ const SEED = {
   brands:[{id:"BR1",name:"Brand A",brandGroup:"Focus"}],
   partnerGroups: DEFAULT_PARTNER_GROUPS.map(n=>({id:n, name:n, description:""})),
   partnerModels:[{id:"PM1",partner:"Website",model:"B2C",partnerGroup:"Website"}],
-  brandPartnerMapping:[{id:"BPM1",brandId:"BR1",partner:"Website",model:"B2C",creditDays:30,gmvGrouping:"Pry"}],
+  brandPartnerMapping:[{id:"BPM1",brandId:"BR1",partner:"Website",model:"B2C",creditDays:30}],
   expenseLineItems:[
     {id:"EL1",name:"Trade Scheme",category:"Other Expenses",gstRate:18,creditorDays:30,type:"CODB"},
     {id:"EL2",name:"Logistics / Freight",category:"Other Expenses",gstRate:18,creditorDays:30,type:"CODB"},
@@ -391,7 +390,6 @@ async function loadData(){
     if(m.partner===undefined) m.partner = '';
     if(m.model===undefined) m.model = '';
     if(m.creditDays===undefined) m.creditDays = '';
-    if(m.gmvGrouping===undefined) m.gmvGrouping = '';
   });
   (DATA.expenseLineItems||[]).forEach(x=>{
     if(x.category===undefined) x.category = 'Other Expenses';
@@ -801,13 +799,19 @@ const TABS = {
     ], {prefix:'PG', addLabel:'Add'})
   },
   brandPartnerMapping:{
-    title:'Brand → Partner-Model Mapping', desc:'Brand and Partner-Model are selected from their masters above. Credit period is in days. GMV grouping is either GMV or Pry.',
+    title:'Brand → Partner-Model Mapping', desc:'Brand and Partner-Model are selected from their masters above. Credit period is in days.',
     render:(el)=> renderMasterTable(el, DATA.brandPartnerMapping, [
       {key:'brandId', label:'Brand', type:'select', options:()=>optList(DATA.brands,b=>b.name), width:170},
-      {key:'partner', label:'Partner', width:170},
+      {key:'partner', label:'Partner', type:'select', options:()=>{
+        const seen = new Set();
+        return DATA.partnerModels.filter(p=>{
+          if(!p.partner || seen.has(p.partner)) return false;
+          seen.add(p.partner);
+          return true;
+        }).map(p=>({id:p.partner, label:p.partner}));
+      }, width:170},
       {key:'model', label:'Model', type:'select', options:()=>MODEL_OPTIONS.map(v=>({id:v,label:v})), width:110},
-      {key:'creditDays', label:'Credit period (days)', type:'number', width:150},
-      {key:'gmvGrouping', label:'GMV grouping', type:'select', options:()=>GMV_GROUPING_OPTIONS.map(v=>({id:v,label:v})), width:130}
+      {key:'creditDays', label:'Credit period (days)', type:'number', width:150}
     ], {prefix:'BPM', addLabel:'Add mapping'})
   },
   expenseLineItems:{
