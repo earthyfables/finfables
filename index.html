@@ -815,14 +815,13 @@ const TABS = {
     ], {prefix:'BPM', addLabel:'Add mapping'})
   },
   expenseLineItems:{
-    title:'Expense Line Item Master', desc:'Expense name and category are free-text. GST rate is a number. Type controls where the line item shows up in CODB/CIDB/Misc. inputs downstream.',
+    title:'Expense Line Item Master', desc:'Expense name and category are free-text. GST rate is a number.',
     render:(el)=> renderMasterTable(el, DATA.expenseLineItems, [
       {key:'name', label:'Expense line item', width:220},
       {key:'category', label:'Category', width:160},
       {key:'gstRate', label:'GST rate %', type:'number', width:110},
-      {key:'creditorDays', label:'Creditor Days', type:'number', width:120},
-      {key:'type', label:'Type', type:'select', options:()=>[{id:'CODB',label:'CODB'},{id:'CIDB',label:'CIDB'},{id:'MISC',label:'Misc. opex'}], width:110}
-    ], {prefix:'EL', addLabel:'Add'})
+      {key:'creditorDays', label:'Creditor Days', type:'number', width:120}
+    ], {prefix:'EL', addLabel:'Add', buildRow:(row)=>({type: row.type || 'MISC'})})
   },
   codbDeductionMapping:{
     title:'CODB Deduction Mapping', desc:'Define CODB line items, then map which Brand → Partner-Models deduct each one directly at the marketplace.',
