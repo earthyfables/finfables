@@ -683,7 +683,10 @@ function renderMarketplaceDeductionMapping(container){
   const filterBrandId = container.dataset.filterBrand || '';
   const filterItemId = container.dataset.filterItem || '';
 
-  const brandOptions = DATA.brands;
+  // Only brands with at least one Brand -> Partner-Model mapping are eligible here —
+  // a brand with no mapping has nothing to deduct against, so it's excluded entirely.
+  const mappedBrandIds = new Set(DATA.brandPartnerMapping.map(m=>m.brandId));
+  const brandOptions = DATA.brands.filter(b=> mappedBrandIds.has(b.id));
   const itemOptions = DATA.codbLineItems;
   const cols = DATA.partnerModels; // global list of partner+model combos, used as matrix columns
 
@@ -693,7 +696,7 @@ function renderMarketplaceDeductionMapping(container){
   const isChecked = (brandId, pmId, itemId)=> DATA.marketplaceDeductionMapping.some(m=> m.brandId===brandId && m.partnerModelId===pmId && m.codbLineItemId===itemId);
 
   let html = `<h2 style="margin-top:0;">Marketplace Deduction Mapping</h2>
-  <div class="desc">For each Brand → Partner-Model, tick which CODB line items are <strong>deducted by the marketplace</strong> (reduces Collectable — not a separate cash payment).</div>
+  <div class="desc">For each Brand → Partner-Model, tick which CODB line items are <strong>deducted by the marketplace</strong> (reduces Collectable — not a separate cash payment). Only brands with a Brand → Partner-Model mapping (tab 4) appear here.</div>
   <div class="addform" style="margin-bottom:14px;">
     <div class="addfield"><label>Brand</label>
       <select id="mdmBrandFilter"><option value="">All Brands</option>${brandOptions.map(b=>`<option value="${b.id}" ${b.id===filterBrandId?'selected':''}>${b.name}</option>`).join('')}</select>
@@ -705,9 +708,9 @@ function renderMarketplaceDeductionMapping(container){
   </div>`;
 
   if(!cols.length){
-    html += `<div class="footnote">No Partner-Model combos yet — add some in "2. Partner-Model master" first.</div>`;
+    html += `<div class="footnote">No Partner-Model combos yet — add some in "3. Partner-Model master" first.</div>`;
   } else if(!rowBrands.length || !rowItems.length){
-    html += `<div class="footnote">No Brands or CODB Line Items to show yet.</div>`;
+    html += `<div class="footnote">No Brands (with a Brand → Partner-Model mapping) or CODB Line Items to show yet.</div>`;
   } else {
     html += `<div style="overflow-x:auto;"><table><thead><tr><th>Brand</th><th>CODB / Expense Item</th><th style="text-align:center;">Sel All</th>`;
     cols.forEach(c=> html += `<th style="text-align:center;">${c.partner}<br><span style="font-weight:400;">${c.model}</span></th>`);
