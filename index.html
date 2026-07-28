@@ -668,7 +668,7 @@ function renderMasterTabBar(activeKey){
 
 function wireMasterTabBar(container){
   container.querySelectorAll('[data-mastertab]').forEach(btn=>{
-    btn.addEventListener('click', ()=>{ activeTab = btn.dataset.mastertab; render(); });
+    btn.addEventListener('click', ()=>{ setActiveTab(btn.dataset.mastertab); });
   });
 }
 
@@ -1074,7 +1074,19 @@ function renderCF(container){
 /* ---------------------------------------------------------------
    NAV / RENDER
    ----------------------------------------------------------------*/
+const ACTIVE_TAB_KEY = 'finfables_activetab_v1';
 let activeTab = 'brands';
+try{
+  const storedTab = localStorage.getItem(ACTIVE_TAB_KEY);
+  if(storedTab && TABS[storedTab]) activeTab = storedTab;
+}catch(e){ /* ignore — localStorage may be unavailable */ }
+
+function setActiveTab(key){
+  activeTab = key;
+  try{ localStorage.setItem(ACTIVE_TAB_KEY, key); }catch(e){ /* ignore */ }
+  render();
+}
+
 const MASTER_TAB_KEYS = MASTER_TABS.map(t=>t.key);
 function render(){
   document.querySelectorAll('.navitem').forEach(b=> b.classList.toggle('active', b.dataset.tab===activeTab));
@@ -1095,7 +1107,7 @@ function render(){
 }
 
 document.querySelectorAll('.navitem').forEach(btn=>{
-  btn.addEventListener('click', ()=>{ activeTab = btn.dataset.tab; render(); });
+  btn.addEventListener('click', ()=>{ setActiveTab(btn.dataset.tab); });
 });
 
 document.getElementById('sidebarSaveBtn').addEventListener('click', ()=>{
