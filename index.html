@@ -515,7 +515,8 @@ function renderMasterTable(container, arr, cols, opts){
 
   html += `<div class="addform">`;
   cols.forEach(c=>{
-    html += `<div class="addfield"><label>${c.label}</label>${fieldInput({}, c).replace('data-key','data-addkey')}</div>`;
+    const w = c.width || 130;
+    html += `<div class="addfield" style="width:${w}px;"><label>${c.label}</label>${fieldInput({}, c).replace('data-key','data-addkey')}</div>`;
   });
   html += `<button class="btn primary addbtn" id="addRowBtn2">${opts.addLabel || 'Add'}</button>`;
   html += `</div>`;
