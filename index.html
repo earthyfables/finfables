@@ -402,10 +402,17 @@ function fieldInput(row, col){
   const val = row[col.key] ?? '';
   if(col.type === 'select'){
     const opts = col.options();
+    if(opts.length && !opts.some(o=>o.id===val)){
+      // No blank placeholder — a select always shows a real option. If the
+      // stored value doesn't match one (unset, or an old/removed value),
+      // default to the first option and keep the row's data in sync with
+      // what's actually displayed.
+      row[col.key] = opts[0].id;
+    }
+    const effectiveVal = row[col.key] ?? val;
     let html = `<select data-key="${col.key}">`;
-    html += `<option value="">—</option>`;
     opts.forEach(o=>{
-      html += `<option value="${o.id}" ${o.id===val?'selected':''}>${o.label}</option>`;
+      html += `<option value="${o.id}" ${o.id===effectiveVal?'selected':''}>${o.label}</option>`;
     });
     html += `</select>`;
     return html;
@@ -493,6 +500,19 @@ function resolveValueForCol(col, text){
     return isNaN(n) ? '' : n;
   }
   return text;
+}
+
+function rowMatches(a, b, cols){
+  return cols.every(c=>{
+    const av = a[c.key], bv = b[c.key];
+    if(typeof av === 'number' || typeof bv === 'number'){
+      return (parseFloat(av)||0) === (parseFloat(bv)||0);
+    }
+    return String(av ?? '').trim().toLowerCase() === String(bv ?? '').trim().toLowerCase();
+  });
+}
+function isDuplicateRow(candidate, arr, cols){
+  return arr.some(r=> rowMatches(r, candidate, cols));
 }
 
 function renderMasterTable(container, arr, cols, opts){
@@ -587,6 +607,10 @@ function renderMasterTable(container, arr, cols, opts){
       row[el.dataset.addkey] = v;
     });
     if(opts.buildRow) Object.assign(row, opts.buildRow(row) || {});
+    if(isDuplicateRow(row, arr, cols)){
+      alert('That row already exists — not adding a duplicate.');
+      return;
+    }
     arr.push(row);
     rerender();
   });
@@ -595,14 +619,23 @@ function renderMasterTable(container, arr, cols, opts){
   if(importBtn) importBtn.addEventListener('click', ()=>{
     const text = container.querySelector('#pasteArea').value;
     const lines = text.split(/\r?\n/).map(l=>l.trim()).filter(Boolean);
+    let added = 0, skipped = 0;
     lines.forEach(line=>{
       const parts = line.split('\t');
       const row = {id: uid(opts.prefix||'ROW')};
       cols.forEach((c,i)=>{ row[c.key] = resolveValueForCol(c, parts[i]); });
       if(opts.buildRow) Object.assign(row, opts.buildRow(row) || {});
+      if(isDuplicateRow(row, arr, cols)){
+        skipped++;
+        return;
+      }
       arr.push(row);
+      added++;
     });
     rerender();
+    if(skipped > 0){
+      alert(`Imported ${added} row(s). Skipped ${skipped} duplicate row(s) already in the table.`);
+    }
   });
 
   const clearBtn = container.querySelector('#clearPasteBtn');
