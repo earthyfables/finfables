@@ -1132,14 +1132,8 @@ document.querySelectorAll('.navitem').forEach(btn=>{
 
 document.getElementById('sidebarSaveBtn').addEventListener('click', ()=>{
   doAutosave();
-  const blob = new Blob([JSON.stringify(DATA, null, 2)], {type:'application/json'});
-  const url = URL.createObjectURL(blob);
-  const a = document.createElement('a');
-  a.href = url; a.download = 'data.json';
-  document.body.appendChild(a); a.click(); document.body.removeChild(a);
-  URL.revokeObjectURL(url);
   const el = document.getElementById('sidebarSaveStatus');
-  if(el) el.textContent = 'Saved in this browser + downloaded data.json (' + new Date().toLocaleTimeString() + ') — send it over to commit permanently';
+  if(el) el.textContent = 'Saved ' + new Date().toLocaleTimeString();
 });
 
 loadData();
