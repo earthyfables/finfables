@@ -1,0 +1,77 @@
+{
+  "meta": {
+    "fyLabel": "FY 2026-27",
+    "months": ["Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec", "Jan", "Feb", "Mar"],
+    "savedAt": null
+  },
+  "channels": [
+    { "id": "CH1", "name": "General Trade" },
+    { "id": "CH2", "name": "Modern Trade" },
+    { "id": "CH3", "name": "E-commerce" }
+  ],
+  "brands": [
+    { "id": "BR1", "name": "Brand A" }
+  ],
+  "partnerModels": [
+    { "id": "PM1", "name": "Super Stockist", "model": "Distributor" },
+    { "id": "PM2", "name": "Retail Chain Co", "model": "Modern Trade" },
+    { "id": "PM3", "name": "Marketplace Co", "model": "E-commerce" }
+  ],
+  "brandPartnerMapping": [
+    { "id": "BPM1", "brandId": "BR1", "partnerId": "PM1" },
+    { "id": "BPM2", "brandId": "BR1", "partnerId": "PM2" },
+    { "id": "BPM3", "brandId": "BR1", "partnerId": "PM3" }
+  ],
+  "expenseLineItems": [
+    { "id": "EL1", "name": "Trade Scheme", "type": "CODB" },
+    { "id": "EL2", "name": "Logistics / Freight", "type": "CODB" },
+    { "id": "EL3", "name": "Marketplace Commission", "type": "CODB" },
+    { "id": "EL4", "name": "Cash Discount", "type": "CIDB" },
+    { "id": "EL5", "name": "Sales Return / Shortage", "type": "CIDB" },
+    { "id": "EL6", "name": "Brand Marketing", "type": "MISC" },
+    { "id": "EL7", "name": "Salaries", "type": "MISC" },
+    { "id": "EL8", "name": "Overheads", "type": "MISC" },
+    { "id": "EL9", "name": "Rent", "type": "MISC" }
+  ],
+  "codbMaster": [
+    { "id": "CM1", "lineItemId": "EL1", "description": "Scheme support given to trade partners" },
+    { "id": "CM2", "lineItemId": "EL2", "description": "Freight and secondary logistics cost" },
+    { "id": "CM3", "lineItemId": "EL3", "description": "Commission charged by marketplace" }
+  ],
+  "cidbDeductionMapping": [
+    { "id": "CD1", "lineItemId": "EL4", "description": "Cash discount deducted by partner on payment" },
+    { "id": "CD2", "lineItemId": "EL5", "description": "Deduction for returns / transit shortage" }
+  ],
+  "skuMaster": [
+    { "id": "SKU1", "name": "SKU 500ml", "brandId": "BR1", "amrp": 100, "acogs": 40, "gstPct": 18 },
+    { "id": "SKU2", "name": "SKU 1L", "brandId": "BR1", "amrp": 180, "acogs": 70, "gstPct": 18 }
+  ],
+  "salesInput": [
+    { "id": "SI1", "skuId": "SKU1", "channelId": "CH1", "month": "Apr", "qty": 10000, "discountPct": 5, "amrp": 100, "acogs": 40, "gstPct": 18 },
+    { "id": "SI2", "skuId": "SKU1", "channelId": "CH2", "month": "Apr", "qty": 6000, "discountPct": 8, "amrp": 100, "acogs": 40, "gstPct": 18 },
+    { "id": "SI3", "skuId": "SKU2", "channelId": "CH3", "month": "Apr", "qty": 3000, "discountPct": 12, "amrp": 180, "acogs": 70, "gstPct": 18 }
+  ],
+  "codbRateCard": [
+    { "id": "RC1", "channelId": "CH1", "lineItemId": "EL1", "rateType": "%", "rateValue": 3, "appliedOn": "Net Sales" },
+    { "id": "RC2", "channelId": "CH2", "lineItemId": "EL1", "rateType": "%", "rateValue": 5, "appliedOn": "Net Sales" },
+    { "id": "RC3", "channelId": "CH3", "lineItemId": "EL3", "rateType": "%", "rateValue": 15, "appliedOn": "Gross Sales" },
+    { "id": "RC4", "channelId": "CH1", "lineItemId": "EL2", "rateType": "Value/Unit", "rateValue": 2, "appliedOn": "Qty" },
+    { "id": "RC5", "channelId": "CH2", "lineItemId": "EL2", "rateType": "Value/Unit", "rateValue": 3, "appliedOn": "Qty" },
+    { "id": "RC6", "channelId": "CH3", "lineItemId": "EL2", "rateType": "Value/Unit", "rateValue": 5, "appliedOn": "Qty" }
+  ],
+  "cidbRateCard": [
+    { "id": "CR1", "channelId": "CH1", "lineItemId": "EL4", "rateType": "%", "rateValue": 1, "appliedOn": "Net Sales" },
+    { "id": "CR2", "channelId": "CH2", "lineItemId": "EL5", "rateType": "%", "rateValue": 1.5, "appliedOn": "Net Sales" }
+  ],
+  "miscInputs": [
+    { "id": "MI1", "lineItemId": "EL6", "month": "Apr", "amount": 200000 },
+    { "id": "MI2", "lineItemId": "EL7", "month": "Apr", "amount": 350000 },
+    { "id": "MI3", "lineItemId": "EL8", "month": "Apr", "amount": 100000 },
+    { "id": "MI4", "lineItemId": "EL9", "month": "Apr", "amount": 80000 }
+  ],
+  "cashFlowItems": [
+    { "id": "CF1", "category": "Capex", "month": "Apr", "amount": 0 },
+    { "id": "CF2", "category": "Change in Working Capital", "month": "Apr", "amount": 0 },
+    { "id": "CF3", "category": "Financing Inflow / Outflow", "month": "Apr", "amount": 0 }
+  ]
+}

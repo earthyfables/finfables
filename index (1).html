@@ -1,0 +1,647 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Annual Budget Ledger</title>
+<style>
+  :root{
+    --bg:#F4F5F3;
+    --surface:#FFFFFF;
+    --ink:#1B2521;
+    --ink-soft:#5B6B63;
+    --line:#DDE3DE;
+    --accent:#0F6B5C;
+    --accent-soft:#E4F0EC;
+    --neg:#B4472A;
+    --neg-soft:#FBEAE4;
+    --amber:#B9832E;
+  }
+  *{box-sizing:border-box;}
+  html,body{margin:0;padding:0;}
+  body{
+    background:var(--bg);
+    color:var(--ink);
+    font-family:'Segoe UI', ui-sans-serif, system-ui, -apple-system, sans-serif;
+    font-size:14px;
+    min-height:100vh;
+  }
+  .app{display:flex; min-height:100vh;}
+
+  /* Sidebar */
+  .sidebar{
+    width:250px; flex:none;
+    background:#12201B;
+    color:#DDE7E2;
+    padding:22px 0 22px 0;
+    display:flex; flex-direction:column;
+  }
+  .brandmark{
+    font-family:'Iowan Old Style','Palatino Linotype',Georgia,serif;
+    font-size:20px; letter-spacing:0.02em;
+    padding:0 20px 4px 20px;
+    color:#F4F1E8;
+  }
+  .brandmark small{display:block; font-size:11px; color:#8FA79C; font-weight:400; margin-top:2px; letter-spacing:0.06em; text-transform:uppercase;}
+  .navgroup{margin-top:22px;}
+  .navgroup h4{
+    font-size:10.5px; text-transform:uppercase; letter-spacing:0.09em;
+    color:#7C9389; margin:0; padding:6px 20px; font-weight:600;
+  }
+  .navitem{
+    display:block; width:100%; text-align:left; background:none; border:none;
+    color:#C9D8D1; padding:8px 20px; font-size:13.5px; cursor:pointer;
+    border-left:3px solid transparent; font-family:inherit;
+  }
+  .navitem:hover{background:rgba(255,255,255,0.05); color:#fff;}
+  .navitem.active{background:rgba(255,255,255,0.08); border-left-color:#5FAE99; color:#fff; font-weight:600;}
+
+  /* Main */
+  .main{flex:1; min-width:0; padding:26px 34px 60px 34px;}
+  .topbar{
+    display:flex; align-items:baseline; justify-content:space-between;
+    margin-bottom:22px; flex-wrap:wrap; gap:12px;
+  }
+  .titleblock h1{
+    font-family:'Iowan Old Style','Palatino Linotype',Georgia,serif;
+    font-size:24px; margin:0 0 2px 0; font-weight:600;
+  }
+  .titleblock .sub{color:var(--ink-soft); font-size:12.5px;}
+  .toolbar{display:flex; gap:8px; align-items:center;}
+  .btn{
+    font-family:inherit; font-size:12.5px; padding:8px 14px; border-radius:5px;
+    border:1px solid var(--line); background:var(--surface); color:var(--ink);
+    cursor:pointer; font-weight:600;
+  }
+  .btn:hover{border-color:var(--accent); color:var(--accent);}
+  .btn.primary{background:var(--accent); color:#fff; border-color:var(--accent);}
+  .btn.primary:hover{background:#0C5647;}
+  #fileInput{display:none;}
+  .savenote{font-size:11.5px; color:var(--ink-soft);}
+
+  .panel{
+    background:var(--surface); border:1px solid var(--line); border-radius:8px;
+    padding:20px 22px; margin-bottom:20px;
+  }
+  .panel h2{
+    font-family:'Iowan Old Style','Palatino Linotype',Georgia,serif;
+    font-size:17px; margin:0 0 4px 0; font-weight:600;
+  }
+  .panel .desc{color:var(--ink-soft); font-size:12.5px; margin-bottom:14px;}
+
+  table{width:100%; border-collapse:collapse; font-size:12.8px;}
+  thead th{
+    text-align:left; font-size:10.5px; text-transform:uppercase; letter-spacing:0.05em;
+    color:var(--ink-soft); border-bottom:1px solid var(--line); padding:7px 8px; font-weight:700;
+    white-space:nowrap;
+  }
+  tbody td{padding:4px 8px; border-bottom:1px solid #EEF1EE; vertical-align:middle;}
+  tbody tr:hover{background:#FAFBFA;}
+  input[type=text],input[type=number],select{
+    width:100%; border:1px solid transparent; background:transparent;
+    font-family:inherit; font-size:12.8px; padding:5px 6px; border-radius:4px; color:var(--ink);
+  }
+  input[type=text]:hover,input[type=number]:hover,select:hover{border-color:var(--line);}
+  input[type=text]:focus,input[type=number]:focus,select:focus{
+    outline:none; border-color:var(--accent); background:#fff; box-shadow:0 0 0 2px var(--accent-soft);
+  }
+  input[type=number]{font-variant-numeric:tabular-nums; text-align:right;}
+  .num{font-variant-numeric:tabular-nums; text-align:right; font-family:ui-monospace,'SFMono-Regular',Consolas,monospace;}
+  .rowdel{
+    border:none; background:none; color:#B7C1BB; cursor:pointer; font-size:15px; line-height:1;
+    padding:2px 6px; border-radius:4px;
+  }
+  .rowdel:hover{color:var(--neg); background:var(--neg-soft);}
+  .addrow{
+    margin-top:10px; font-size:12.5px; font-weight:600; color:var(--accent);
+    background:var(--accent-soft); border:1px dashed #B9D6CB; border-radius:5px;
+    padding:7px 12px; cursor:pointer;
+  }
+  .addrow:hover{background:#D8ECE4;}
+
+  /* Output ledger tables */
+  .ledger{width:100%; border-collapse:collapse; font-family:ui-monospace,'SFMono-Regular',Consolas,monospace; font-size:12.3px;}
+  .ledger th{
+    text-align:right; padding:6px 9px; border-bottom:2px solid var(--ink);
+    font-family:inherit; font-weight:600; white-space:nowrap;
+  }
+  .ledger th:first-child{text-align:left; font-family:'Segoe UI',sans-serif;}
+  .ledger td{padding:5px 9px; text-align:right; border-bottom:1px solid #EEF1EE; white-space:nowrap;}
+  .ledger td:first-child{text-align:left; font-family:'Segoe UI',sans-serif; white-space:normal;}
+  .ledger tr.section td:first-child{font-weight:700; color:var(--ink); padding-top:14px;}
+  .ledger tr.subtotal td{font-weight:700; border-top:1px solid var(--ink); border-bottom:1px double var(--ink);}
+  .ledger tr.grand td{font-weight:700; border-top:2px solid var(--accent); color:var(--accent); font-size:13px;}
+  .ledger tr.lineitem td:first-child{color:var(--ink-soft); padding-left:18px;}
+  .ledger tr.neg td{color:var(--neg);}
+  .ledger td.total-col{border-left:2px solid var(--line); font-weight:700;}
+  .pct{color:var(--ink-soft); font-size:11px;}
+
+  .tag{font-size:10px; padding:2px 7px; border-radius:99px; font-weight:700; letter-spacing:0.03em;}
+  .tag.CODB{background:#E4F0EC; color:var(--accent);}
+  .tag.CIDB{background:#FBEAE4; color:var(--neg);}
+  .tag.MISC{background:#F1EAD9; color:var(--amber);}
+
+  .footnote{font-size:11.5px; color:var(--ink-soft); margin-top:8px; line-height:1.5;}
+  .hidden{display:none !important;}
+</style>
+</head>
+<body>
+<div class="app">
+
+  <nav class="sidebar">
+    <div class="brandmark">Ledger<small id="fyLabel">Annual Budget</small></div>
+
+    <div class="navgroup">
+      <h4>Masters</h4>
+      <button class="navitem" data-tab="brands">Brand Master</button>
+      <button class="navitem" data-tab="partnerModels">Partner–Model Master</button>
+      <button class="navitem" data-tab="brandPartnerMapping">Brand–Partner Mapping</button>
+      <button class="navitem" data-tab="expenseLineItems">Expense Line Item Master</button>
+      <button class="navitem" data-tab="codbMaster">CODB Master</button>
+      <button class="navitem" data-tab="cidbDeductionMapping">CIDB Deduction Mapping</button>
+      <button class="navitem" data-tab="skuMaster">SKU Master</button>
+    </div>
+
+    <div class="navgroup">
+      <h4>Inputs</h4>
+      <button class="navitem" data-tab="salesInput">SKU × Channel Sales Input</button>
+      <button class="navitem" data-tab="codbRateCard">CODB Rate Card</button>
+      <button class="navitem" data-tab="cidbRateCard">CIDB Rate Card</button>
+      <button class="navitem" data-tab="miscInputs">Misc. Inputs</button>
+      <button class="navitem" data-tab="cashFlowItems">Cash Flow Adjustments</button>
+    </div>
+
+    <div class="navgroup">
+      <h4>Output</h4>
+      <button class="navitem" data-tab="outputPL">Profit &amp; Loss</button>
+      <button class="navitem" data-tab="outputCF">Cash Flow</button>
+    </div>
+  </nav>
+
+  <main class="main">
+    <div class="topbar">
+      <div class="titleblock">
+        <h1 id="panelTitle">Brand Master</h1>
+        <div class="sub" id="panelSub">Loading…</div>
+      </div>
+      <div class="toolbar">
+        <span class="savenote" id="saveNote"></span>
+        <input type="file" id="fileInput" accept="application/json">
+        <button class="btn" id="loadBtn">Load JSON</button>
+        <button class="btn primary" id="exportBtn">Export data.json</button>
+      </div>
+    </div>
+
+    <div id="content"></div>
+  </main>
+</div>
+
+<script>
+/* ---------------------------------------------------------------
+   STATE — loaded from data.json (sibling file). Falls back to a
+   minimal seed if the fetch fails (e.g. opened via file:// where
+   local fetch is blocked by the browser). On GitHub Pages / any
+   http server, data.json will load normally.
+   ----------------------------------------------------------------*/
+let DATA = null;
+const MONTHS = ["Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec","Jan","Feb","Mar"];
+
+const SEED = {
+  meta:{fyLabel:"FY 2026-27", months:MONTHS, savedAt:null},
+  channels:[{id:"CH1",name:"General Trade"},{id:"CH2",name:"Modern Trade"},{id:"CH3",name:"E-commerce"}],
+  brands:[{id:"BR1",name:"Brand A"}],
+  partnerModels:[{id:"PM1",name:"Super Stockist",model:"Distributor"}],
+  brandPartnerMapping:[{id:"BPM1",brandId:"BR1",partnerId:"PM1"}],
+  expenseLineItems:[
+    {id:"EL1",name:"Trade Scheme",type:"CODB"},
+    {id:"EL2",name:"Logistics / Freight",type:"CODB"},
+    {id:"EL6",name:"Brand Marketing",type:"MISC"},
+    {id:"EL7",name:"Salaries",type:"MISC"},
+    {id:"EL8",name:"Overheads",type:"MISC"},
+    {id:"EL9",name:"Rent",type:"MISC"}
+  ],
+  codbMaster:[], cidbDeductionMapping:[],
+  skuMaster:[{id:"SKU1",name:"SKU 500ml",brandId:"BR1",amrp:100,acogs:40,gstPct:18}],
+  salesInput:[], codbRateCard:[], cidbRateCard:[], miscInputs:[], cashFlowItems:[]
+};
+
+function uid(prefix){ return prefix + "_" + Math.random().toString(36).slice(2,8); }
+
+async function loadData(){
+  try{
+    const res = await fetch('data.json', {cache:'no-store'});
+    if(!res.ok) throw new Error('no file');
+    DATA = await res.json();
+    document.getElementById('saveNote').textContent = 'Loaded data.json';
+  }catch(e){
+    DATA = JSON.parse(JSON.stringify(SEED));
+    document.getElementById('saveNote').textContent = 'Using built-in seed data (data.json not reachable here)';
+  }
+  ['codbRateCard','cidbRateCard','cashFlowItems'].forEach(k=>{ if(!DATA[k]) DATA[k]=[]; });
+  document.getElementById('fyLabel').textContent = DATA.meta?.fyLabel || 'Annual Budget';
+  render();
+}
+
+/* ---------------------------------------------------------------
+   GENERIC TABLE EDITOR
+   ----------------------------------------------------------------*/
+function fieldInput(row, col){
+  const val = row[col.key] ?? '';
+  if(col.type === 'select'){
+    const opts = col.options();
+    let html = `<select data-key="${col.key}">`;
+    html += `<option value="">—</option>`;
+    opts.forEach(o=>{
+      html += `<option value="${o.id}" ${o.id===val?'selected':''}>${o.label}</option>`;
+    });
+    html += `</select>`;
+    return html;
+  }
+  if(col.type === 'number'){
+    return `<input type="number" step="any" data-key="${col.key}" value="${val}">`;
+  }
+  return `<input type="text" data-key="${col.key}" value="${val}">`;
+}
+
+function renderEditableTable(container, arr, cols, opts){
+  opts = opts || {};
+  let html = `<table><thead><tr>`;
+  cols.forEach(c=> html += `<th>${c.label}</th>`);
+  html += `<th style="width:30px;"></th></tr></thead><tbody>`;
+  arr.forEach((row,idx)=>{
+    html += `<tr data-idx="${idx}">`;
+    cols.forEach(c=> html += `<td>${fieldInput(row,c)}</td>`);
+    html += `<td><button class="rowdel" data-del="${idx}" title="Delete row">✕</button></td></tr>`;
+  });
+  html += `</tbody></table><button class="addrow" id="addRowBtn">+ Add row</button>`;
+  container.innerHTML = html;
+
+  container.querySelectorAll('input,select').forEach(el=>{
+    el.addEventListener('change', e=>{
+      const tr = e.target.closest('tr');
+      const idx = +tr.dataset.idx;
+      const key = e.target.dataset.key;
+      let v = e.target.value;
+      if(e.target.type === 'number') v = v === '' ? '' : parseFloat(v);
+      arr[idx][key] = v;
+      if(opts.onChange) opts.onChange();
+      markDirty();
+    });
+  });
+  container.querySelectorAll('[data-del]').forEach(btn=>{
+    btn.addEventListener('click', e=>{
+      arr.splice(+btn.dataset.del,1);
+      renderEditableTable(container, arr, cols, opts);
+      if(opts.onChange) opts.onChange();
+      markDirty();
+    });
+  });
+  container.querySelector('#addRowBtn').addEventListener('click', ()=>{
+    const blank = {id: uid(opts.prefix||'ROW')};
+    cols.forEach(c=> blank[c.key] = c.default !== undefined ? c.default : '');
+    arr.push(blank);
+    renderEditableTable(container, arr, cols, opts);
+    markDirty();
+  });
+}
+
+function markDirty(){
+  document.getElementById('saveNote').textContent = 'Unsaved changes — click "Export data.json" to save';
+}
+
+/* ---------------------------------------------------------------
+   TAB DEFINITIONS
+   ----------------------------------------------------------------*/
+const optList = (arr, labelFn)=> arr.map(x=>({id:x.id, label:labelFn(x)}));
+
+const TABS = {
+  brands:{
+    title:'Brand Master', desc:'Every brand carried in this budget.',
+    render:(el)=> renderEditableTable(el, DATA.brands, [
+      {key:'name', label:'Brand name'}
+    ], {prefix:'BR'})
+  },
+  partnerModels:{
+    title:'Partner – Model Master', desc:'Trade / channel partners and their business model.',
+    render:(el)=> renderEditableTable(el, DATA.partnerModels, [
+      {key:'name', label:'Partner name'},
+      {key:'model', label:'Model'}
+    ], {prefix:'PM'})
+  },
+  brandPartnerMapping:{
+    title:'Brand – Partner Mapping', desc:'Which partners each brand sells through.',
+    render:(el)=> renderEditableTable(el, DATA.brandPartnerMapping, [
+      {key:'brandId', label:'Brand', type:'select', options:()=>optList(DATA.brands,b=>b.name)},
+      {key:'partnerId', label:'Partner', type:'select', options:()=>optList(DATA.partnerModels,p=>p.name)}
+    ], {prefix:'BPM'})
+  },
+  expenseLineItems:{
+    title:'Expense Line Item Master', desc:'All expense lines used across CODB, CIDB and Misc. inputs. Type controls where the line item shows up downstream.',
+    render:(el)=> renderEditableTable(el, DATA.expenseLineItems, [
+      {key:'name', label:'Line item'},
+      {key:'type', label:'Type', type:'select', options:()=>[{id:'CODB',label:'CODB'},{id:'CIDB',label:'CIDB'},{id:'MISC',label:'Misc. opex'}]}
+    ], {prefix:'EL'})
+  },
+  codbMaster:{
+    title:'CODB Master', desc:'Cost-of-doing-business line items — description / notes for each.',
+    render:(el)=> renderEditableTable(el, DATA.codbMaster, [
+      {key:'lineItemId', label:'Line item', type:'select', options:()=>optList(DATA.expenseLineItems.filter(x=>x.type==='CODB'),x=>x.name)},
+      {key:'description', label:'Description'}
+    ], {prefix:'CM'})
+  },
+  cidbDeductionMapping:{
+    title:'CIDB Deduction Mapping', desc:'Claims / deduction line items and what they represent.',
+    render:(el)=> renderEditableTable(el, DATA.cidbDeductionMapping, [
+      {key:'lineItemId', label:'Line item', type:'select', options:()=>optList(DATA.expenseLineItems.filter(x=>x.type==='CIDB'),x=>x.name)},
+      {key:'description', label:'Description'}
+    ], {prefix:'CD'})
+  },
+  skuMaster:{
+    title:'SKU Master', desc:'Base AMRP, ACOGS and GST% per SKU — used as defaults in the sales input grid.',
+    render:(el)=> renderEditableTable(el, DATA.skuMaster, [
+      {key:'name', label:'SKU'},
+      {key:'brandId', label:'Brand', type:'select', options:()=>optList(DATA.brands,b=>b.name)},
+      {key:'amrp', label:'AMRP', type:'number'},
+      {key:'acogs', label:'ACOGS', type:'number'},
+      {key:'gstPct', label:'GST %', type:'number'}
+    ], {prefix:'SKU'})
+  },
+  salesInput:{
+    title:'SKU × Channel Sales Input', desc:'Secondary gross qty, discount, AMRP, ACOGS and GST per SKU, per channel, per month.',
+    render:(el)=> renderEditableTable(el, DATA.salesInput, [
+      {key:'skuId', label:'SKU', type:'select', options:()=>optList(DATA.skuMaster,s=>s.name)},
+      {key:'channelId', label:'Channel', type:'select', options:()=>optList(DATA.channels,c=>c.name)},
+      {key:'month', label:'Month', type:'select', options:()=>MONTHS.map(m=>({id:m,label:m}))},
+      {key:'qty', label:'Gross Qty', type:'number'},
+      {key:'discountPct', label:'Discount %', type:'number'},
+      {key:'amrp', label:'AMRP', type:'number'},
+      {key:'acogs', label:'ACOGS', type:'number'},
+      {key:'gstPct', label:'GST %', type:'number'}
+    ], {prefix:'SI'})
+  },
+  codbRateCard:{
+    title:'CODB Rate Card', desc:'Channel-wise rate for each CODB line item, and the base it is applied on.',
+    render:(el)=> renderEditableTable(el, DATA.codbRateCard, [
+      {key:'channelId', label:'Channel', type:'select', options:()=>optList(DATA.channels,c=>c.name)},
+      {key:'lineItemId', label:'Line item', type:'select', options:()=>optList(DATA.expenseLineItems.filter(x=>x.type==='CODB'),x=>x.name)},
+      {key:'rateType', label:'Rate type', type:'select', options:()=>[{id:'%',label:'%'},{id:'Value/Unit',label:'Value / Unit'}]},
+      {key:'rateValue', label:'Rate value', type:'number'},
+      {key:'appliedOn', label:'Applied on (% only)', type:'select', options:()=>[{id:'Gross Sales',label:'Gross Sales'},{id:'Net Sales',label:'Net Sales'},{id:'Qty',label:'Qty'}]}
+    ], {prefix:'RC'})
+  },
+  cidbRateCard:{
+    title:'CIDB Rate Card', desc:'Channel-wise rate for each CIDB deduction line item.',
+    render:(el)=> renderEditableTable(el, DATA.cidbRateCard, [
+      {key:'channelId', label:'Channel', type:'select', options:()=>optList(DATA.channels,c=>c.name)},
+      {key:'lineItemId', label:'Line item', type:'select', options:()=>optList(DATA.expenseLineItems.filter(x=>x.type==='CIDB'),x=>x.name)},
+      {key:'rateType', label:'Rate type', type:'select', options:()=>[{id:'%',label:'%'},{id:'Value/Unit',label:'Value / Unit'}]},
+      {key:'rateValue', label:'Rate value', type:'number'},
+      {key:'appliedOn', label:'Applied on (% only)', type:'select', options:()=>[{id:'Gross Sales',label:'Gross Sales'},{id:'Net Sales',label:'Net Sales'},{id:'Qty',label:'Qty'}]}
+    ], {prefix:'CR'})
+  },
+  miscInputs:{
+    title:'Miscellaneous Inputs', desc:'Brand marketing, salaries, overheads, rent — direct monthly amounts.',
+    render:(el)=> renderEditableTable(el, DATA.miscInputs, [
+      {key:'lineItemId', label:'Line item', type:'select', options:()=>optList(DATA.expenseLineItems.filter(x=>x.type==='MISC'),x=>x.name)},
+      {key:'month', label:'Month', type:'select', options:()=>MONTHS.map(m=>({id:m,label:m}))},
+      {key:'amount', label:'Amount', type:'number'}
+    ], {prefix:'MI'})
+  },
+  cashFlowItems:{
+    title:'Cash Flow Adjustments', desc:'Capex, working-capital change and financing flows, by month — layered onto EBITDA in the Cash Flow output.',
+    render:(el)=> renderEditableTable(el, DATA.cashFlowItems, [
+      {key:'category', label:'Category', type:'select', options:()=>[{id:'Capex',label:'Capex'},{id:'Change in Working Capital',label:'Change in Working Capital'},{id:'Financing Inflow / Outflow',label:'Financing Inflow / Outflow'}]},
+      {key:'month', label:'Month', type:'select', options:()=>MONTHS.map(m=>({id:m,label:m}))},
+      {key:'amount', label:'Amount', type:'number'}
+    ], {prefix:'CF'})
+  },
+  outputPL:{ title:'Profit & Loss', desc:'Computed monthly, annual total on the right.', render: renderPL },
+  outputCF:{ title:'Cash Flow', desc:'Simplified: EBITDA adjusted for capex, working capital and financing. Extend the model with receivable/payable ageing as a next step.', render: renderCF }
+};
+
+/* ---------------------------------------------------------------
+   CALCULATION ENGINE
+   ----------------------------------------------------------------*/
+function computeMonthlyBase(){
+  // returns { channelId: { month: {qty, grossSales, netSales} } } and overall by month
+  const byChMonth = {};
+  const overall = {}; MONTHS.forEach(m=> overall[m] = {qty:0, grossSales:0, discount:0, netSales:0, cogs:0});
+  DATA.salesInput.forEach(r=>{
+    if(!r.skuId || !r.channelId || !r.month) return;
+    const qty = +r.qty || 0;
+    const amrp = +r.amrp || 0;
+    const acogs = +r.acogs || 0;
+    const discPct = +r.discountPct || 0;
+    const gross = qty*amrp;
+    const disc = gross*discPct/100;
+    const net = gross - disc;
+    const cogs = qty*acogs;
+    byChMonth[r.channelId] = byChMonth[r.channelId] || {};
+    byChMonth[r.channelId][r.month] = byChMonth[r.channelId][r.month] || {qty:0,grossSales:0,discount:0,netSales:0,cogs:0};
+    const b = byChMonth[r.channelId][r.month];
+    b.qty += qty; b.grossSales += gross; b.discount += disc; b.netSales += net; b.cogs += cogs;
+    const o = overall[r.month];
+    o.qty += qty; o.grossSales += gross; o.discount += disc; o.netSales += net; o.cogs += cogs;
+  });
+  return {byChMonth, overall};
+}
+
+function computeRateCardLines(rateCard, base){
+  // returns { lineItemId: { month: amount } } and totals per month
+  const lines = {};
+  rateCard.forEach(r=>{
+    if(!r.channelId || !r.lineItemId) return;
+    const chData = base.byChMonth[r.channelId];
+    lines[r.lineItemId] = lines[r.lineItemId] || {};
+    MONTHS.forEach(m=>{
+      const b = (chData && chData[m]) || {qty:0,grossSales:0,netSales:0};
+      let amt = 0;
+      const rv = +r.rateValue || 0;
+      if(r.rateType === 'Value/Unit'){
+        amt = b.qty * rv;
+      } else { // %
+        const baseVal = r.appliedOn === 'Gross Sales' ? b.grossSales : r.appliedOn === 'Qty' ? b.qty : b.netSales;
+        amt = baseVal * rv/100;
+      }
+      lines[r.lineItemId][m] = (lines[r.lineItemId][m]||0) + amt;
+    });
+  });
+  return lines;
+}
+
+function computeMiscLines(){
+  const lines = {};
+  DATA.miscInputs.forEach(r=>{
+    if(!r.lineItemId || !r.month) return;
+    lines[r.lineItemId] = lines[r.lineItemId] || {};
+    lines[r.lineItemId][r.month] = (lines[r.lineItemId][r.month]||0) + (+r.amount||0);
+  });
+  return lines;
+}
+
+function sumMonth(linesObj, month){
+  let t=0; Object.values(linesObj).forEach(byM=> t += (byM[month]||0)); return t;
+}
+function sumAll(linesObj){
+  let t=0; Object.values(linesObj).forEach(byM=> MONTHS.forEach(m=> t += (byM[m]||0))); return t;
+}
+function lineName(id){ const li = DATA.expenseLineItems.find(x=>x.id===id); return li ? li.name : id; }
+function fmt(n){
+  n = Math.round(n||0);
+  const neg = n<0;
+  const s = Math.abs(n).toLocaleString('en-IN');
+  return neg ? `(${s})` : s;
+}
+
+function buildPLModel(){
+  const base = computeMonthlyBase();
+  const codbLines = computeRateCardLines(DATA.codbRateCard, base);
+  const cidbLines = computeRateCardLines(DATA.cidbRateCard, base);
+  const miscLines = computeMiscLines();
+  return {base, codbLines, cidbLines, miscLines};
+}
+
+function renderPL(container){
+  const {base, codbLines, cidbLines, miscLines} = buildPLModel();
+  const o = base.overall;
+
+  function rowTotal(getter){ let t=0; MONTHS.forEach(m=> t+=getter(m)); return t; }
+
+  let html = `<div class="panel"><table class="ledger"><thead><tr><th>₹</th>`;
+  MONTHS.forEach(m=> html += `<th>${m}</th>`);
+  html += `<th class="total-col">FY Total</th></tr></thead><tbody>`;
+
+  const simpleRow = (label, getter, cls)=>{
+    let r = `<tr class="${cls||''}"><td>${label}</td>`;
+    MONTHS.forEach(m=> r += `<td>${fmt(getter(m))}</td>`);
+    r += `<td class="total-col">${fmt(rowTotal(getter))}</td></tr>`;
+    html += r;
+  };
+
+  simpleRow('Gross Sales', m=>o[m].grossSales, 'section');
+  simpleRow('Less: Discount', m=>-o[m].discount);
+  simpleRow('Net Sales', m=>o[m].netSales, 'subtotal');
+  simpleRow('Less: ACOGS', m=>-o[m].cogs);
+  simpleRow('Gross Margin', m=>o[m].netSales - o[m].cogs, 'subtotal');
+
+  html += `<tr class="section"><td>Less: CODB</td>${MONTHS.map(()=>'<td></td>').join('')}<td class="total-col"></td></tr>`;
+  Object.keys(codbLines).forEach(li=>{
+    simpleRow(lineName(li), m=>-(codbLines[li][m]||0), 'lineitem neg');
+  });
+  const codbTotalByM = m=> sumMonth(codbLines,m);
+  simpleRow('Total CODB', m=>-codbTotalByM(m), 'subtotal neg');
+
+  simpleRow('Contribution Margin', m=>o[m].netSales - o[m].cogs - codbTotalByM(m), 'subtotal');
+
+  html += `<tr class="section"><td>Less: CIDB Deductions</td>${MONTHS.map(()=>'<td></td>').join('')}<td class="total-col"></td></tr>`;
+  Object.keys(cidbLines).forEach(li=>{
+    simpleRow(lineName(li), m=>-(cidbLines[li][m]||0), 'lineitem neg');
+  });
+  const cidbTotalByM = m=> sumMonth(cidbLines,m);
+  simpleRow('Total CIDB', m=>-cidbTotalByM(m), 'subtotal neg');
+
+  simpleRow('Margin after CIDB', m=>o[m].netSales - o[m].cogs - codbTotalByM(m) - cidbTotalByM(m), 'subtotal');
+
+  html += `<tr class="section"><td>Less: Misc. Opex</td>${MONTHS.map(()=>'<td></td>').join('')}<td class="total-col"></td></tr>`;
+  Object.keys(miscLines).forEach(li=>{
+    simpleRow(lineName(li), m=>-(miscLines[li][m]||0), 'lineitem neg');
+  });
+  const miscTotalByM = m=> sumMonth(miscLines,m);
+  simpleRow('Total Misc. Opex', m=>-miscTotalByM(m), 'subtotal neg');
+
+  simpleRow('EBITDA', m=>o[m].netSales - o[m].cogs - codbTotalByM(m) - cidbTotalByM(m) - miscTotalByM(m), 'grand');
+
+  html += `</tbody></table></div>`;
+  html += `<div class="footnote">Discount % and ACOGS/AMRP are keyed per SKU × channel × month in the Sales Input grid. CODB and CIDB are computed from their respective rate cards (rate × Gross Sales / Net Sales / Qty, per channel). GST is collected as an input field for reference but is excluded from this P&amp;L (it is a pass-through, not revenue).</div>`;
+  container.innerHTML = html;
+}
+
+function renderCF(container){
+  const {base, codbLines, cidbLines, miscLines} = buildPLModel();
+  const o = base.overall;
+  const ebitda = m=> o[m].netSales - o[m].cogs - sumMonth(codbLines,m) - sumMonth(cidbLines,m) - sumMonth(miscLines,m);
+
+  const cfByCat = {};
+  DATA.cashFlowItems.forEach(r=>{
+    if(!r.category||!r.month) return;
+    cfByCat[r.category] = cfByCat[r.category] || {};
+    cfByCat[r.category][r.month] = (cfByCat[r.category][r.month]||0) + (+r.amount||0);
+  });
+  const catVal = (cat,m)=> (cfByCat[cat] && cfByCat[cat][m]) || 0;
+
+  function rowTotal(getter){ let t=0; MONTHS.forEach(m=> t+=getter(m)); return t; }
+  const simpleRow = (label, getter, cls)=>{
+    let r = `<tr class="${cls||''}"><td>${label}</td>`;
+    MONTHS.forEach(m=> r += `<td>${fmt(getter(m))}</td>`);
+    r += `<td class="total-col">${fmt(rowTotal(getter))}</td></tr>`;
+    return r;
+  };
+
+  let html = `<div class="panel"><table class="ledger"><thead><tr><th>₹</th>`;
+  MONTHS.forEach(m=> html += `<th>${m}</th>`);
+  html += `<th class="total-col">FY Total</th></tr></thead><tbody>`;
+
+  html += simpleRow('EBITDA (from P&amp;L)', ebitda, 'section');
+  html += simpleRow('Less: Capex', m=>-catVal('Capex',m));
+  html += simpleRow('Add/(less): Change in Working Capital', m=>-catVal('Change in Working Capital',m));
+  html += simpleRow('Add/(less): Financing Inflow / Outflow', m=>catVal('Financing Inflow / Outflow',m));
+  html += simpleRow('Net Cash Flow', m=> ebitda(m) - catVal('Capex',m) - catVal('Change in Working Capital',m) + catVal('Financing Inflow / Outflow',m), 'grand');
+
+  html += `</tbody></table></div>`;
+  html += `<div class="footnote">This is a simplified indirect cash flow: EBITDA adjusted for capex, working-capital movement and financing, keyed directly in "Cash Flow Adjustments". It does not yet model receivable/payable ageing, taxes or interest — add those as further line items when ready.</div>`;
+  container.innerHTML = html;
+}
+
+/* ---------------------------------------------------------------
+   NAV / RENDER
+   ----------------------------------------------------------------*/
+let activeTab = 'brands';
+function render(){
+  document.querySelectorAll('.navitem').forEach(b=> b.classList.toggle('active', b.dataset.tab===activeTab));
+  const tab = TABS[activeTab];
+  document.getElementById('panelTitle').textContent = tab.title;
+  document.getElementById('panelSub').textContent = tab.desc;
+  const content = document.getElementById('content');
+  if(activeTab.startsWith('output')){
+    tab.render(content);
+  }else{
+    content.innerHTML = `<div class="panel"><div id="tableHost"></div></div>`;
+    tab.render(document.getElementById('tableHost'));
+  }
+}
+
+document.querySelectorAll('.navitem').forEach(btn=>{
+  btn.addEventListener('click', ()=>{ activeTab = btn.dataset.tab; render(); });
+});
+
+document.getElementById('exportBtn').addEventListener('click', ()=>{
+  DATA.meta.savedAt = new Date().toISOString();
+  const blob = new Blob([JSON.stringify(DATA, null, 2)], {type:'application/json'});
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url; a.download = 'data.json';
+  document.body.appendChild(a); a.click(); document.body.removeChild(a);
+  URL.revokeObjectURL(url);
+  document.getElementById('saveNote').textContent = 'Exported data.json — commit it to GitHub to save for good';
+});
+
+document.getElementById('loadBtn').addEventListener('click', ()=> document.getElementById('fileInput').click());
+document.getElementById('fileInput').addEventListener('change', (e)=>{
+  const file = e.target.files[0]; if(!file) return;
+  const reader = new FileReader();
+  reader.onload = (ev)=>{
+    try{
+      DATA = JSON.parse(ev.target.result);
+      ['codbRateCard','cidbRateCard','cashFlowItems'].forEach(k=>{ if(!DATA[k]) DATA[k]=[]; });
+      document.getElementById('fyLabel').textContent = DATA.meta?.fyLabel || 'Annual Budget';
+      document.getElementById('saveNote').textContent = 'Loaded ' + file.name;
+      render();
+    }catch(err){ alert('Could not parse that JSON file: ' + err.message); }
+  };
+  reader.readAsText(file);
+});
+
+loadData();
+</script>
+</body>
+</html>
