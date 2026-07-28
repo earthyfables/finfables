@@ -87,18 +87,7 @@
     color:var(--ink); letter-spacing:0.01em;
   }
   .titleblock .sub{color:var(--ink-soft); font-size:13px; font-style:italic;}
-  .toolbar{display:flex; gap:10px; align-items:center;}
-  .btn{
-    font-family:'Times New Roman', Times, serif; font-size:13px; padding:9px 17px; border-radius:7px;
-    border:1px solid var(--line); background:var(--surface); color:var(--ink);
-    cursor:pointer; font-weight:700; transition:all 0.15s ease;
-    box-shadow:var(--shadow-sm);
-  }
-  .btn:hover{border-color:var(--accent); color:var(--accent); box-shadow:var(--shadow-md); transform:translateY(-1px);}
-  .btn.primary{background:linear-gradient(180deg, var(--accent), var(--accent-dark)); color:#fff; border-color:var(--accent-dark);}
-  .btn.primary:hover{color:#fff; box-shadow:var(--shadow-md);}
   #fileInput{display:none;}
-  .savenote{font-size:12px; color:var(--ink-soft); font-style:italic;}
 
   .panel{
     background:var(--surface); border:1px solid var(--line); border-radius:var(--radius);
@@ -234,12 +223,6 @@
         <h1 id="panelTitle">Brand Master</h1>
         <div class="sub" id="panelSub">Loading…</div>
       </div>
-      <div class="toolbar">
-        <span class="savenote" id="saveNote"></span>
-        <input type="file" id="fileInput" accept="application/json">
-        <button class="btn" id="loadBtn">Load JSON</button>
-        <button class="btn primary" id="exportBtn">Export data.json</button>
-      </div>
     </div>
 
     <div id="content"></div>
@@ -282,10 +265,8 @@ async function loadData(){
     const res = await fetch('data.json', {cache:'no-store'});
     if(!res.ok) throw new Error('no file');
     DATA = await res.json();
-    document.getElementById('saveNote').textContent = 'Loaded data.json';
   }catch(e){
     DATA = JSON.parse(JSON.stringify(SEED));
-    document.getElementById('saveNote').textContent = 'Using built-in seed data (data.json not reachable here)';
   }
   ['codbRateCard','cidbRateCard','cashFlowItems'].forEach(k=>{ if(!DATA[k]) DATA[k]=[]; });
   document.getElementById('fyLabel').textContent = DATA.meta?.fyLabel || 'Annual Budget';
@@ -356,7 +337,6 @@ function renderEditableTable(container, arr, cols, opts){
 }
 
 function markDirty(){
-  document.getElementById('saveNote').textContent = 'Unsaved changes — click "Export data.json" to save';
 }
 
 /* ---------------------------------------------------------------
@@ -689,33 +669,6 @@ function render(){
 
 document.querySelectorAll('.navitem').forEach(btn=>{
   btn.addEventListener('click', ()=>{ activeTab = btn.dataset.tab; render(); });
-});
-
-document.getElementById('exportBtn').addEventListener('click', ()=>{
-  DATA.meta.savedAt = new Date().toISOString();
-  const blob = new Blob([JSON.stringify(DATA, null, 2)], {type:'application/json'});
-  const url = URL.createObjectURL(blob);
-  const a = document.createElement('a');
-  a.href = url; a.download = 'data.json';
-  document.body.appendChild(a); a.click(); document.body.removeChild(a);
-  URL.revokeObjectURL(url);
-  document.getElementById('saveNote').textContent = 'Exported data.json — commit it to GitHub to save for good';
-});
-
-document.getElementById('loadBtn').addEventListener('click', ()=> document.getElementById('fileInput').click());
-document.getElementById('fileInput').addEventListener('change', (e)=>{
-  const file = e.target.files[0]; if(!file) return;
-  const reader = new FileReader();
-  reader.onload = (ev)=>{
-    try{
-      DATA = JSON.parse(ev.target.result);
-      ['codbRateCard','cidbRateCard','cashFlowItems'].forEach(k=>{ if(!DATA[k]) DATA[k]=[]; });
-      document.getElementById('fyLabel').textContent = DATA.meta?.fyLabel || 'Annual Budget';
-      document.getElementById('saveNote').textContent = 'Loaded ' + file.name;
-      render();
-    }catch(err){ alert('Could not parse that JSON file: ' + err.message); }
-  };
-  reader.readAsText(file);
 });
 
 loadData();
