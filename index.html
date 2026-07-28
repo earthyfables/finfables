@@ -688,15 +688,23 @@ function renderMarketplaceDeductionMapping(container){
   const mappedBrandIds = new Set(DATA.brandPartnerMapping.map(m=>m.brandId));
   const brandOptions = DATA.brands.filter(b=> mappedBrandIds.has(b.id));
   const itemOptions = DATA.codbLineItems;
-  const cols = DATA.partnerModels; // global list of partner+model combos, used as matrix columns
 
   const rowBrands = filterBrandId ? brandOptions.filter(b=>b.id===filterBrandId) : brandOptions;
   const rowItems = filterItemId ? itemOptions.filter(x=>x.id===filterItemId) : itemOptions;
 
+  const getBrandCols = (brandId)=>{
+    const cols = [];
+    DATA.brandPartnerMapping.filter(m=>m.brandId===brandId).forEach(m=>{
+      const pm = DATA.partnerModels.find(p=>p.partner===m.partner && p.model===m.model);
+      if(pm && !cols.some(c=>c.id===pm.id)) cols.push(pm);
+    });
+    return cols;
+  };
+
   const isChecked = (brandId, pmId, itemId)=> DATA.marketplaceDeductionMapping.some(m=> m.brandId===brandId && m.partnerModelId===pmId && m.codbLineItemId===itemId);
 
   let html = `<h2 style="margin-top:0;">Marketplace Deduction Mapping</h2>
-  <div class="desc">For each Brand → Partner-Model, tick which CODB line items are <strong>deducted by the marketplace</strong> (reduces Collectable — not a separate cash payment). Only brands with a Brand → Partner-Model mapping (tab 4) appear here.</div>
+  <div class="desc">For each Brand → Partner-Model, tick which CODB line items are <strong>deducted by the marketplace</strong> (reduces Collectable — not a separate cash payment). Only brands with a Brand → Partner-Model mapping (tab 4) appear here, and each brand only shows the Partner-Models it's actually mapped to.</div>
   <div class="addform" style="margin-bottom:14px;">
     <div class="addfield"><label>Brand</label>
       <select id="mdmBrandFilter"><option value="">All Brands</option>${brandOptions.map(b=>`<option value="${b.id}" ${b.id===filterBrandId?'selected':''}>${b.name}</option>`).join('')}</select>
@@ -707,26 +715,32 @@ function renderMarketplaceDeductionMapping(container){
     <button class="btn primary" id="mdmSaveBtn">Save mapping</button>
   </div>`;
 
-  if(!cols.length){
+  if(!DATA.partnerModels.length){
     html += `<div class="footnote">No Partner-Model combos yet — add some in "3. Partner-Model master" first.</div>`;
   } else if(!rowBrands.length || !rowItems.length){
     html += `<div class="footnote">No Brands (with a Brand → Partner-Model mapping) or CODB Line Items to show yet.</div>`;
   } else {
-    html += `<div style="overflow-x:auto;"><table><thead><tr><th>Brand</th><th>CODB / Expense Item</th><th style="text-align:center;">Sel All</th>`;
-    cols.forEach(c=> html += `<th style="text-align:center;">${c.partner}<br><span style="font-weight:400;">${c.model}</span></th>`);
-    html += `</tr></thead><tbody>`;
     rowBrands.forEach(b=>{
+      const brandCols = getBrandCols(b.id);
+      html += `<h3 style="margin:18px 0 8px 0;">${b.name}</h3>`;
+      if(!brandCols.length){
+        html += `<div class="footnote" style="margin-bottom:16px;">No Partner-Model mapping for ${b.name} yet — add one in "4. Brand → Partner Mapping".</div>`;
+        return;
+      }
+      html += `<div style="overflow-x:auto; margin-bottom:22px;"><table><thead><tr><th>CODB / Expense Item</th><th style="text-align:center;">Sel All</th>`;
+      brandCols.forEach(c=> html += `<th style="text-align:center;">${c.partner}<br><span style="font-weight:400;">${c.model}</span></th>`);
+      html += `</tr></thead><tbody>`;
       rowItems.forEach(item=>{
-        html += `<tr><td style="font-weight:700;">${b.name}</td><td>${item.name}</td>`;
+        html += `<tr><td>${item.name}</td>`;
         html += `<td style="text-align:center;"><input type="checkbox" class="mdmRowSel" data-brand="${b.id}" data-item="${item.id}"></td>`;
-        cols.forEach(c=>{
+        brandCols.forEach(c=>{
           const checked = isChecked(b.id, c.id, item.id);
           html += `<td style="text-align:center;"><input type="checkbox" class="mdmCell" data-brand="${b.id}" data-pm="${c.id}" data-item="${item.id}" ${checked?'checked':''}></td>`;
         });
         html += `</tr>`;
       });
+      html += `</tbody></table></div>`;
     });
-    html += `</tbody></table></div>`;
   }
 
   container.innerHTML = html;
