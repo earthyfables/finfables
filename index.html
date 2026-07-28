@@ -196,6 +196,28 @@
   }
   .addrow:hover{background:#D6DEF5; box-shadow:var(--shadow-sm);}
 
+  /* Masters & Config tables — tighter rows, plain-case headers, fixed column widths */
+  .mastertable{table-layout:fixed;}
+  .mastertable thead th{
+    text-align:left; font-size:12.5px; text-transform:none; letter-spacing:0;
+    color:#6B7285; border-bottom:1px solid var(--line); background:#F7F8FB;
+    padding:8px 10px; font-weight:700; white-space:nowrap;
+  }
+  .mastertable tbody td{padding:4px 10px; white-space:nowrap; overflow:hidden;}
+  .mastertable tbody td input[type=text],
+  .mastertable tbody td input[type=number],
+  .mastertable tbody td select{padding:5px 7px; font-size:13px;}
+  .mastertable td.actionscell{white-space:nowrap; overflow:visible;}
+  .btn-sm{
+    font-family:'Times New Roman', Times, serif; font-size:12px; padding:4px 11px; border-radius:5px;
+    border:1px solid var(--line); background:var(--surface); color:var(--ink);
+    cursor:pointer; font-weight:700; transition:all 0.12s ease; white-space:nowrap;
+  }
+  .btn-sm:hover{border-color:var(--accent); color:var(--accent);}
+  .btn-sm.danger{color:var(--neg); border-color:#E3B8B8;}
+  .btn-sm.danger:hover{background:var(--neg-soft);}
+  .actionsrow{display:inline-flex; gap:6px; white-space:nowrap;}
+
   /* Output ledger tables */
   .ledger{width:100%; border-collapse:collapse; font-family:'Times New Roman', Times, serif; font-size:13px;}
   .ledger th{
@@ -289,7 +311,6 @@
 let DATA = null;
 const MONTHS = ["Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec","Jan","Feb","Mar"];
 const BRAND_GROUP_OPTIONS = ["Focus","Non Focus","Rainbow"];
-const COHORT_OPTIONS = ["Coh1","Coh2","Coh3"];
 const MODEL_OPTIONS = ["B2C","B2B"];
 const PARTNER_GROUP_OPTIONS = ["Website","FAM","MAN","Stores","Other MP","Other Offline"];
 const GMV_GROUPING_OPTIONS = ["GMV","Pry"];
@@ -297,7 +318,7 @@ const GMV_GROUPING_OPTIONS = ["GMV","Pry"];
 const SEED = {
   meta:{fyLabel:"FY 2026-27", months:MONTHS, savedAt:null},
   channels:[{id:"CH1",name:"General Trade"},{id:"CH2",name:"Modern Trade"},{id:"CH3",name:"E-commerce"}],
-  brands:[{id:"BR1",name:"Brand A",brand2:"Brand A",brandGroup:"Focus",cohort:"Coh1"}],
+  brands:[{id:"BR1",name:"Brand A",brandGroup:"Focus"}],
   partnerModels:[{id:"PM1",partner:"Website",model:"B2C",partnerGroup:"Website"}],
   brandPartnerMapping:[{id:"BPM1",brandId:"BR1",partner:"Website",model:"B2C",creditDays:30,gmvGrouping:"Pry"}],
   expenseLineItems:[
@@ -345,9 +366,7 @@ async function loadData(){
   // so older saved files keep working without losing existing rows.
   ['codbRateCard','cidbRateCard','cashFlowItems','codbLineItems','marketplaceDeductionMapping'].forEach(k=>{ if(!DATA[k]) DATA[k]=[]; });
   (DATA.brands||[]).forEach(b=>{
-    if(b.brand2===undefined) b.brand2 = b.name || '';
     if(b.brandGroup===undefined) b.brandGroup = '';
-    if(b.cohort===undefined) b.cohort = '';
   });
   (DATA.partnerModels||[]).forEach(p=>{
     if(p.partner===undefined) p.partner = p.name || '';
@@ -496,13 +515,16 @@ function renderMasterTable(container, arr, cols, opts){
 
   html += `<button class="btn danger" id="deleteSelBtn">Delete selected</button>`;
 
-  html += `<table><thead><tr><th style="width:26px;"><input type="checkbox" id="selAll"></th>`;
+  html += `<table class="mastertable"><colgroup><col style="width:34px;">`;
+  cols.forEach(c=> html += `<col${c.width?` style="width:${c.width}px;"`:''}>`);
+  html += `<col style="width:150px;"></colgroup>`;
+  html += `<thead><tr><th><input type="checkbox" id="selAll"></th>`;
   cols.forEach(c=> html += `<th>${c.label}</th>`);
-  html += `<th style="width:130px;"></th></tr></thead><tbody>`;
+  html += `<th></th></tr></thead><tbody>`;
   arr.forEach((row,idx)=>{
     html += `<tr data-idx="${idx}"><td><input type="checkbox" class="rowsel" data-selidx="${idx}"></td>`;
     cols.forEach(c=> html += `<td>${fieldInput(row,c)}</td>`);
-    html += `<td><button class="btn" data-editidx="${idx}">Edit</button> <button class="btn danger" data-del="${idx}">Remove</button></td></tr>`;
+    html += `<td class="actionscell"><div class="actionsrow"><button class="btn-sm" data-editidx="${idx}">Edit</button><button class="btn-sm danger" data-del="${idx}">Remove</button></div></td></tr>`;
   });
   html += `</tbody></table>`;
 
@@ -698,8 +720,8 @@ function renderCodbDeductionMappingScreen(container){
     <div id="marketplaceMappingHost"></div>
   `;
   renderMasterTable(container.querySelector('#codbLineItemsHost'), DATA.codbLineItems, [
-    {key:'name', label:'CODB Line Item'},
-    {key:'expenseLineItemId', label:'Expense Line Item', type:'select', options:()=>optList(DATA.expenseLineItems, x=>x.name)}
+    {key:'name', label:'CODB Line Item', width:240},
+    {key:'expenseLineItemId', label:'Expense Line Item', type:'select', options:()=>optList(DATA.expenseLineItems, x=>x.name), width:220}
   ], {prefix:'CLI', addLabel:'Add', onChange: ()=> renderMarketplaceDeductionMapping(container.querySelector('#marketplaceMappingHost'))});
   const mmHost = container.querySelector('#marketplaceMappingHost');
   renderMarketplaceDeductionMapping(mmHost);
@@ -707,40 +729,38 @@ function renderCodbDeductionMappingScreen(container){
 
 const TABS = {
   brands:{
-    title:'Brand Master', desc:'Brand and Brand 2 are free-text. Brand group and Cohort are fixed options.',
+    title:'Brand Master', desc:'Brand is free-text. Brand group is a fixed option.',
     render:(el)=> renderMasterTable(el, DATA.brands, [
-      {key:'name', label:'Brand'},
-      {key:'brand2', label:'Brand 2'},
-      {key:'brandGroup', label:'Brand group', type:'select', options:()=>BRAND_GROUP_OPTIONS.map(v=>({id:v,label:v}))},
-      {key:'cohort', label:'Cohort', type:'select', options:()=>COHORT_OPTIONS.map(v=>({id:v,label:v}))}
+      {key:'name', label:'Brand', width:260},
+      {key:'brandGroup', label:'Brand group', type:'select', options:()=>BRAND_GROUP_OPTIONS.map(v=>({id:v,label:v})), width:160}
     ], {prefix:'BR', addLabel:'Add brand'})
   },
   partnerModels:{
     title:'Partner-Model Master', desc:'Partner is the channel (e.g. Myntra). Model is the commercial arrangement (e.g. B2C/B2B). Partner Group is for roll-up reporting.',
     render:(el)=> renderMasterTable(el, DATA.partnerModels, [
-      {key:'partner', label:'Partner'},
-      {key:'model', label:'Model', type:'select', options:()=>MODEL_OPTIONS.map(v=>({id:v,label:v}))},
-      {key:'partnerGroup', label:'Partner group', type:'select', options:()=>PARTNER_GROUP_OPTIONS.map(v=>({id:v,label:v}))}
+      {key:'partner', label:'Partner', width:260},
+      {key:'model', label:'Model', type:'select', options:()=>MODEL_OPTIONS.map(v=>({id:v,label:v})), width:120},
+      {key:'partnerGroup', label:'Partner group', type:'select', options:()=>PARTNER_GROUP_OPTIONS.map(v=>({id:v,label:v})), width:160}
     ], {prefix:'PM', addLabel:'Add'})
   },
   brandPartnerMapping:{
     title:'Brand → Partner-Model Mapping', desc:'Brand and Partner-Model are selected from their masters above. Credit period is in days. GMV grouping is either GMV or Pry.',
     render:(el)=> renderMasterTable(el, DATA.brandPartnerMapping, [
-      {key:'brandId', label:'Brand', type:'select', options:()=>optList(DATA.brands,b=>b.name)},
-      {key:'partner', label:'Partner'},
-      {key:'model', label:'Model', type:'select', options:()=>MODEL_OPTIONS.map(v=>({id:v,label:v}))},
-      {key:'creditDays', label:'Credit period (days)', type:'number'},
-      {key:'gmvGrouping', label:'GMV grouping', type:'select', options:()=>GMV_GROUPING_OPTIONS.map(v=>({id:v,label:v}))}
+      {key:'brandId', label:'Brand', type:'select', options:()=>optList(DATA.brands,b=>b.name), width:170},
+      {key:'partner', label:'Partner', width:170},
+      {key:'model', label:'Model', type:'select', options:()=>MODEL_OPTIONS.map(v=>({id:v,label:v})), width:110},
+      {key:'creditDays', label:'Credit period (days)', type:'number', width:150},
+      {key:'gmvGrouping', label:'GMV grouping', type:'select', options:()=>GMV_GROUPING_OPTIONS.map(v=>({id:v,label:v})), width:130}
     ], {prefix:'BPM', addLabel:'Add mapping'})
   },
   expenseLineItems:{
     title:'Expense Line Item Master', desc:'Expense name and category are free-text. GST rate is a number. Type controls where the line item shows up in CODB/CIDB/Misc. inputs downstream.',
     render:(el)=> renderMasterTable(el, DATA.expenseLineItems, [
-      {key:'name', label:'Expense line item'},
-      {key:'category', label:'Category'},
-      {key:'gstRate', label:'GST rate %', type:'number'},
-      {key:'creditorDays', label:'Creditor Days', type:'number'},
-      {key:'type', label:'Type', type:'select', options:()=>[{id:'CODB',label:'CODB'},{id:'CIDB',label:'CIDB'},{id:'MISC',label:'Misc. opex'}]}
+      {key:'name', label:'Expense line item', width:220},
+      {key:'category', label:'Category', width:160},
+      {key:'gstRate', label:'GST rate %', type:'number', width:110},
+      {key:'creditorDays', label:'Creditor Days', type:'number', width:120},
+      {key:'type', label:'Type', type:'select', options:()=>[{id:'CODB',label:'CODB'},{id:'CIDB',label:'CIDB'},{id:'MISC',label:'Misc. opex'}], width:110}
     ], {prefix:'EL', addLabel:'Add'})
   },
   codbDeductionMapping:{
