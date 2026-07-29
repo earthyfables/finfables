@@ -115,6 +115,16 @@
   .mastertab:hover{border-color:var(--accent); color:var(--accent);}
   .mastertab.active{background:linear-gradient(180deg, var(--accent), var(--accent-dark)); color:#fff; border-color:var(--accent-dark); box-shadow:var(--shadow-sm);}
 
+  /* Pill sub-navigation (e.g. Pareto Master's Product Group / Category / Sub Category) */
+  .pillbar{display:flex; gap:8px; flex-wrap:wrap; margin-bottom:20px;}
+  .pill{
+    font-family:'Times New Roman', Times, serif; font-size:13px; font-weight:700;
+    padding:8px 18px; border-radius:999px; border:1px solid var(--line); background:var(--surface);
+    color:var(--ink-soft); cursor:pointer; transition:all 0.15s ease;
+  }
+  .pill:hover{border-color:var(--accent); color:var(--accent);}
+  .pill.active{background:var(--accent); color:#fff; border-color:var(--accent-dark); box-shadow:var(--shadow-sm);}
+
   /* Paste-from-Excel box */
   .pastebox{border:1px solid var(--line); border-radius:var(--radius); padding:14px 16px; margin-bottom:18px; background:#FAFBFD;}
   .pastebox-label{font-size:13px; font-weight:700; color:var(--ink); margin-bottom:8px;}
@@ -278,7 +288,7 @@
       <button class="navitem" data-tab="brandPartnerMapping">4. Brand → Partner Mapping</button>
       <button class="navitem" data-tab="expenseLineItems">5. Expense Line Item Master</button>
       <button class="navitem" data-tab="codbDeductionMapping">6. CODB Deduction Mapping</button>
-      <button class="navitem" data-tab="skuMaster">SKU Master</button>
+      <button class="navitem" data-tab="paretoMaster">Pareto Master</button>
     </div>
 
     <div class="navgroup">
@@ -343,7 +353,9 @@ const SEED = {
     {id:"EL9",name:"Rent",category:"Other Expenses",gstRate:18,creditorDays:30,type:"MISC"}
   ],
   codbLineItems:[], marketplaceDeductionMapping:[],
-  skuMaster:[{id:"SKU1",name:"SKU 500ml",brandId:"BR1",amrp:100,acogs:40,gstPct:18}],
+  productGroups:[{id:"PG1",name:"Personal Care"}],
+  productCategories:[{id:"PC1",name:"Towels",productGroupId:"PG1"}],
+  productSubCategories:[{id:"PSC1",name:"Bath Towel",size:"500ml",productGroupId:"PG1",productCategoryId:"PC1",amrp:100,acogs:40}],
   salesInput:[], codbRateCard:[], cidbRateCard:[], miscInputs:[], cashFlowItems:[]
 };
 
@@ -377,7 +389,15 @@ async function loadData(){
   }
   // Migration: backfill any fields/arrays introduced after this data.json was last saved,
   // so older saved files keep working without losing existing rows.
-  ['codbRateCard','cidbRateCard','cashFlowItems','codbLineItems','marketplaceDeductionMapping'].forEach(k=>{ if(!DATA[k]) DATA[k]=[]; });
+  ['codbRateCard','cidbRateCard','cashFlowItems','codbLineItems','marketplaceDeductionMapping','productGroups','productCategories'].forEach(k=>{ if(!DATA[k]) DATA[k]=[]; });
+  if(!DATA.productSubCategories){
+    // Migrate any pre-existing SKU Master rows into the new Product Sub Category master
+    // so nothing is lost when upgrading from the old SKU-based structure.
+    DATA.productSubCategories = (DATA.skuMaster || []).map(s=>({
+      id: s.id, name: s.name, size: '', productGroupId: '', productCategoryId: '',
+      amrp: s.amrp, acogs: s.acogs
+    }));
+  }
   if(!DATA.partnerGroups) DATA.partnerGroups = DEFAULT_PARTNER_GROUPS.map(n=>({id:n, name:n, description:""}));
   (DATA.partnerModels||[]).forEach(p=>{
     if(p.partnerGroup && !DATA.partnerGroups.some(g=>g.id===p.partnerGroup)){
@@ -802,6 +822,51 @@ function renderCodbDeductionMappingScreen(container){
   renderMarketplaceDeductionMapping(mmHost);
 }
 
+const PARETO_SUB_TABS = [
+  {key:'productGroups', label:'Product Group'},
+  {key:'productCategories', label:'Product Category'},
+  {key:'productSubCategories', label:'Product Sub Category'}
+];
+let paretoSubTab = 'productGroups';
+
+function renderParetoSubTable(host, key){
+  if(key === 'productGroups'){
+    renderMasterTable(host, DATA.productGroups, [
+      {key:'name', label:'Product Group', width:320}
+    ], {prefix:'PG', addLabel:'Add'});
+  } else if(key === 'productCategories'){
+    renderMasterTable(host, DATA.productCategories, [
+      {key:'name', label:'Pdt Cat', width:220},
+      {key:'productGroupId', label:'Pdt Grp', type:'select', options:()=>optList(DATA.productGroups,g=>g.name), width:200}
+    ], {prefix:'PC', addLabel:'Add'});
+  } else {
+    renderMasterTable(host, DATA.productSubCategories, [
+      {key:'name', label:'Pdt Sub Cat', width:200},
+      {key:'size', label:'Size', width:100},
+      {key:'productGroupId', label:'Pdt Grp', type:'select', options:()=>optList(DATA.productGroups,g=>g.name), width:160},
+      {key:'productCategoryId', label:'Pdt Cat', type:'select', options:()=>optList(DATA.productCategories,c=>c.name), width:160},
+      {key:'amrp', label:'AMRP', type:'number', width:100},
+      {key:'acogs', label:'ACOGS', type:'number', width:100}
+    ], {prefix:'PSC', addLabel:'Add'});
+  }
+}
+
+function renderParetoMasterScreen(container){
+  let pillsHtml = `<div class="pillbar">`;
+  PARETO_SUB_TABS.forEach(t=>{
+    pillsHtml += `<button class="pill ${t.key===paretoSubTab?'active':''}" data-paretotab="${t.key}">${t.label}</button>`;
+  });
+  pillsHtml += `</div>`;
+  container.innerHTML = pillsHtml + `<div id="paretoSubHost"></div>`;
+  container.querySelectorAll('[data-paretotab]').forEach(btn=>{
+    btn.addEventListener('click', ()=>{
+      paretoSubTab = btn.dataset.paretotab;
+      renderParetoMasterScreen(container);
+    });
+  });
+  renderParetoSubTable(container.querySelector('#paretoSubHost'), paretoSubTab);
+}
+
 const TABS = {
   brands:{
     title:'Brand Master', desc:'Brand is free-text. Brand group is a fixed option.',
@@ -854,20 +919,14 @@ const TABS = {
     title:'CODB Deduction Mapping', desc:'Define CODB line items, then map which Brand → Partner-Models deduct each one directly at the marketplace.',
     render: renderCodbDeductionMappingScreen
   },
-  skuMaster:{
-    title:'SKU Master', desc:'Base AMRP, ACOGS and GST% per SKU — used as defaults in the sales input grid.',
-    render:(el)=> renderEditableTable(el, DATA.skuMaster, [
-      {key:'name', label:'SKU'},
-      {key:'brandId', label:'Brand', type:'select', options:()=>optList(DATA.brands,b=>b.name)},
-      {key:'amrp', label:'AMRP', type:'number'},
-      {key:'acogs', label:'ACOGS', type:'number'},
-      {key:'gstPct', label:'GST %', type:'number'}
-    ], {prefix:'SKU'})
+  paretoMaster:{
+    title:'Pareto Master', desc:'Product hierarchy: Product Group → Product Category → Product Sub Category. AMRP/ACOGS live at the Sub Category level.',
+    render: renderParetoMasterScreen
   },
   salesInput:{
-    title:'SKU × Channel Sales Input', desc:'Secondary gross qty, discount, AMRP, ACOGS and GST per SKU, per channel, per month.',
+    title:'SKU × Channel Sales Input', desc:'Secondary gross qty, discount, AMRP, ACOGS and GST per Product Sub Category, per channel, per month.',
     render:(el)=> renderEditableTable(el, DATA.salesInput, [
-      {key:'skuId', label:'SKU', type:'select', options:()=>optList(DATA.skuMaster,s=>s.name)},
+      {key:'skuId', label:'SKU (Pdt Sub Cat)', type:'select', options:()=>optList(DATA.productSubCategories,s=>s.name)},
       {key:'channelId', label:'Channel', type:'select', options:()=>optList(DATA.channels,c=>c.name)},
       {key:'month', label:'Month', type:'select', options:()=>MONTHS.map(m=>({id:m,label:m}))},
       {key:'qty', label:'Gross Qty', type:'number'},
