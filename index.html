@@ -204,6 +204,12 @@
 
   /* Masters & Config tables — tighter rows, plain-case headers, fixed column widths */
   .mastertable{table-layout:fixed;}
+  .scrollbox{overflow-y:auto; border:1px solid var(--line); border-radius:var(--radius);}
+  .scrollbox table{margin:0;}
+  .scrollbox thead th{position:sticky; top:0; z-index:2; box-shadow:0 1px 0 var(--line);}
+  .mdmtable{border-collapse:collapse; font-size:12.8px;}
+  .mdmtable thead th{background:#F7F8FB; padding:8px 10px; border-bottom:1px solid var(--line); white-space:nowrap; position:sticky; top:0; z-index:2; box-shadow:0 1px 0 var(--line);}
+  .mdmtable tbody td{padding:6px 10px; border-bottom:1px solid var(--line); white-space:nowrap;}
   .mastertable thead th{
     text-align:left; font-size:12.5px; text-transform:none; letter-spacing:0;
     color:#6B7285; border-bottom:1px solid var(--line); background:#F7F8FB;
@@ -549,6 +555,9 @@ function renderMasterTable(container, arr, cols, opts){
 
   html += `<button class="btn danger" id="deleteSelBtn">Delete selected</button>`;
 
+  const scrollOpen = opts.tableMaxHeight ? `<div class="scrollbox" style="max-height:${opts.tableMaxHeight};">` : '';
+  const scrollClose = opts.tableMaxHeight ? `</div>` : '';
+  html += scrollOpen;
   html += `<table class="mastertable"><colgroup><col style="width:34px;">`;
   cols.forEach(c=> html += `<col${c.width?` style="width:${c.width}px;"`:''}>`);
   html += `<col style="width:150px;"></colgroup>`;
@@ -561,6 +570,7 @@ function renderMasterTable(container, arr, cols, opts){
     html += `<td class="actionscell"><div class="actionsrow"><button class="btn-sm" data-editidx="${idx}">Edit</button><button class="btn-sm danger" data-del="${idx}">Remove</button></div></td></tr>`;
   });
   html += `</tbody></table>`;
+  html += scrollClose;
 
   container.innerHTML = html;
 
@@ -727,7 +737,7 @@ function renderMarketplaceDeductionMapping(container){
         html += `<div class="footnote" style="margin-bottom:16px;">No Partner-Model mapping for ${b.name} yet — add one in "4. Brand → Partner Mapping".</div>`;
         return;
       }
-      html += `<div style="overflow-x:auto; margin-bottom:22px;"><table><thead><tr><th>CODB / Expense Item</th><th style="text-align:center;">Sel All</th>`;
+      html += `<div class="scrollbox mdm-scrollbox" style="max-height:340px; overflow-x:auto; margin-bottom:22px;"><table class="mdmtable"><thead><tr><th>CODB / Expense Item</th><th style="text-align:center;">Sel All</th>`;
       brandCols.forEach(c=> html += `<th style="text-align:center;">${c.partner}<br><span style="font-weight:400;">${c.model}</span></th>`);
       html += `</tr></thead><tbody>`;
       rowItems.forEach(item=>{
@@ -787,7 +797,7 @@ function renderCodbDeductionMappingScreen(container){
   renderMasterTable(container.querySelector('#codbLineItemsHost'), DATA.codbLineItems, [
     {key:'name', label:'CODB Line Item', width:240},
     {key:'expenseLineItemId', label:'Expense Line Item', type:'select', options:()=>optList(DATA.expenseLineItems, x=>x.name), width:220}
-  ], {prefix:'CLI', addLabel:'Add', onChange: ()=> renderMarketplaceDeductionMapping(container.querySelector('#marketplaceMappingHost'))});
+  ], {prefix:'CLI', addLabel:'Add', tableMaxHeight:'320px', onChange: ()=> renderMarketplaceDeductionMapping(container.querySelector('#marketplaceMappingHost'))});
   const mmHost = container.querySelector('#marketplaceMappingHost');
   renderMarketplaceDeductionMapping(mmHost);
 }
