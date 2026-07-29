@@ -15,7 +15,7 @@
       "Feb",
       "Mar"
     ],
-    "savedAt": "2026-07-29T12:28:25.009Z"
+    "savedAt": "2026-07-29T12:29:55.506Z"
   },
   "channels": [
     {
@@ -799,7 +799,16 @@
       "description": "Quick Commerce"
     }
   ],
-  "productGroups": [],
+  "productGroups": [
+    {
+      "id": "PG_zhux4k",
+      "name": "Home"
+    },
+    {
+      "id": "PG_vf9yhj",
+      "name": "Kitchen"
+    }
+  ],
   "productCategories": [],
   "productSubCategories": [
     {
