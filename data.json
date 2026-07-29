@@ -15,7 +15,7 @@
       "Feb",
       "Mar"
     ],
-    "savedAt": "2026-07-29T14:29:38.622Z"
+    "savedAt": "2026-07-29T14:29:46.329Z"
   },
   "channels": [
     {
@@ -204,7 +204,7 @@
       "id": "EL_notxgv",
       "name": "COGS",
       "category": "Material",
-      "gstRate": 18,
+      "gstRate": 5,
       "creditorDays": 60,
       "type": "MISC"
     },
