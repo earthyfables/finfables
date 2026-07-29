@@ -253,7 +253,7 @@
   .ledger th{
     text-align:right; padding:8px 11px; border-bottom:2px solid var(--accent-dark);
     font-family:'Times New Roman', Times, serif; font-weight:700; white-space:nowrap; color:var(--ink-soft);
-    text-transform:uppercase; font-size:10.5px; letter-spacing:0.06em;
+    text-transform:uppercase; font-size:10.5px; letter-spacing:0.06em; background:var(--surface);
   }
   .ledger th:first-child{text-align:left;}
   .ledger td{padding:6px 11px; text-align:right; border-bottom:1px solid var(--line); white-space:nowrap; font-variant-numeric:tabular-nums;}
@@ -309,8 +309,8 @@
 
     <div class="navgroup">
       <h4>Output</h4>
-      <button class="navitem" data-tab="outputPL"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg><span>Profit &amp; Loss</span></button>
-      <button class="navitem" data-tab="outputCF"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg><span>Cash Flow</span></button>
+      <button class="navitem" data-tab="outputPLCF"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg><span>P&amp;L &amp; Cash Flow</span></button>
+      <button class="navitem" data-tab="outputPartnerPL"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 13a5 5 0 007.54.54l3-3a5 5 0 00-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 00-7.54-.54l-3 3a5 5 0 007.07 7.07l1.71-1.71"/></svg><span>Partner-Model P&amp;L</span></button>
     </div>
 
     <div class="sidebarsave">
@@ -985,8 +985,8 @@ const TABS = {
       {key:'amount', label:'Amount', type:'number'}
     ], {prefix:'CF'})
   },
-  outputPL:{ title:'Profit & Loss', desc:'Computed monthly, annual total on the right.', render: renderPL },
-  outputCF:{ title:'Cash Flow', desc:'Simplified: EBITDA adjusted for capex, working capital and financing. Extend the model with receivable/payable ageing as a next step.', render: renderCF }
+  outputPLCF:{ title:'P&L & Cash Flow', desc:'Structure matches the reviewed model — not yet linked to live inputs.', render: renderPLCF },
+  outputPartnerPL:{ title:'Partner-Model P&L', desc:'Same P&L layout, one block per Partner-Model. Structure only, not yet linked.', render: renderPartnerModelPL }
 };
 
 /* ---------------------------------------------------------------
@@ -1063,118 +1063,167 @@ function fmt(n){
   return neg ? `(${s})` : s;
 }
 
-function buildPLModel(){
-  const base = computeMonthlyBase();
-  const codbLines = computeRateCardLines(DATA.codbRateCard, base);
-  const miscLines = computeMiscLines();
-  return {base, codbLines, miscLines};
-}
+/* ---------------------------------------------------------------
+   P&L & CASH FLOW — combined output, structure only (not yet linked
+   to Sales Input / Rate Cards / Cash Flow Adjustments). Row layout
+   matches the reviewed Excel model exactly, section for section.
+   ----------------------------------------------------------------*/
+const PLCF_SECTIONS = [
+  { title:'Profit & Loss', rows:[
+    {label:'GMV'},
+    {label:'Returns', indent:true},
+    {label:'GST', indent:true},
+    {label:'Qty'},
+    {label:'NSV', subtotal:true},
+    {label:'COGS', indent:true},
+    {label:'CM1', subtotal:true},
+    {label:'Shrinkage Cost', indent:true},
+    {label:'WH Cost', indent:true},
+    {label:'Packing Cost', indent:true},
+    {label:'Shipping Fee - WH to MP/Consumer', indent:true},
+    {label:'Shipping Fee - MP', indent:true},
+    {label:'Shipping Fee - Return', indent:true},
+    {label:'Closing Fee', indent:true},
+    {label:'Referal Fee', indent:true},
+    {label:'Technology Fee', indent:true},
+    {label:'Pick and Pack', indent:true},
+    {label:'Storage Fees', indent:true},
+    {label:'Comm Cost', indent:true},
+    {label:'CODB', subtotal:true},
+    {label:'CM2', subtotal:true},
+    {label:'CAC', indent:true},
+    {label:'CM3', subtotal:true},
+    {label:'Salary', indent:true},
+    {label:'WH Salary', indent:true},
+    {label:'Founder Salary', indent:true},
+    {label:'Rent', indent:true},
+    {label:'Agency Marketing', indent:true},
+    {label:'CA Agency', indent:true},
+    {label:'Electricity', indent:true},
+    {label:'Internet', indent:true},
+    {label:'Misc', indent:true},
+    {label:'EBITDA', grand:true}
+  ]},
+  { title:'Key Ratios', rows:[
+    {label:'ASP (NOT)'},
+    {label:'CM1%'},
+    {label:'CODB%'},
+    {label:'CM2%'},
+    {label:'CAC% on GMV'},
+    {label:'CM3%'},
+    {label:'EBITDA%'}
+  ]},
+  { title:'Cash — Indirect', rows:[
+    {label:'EBITDA'},
+    {label:'Change in WC'},
+    {label:'Change in Other CA / CL'},
+    {label:'GST Credit'},
+    {label:'OCF', subtotal:true}
+  ]},
+  { title:'Cash — Direct', rows:[
+    {label:'Collections'},
+    {label:'Payments - Material', indent:true},
+    {label:'Payments - Others', indent:true},
+    {label:'GST Payments', indent:true},
+    {label:'Net Cash', subtotal:true},
+    {label:'Check'}
+  ]},
+  { title:'Closing Working Capital', rows:[
+    {label:'Inventory'},
+    {label:'Debtors'},
+    {label:'Creditors - Material'},
+    {label:'Creditors - Others'},
+    {label:'NWC', subtotal:true},
+    {label:'Change in WC'}
+  ]},
+  { title:'Inventory Schedule', rows:[
+    {label:'Op Inventory'},
+    {label:'Inwards', indent:true},
+    {label:'Outwards', indent:true},
+    {label:'Cl Inventory', subtotal:true}
+  ]},
+  { title:'Debtors Schedule', rows:[
+    {label:'Op Debtors Tot'},
+    {label:'Sales +GST', indent:true},
+    {label:'Dedn', indent:true},
+    {label:'Collections', indent:true},
+    {label:'Cl Debtors', subtotal:true}
+  ]},
+  { title:'Collections & Deductions Detail', rows:[
+    {label:'Sales + GST'},
+    {label:'TDS + TCS Deductions', indent:true},
+    {label:'Gross Collectables', subtotal:true},
+    {label:'Deductions', indent:true},
+    {label:'GST on Deductions', indent:true},
+    {label:'Net Deductions', subtotal:true}
+  ]},
+  { title:'Creditors — COGS Schedule', rows:[
+    {label:'Op Creditors - COGS'},
+    {label:'Purchases', indent:true},
+    {label:'Payments', indent:true},
+    {label:'Cl Creditors - COGS', subtotal:true}
+  ]},
+  { title:'Creditors — Others Schedule', rows:[
+    {label:'Op Creditors - Others'},
+    {label:'Expenses', indent:true},
+    {label:'Payments', indent:true},
+    {label:'Cl Creditors - Others', subtotal:true}
+  ]},
+  { title:'Input Credit Calculation', rows:[
+    {label:'Op GST'},
+    {label:'Material', indent:true},
+    {label:'Expenses', indent:true},
+    {label:'Total Input Credit', subtotal:true},
+    {label:'Utilised', indent:true},
+    {label:'Cl Credit', subtotal:true}
+  ]},
+  { title:'GST — Cash Impact', rows:[
+    {label:'Output GST'},
+    {label:'GST Payments', indent:true}
+  ]},
+  { title:'Other CA / CL', rows:[
+    {label:'Op CA / CL'},
+    {label:'During the year', indent:true},
+    {label:'Expended', indent:true},
+    {label:'Cl CA / CL', subtotal:true}
+  ]}
+];
 
-function renderPL(container){
-  const {base, codbLines, miscLines} = buildPLModel();
-  const o = base.overall;
-
-  function rowTotal(getter){ let t=0; MONTHS.forEach(m=> t+=getter(m)); return t; }
-
-  const codbTotalByMKpi = m=> sumMonth(codbLines,m);
-  const miscTotalByMKpi = m=> sumMonth(miscLines,m);
-  const ebitdaByMKpi = m=> o[m].netSales - o[m].cogs - codbTotalByMKpi(m) - miscTotalByMKpi(m);
-  const fyNetSales = rowTotal(m=>o[m].netSales);
-  const fyGrossMargin = rowTotal(m=>o[m].netSales - o[m].cogs);
-  const fyEbitda = rowTotal(ebitdaByMKpi);
-  const ebitdaPct = fyNetSales ? (fyEbitda/fyNetSales*100) : 0;
-  const gmPct = fyNetSales ? (fyGrossMargin/fyNetSales*100) : 0;
-
-  let html = `<div class="kpirow">
-    <div class="kpi"><div class="kpilabel">Net Sales (FY)</div><div class="kpival">₹${fmt(fyNetSales)}</div></div>
-    <div class="kpi"><div class="kpilabel">Gross Margin</div><div class="kpival">₹${fmt(fyGrossMargin)}</div><div class="kpisub">${gmPct.toFixed(1)}% of net sales</div></div>
-    <div class="kpi ${fyEbitda<0?'negtone':''}"><div class="kpilabel">EBITDA (FY)</div><div class="kpival ${fyEbitda<0?'neg':''}">₹${fmt(fyEbitda)}</div><div class="kpisub">${ebitdaPct.toFixed(1)}% of net sales</div></div>
-  </div>`;
-
-  html += `<div class="panel"><table class="ledger"><thead><tr><th>₹</th>`;
+function renderPLCFTable(sections){
+  let html = `<table class="ledger"><thead><tr><th>₹</th>`;
   MONTHS.forEach(m=> html += `<th>${m}</th>`);
   html += `<th class="total-col">FY Total</th></tr></thead><tbody>`;
-
-  const simpleRow = (label, getter, cls)=>{
-    let r = `<tr class="${cls||''}"><td>${label}</td>`;
-    MONTHS.forEach(m=> r += `<td>${fmt(getter(m))}</td>`);
-    r += `<td class="total-col">${fmt(rowTotal(getter))}</td></tr>`;
-    html += r;
-  };
-
-  simpleRow('Gross Sales', m=>o[m].grossSales, 'section');
-  simpleRow('Less: Discount', m=>-o[m].discount);
-  simpleRow('Net Sales', m=>o[m].netSales, 'subtotal');
-  simpleRow('Less: ACOGS', m=>-o[m].cogs);
-  simpleRow('Gross Margin', m=>o[m].netSales - o[m].cogs, 'subtotal');
-
-  html += `<tr class="section"><td>Less: CODB</td>${MONTHS.map(()=>'<td></td>').join('')}<td class="total-col"></td></tr>`;
-  Object.keys(codbLines).forEach(li=>{
-    simpleRow(lineName(li), m=>-(codbLines[li][m]||0), 'lineitem neg');
+  sections.forEach(sec=>{
+    html += `<tr class="section"><td>${sec.title}</td>${MONTHS.map(()=>'<td></td>').join('')}<td class="total-col"></td></tr>`;
+    sec.rows.forEach(r=>{
+      const cls = [r.subtotal?'subtotal':'', r.grand?'grand':'', r.indent?'lineitem':''].filter(Boolean).join(' ');
+      html += `<tr class="${cls}"><td>${r.label}</td>`;
+      MONTHS.forEach(()=> html += `<td>—</td>`);
+      html += `<td class="total-col">—</td></tr>`;
+    });
   });
-  const codbTotalByM = m=> sumMonth(codbLines,m);
-  simpleRow('Total CODB', m=>-codbTotalByM(m), 'subtotal neg');
+  html += `</tbody></table>`;
+  return html;
+}
 
-  simpleRow('Contribution Margin', m=>o[m].netSales - o[m].cogs - codbTotalByM(m), 'subtotal');
-
-  html += `<tr class="section"><td>Less: Misc. Opex</td>${MONTHS.map(()=>'<td></td>').join('')}<td class="total-col"></td></tr>`;
-  Object.keys(miscLines).forEach(li=>{
-    simpleRow(lineName(li), m=>-(miscLines[li][m]||0), 'lineitem neg');
-  });
-  const miscTotalByM = m=> sumMonth(miscLines,m);
-  simpleRow('Total Misc. Opex', m=>-miscTotalByM(m), 'subtotal neg');
-
-  simpleRow('EBITDA', m=>o[m].netSales - o[m].cogs - codbTotalByM(m) - miscTotalByM(m), 'grand');
-
-  html += `</tbody></table></div>`;
-  html += `<div class="footnote">Discount % and ACOGS/AMRP are keyed per SKU × channel × month in the Sales Input grid. CODB is computed from its rate card (rate × Gross Sales / Net Sales / Qty, per channel). GST is collected as an input field for reference but is excluded from this P&amp;L (it is a pass-through, not revenue).</div>`;
+function renderPLCF(container){
+  let html = `<div class="footnote" style="margin-bottom:16px;">Structure only — matches the reviewed model layout, not yet linked to Sales Input / Rate Cards / Cash Flow Adjustments. Values will populate once the input data is finalized and connected.</div>`;
+  html += `<div class="panel"><div class="scrollbox" style="max-height:640px;">${renderPLCFTable(PLCF_SECTIONS)}</div></div>`;
   container.innerHTML = html;
 }
 
-function renderCF(container){
-  const {base, codbLines, miscLines} = buildPLModel();
-  const o = base.overall;
-  const ebitda = m=> o[m].netSales - o[m].cogs - sumMonth(codbLines,m) - sumMonth(miscLines,m);
-
-  const cfByCat = {};
-  DATA.cashFlowItems.forEach(r=>{
-    if(!r.category||!r.month) return;
-    cfByCat[r.category] = cfByCat[r.category] || {};
-    cfByCat[r.category][r.month] = (cfByCat[r.category][r.month]||0) + (+r.amount||0);
-  });
-  const catVal = (cat,m)=> (cfByCat[cat] && cfByCat[cat][m]) || 0;
-
-  function rowTotal(getter){ let t=0; MONTHS.forEach(m=> t+=getter(m)); return t; }
-  const simpleRow = (label, getter, cls)=>{
-    let r = `<tr class="${cls||''}"><td>${label}</td>`;
-    MONTHS.forEach(m=> r += `<td>${fmt(getter(m))}</td>`);
-    r += `<td class="total-col">${fmt(rowTotal(getter))}</td></tr>`;
-    return r;
-  };
-
-  const netCFByM = m=> ebitda(m) - catVal('Capex',m) - catVal('Change in Working Capital',m) + catVal('Financing Inflow / Outflow',m);
-  const fyNetCF = rowTotal(netCFByM);
-  const openingCash = (DATA.meta && (+DATA.meta.openingCash || 0)) || 0;
-  const closingCash = openingCash + fyNetCF;
-
-  let html = `<div class="kpirow">
-    <div class="kpi"><div class="kpilabel">Net Cash Flow (FY)</div><div class="kpival ${fyNetCF<0?'neg':''}">₹${fmt(fyNetCF)}</div></div>
-    <div class="kpi"><div class="kpilabel">Opening Cash</div><div class="kpival">₹${fmt(openingCash)}</div></div>
-    <div class="kpi ${closingCash<0?'negtone':''}"><div class="kpilabel">Closing Cash</div><div class="kpival ${closingCash<0?'neg':''}">₹${fmt(closingCash)}</div></div>
-  </div>`;
-
-  html += `<div class="panel"><table class="ledger"><thead><tr><th>₹</th>`;
-  MONTHS.forEach(m=> html += `<th>${m}</th>`);
-  html += `<th class="total-col">FY Total</th></tr></thead><tbody>`;
-
-  html += simpleRow('EBITDA (from P&amp;L)', ebitda, 'section');
-  html += simpleRow('Less: Capex', m=>-catVal('Capex',m));
-  html += simpleRow('Add/(less): Change in Working Capital', m=>-catVal('Change in Working Capital',m));
-  html += simpleRow('Add/(less): Financing Inflow / Outflow', m=>catVal('Financing Inflow / Outflow',m));
-  html += simpleRow('Net Cash Flow', m=> ebitda(m) - catVal('Capex',m) - catVal('Change in Working Capital',m) + catVal('Financing Inflow / Outflow',m), 'grand');
-
-  html += `</tbody></table></div>`;
-  html += `<div class="footnote">This is a simplified indirect cash flow: EBITDA adjusted for capex, working-capital movement and financing, keyed directly in "Cash Flow Adjustments". It does not yet model receivable/payable ageing, taxes or interest — add those as further line items when ready.</div>`;
+function renderPartnerModelPL(container){
+  let html = `<div class="footnote" style="margin-bottom:16px;">Structure only — same P&amp;L layout as the main output, broken out per Partner-Model. Not yet linked to live data.</div>`;
+  const pms = DATA.partnerModels;
+  if(!pms.length){
+    html += `<div class="footnote">No Partner-Model combos yet — add some in "3. Partner-Model master" first.</div>`;
+  } else {
+    const plOnlySections = PLCF_SECTIONS.slice(0,2); // Profit & Loss + Key Ratios only
+    pms.forEach(pm=>{
+      html += `<h3 style="margin:18px 0 8px 0;">${pm.partner} — ${pm.model}</h3>`;
+      html += `<div class="panel"><div class="scrollbox" style="max-height:420px;">${renderPLCFTable(plOnlySections)}</div></div>`;
+    });
+  }
   container.innerHTML = html;
 }
 
