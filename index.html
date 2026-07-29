@@ -92,7 +92,7 @@
     background:#1B2A4D; color:#fff; border-color:#ECCB7D; outline:none;
     box-shadow:0 0 0 3px rgba(236,203,125,0.25);
   }
-  .cyclepanel select option{color:#1B2338;}
+  .cyclepanel select option{color:#1B2338; background:#fff;}
   .cyclepanel .cyclelabel{font-size:10px; text-transform:uppercase; letter-spacing:0.08em; color:#6B76A0; font-weight:700; margin:8px 0 4px 0;}
   .cyclepanel .cyclesummary{font-size:11px; color:#ECCB7D; font-style:italic; margin-top:6px; line-height:1.4;}
   .cyclepanel .newcyclebtn{
@@ -107,6 +107,14 @@
     font-family:'Times New Roman', Times, serif; font-size:12.5px; font-weight:700; cursor:pointer; margin-top:4px;
   }
   .cyclepanel .createbtn:hover{background:#A47632;}
+  .cyclepanel .versiontoggle{display:flex; gap:6px; margin-bottom:4px;}
+  .cyclepanel .verbtn{
+    flex:1; padding:7px 0; border-radius:6px; border:1px solid rgba(255,255,255,0.14);
+    background:rgba(255,255,255,0.06); color:#B9C1DC; font-family:'Times New Roman', Times, serif;
+    font-size:12px; font-weight:700; cursor:pointer; transition:all 0.15s ease;
+  }
+  .cyclepanel .verbtn:hover{border-color:#ECCB7D; color:#fff;}
+  .cyclepanel .verbtn.active{background:var(--accent); color:#fff; border-color:var(--accent-dark);}
   .sidebarsave-status{font-size:10.5px; color:#8590B3; margin-top:8px; text-align:center; font-style:italic; line-height:1.4;}
 
   /* Main */
@@ -1313,6 +1321,17 @@ function setActiveTab(key){
 }
 
 let cycleFormOpen = false;
+let cycleVersionType = 'AOP';
+
+function nextLENumber(cycles, brandId, fy){
+  let max = 0;
+  cycles.filter(c=>c.brandId===brandId && c.fy===fy && /^LE\d+$/.test(c.version||'')).forEach(c=>{
+    const n = parseInt(c.version.slice(2), 10);
+    if(n > max) max = n;
+  });
+  return max + 1;
+}
+
 function renderCyclePanel(){
   const panel = document.getElementById('cyclePanel');
   if(!panel) return;
@@ -1343,7 +1362,10 @@ function renderCyclePanel(){
       <div class="cyclelabel">Start Month (always ends Mar)</div>
       <select id="cycleStartMonth">${DEFAULT_MONTHS.map(m=>`<option value="${m}">${m}</option>`).join('')}</select>
       <div class="cyclelabel">Version</div>
-      <select id="cycleVersion"><option value="AOP">AOP</option>${[1,2,3,4,5].map(n=>`<option value="LE${n}">LE${n}</option>`).join('')}</select>
+      <div class="versiontoggle">
+        <button type="button" class="verbtn ${cycleVersionType==='AOP'?'active':''}" data-vtype="AOP">AOP</button>
+        <button type="button" class="verbtn ${cycleVersionType==='LE'?'active':''}" data-vtype="LE">LE</button>
+      </div>
       <button class="createbtn" id="createCycleBtn">Create Cycle</button>
     </div>`;
   }
@@ -1362,7 +1384,15 @@ function renderCyclePanel(){
 
   panel.querySelector('#newCycleBtn').addEventListener('click', ()=>{
     cycleFormOpen = !cycleFormOpen;
+    cycleVersionType = 'AOP';
     renderCyclePanel();
+  });
+
+  panel.querySelectorAll('.verbtn').forEach(btn=>{
+    btn.addEventListener('click', ()=>{
+      cycleVersionType = btn.dataset.vtype;
+      renderCyclePanel();
+    });
   });
 
   const copyFromSel = panel.querySelector('#cycleCopyFrom');
@@ -1382,12 +1412,44 @@ function renderCyclePanel(){
     const brandId = panel.querySelector('#cycleBrand').value;
     const fy = panel.querySelector('#cycleFY').value;
     const startMonth = panel.querySelector('#cycleStartMonth').value;
-    const version = panel.querySelector('#cycleVersion').value;
-    if(cycles.some(c=>c.brandId===brandId && c.fy===fy && c.version===version)){
-      alert('A cycle for this Brand + FY + Version already exists.');
+
+    if(cycleVersionType === 'AOP'){
+      const existingAOP = cycles.find(c=>c.brandId===brandId && c.fy===fy && c.version==='AOP');
+      if(existingAOP){
+        const brandName = (DATA.brands.find(b=>b.id===brandId)||{}).name || 'this brand';
+        const switchInstead = confirm(`An AOP already exists for ${brandName} ${fy}.\n\nOK — switch to it.\nCancel — create a new LE revision instead.`);
+        if(switchInstead){
+          DATA.meta.activeCycleId = existingAOP.id;
+          applyActiveCycle();
+          cycleFormOpen = false;
+          markDirty();
+          render();
+          return;
+        }
+        // Fall through to creating an LE revision instead.
+        const n = nextLENumber(cycles, brandId, fy);
+        const newCycle = {id: uid('CYC'), brandId, fy, startMonth, version:`LE${n}`};
+        DATA.aopCycles.push(newCycle);
+        DATA.meta.activeCycleId = newCycle.id;
+        applyActiveCycle();
+        cycleFormOpen = false;
+        markDirty();
+        render();
+        return;
+      }
+      const newCycle = {id: uid('CYC'), brandId, fy, startMonth, version:'AOP'};
+      DATA.aopCycles.push(newCycle);
+      DATA.meta.activeCycleId = newCycle.id;
+      applyActiveCycle();
+      cycleFormOpen = false;
+      markDirty();
+      render();
       return;
     }
-    const newCycle = {id: uid('CYC'), brandId, fy, startMonth, version};
+
+    // LE: auto-numbered, resets per Brand+FY (each new FY starts back at LE1).
+    const n = nextLENumber(cycles, brandId, fy);
+    const newCycle = {id: uid('CYC'), brandId, fy, startMonth, version:`LE${n}`};
     DATA.aopCycles.push(newCycle);
     DATA.meta.activeCycleId = newCycle.id;
     applyActiveCycle();
