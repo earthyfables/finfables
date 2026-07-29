@@ -355,7 +355,7 @@ const SEED = {
   codbLineItems:[], marketplaceDeductionMapping:[],
   productGroups:[{id:"PG1",name:"Personal Care"}],
   productCategories:[{id:"PC1",name:"Towels",productGroupId:"PG1"}],
-  productSubCategories:[{id:"PSC1",name:"Bath Towel",size:"500ml",productGroupId:"PG1",productCategoryId:"PC1",amrp:100,acogs:40}],
+  productSubCategories:[{id:"PSC1",name:"Bath Towel",productGroupId:"PG1",productCategoryId:"PC1",amrp:100,acogs:40}],
   salesInput:[], codbRateCard:[], cidbRateCard:[], miscInputs:[], cashFlowItems:[]
 };
 
@@ -394,7 +394,7 @@ async function loadData(){
     // Migrate any pre-existing SKU Master rows into the new Product Sub Category master
     // so nothing is lost when upgrading from the old SKU-based structure.
     DATA.productSubCategories = (DATA.skuMaster || []).map(s=>({
-      id: s.id, name: s.name, size: '', productGroupId: '', productCategoryId: '',
+      id: s.id, name: s.name, productGroupId: '', productCategoryId: '',
       amrp: s.amrp, acogs: s.acogs
     }));
   }
@@ -842,10 +842,9 @@ function renderParetoSubTable(host, key){
     ], {prefix:'PC', addLabel:'Add'});
   } else {
     renderMasterTable(host, DATA.productSubCategories, [
-      {key:'name', label:'Pdt Sub Cat', width:200},
-      {key:'size', label:'Size', width:100},
-      {key:'productGroupId', label:'Pdt Grp', type:'select', options:()=>optList(DATA.productGroups,g=>g.name), width:160},
-      {key:'productCategoryId', label:'Pdt Cat', type:'select', options:()=>optList(DATA.productCategories,c=>c.name), width:160},
+      {key:'name', label:'Pdt Sub Cat', width:220},
+      {key:'productGroupId', label:'Pdt Grp', type:'select', options:()=>optList(DATA.productGroups,g=>g.name), width:170},
+      {key:'productCategoryId', label:'Pdt Cat', type:'select', options:()=>optList(DATA.productCategories,c=>c.name), width:170},
       {key:'amrp', label:'AMRP', type:'number', width:100},
       {key:'acogs', label:'ACOGS', type:'number', width:100}
     ], {prefix:'PSC', addLabel:'Add'});
