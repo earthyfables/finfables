@@ -112,12 +112,16 @@
   /* Masters & Config: horizontal tab bar */
   .mastertabbar{display:flex; gap:8px; flex-wrap:wrap; margin-bottom:18px; padding-bottom:14px; border-bottom:1px solid var(--line);}
   .mastertab{
+    display:inline-flex; align-items:center; gap:8px;
     font-family:'Times New Roman', Times, serif; font-size:13.5px; font-weight:700;
     padding:9px 16px; border-radius:7px; border:1px solid var(--line); background:var(--surface);
     color:var(--ink); cursor:pointer; transition:all 0.15s ease;
   }
+  .mastertab svg{width:14px; height:14px; flex:none; opacity:0.75;}
   .mastertab:hover{border-color:var(--accent); color:var(--accent);}
+  .mastertab:hover svg{opacity:1;}
   .mastertab.active{background:linear-gradient(180deg, var(--accent), var(--accent-dark)); color:#fff; border-color:var(--accent-dark); box-shadow:var(--shadow-sm);}
+  .mastertab.active svg{opacity:1;}
 
   /* Pill sub-navigation (e.g. Pareto Master's Product Group / Category / Sub Category) */
   .pillbar{display:flex; gap:8px; flex-wrap:wrap; margin-bottom:20px;}
@@ -229,7 +233,7 @@
     color:#6B7285; border-bottom:1px solid var(--line); background:#F7F8FB;
     padding:8px 10px; font-weight:700; white-space:nowrap;
   }
-  .mastertable tbody td{padding:4px 10px; white-space:nowrap; overflow:hidden;}
+  .mastertable tbody td{padding:4px 10px; white-space:nowrap;}
   .mastertable tbody td input[type=text],
   .mastertable tbody td input[type=number],
   .mastertable tbody td select{padding:5px 7px; font-size:13px;}
@@ -702,10 +706,20 @@ const MASTER_TABS = [
   {key:'paretoMaster', num:7, label:'Pareto master'}
 ];
 
+const MASTER_TAB_ICONS = {
+  brands: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20.59 13.41L13.41 20.6a2 2 0 01-2.83 0L3 13V3h10l7.59 7.59a2 2 0 010 2.82z"/><circle cx="7.5" cy="7.5" r="1.2"/></svg>',
+  partnerGroups: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 00-4-4H7a4 4 0 00-4 4v2"/><circle cx="10" cy="7" r="4"/><path d="M23 21v-2a4 4 0 00-3-3.87"/><path d="M16 3.13a4 4 0 010 7.75"/></svg>',
+  partnerModels: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 13a5 5 0 007.54.54l3-3a5 5 0 00-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 00-7.54-.54l-3 3a5 5 0 007.07 7.07l1.71-1.71"/></svg>',
+  brandPartnerMapping: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="6" y1="3" x2="6" y2="15"/><circle cx="18" cy="6" r="3"/><circle cx="6" cy="18" r="3"/><path d="M18 9a9 9 0 01-9 9"/></svg>',
+  expenseLineItems: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 00-2 2v16l3-2 3 2 3-2 3 2V4a2 2 0 00-2-2z"/><line x1="8" y1="8" x2="14" y2="8"/><line x1="8" y1="12" x2="14" y2="12"/></svg>',
+  codbDeductionMapping: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="19" y1="5" x2="5" y2="19"/><circle cx="6.5" cy="6.5" r="2.5"/><circle cx="17.5" cy="17.5" r="2.5"/></svg>',
+  paretoMaster: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="6" y1="20" x2="6" y2="15"/><line x1="12" y1="20" x2="12" y2="9"/><line x1="18" y1="20" x2="18" y2="4"/></svg>'
+};
+
 function renderMasterTabBar(activeKey){
   let html = `<div class="mastertabbar">`;
   MASTER_TABS.forEach(t=>{
-    html += `<button class="mastertab ${t.key===activeKey?'active':''}" data-mastertab="${t.key}">${t.num}. ${t.label}</button>`;
+    html += `<button class="mastertab ${t.key===activeKey?'active':''}" data-mastertab="${t.key}">${MASTER_TAB_ICONS[t.key]||''}<span>${t.label}</span></button>`;
   });
   html += `</div>`;
   return html;
@@ -852,8 +866,8 @@ function renderParetoSubTable(host, key){
       {key:'name', label:'Pdt Sub Cat', width:220},
       {key:'productGroupId', label:'Pdt Grp', type:'select', options:()=>optList(DATA.productGroups,g=>g.name), width:170},
       {key:'productCategoryId', label:'Pdt Cat', type:'select', options:()=>optList(DATA.productCategories,c=>c.name), width:170},
-      {key:'amrp', label:'AMRP', type:'number', width:100},
-      {key:'acogs', label:'ACOGS', type:'number', width:100}
+      {key:'amrp', label:'AMRP', type:'number', width:110},
+      {key:'acogs', label:'ACOGS', type:'number', width:110}
     ], {prefix:'PSC', addLabel:'Add'});
   }
 }
