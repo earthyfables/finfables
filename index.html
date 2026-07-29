@@ -303,7 +303,6 @@
       <h4>Inputs</h4>
       <button class="navitem" data-tab="salesInput"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="23 6 13.5 15.5 8.5 10.5 1 18"/><polyline points="17 6 23 6 23 12"/></svg><span>SKU × Channel Sales Input</span></button>
       <button class="navitem" data-tab="codbRateCard"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="4" y1="21" x2="4" y2="14"/><line x1="4" y1="10" x2="4" y2="3"/><line x1="12" y1="21" x2="12" y2="12"/><line x1="12" y1="8" x2="12" y2="3"/><line x1="20" y1="21" x2="20" y2="16"/><line x1="20" y1="12" x2="20" y2="3"/><line x1="1" y1="14" x2="7" y2="14"/><line x1="9" y1="8" x2="15" y2="8"/><line x1="17" y1="16" x2="23" y2="16"/></svg><span>CODB Rate Card</span></button>
-      <button class="navitem" data-tab="cidbRateCard"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="1" y="4" width="22" height="16" rx="2"/><line x1="1" y1="10" x2="23" y2="10"/></svg><span>CIDB Rate Card</span></button>
       <button class="navitem" data-tab="miscInputs"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="1.4"/><circle cx="19" cy="12" r="1.4"/><circle cx="5" cy="12" r="1.4"/></svg><span>Misc. Inputs</span></button>
       <button class="navitem" data-tab="cashFlowItems"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="23 4 23 10 17 10"/><polyline points="1 20 1 14 7 14"/><path d="M3.51 9a9 9 0 0114.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0020.49 15"/></svg><span>Cash Flow Adjustments</span></button>
     </div>
@@ -364,7 +363,7 @@ const SEED = {
   productGroups:[{id:"PG1",name:"Personal Care"}],
   productCategories:[{id:"PC1",name:"Towels",productGroupId:"PG1"}],
   productSubCategories:[{id:"PSC1",name:"Bath Towel",productGroupId:"PG1",productCategoryId:"PC1",amrp:100,acogs:40}],
-  salesInput:[], codbRateCard:[], cidbRateCard:[], miscInputs:[], cashFlowItems:[]
+  salesInput:[], codbRateCard:[], miscInputs:[], cashFlowItems:[]
 };
 
 function uid(prefix){ return prefix + "_" + Math.random().toString(36).slice(2,8); }
@@ -397,7 +396,7 @@ async function loadData(){
   }
   // Migration: backfill any fields/arrays introduced after this data.json was last saved,
   // so older saved files keep working without losing existing rows.
-  ['codbRateCard','cidbRateCard','cashFlowItems','codbLineItems','marketplaceDeductionMapping','productGroups','productCategories'].forEach(k=>{ if(!DATA[k]) DATA[k]=[]; });
+  ['codbRateCard','cashFlowItems','codbLineItems','marketplaceDeductionMapping','productGroups','productCategories'].forEach(k=>{ if(!DATA[k]) DATA[k]=[]; });
   if(!DATA.productSubCategories){
     // Migrate any pre-existing SKU Master rows into the new Product Sub Category master
     // so nothing is lost when upgrading from the old SKU-based structure.
@@ -970,16 +969,6 @@ const TABS = {
       {key:'appliedOn', label:'Applied on (% only)', type:'select', options:()=>[{id:'Gross Sales',label:'Gross Sales'},{id:'Net Sales',label:'Net Sales'},{id:'Qty',label:'Qty'}]}
     ], {prefix:'RC'})
   },
-  cidbRateCard:{
-    title:'CIDB Rate Card', desc:'Channel-wise rate for each CIDB deduction line item.',
-    render:(el)=> renderEditableTable(el, DATA.cidbRateCard, [
-      {key:'channelId', label:'Channel', type:'select', options:()=>optList(DATA.channels,c=>c.name)},
-      {key:'lineItemId', label:'Line item', type:'select', options:()=>optList(DATA.expenseLineItems.filter(x=>x.type==='CIDB'),x=>x.name)},
-      {key:'rateType', label:'Rate type', type:'select', options:()=>[{id:'%',label:'%'},{id:'Value/Unit',label:'Value / Unit'}]},
-      {key:'rateValue', label:'Rate value', type:'number'},
-      {key:'appliedOn', label:'Applied on (% only)', type:'select', options:()=>[{id:'Gross Sales',label:'Gross Sales'},{id:'Net Sales',label:'Net Sales'},{id:'Qty',label:'Qty'}]}
-    ], {prefix:'CR'})
-  },
   miscInputs:{
     title:'Miscellaneous Inputs', desc:'Brand marketing, salaries, overheads, rent — direct monthly amounts.',
     render:(el)=> renderEditableTable(el, DATA.miscInputs, [
@@ -1077,21 +1066,19 @@ function fmt(n){
 function buildPLModel(){
   const base = computeMonthlyBase();
   const codbLines = computeRateCardLines(DATA.codbRateCard, base);
-  const cidbLines = computeRateCardLines(DATA.cidbRateCard, base);
   const miscLines = computeMiscLines();
-  return {base, codbLines, cidbLines, miscLines};
+  return {base, codbLines, miscLines};
 }
 
 function renderPL(container){
-  const {base, codbLines, cidbLines, miscLines} = buildPLModel();
+  const {base, codbLines, miscLines} = buildPLModel();
   const o = base.overall;
 
   function rowTotal(getter){ let t=0; MONTHS.forEach(m=> t+=getter(m)); return t; }
 
   const codbTotalByMKpi = m=> sumMonth(codbLines,m);
-  const cidbTotalByMKpi = m=> sumMonth(cidbLines,m);
   const miscTotalByMKpi = m=> sumMonth(miscLines,m);
-  const ebitdaByMKpi = m=> o[m].netSales - o[m].cogs - codbTotalByMKpi(m) - cidbTotalByMKpi(m) - miscTotalByMKpi(m);
+  const ebitdaByMKpi = m=> o[m].netSales - o[m].cogs - codbTotalByMKpi(m) - miscTotalByMKpi(m);
   const fyNetSales = rowTotal(m=>o[m].netSales);
   const fyGrossMargin = rowTotal(m=>o[m].netSales - o[m].cogs);
   const fyEbitda = rowTotal(ebitdaByMKpi);
@@ -1130,15 +1117,6 @@ function renderPL(container){
 
   simpleRow('Contribution Margin', m=>o[m].netSales - o[m].cogs - codbTotalByM(m), 'subtotal');
 
-  html += `<tr class="section"><td>Less: CIDB Deductions</td>${MONTHS.map(()=>'<td></td>').join('')}<td class="total-col"></td></tr>`;
-  Object.keys(cidbLines).forEach(li=>{
-    simpleRow(lineName(li), m=>-(cidbLines[li][m]||0), 'lineitem neg');
-  });
-  const cidbTotalByM = m=> sumMonth(cidbLines,m);
-  simpleRow('Total CIDB', m=>-cidbTotalByM(m), 'subtotal neg');
-
-  simpleRow('Margin after CIDB', m=>o[m].netSales - o[m].cogs - codbTotalByM(m) - cidbTotalByM(m), 'subtotal');
-
   html += `<tr class="section"><td>Less: Misc. Opex</td>${MONTHS.map(()=>'<td></td>').join('')}<td class="total-col"></td></tr>`;
   Object.keys(miscLines).forEach(li=>{
     simpleRow(lineName(li), m=>-(miscLines[li][m]||0), 'lineitem neg');
@@ -1146,17 +1124,17 @@ function renderPL(container){
   const miscTotalByM = m=> sumMonth(miscLines,m);
   simpleRow('Total Misc. Opex', m=>-miscTotalByM(m), 'subtotal neg');
 
-  simpleRow('EBITDA', m=>o[m].netSales - o[m].cogs - codbTotalByM(m) - cidbTotalByM(m) - miscTotalByM(m), 'grand');
+  simpleRow('EBITDA', m=>o[m].netSales - o[m].cogs - codbTotalByM(m) - miscTotalByM(m), 'grand');
 
   html += `</tbody></table></div>`;
-  html += `<div class="footnote">Discount % and ACOGS/AMRP are keyed per SKU × channel × month in the Sales Input grid. CODB and CIDB are computed from their respective rate cards (rate × Gross Sales / Net Sales / Qty, per channel). GST is collected as an input field for reference but is excluded from this P&amp;L (it is a pass-through, not revenue).</div>`;
+  html += `<div class="footnote">Discount % and ACOGS/AMRP are keyed per SKU × channel × month in the Sales Input grid. CODB is computed from its rate card (rate × Gross Sales / Net Sales / Qty, per channel). GST is collected as an input field for reference but is excluded from this P&amp;L (it is a pass-through, not revenue).</div>`;
   container.innerHTML = html;
 }
 
 function renderCF(container){
-  const {base, codbLines, cidbLines, miscLines} = buildPLModel();
+  const {base, codbLines, miscLines} = buildPLModel();
   const o = base.overall;
-  const ebitda = m=> o[m].netSales - o[m].cogs - sumMonth(codbLines,m) - sumMonth(cidbLines,m) - sumMonth(miscLines,m);
+  const ebitda = m=> o[m].netSales - o[m].cogs - sumMonth(codbLines,m) - sumMonth(miscLines,m);
 
   const cfByCat = {};
   DATA.cashFlowItems.forEach(r=>{
