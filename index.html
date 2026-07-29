@@ -416,6 +416,17 @@ function applyActiveCycle(){
   const c = getActiveCycle();
   MONTHS = c ? computeCycleMonths(c) : DEFAULT_MONTHS.slice();
 }
+// Cycle-scoped input data: salesInputByCycle / codbRateCardByCycle /
+// miscInputsByCycle / cashFlowItemsByCycle are each an object keyed by
+// cycle id ('' = the default Apr-Mar cycle with no AOP cycle selected).
+// getCycleData returns the array for whichever cycle is currently active,
+// auto-creating an empty one the first time a given cycle is touched.
+function getCycleData(byCycleKey){
+  const ck = DATA.meta.activeCycleId || '';
+  if(!DATA[byCycleKey]) DATA[byCycleKey] = {};
+  if(!DATA[byCycleKey][ck]) DATA[byCycleKey][ck] = [];
+  return DATA[byCycleKey][ck];
+}
 
 const SEED = {
   meta:{fyLabel:"FY 2026-27", months:DEFAULT_MONTHS, savedAt:null, activeCycleId:''},
@@ -437,7 +448,7 @@ const SEED = {
   productGroups:[{id:"PG1",name:"Personal Care"}],
   productCategories:[{id:"PC1",name:"Towels",productGroupId:"PG1"}],
   productSubCategories:[{id:"PSC1",name:"Bath Towel",productGroupId:"PG1",productCategoryId:"PC1",amrp:100,acogs:40}],
-  salesInput:[], codbRateCard:[], miscInputs:[], cashFlowItems:[]
+  salesInputByCycle:{'':[]}, codbRateCardByCycle:{'':[]}, miscInputsByCycle:{'':[]}, cashFlowItemsByCycle:{'':[]}
 };
 
 function uid(prefix){ return prefix + "_" + Math.random().toString(36).slice(2,8); }
@@ -470,7 +481,17 @@ async function loadData(){
   }
   // Migration: backfill any fields/arrays introduced after this data.json was last saved,
   // so older saved files keep working without losing existing rows.
-  ['codbRateCard','cashFlowItems','codbLineItems','marketplaceDeductionMapping','productGroups','productCategories'].forEach(k=>{ if(!DATA[k]) DATA[k]=[]; });
+  ['codbLineItems','marketplaceDeductionMapping','productGroups','productCategories'].forEach(k=>{ if(!DATA[k]) DATA[k]=[]; });
+  // Migrate salesInput/codbRateCard/miscInputs/cashFlowItems from the old flat-array
+  // shape into the new cycle-scoped shape ({'': [...], [cycleId]: [...]}) so that
+  // pre-existing data lands in the default (no-cycle) bucket rather than being lost.
+  ['salesInputByCycle','codbRateCardByCycle','miscInputsByCycle','cashFlowItemsByCycle'].forEach(k=>{
+    if(!DATA[k]){
+      const oldKey = k.replace('ByCycle','');
+      DATA[k] = { '': Array.isArray(DATA[oldKey]) ? DATA[oldKey] : [] };
+    }
+    if(!DATA[k]['']) DATA[k][''] = [];
+  });
   if(!DATA.productSubCategories){
     // Migrate any pre-existing SKU Master rows into the new Product Sub Category master
     // so nothing is lost when upgrading from the old SKU-based structure.
@@ -1025,7 +1046,7 @@ const TABS = {
   },
   salesInput:{
     title:'SKU × Channel Sales Input', desc:'Secondary gross qty, discount, AMRP, ACOGS and GST per Product Sub Category, per channel, per month.',
-    render:(el)=> renderEditableTable(el, DATA.salesInput, [
+    render:(el)=> renderEditableTable(el, getCycleData('salesInputByCycle'), [
       {key:'skuId', label:'SKU (Pdt Sub Cat)', type:'select', options:()=>optList(DATA.productSubCategories,s=>s.name)},
       {key:'channelId', label:'Channel', type:'select', options:()=>optList(DATA.channels,c=>c.name)},
       {key:'month', label:'Month', type:'select', options:()=>MONTHS.map(m=>({id:m,label:m}))},
@@ -1038,7 +1059,7 @@ const TABS = {
   },
   codbRateCard:{
     title:'CODB Rate Card', desc:'Channel-wise rate for each CODB line item, and the base it is applied on.',
-    render:(el)=> renderEditableTable(el, DATA.codbRateCard, [
+    render:(el)=> renderEditableTable(el, getCycleData('codbRateCardByCycle'), [
       {key:'channelId', label:'Channel', type:'select', options:()=>optList(DATA.channels,c=>c.name)},
       {key:'lineItemId', label:'Line item', type:'select', options:()=>optList(DATA.expenseLineItems.filter(x=>x.type==='CODB'),x=>x.name)},
       {key:'rateType', label:'Rate type', type:'select', options:()=>[{id:'%',label:'%'},{id:'Value/Unit',label:'Value / Unit'}]},
@@ -1048,7 +1069,7 @@ const TABS = {
   },
   miscInputs:{
     title:'Miscellaneous Inputs', desc:'Brand marketing, salaries, overheads, rent — direct monthly amounts.',
-    render:(el)=> renderEditableTable(el, DATA.miscInputs, [
+    render:(el)=> renderEditableTable(el, getCycleData('miscInputsByCycle'), [
       {key:'lineItemId', label:'Line item', type:'select', options:()=>optList(DATA.expenseLineItems.filter(x=>x.type==='MISC'),x=>x.name)},
       {key:'month', label:'Month', type:'select', options:()=>MONTHS.map(m=>({id:m,label:m}))},
       {key:'amount', label:'Amount', type:'number'}
@@ -1056,7 +1077,7 @@ const TABS = {
   },
   cashFlowItems:{
     title:'Cash Flow Adjustments', desc:'Capex, working-capital change and financing flows, by month — layered onto EBITDA in the Cash Flow output.',
-    render:(el)=> renderEditableTable(el, DATA.cashFlowItems, [
+    render:(el)=> renderEditableTable(el, getCycleData('cashFlowItemsByCycle'), [
       {key:'category', label:'Category', type:'select', options:()=>[{id:'Capex',label:'Capex'},{id:'Change in Working Capital',label:'Change in Working Capital'},{id:'Financing Inflow / Outflow',label:'Financing Inflow / Outflow'}]},
       {key:'month', label:'Month', type:'select', options:()=>MONTHS.map(m=>({id:m,label:m}))},
       {key:'amount', label:'Amount', type:'number'}
@@ -1073,7 +1094,7 @@ function computeMonthlyBase(){
   // returns { channelId: { month: {qty, grossSales, netSales} } } and overall by month
   const byChMonth = {};
   const overall = {}; MONTHS.forEach(m=> overall[m] = {qty:0, grossSales:0, discount:0, netSales:0, cogs:0});
-  DATA.salesInput.forEach(r=>{
+  getCycleData('salesInputByCycle').forEach(r=>{
     if(!r.skuId || !r.channelId || !r.month) return;
     const qty = +r.qty || 0;
     const amrp = +r.amrp || 0;
@@ -1118,7 +1139,7 @@ function computeRateCardLines(rateCard, base){
 
 function computeMiscLines(){
   const lines = {};
-  DATA.miscInputs.forEach(r=>{
+  getCycleData('miscInputsByCycle').forEach(r=>{
     if(!r.lineItemId || !r.month) return;
     lines[r.lineItemId] = lines[r.lineItemId] || {};
     lines[r.lineItemId][r.month] = (lines[r.lineItemId][r.month]||0) + (+r.amount||0);
