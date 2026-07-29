@@ -15,7 +15,7 @@
       "Feb",
       "Mar"
     ],
-    "savedAt": "2026-07-29T13:00:36.913Z"
+    "savedAt": "2026-07-29T14:27:30.200Z"
   },
   "channels": [
     {
@@ -62,7 +62,7 @@
       "id": "PM_y0jzso",
       "partner": "Amazon USA",
       "model": "B2C",
-      "partnerGroup": "FAM"
+      "partnerGroup": "PG_ofzjnk"
     },
     {
       "id": "PM_esn20h",
@@ -267,7 +267,7 @@
   "salesInput": [
     {
       "id": "SI1",
-      "skuId": "SKU1",
+      "skuId": "PSC_ttd6f0",
       "channelId": "CH1",
       "month": "Apr",
       "qty": 10000,
@@ -278,7 +278,7 @@
     },
     {
       "id": "SI2",
-      "skuId": "SKU1",
+      "skuId": "PSC_ttd6f0",
       "channelId": "CH2",
       "month": "Apr",
       "qty": 6000,
@@ -289,7 +289,7 @@
     },
     {
       "id": "SI3",
-      "skuId": "SKU2",
+      "skuId": "PSC_ttd6f0",
       "channelId": "CH3",
       "month": "Apr",
       "qty": 3000,
@@ -797,6 +797,11 @@
       "id": "QCK",
       "name": "QCK",
       "description": "Quick Commerce"
+    },
+    {
+      "id": "PG_ofzjnk",
+      "name": "INTL",
+      "description": "International"
     }
   ],
   "productGroups": [
