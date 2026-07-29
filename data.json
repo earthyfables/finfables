@@ -15,7 +15,7 @@
       "Feb",
       "Mar"
     ],
-    "savedAt": "2026-07-29T12:29:55.506Z"
+    "savedAt": "2026-07-29T12:31:55.668Z"
   },
   "channels": [
     {
@@ -809,7 +809,68 @@
       "name": "Kitchen"
     }
   ],
-  "productCategories": [],
+  "productCategories": [
+    {
+      "id": "PC_r2a5ac",
+      "name": "Bath Mats",
+      "productGroupId": "PG_zhux4k"
+    },
+    {
+      "id": "PC_ofapit",
+      "name": "Bath Towels",
+      "productGroupId": "PG_zhux4k"
+    },
+    {
+      "id": "PC_t2rz6a",
+      "name": "Face Towel",
+      "productGroupId": "PG_zhux4k"
+    },
+    {
+      "id": "PC_d7uwz1",
+      "name": "Frying Pan",
+      "productGroupId": "PG_vf9yhj"
+    },
+    {
+      "id": "PC_h01yup",
+      "name": "Hand Towels",
+      "productGroupId": "PG_zhux4k"
+    },
+    {
+      "id": "PC_21bqv5",
+      "name": "Kadai",
+      "productGroupId": "PG_vf9yhj"
+    },
+    {
+      "id": "PC_mg39l4",
+      "name": "Sauce Pan",
+      "productGroupId": "PG_vf9yhj"
+    },
+    {
+      "id": "PC_edydxr",
+      "name": "Tope",
+      "productGroupId": "PG_vf9yhj"
+    },
+    {
+      "id": "PC_ncey5g",
+      "name": "Towel Set",
+      "productGroupId": "PG_zhux4k"
+    },
+    {
+      "id": "PC_e0ut7i",
+      "name": "Wok",
+      "productGroupId": "PG_vf9yhj"
+    },
+    {
+      "id": "PC_9kyg3s",
+      "name": "Head Towels",
+      "productGroupId": "PG_zhux4k"
+    },
+    {
+      "id": "PC_43yr0v",
+      "name": "Gym Towels",
+      "productGroupId": "PG_zhux4k"
+    }
+  ],
   "productSubCategories": [
     {
       "id": "SKU1",
