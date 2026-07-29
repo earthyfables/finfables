@@ -1,77 +1,824 @@
 {
   "meta": {
     "fyLabel": "FY 2026-27",
-    "months": ["Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec", "Jan", "Feb", "Mar"],
-    "savedAt": null
+    "months": [
+      "Apr",
+      "May",
+      "Jun",
+      "Jul",
+      "Aug",
+      "Sep",
+      "Oct",
+      "Nov",
+      "Dec",
+      "Jan",
+      "Feb",
+      "Mar"
+    ],
+    "savedAt": "2026-07-29T12:27:39.457Z"
   },
   "channels": [
-    { "id": "CH1", "name": "General Trade" },
-    { "id": "CH2", "name": "Modern Trade" },
-    { "id": "CH3", "name": "E-commerce" }
+    {
+      "id": "CH1",
+      "name": "General Trade"
+    },
+    {
+      "id": "CH2",
+      "name": "Modern Trade"
+    },
+    {
+      "id": "CH3",
+      "name": "E-commerce"
+    }
   ],
   "brands": [
-    { "id": "BR1", "name": "Brand A" }
+    {
+      "id": "BR1",
+      "name": "Earthy Fables",
+      "brand2": "Brand A",
+      "brandGroup": "Focus",
+      "cohort": ""
+    },
+    {
+      "id": "BR_i228uj",
+      "name": "Amit",
+      "brandGroup": "Rainbow"
+    }
   ],
   "partnerModels": [
-    { "id": "PM1", "name": "Super Stockist", "model": "Distributor" },
-    { "id": "PM2", "name": "Retail Chain Co", "model": "Modern Trade" },
-    { "id": "PM3", "name": "Marketplace Co", "model": "E-commerce" }
+    {
+      "id": "PM_2nak1i",
+      "partner": "Flipkart",
+      "model": "B2C",
+      "partnerGroup": "FAM"
+    },
+    {
+      "id": "PM_rkv6uj",
+      "partner": "Amazon",
+      "model": "B2C",
+      "partnerGroup": "FAM"
+    },
+    {
+      "id": "PM_y0jzso",
+      "partner": "Amazon USA",
+      "model": "B2C",
+      "partnerGroup": "FAM"
+    },
+    {
+      "id": "PM_esn20h",
+      "partner": "Blinkit",
+      "model": "B2C",
+      "partnerGroup": "QCK"
+    },
+    {
+      "id": "PM_jgo2r9",
+      "partner": "Website",
+      "model": "B2C",
+      "partnerGroup": "Website"
+    },
+    {
+      "id": "PM_2gw084",
+      "partner": "Myntra",
+      "model": "B2C",
+      "partnerGroup": "MAN"
+    }
   ],
   "brandPartnerMapping": [
-    { "id": "BPM1", "brandId": "BR1", "partnerId": "PM1" },
-    { "id": "BPM2", "brandId": "BR1", "partnerId": "PM2" },
-    { "id": "BPM3", "brandId": "BR1", "partnerId": "PM3" }
+    {
+      "id": "BPM_leq42y",
+      "brandId": "BR1",
+      "partner": "Flipkart",
+      "model": "B2C",
+      "creditDays": 15
+    },
+    {
+      "id": "BPM_exbxqc",
+      "brandId": "BR1",
+      "partner": "Amazon",
+      "model": "B2C",
+      "creditDays": 15
+    },
+    {
+      "id": "BPM_6c9gqo",
+      "brandId": "BR1",
+      "partner": "Amazon USA",
+      "model": "B2C",
+      "creditDays": 15
+    },
+    {
+      "id": "BPM_93osmj",
+      "brandId": "BR1",
+      "partner": "Blinkit",
+      "model": "B2C",
+      "creditDays": 15
+    },
+    {
+      "id": "BPM_o75mgv",
+      "brandId": "BR1",
+      "partner": "Website",
+      "model": "B2C",
+      "creditDays": 15
+    },
+    {
+      "id": "BPM_ng4s39",
+      "brandId": "BR1",
+      "partner": "Myntra",
+      "model": "B2C",
+      "creditDays": 15
+    }
   ],
   "expenseLineItems": [
-    { "id": "EL1", "name": "Trade Scheme", "type": "CODB" },
-    { "id": "EL2", "name": "Logistics / Freight", "type": "CODB" },
-    { "id": "EL3", "name": "Marketplace Commission", "type": "CODB" },
-    { "id": "EL4", "name": "Cash Discount", "type": "CIDB" },
-    { "id": "EL5", "name": "Sales Return / Shortage", "type": "CIDB" },
-    { "id": "EL6", "name": "Brand Marketing", "type": "MISC" },
-    { "id": "EL7", "name": "Salaries", "type": "MISC" },
-    { "id": "EL8", "name": "Overheads", "type": "MISC" },
-    { "id": "EL9", "name": "Rent", "type": "MISC" }
+    {
+      "id": "EL_vpsayp",
+      "name": "CODB",
+      "category": "Other Expenses",
+      "gstRate": 18,
+      "creditorDays": 30,
+      "type": "MISC"
+    },
+    {
+      "id": "EL_1tskzd",
+      "name": "CAC",
+      "category": "Other Expenses",
+      "gstRate": 18,
+      "creditorDays": 30,
+      "type": "MISC"
+    },
+    {
+      "id": "EL_2ft97u",
+      "name": "Brand Marketing",
+      "category": "Other Expenses",
+      "gstRate": 18,
+      "creditorDays": 30,
+      "type": "MISC"
+    },
+    {
+      "id": "EL_3ffb7u",
+      "name": "Royalty",
+      "category": "Other Expenses",
+      "gstRate": 18,
+      "creditorDays": 30,
+      "type": "MISC"
+    },
+    {
+      "id": "EL_cpucaa",
+      "name": "Salaries - Direct",
+      "category": "Other Expenses",
+      "gstRate": 0,
+      "creditorDays": 0,
+      "type": "MISC"
+    },
+    {
+      "id": "EL_aaeffh",
+      "name": "Overheads - Direct",
+      "category": "Other Expenses",
+      "gstRate": 18,
+      "creditorDays": 30,
+      "type": "MISC"
+    },
+    {
+      "id": "EL_ry6t0e",
+      "name": "Overheads - Rent",
+      "category": "Other Expenses",
+      "gstRate": 18,
+      "creditorDays": 30,
+      "type": "MISC"
+    },
+    {
+      "id": "EL_hbh005",
+      "name": "Salaries - Indirect",
+      "category": "Other Expenses",
+      "gstRate": 18,
+      "creditorDays": 0,
+      "type": "MISC"
+    },
+    {
+      "id": "EL_jzy1qi",
+      "name": "Overheads - Indirect",
+      "category": "Other Expenses",
+      "gstRate": 18,
+      "creditorDays": 30,
+      "type": "MISC"
+    },
+    {
+      "id": "EL_notxgv",
+      "name": "COGS",
+      "category": "Material",
+      "gstRate": 3,
+      "creditorDays": 60,
+      "type": "MISC"
+    },
+    {
+      "id": "EL_ykcdna",
+      "name": "Inter company",
+      "category": "IC",
+      "gstRate": 18,
+      "creditorDays": 360,
+      "type": "MISC"
+    }
   ],
   "codbMaster": [
-    { "id": "CM1", "lineItemId": "EL1", "description": "Scheme support given to trade partners" },
-    { "id": "CM2", "lineItemId": "EL2", "description": "Freight and secondary logistics cost" },
-    { "id": "CM3", "lineItemId": "EL3", "description": "Commission charged by marketplace" }
+    {
+      "id": "CM1",
+      "lineItemId": "EL1",
+      "description": "Scheme support given to trade partners"
+    },
+    {
+      "id": "CM2",
+      "lineItemId": "EL2",
+      "description": "Freight and secondary logistics cost"
+    },
+    {
+      "id": "CM3",
+      "lineItemId": "EL3",
+      "description": "Commission charged by marketplace"
+    }
   ],
   "cidbDeductionMapping": [
-    { "id": "CD1", "lineItemId": "EL4", "description": "Cash discount deducted by partner on payment" },
-    { "id": "CD2", "lineItemId": "EL5", "description": "Deduction for returns / transit shortage" }
+    {
+      "id": "CD1",
+      "lineItemId": "EL4",
+      "description": "Cash discount deducted by partner on payment"
+    },
+    {
+      "id": "CD2",
+      "lineItemId": "EL5",
+      "description": "Deduction for returns / transit shortage"
+    }
   ],
   "skuMaster": [
-    { "id": "SKU1", "name": "SKU 500ml", "brandId": "BR1", "amrp": 100, "acogs": 40, "gstPct": 18 },
-    { "id": "SKU2", "name": "SKU 1L", "brandId": "BR1", "amrp": 180, "acogs": 70, "gstPct": 18 }
+    {
+      "id": "SKU1",
+      "name": "SKU 500ml",
+      "brandId": "BR1",
+      "amrp": 100,
+      "acogs": 40,
+      "gstPct": 18
+    },
+    {
+      "id": "SKU2",
+      "name": "SKU 1L",
+      "brandId": "BR1",
+      "amrp": 180,
+      "acogs": 70,
+      "gstPct": 18
+    }
   ],
   "salesInput": [
-    { "id": "SI1", "skuId": "SKU1", "channelId": "CH1", "month": "Apr", "qty": 10000, "discountPct": 5, "amrp": 100, "acogs": 40, "gstPct": 18 },
-    { "id": "SI2", "skuId": "SKU1", "channelId": "CH2", "month": "Apr", "qty": 6000, "discountPct": 8, "amrp": 100, "acogs": 40, "gstPct": 18 },
-    { "id": "SI3", "skuId": "SKU2", "channelId": "CH3", "month": "Apr", "qty": 3000, "discountPct": 12, "amrp": 180, "acogs": 70, "gstPct": 18 }
+    {
+      "id": "SI1",
+      "skuId": "SKU1",
+      "channelId": "CH1",
+      "month": "Apr",
+      "qty": 10000,
+      "discountPct": 5,
+      "amrp": 100,
+      "acogs": 40,
+      "gstPct": 18
+    },
+    {
+      "id": "SI2",
+      "skuId": "SKU1",
+      "channelId": "CH2",
+      "month": "Apr",
+      "qty": 6000,
+      "discountPct": 8,
+      "amrp": 100,
+      "acogs": 40,
+      "gstPct": 18
+    },
+    {
+      "id": "SI3",
+      "skuId": "SKU2",
+      "channelId": "CH3",
+      "month": "Apr",
+      "qty": 3000,
+      "discountPct": 12,
+      "amrp": 180,
+      "acogs": 70,
+      "gstPct": 18
+    }
   ],
   "codbRateCard": [
-    { "id": "RC1", "channelId": "CH1", "lineItemId": "EL1", "rateType": "%", "rateValue": 3, "appliedOn": "Net Sales" },
-    { "id": "RC2", "channelId": "CH2", "lineItemId": "EL1", "rateType": "%", "rateValue": 5, "appliedOn": "Net Sales" },
-    { "id": "RC3", "channelId": "CH3", "lineItemId": "EL3", "rateType": "%", "rateValue": 15, "appliedOn": "Gross Sales" },
-    { "id": "RC4", "channelId": "CH1", "lineItemId": "EL2", "rateType": "Value/Unit", "rateValue": 2, "appliedOn": "Qty" },
-    { "id": "RC5", "channelId": "CH2", "lineItemId": "EL2", "rateType": "Value/Unit", "rateValue": 3, "appliedOn": "Qty" },
-    { "id": "RC6", "channelId": "CH3", "lineItemId": "EL2", "rateType": "Value/Unit", "rateValue": 5, "appliedOn": "Qty" }
+    {
+      "id": "RC1",
+      "channelId": "CH1",
+      "lineItemId": "EL1",
+      "rateType": "%",
+      "rateValue": 3,
+      "appliedOn": "Net Sales"
+    },
+    {
+      "id": "RC2",
+      "channelId": "CH2",
+      "lineItemId": "EL1",
+      "rateType": "%",
+      "rateValue": 5,
+      "appliedOn": "Net Sales"
+    },
+    {
+      "id": "RC3",
+      "channelId": "CH3",
+      "lineItemId": "EL3",
+      "rateType": "%",
+      "rateValue": 15,
+      "appliedOn": "Gross Sales"
+    },
+    {
+      "id": "RC4",
+      "channelId": "CH1",
+      "lineItemId": "EL2",
+      "rateType": "Value/Unit",
+      "rateValue": 2,
+      "appliedOn": "Qty"
+    },
+    {
+      "id": "RC5",
+      "channelId": "CH2",
+      "lineItemId": "EL2",
+      "rateType": "Value/Unit",
+      "rateValue": 3,
+      "appliedOn": "Qty"
+    },
+    {
+      "id": "RC6",
+      "channelId": "CH3",
+      "lineItemId": "EL2",
+      "rateType": "Value/Unit",
+      "rateValue": 5,
+      "appliedOn": "Qty"
+    }
   ],
   "cidbRateCard": [
-    { "id": "CR1", "channelId": "CH1", "lineItemId": "EL4", "rateType": "%", "rateValue": 1, "appliedOn": "Net Sales" },
-    { "id": "CR2", "channelId": "CH2", "lineItemId": "EL5", "rateType": "%", "rateValue": 1.5, "appliedOn": "Net Sales" }
+    {
+      "id": "CR1",
+      "channelId": "CH1",
+      "lineItemId": "EL4",
+      "rateType": "%",
+      "rateValue": 1,
+      "appliedOn": "Net Sales"
+    },
+    {
+      "id": "CR2",
+      "channelId": "CH2",
+      "lineItemId": "EL5",
+      "rateType": "%",
+      "rateValue": 1.5,
+      "appliedOn": "Net Sales"
+    }
   ],
   "miscInputs": [
-    { "id": "MI1", "lineItemId": "EL6", "month": "Apr", "amount": 200000 },
-    { "id": "MI2", "lineItemId": "EL7", "month": "Apr", "amount": 350000 },
-    { "id": "MI3", "lineItemId": "EL8", "month": "Apr", "amount": 100000 },
-    { "id": "MI4", "lineItemId": "EL9", "month": "Apr", "amount": 80000 }
+    {
+      "id": "MI1",
+      "lineItemId": "EL6",
+      "month": "Apr",
+      "amount": 200000
+    },
+    {
+      "id": "MI2",
+      "lineItemId": "EL7",
+      "month": "Apr",
+      "amount": 350000
+    },
+    {
+      "id": "MI3",
+      "lineItemId": "EL8",
+      "month": "Apr",
+      "amount": 100000
+    },
+    {
+      "id": "MI4",
+      "lineItemId": "EL9",
+      "month": "Apr",
+      "amount": 80000
+    }
   ],
   "cashFlowItems": [
-    { "id": "CF1", "category": "Capex", "month": "Apr", "amount": 0 },
-    { "id": "CF2", "category": "Change in Working Capital", "month": "Apr", "amount": 0 },
-    { "id": "CF3", "category": "Financing Inflow / Outflow", "month": "Apr", "amount": 0 }
+    {
+      "id": "CF1",
+      "category": "Capex",
+      "month": "Apr",
+      "amount": 0
+    },
+    {
+      "id": "CF2",
+      "category": "Change in Working Capital",
+      "month": "Apr",
+      "amount": 0
+    },
+    {
+      "id": "CF3",
+      "category": "Financing Inflow / Outflow",
+      "month": "Apr",
+      "amount": 0
+    }
+  ],
+  "codbLineItems": [
+    {
+      "id": "CLI_n2ckas",
+      "name": "Cust Care Charges",
+      "expenseLineItemId": "EL_vpsayp"
+    },
+    {
+      "id": "CLI_we7tng",
+      "name": "PGW Costs",
+      "expenseLineItemId": "EL_vpsayp"
+    },
+    {
+      "id": "CLI_jk3s81",
+      "name": "Shrinkage Cost",
+      "expenseLineItemId": "EL_vpsayp"
+    },
+    {
+      "id": "CLI_wnbqlw",
+      "name": "WH Cost",
+      "expenseLineItemId": "EL_vpsayp"
+    },
+    {
+      "id": "CLI_js18tx",
+      "name": "Packing Cost",
+      "expenseLineItemId": "EL_vpsayp"
+    },
+    {
+      "id": "CLI_ny357m",
+      "name": "Shipping Fee - Forward",
+      "expenseLineItemId": "EL_vpsayp"
+    },
+    {
+      "id": "CLI_9ftoyg",
+      "name": "COD Charges",
+      "expenseLineItemId": "EL_vpsayp"
+    },
+    {
+      "id": "CLI_qilzq1",
+      "name": "Shipping Fee - Mfg to WH",
+      "expenseLineItemId": "EL_vpsayp"
+    },
+    {
+      "id": "CLI_cgf218",
+      "name": "Shipping Fee - WH to MP/Consumer",
+      "expenseLineItemId": "EL_vpsayp"
+    },
+    {
+      "id": "CLI_u9nlrh",
+      "name": "Shipping Fee - MP",
+      "expenseLineItemId": "EL_vpsayp"
+    },
+    {
+      "id": "CLI_c5qu8y",
+      "name": "Shipping Fee - Return",
+      "expenseLineItemId": "EL_vpsayp"
+    },
+    {
+      "id": "CLI_e8xfgb",
+      "name": "Closing Fee",
+      "expenseLineItemId": "EL_vpsayp"
+    },
+    {
+      "id": "CLI_yusbdc",
+      "name": "Fixed Fee",
+      "expenseLineItemId": "EL_vpsayp"
+    },
+    {
+      "id": "CLI_zr5pow",
+      "name": "Technology Fee",
+      "expenseLineItemId": "EL_vpsayp"
+    },
+    {
+      "id": "CLI_yumaqg",
+      "name": "Pick and Pack",
+      "expenseLineItemId": "EL_vpsayp"
+    },
+    {
+      "id": "CLI_wckj3j",
+      "name": "Storage Fees",
+      "expenseLineItemId": "EL_vpsayp"
+    },
+    {
+      "id": "CLI_0tteo6",
+      "name": "Other FUL",
+      "expenseLineItemId": "EL_vpsayp"
+    },
+    {
+      "id": "CLI_6qsvs6",
+      "name": "Comm Cost",
+      "expenseLineItemId": "EL_vpsayp"
+    },
+    {
+      "id": "CLI_lpq9o5",
+      "name": "Fixed Costs - Offline",
+      "expenseLineItemId": "EL_vpsayp"
+    },
+    {
+      "id": "CLI_zw5eze",
+      "name": "Variable Costs - Offline",
+      "expenseLineItemId": "EL_vpsayp"
+    },
+    {
+      "id": "CLI_fk4ybo",
+      "name": "CAC",
+      "expenseLineItemId": "EL_1tskzd"
+    }
+  ],
+  "marketplaceDeductionMapping": [
+    {
+      "brandId": "BR1",
+      "partnerModelId": "PM_2nak1i",
+      "codbLineItemId": "CLI_u9nlrh"
+    },
+    {
+      "brandId": "BR1",
+      "partnerModelId": "PM_rkv6uj",
+      "codbLineItemId": "CLI_u9nlrh"
+    },
+    {
+      "brandId": "BR1",
+      "partnerModelId": "PM_y0jzso",
+      "codbLineItemId": "CLI_u9nlrh"
+    },
+    {
+      "brandId": "BR1",
+      "partnerModelId": "PM_esn20h",
+      "codbLineItemId": "CLI_u9nlrh"
+    },
+    {
+      "brandId": "BR1",
+      "partnerModelId": "PM_jgo2r9",
+      "codbLineItemId": "CLI_u9nlrh"
+    },
+    {
+      "brandId": "BR1",
+      "partnerModelId": "PM_2gw084",
+      "codbLineItemId": "CLI_u9nlrh"
+    },
+    {
+      "brandId": "BR1",
+      "partnerModelId": "PM_2nak1i",
+      "codbLineItemId": "CLI_c5qu8y"
+    },
+    {
+      "brandId": "BR1",
+      "partnerModelId": "PM_rkv6uj",
+      "codbLineItemId": "CLI_c5qu8y"
+    },
+    {
+      "brandId": "BR1",
+      "partnerModelId": "PM_y0jzso",
+      "codbLineItemId": "CLI_c5qu8y"
+    },
+    {
+      "brandId": "BR1",
+      "partnerModelId": "PM_esn20h",
+      "codbLineItemId": "CLI_c5qu8y"
+    },
+    {
+      "brandId": "BR1",
+      "partnerModelId": "PM_jgo2r9",
+      "codbLineItemId": "CLI_c5qu8y"
+    },
+    {
+      "brandId": "BR1",
+      "partnerModelId": "PM_2gw084",
+      "codbLineItemId": "CLI_c5qu8y"
+    },
+    {
+      "brandId": "BR1",
+      "partnerModelId": "PM_2nak1i",
+      "codbLineItemId": "CLI_e8xfgb"
+    },
+    {
+      "brandId": "BR1",
+      "partnerModelId": "PM_rkv6uj",
+      "codbLineItemId": "CLI_e8xfgb"
+    },
+    {
+      "brandId": "BR1",
+      "partnerModelId": "PM_y0jzso",
+      "codbLineItemId": "CLI_e8xfgb"
+    },
+    {
+      "brandId": "BR1",
+      "partnerModelId": "PM_esn20h",
+      "codbLineItemId": "CLI_e8xfgb"
+    },
+    {
+      "brandId": "BR1",
+      "partnerModelId": "PM_jgo2r9",
+      "codbLineItemId": "CLI_e8xfgb"
+    },
+    {
+      "brandId": "BR1",
+      "partnerModelId": "PM_2gw084",
+      "codbLineItemId": "CLI_e8xfgb"
+    },
+    {
+      "brandId": "BR1",
+      "partnerModelId": "PM_2nak1i",
+      "codbLineItemId": "CLI_yusbdc"
+    },
+    {
+      "brandId": "BR1",
+      "partnerModelId": "PM_rkv6uj",
+      "codbLineItemId": "CLI_yusbdc"
+    },
+    {
+      "brandId": "BR1",
+      "partnerModelId": "PM_y0jzso",
+      "codbLineItemId": "CLI_yusbdc"
+    },
+    {
+      "brandId": "BR1",
+      "partnerModelId": "PM_esn20h",
+      "codbLineItemId": "CLI_yusbdc"
+    },
+    {
+      "brandId": "BR1",
+      "partnerModelId": "PM_jgo2r9",
+      "codbLineItemId": "CLI_yusbdc"
+    },
+    {
+      "brandId": "BR1",
+      "partnerModelId": "PM_2gw084",
+      "codbLineItemId": "CLI_yusbdc"
+    },
+    {
+      "brandId": "BR1",
+      "partnerModelId": "PM_2nak1i",
+      "codbLineItemId": "CLI_zr5pow"
+    },
+    {
+      "brandId": "BR1",
+      "partnerModelId": "PM_rkv6uj",
+      "codbLineItemId": "CLI_zr5pow"
+    },
+    {
+      "brandId": "BR1",
+      "partnerModelId": "PM_y0jzso",
+      "codbLineItemId": "CLI_zr5pow"
+    },
+    {
+      "brandId": "BR1",
+      "partnerModelId": "PM_esn20h",
+      "codbLineItemId": "CLI_zr5pow"
+    },
+    {
+      "brandId": "BR1",
+      "partnerModelId": "PM_jgo2r9",
+      "codbLineItemId": "CLI_zr5pow"
+    },
+    {
+      "brandId": "BR1",
+      "partnerModelId": "PM_2gw084",
+      "codbLineItemId": "CLI_zr5pow"
+    },
+    {
+      "brandId": "BR1",
+      "partnerModelId": "PM_2nak1i",
+      "codbLineItemId": "CLI_yumaqg"
+    },
+    {
+      "brandId": "BR1",
+      "partnerModelId": "PM_rkv6uj",
+      "codbLineItemId": "CLI_yumaqg"
+    },
+    {
+      "brandId": "BR1",
+      "partnerModelId": "PM_y0jzso",
+      "codbLineItemId": "CLI_yumaqg"
+    },
+    {
+      "brandId": "BR1",
+      "partnerModelId": "PM_esn20h",
+      "codbLineItemId": "CLI_yumaqg"
+    },
+    {
+      "brandId": "BR1",
+      "partnerModelId": "PM_jgo2r9",
+      "codbLineItemId": "CLI_yumaqg"
+    },
+    {
+      "brandId": "BR1",
+      "partnerModelId": "PM_2gw084",
+      "codbLineItemId": "CLI_yumaqg"
+    },
+    {
+      "brandId": "BR1",
+      "partnerModelId": "PM_2nak1i",
+      "codbLineItemId": "CLI_wckj3j"
+    },
+    {
+      "brandId": "BR1",
+      "partnerModelId": "PM_rkv6uj",
+      "codbLineItemId": "CLI_wckj3j"
+    },
+    {
+      "brandId": "BR1",
+      "partnerModelId": "PM_y0jzso",
+      "codbLineItemId": "CLI_wckj3j"
+    },
+    {
+      "brandId": "BR1",
+      "partnerModelId": "PM_esn20h",
+      "codbLineItemId": "CLI_wckj3j"
+    },
+    {
+      "brandId": "BR1",
+      "partnerModelId": "PM_jgo2r9",
+      "codbLineItemId": "CLI_wckj3j"
+    },
+    {
+      "brandId": "BR1",
+      "partnerModelId": "PM_2gw084",
+      "codbLineItemId": "CLI_wckj3j"
+    },
+    {
+      "brandId": "BR1",
+      "partnerModelId": "PM_2nak1i",
+      "codbLineItemId": "CLI_6qsvs6"
+    },
+    {
+      "brandId": "BR1",
+      "partnerModelId": "PM_rkv6uj",
+      "codbLineItemId": "CLI_6qsvs6"
+    },
+    {
+      "brandId": "BR1",
+      "partnerModelId": "PM_y0jzso",
+      "codbLineItemId": "CLI_6qsvs6"
+    },
+    {
+      "brandId": "BR1",
+      "partnerModelId": "PM_esn20h",
+      "codbLineItemId": "CLI_6qsvs6"
+    },
+    {
+      "brandId": "BR1",
+      "partnerModelId": "PM_jgo2r9",
+      "codbLineItemId": "CLI_6qsvs6"
+    },
+    {
+      "brandId": "BR1",
+      "partnerModelId": "PM_2gw084",
+      "codbLineItemId": "CLI_6qsvs6"
+    }
+  ],
+  "partnerGroups": [
+    {
+      "id": "Website",
+      "name": "Website",
+      "description": "Website"
+    },
+    {
+      "id": "FAM",
+      "name": "FAM",
+      "description": "Flipkat, Amazon and Meesho"
+    },
+    {
+      "id": "MAN",
+      "name": "MAN",
+      "description": "Myntra, Ajio and Nykaa"
+    },
+    {
+      "id": "Stores",
+      "name": "Stores",
+      "description": "Stores"
+    },
+    {
+      "id": "Other MP",
+      "name": "Other MP",
+      "description": "Other MP"
+    },
+    {
+      "id": "Other Offline",
+      "name": "Other Offline",
+      "description": "Other Offline"
+    },
+    {
+      "id": "QCK",
+      "name": "QCK",
+      "description": "Quick Commerce"
+    }
+  ],
+  "productGroups": [],
+  "productCategories": [],
+  "productSubCategories": [
+    {
+      "id": "SKU1",
+      "name": "SKU 500ml",
+      "size": "",
+      "productGroupId": "",
+      "productCategoryId": "",
+      "amrp": 100,
+      "acogs": 40
+    },
+    {
+      "id": "SKU2",
+      "name": "SKU 1L",
+      "size": "",
+      "productGroupId": "",
+      "productCategoryId": "",
+      "amrp": 180,
+      "acogs": 70
+    }
   ]
 }
