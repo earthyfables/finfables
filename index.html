@@ -371,27 +371,38 @@ const BRAND_GROUP_OPTIONS = ["Focus","Rainbow"];
 const MODEL_OPTIONS = ["B2C","B2B"];
 const DEFAULT_PARTNER_GROUPS = ["Website","FAM","MAN","Stores","Other MP","Other Offline","QCK"];
 
-function computeCycleMonths(startMonth, rollingMonths){
-  const startIdx = MONTHS_CALENDAR.indexOf(startMonth);
-  const n = parseInt(rollingMonths,10) || 12;
-  if(startIdx === -1) return DEFAULT_MONTHS.slice();
-  const out = [];
-  for(let i=0; i<n; i++){ out.push(MONTHS_CALENDAR[(startIdx+i) % 12]); }
-  return out;
+const FY_OPTIONS = ["FY25","FY26","FY27","FY28","FY29","FY30","FY31","FY32"];
+
+function computeCycleMonths(cycle){
+  if(cycle.rollingMonths){
+    // Backward compatibility for cycles created before this redesign.
+    const startIdx = MONTHS_CALENDAR.indexOf(cycle.startMonth);
+    const n = parseInt(cycle.rollingMonths,10) || 12;
+    if(startIdx === -1) return DEFAULT_MONTHS.slice();
+    const out = [];
+    for(let i=0; i<n; i++){ out.push(MONTHS_CALENDAR[(startIdx+i) % 12]); }
+    return out;
+  }
+  // Always ends at Mar of the cycle's FY — start month can be anywhere
+  // within that FY's Apr-Mar window (e.g. a company starting its AOP in Oct).
+  const idx = DEFAULT_MONTHS.indexOf(cycle.startMonth);
+  return idx === -1 ? DEFAULT_MONTHS.slice() : DEFAULT_MONTHS.slice(idx);
 }
 function cycleLabel(cycle){
   if(!cycle) return '';
   const brand = DATA.brands.find(b=>b.id===cycle.brandId);
-  const months = computeCycleMonths(cycle.startMonth, cycle.rollingMonths);
+  const months = computeCycleMonths(cycle);
   const endMonth = months[months.length-1];
-  return `${brand?brand.name:'—'} · ${cycle.startMonth}-${endMonth} · ${cycle.rollingMonths} months`;
+  const fy = cycle.fy || '';
+  const version = cycle.version || 'AOP';
+  return `${brand?brand.name:'—'} · ${fy} · ${version} · ${cycle.startMonth}-${endMonth}`;
 }
 function getActiveCycle(){
   return (DATA.aopCycles||[]).find(c=>c.id===DATA.meta.activeCycleId) || null;
 }
 function applyActiveCycle(){
   const c = getActiveCycle();
-  MONTHS = c ? computeCycleMonths(c.startMonth, c.rollingMonths) : DEFAULT_MONTHS.slice();
+  MONTHS = c ? computeCycleMonths(c) : DEFAULT_MONTHS.slice();
 }
 
 const SEED = {
@@ -1315,13 +1326,20 @@ function renderCyclePanel(){
   html += `<button class="newcyclebtn" id="newCycleBtn">${cycleFormOpen?'✕ Cancel':'+ New Cycle'}</button>`;
 
   if(cycleFormOpen){
-    html += `<div class="cycleform">
+    html += `<div class="cycleform">`;
+    if(cycles.length){
+      html += `<div class="cyclelabel">Copy from (optional)</div>
+      <select id="cycleCopyFrom"><option value="">— Start blank —</option>${cycles.map(c=>`<option value="${c.id}">${cycleLabel(c)}</option>`).join('')}</select>`;
+    }
+    html += `
       <div class="cyclelabel">Brand</div>
       <select id="cycleBrand">${DATA.brands.map(b=>`<option value="${b.id}">${b.name}</option>`).join('')}</select>
-      <div class="cyclelabel">Start Month</div>
-      <select id="cycleStartMonth">${MONTHS_CALENDAR.map(m=>`<option value="${m}">${m}</option>`).join('')}</select>
-      <div class="cyclelabel">Rolling Months</div>
-      <select id="cycleRolling">${[1,2,3,4,5,6,7,8,9,10,11,12].map(n=>`<option value="${n}" ${n===6?'selected':''}>${n}</option>`).join('')}</select>
+      <div class="cyclelabel">FY</div>
+      <select id="cycleFY">${FY_OPTIONS.map(fy=>`<option value="${fy}">${fy}</option>`).join('')}</select>
+      <div class="cyclelabel">Start Month (always ends Mar)</div>
+      <select id="cycleStartMonth">${DEFAULT_MONTHS.map(m=>`<option value="${m}">${m}</option>`).join('')}</select>
+      <div class="cyclelabel">Version</div>
+      <select id="cycleVersion"><option value="AOP">AOP</option>${[1,2,3,4,5].map(n=>`<option value="LE${n}">LE${n}</option>`).join('')}</select>
       <button class="createbtn" id="createCycleBtn">Create Cycle</button>
     </div>`;
   }
@@ -1343,13 +1361,29 @@ function renderCyclePanel(){
     renderCyclePanel();
   });
 
+  const copyFromSel = panel.querySelector('#cycleCopyFrom');
+  if(copyFromSel) copyFromSel.addEventListener('change', ()=>{
+    const src = cycles.find(c=>c.id===copyFromSel.value);
+    if(src){
+      panel.querySelector('#cycleBrand').value = src.brandId;
+      panel.querySelector('#cycleStartMonth').value = src.startMonth || 'Apr';
+      // FY and Version are left for the user to set for the new cycle —
+      // that's the whole point of using this as a template for the next one.
+    }
+  });
+
   const createBtn = panel.querySelector('#createCycleBtn');
   if(createBtn) createBtn.addEventListener('click', ()=>{
     if(!DATA.brands.length){ alert('Add a brand in Brand Master first.'); return; }
     const brandId = panel.querySelector('#cycleBrand').value;
+    const fy = panel.querySelector('#cycleFY').value;
     const startMonth = panel.querySelector('#cycleStartMonth').value;
-    const rollingMonths = parseInt(panel.querySelector('#cycleRolling').value, 10);
-    const newCycle = {id: uid('CYC'), brandId, startMonth, rollingMonths};
+    const version = panel.querySelector('#cycleVersion').value;
+    if(cycles.some(c=>c.brandId===brandId && c.fy===fy && c.version===version)){
+      alert('A cycle for this Brand + FY + Version already exists.');
+      return;
+    }
+    const newCycle = {id: uid('CYC'), brandId, fy, startMonth, version};
     DATA.aopCycles.push(newCycle);
     DATA.meta.activeCycleId = newCycle.id;
     applyActiveCycle();
