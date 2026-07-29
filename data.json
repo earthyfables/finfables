@@ -15,7 +15,7 @@
       "Feb",
       "Mar"
     ],
-    "savedAt": "2026-07-29T14:27:30.200Z"
+    "savedAt": "2026-07-29T14:29:24.094Z"
   },
   "channels": [
     {
@@ -89,14 +89,14 @@
       "brandId": "BR1",
       "partner": "Flipkart",
       "model": "B2C",
-      "creditDays": 15
+      "creditDays": 7
     },
     {
       "id": "BPM_exbxqc",
       "brandId": "BR1",
       "partner": "Amazon",
       "model": "B2C",
-      "creditDays": 15
+      "creditDays": 7
     },
     {
       "id": "BPM_6c9gqo",
@@ -117,7 +117,7 @@
       "brandId": "BR1",
       "partner": "Website",
       "model": "B2C",
-      "creditDays": 15
+      "creditDays": 3
     },
     {
       "id": "BPM_ng4s39",
