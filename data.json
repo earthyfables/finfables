@@ -15,7 +15,7 @@
       "Feb",
       "Mar"
     ],
-    "savedAt": "2026-07-29T12:37:56.054Z"
+    "savedAt": "2026-07-29T12:53:26.409Z"
   },
   "channels": [
     {
@@ -873,7 +873,7 @@
   ],
   "productSubCategories": [
     {
-      "id": "PSC_13dvv9",
+      "id": "PSC_ttd6f0",
       "name": "Bath Mats Cotton reversible  - 50X80",
       "productGroupId": "PG_zhux4k",
       "productCategoryId": "PC_r2a5ac",
@@ -881,7 +881,7 @@
       "acogs": 210
     },
     {
-      "id": "PSC_9d21m0",
+      "id": "PSC_m41tkp",
       "name": "Bath Mats Microfiber  - 60X40",
       "productGroupId": "PG_zhux4k",
       "productCategoryId": "PC_r2a5ac",
@@ -889,7 +889,7 @@
       "acogs": 113
     },
     {
-      "id": "PSC_ptq057",
+      "id": "PSC_0s1iej",
       "name": "Bath Towels Combed 600 GSM Set of 1  - 75x150",
       "productGroupId": "PG_zhux4k",
       "productCategoryId": "PC_ofapit",
@@ -897,15 +897,15 @@
       "acogs": 270
     },
     {
-      "id": "PSC_vw0r8e",
+      "id": "PSC_hkuico",
       "name": "Bath Towels Combed 600 GSM set of 2 - 75x150",
       "productGroupId": "PG_zhux4k",
       "productCategoryId": "PC_ofapit",
-      "amrp": 1,
+      "amrp": 1902,
       "acogs": 540
     },
     {
-      "id": "PSC_g3yfiz",
+      "id": "PSC_d4qsfk",
       "name": "Bath Towels Combed 600 GSM Set of 1 Small Size - 70X140",
       "productGroupId": "PG_zhux4k",
       "productCategoryId": "PC_ofapit",
@@ -913,23 +913,23 @@
       "acogs": 250
     },
     {
-      "id": "PSC_r40gss",
+      "id": "PSC_l60m6q",
       "name": "Bath Towels Combed Combo 600 GSM set of 1 Bath , 2 Hand   - 75x150",
       "productGroupId": "PG_zhux4k",
       "productCategoryId": "PC_ofapit",
-      "amrp": 1,
+      "amrp": 1332,
       "acogs": 388
     },
     {
-      "id": "PSC_db5mk2",
+      "id": "PSC_0rgyw5",
       "name": "Bath Towels Combed Combo 600 GSM set of 2 Bath , 2 Hand 2 Face  - 75x150",
       "productGroupId": "PG_zhux4k",
       "productCategoryId": "PC_ofapit",
-      "amrp": 2,
+      "amrp": 2570,
       "acogs": 704
     },
     {
-      "id": "PSC_7wgyc9",
+      "id": "PSC_t72pzc",
       "name": "Bath Towels Combed 500 GSM set of 1  - 140X70",
       "productGroupId": "PG_zhux4k",
       "productCategoryId": "PC_ofapit",
@@ -937,31 +937,31 @@
       "acogs": 186
     },
     {
-      "id": "PSC_jmas5u",
+      "id": "PSC_h31x6d",
       "name": "Bath Towels Combed 500 GSM set of 2 - 140X70",
       "productGroupId": "PG_zhux4k",
       "productCategoryId": "PC_ofapit",
-      "amrp": 1,
+      "amrp": 1330,
       "acogs": 186
     },
     {
-      "id": "PSC_xs6fa0",
+      "id": "PSC_rglp1i",
       "name": "Towels Bamboo Bath Set of 1 - 73X150",
       "productGroupId": "PG_zhux4k",
       "productCategoryId": "PC_ofapit",
-      "amrp": 1,
+      "amrp": 1237,
       "acogs": 331
     },
     {
-      "id": "PSC_jntom1",
+      "id": "PSC_mzi8v6",
       "name": "Towels Bamboo Set of 2 - 73X150",
       "productGroupId": "PG_zhux4k",
       "productCategoryId": "PC_ofapit",
-      "amrp": 1,
+      "amrp": 1274,
       "acogs": 662
     },
     {
-      "id": "PSC_v2k87t",
+      "id": "PSC_se6p1h",
       "name": "Bath Towels Combed 400 GSM - 70X140",
       "productGroupId": "PG_zhux4k",
       "productCategoryId": "PC_ofapit",
@@ -969,7 +969,7 @@
       "acogs": 145
     },
     {
-      "id": "PSC_zntzdn",
+      "id": "PSC_9qw1mu",
       "name": "Bath Towels Combed 400 GSM Set of 2  - 70X140",
       "productGroupId": "PG_zhux4k",
       "productCategoryId": "PC_ofapit",
@@ -977,7 +977,7 @@
       "acogs": 290
     },
     {
-      "id": "PSC_77m79d",
+      "id": "PSC_my8ss2",
       "name": "Face Towels 600 GSM set of 3 - 30X30",
       "productGroupId": "PG_zhux4k",
       "productCategoryId": "PC_t2rz6a",
@@ -985,7 +985,7 @@
       "acogs": 72
     },
     {
-      "id": "PSC_e2ja9a",
+      "id": "PSC_07l611",
       "name": "Face Towels 600 GSM set of 4 - 30X30",
       "productGroupId": "PG_zhux4k",
       "productCategoryId": "PC_t2rz6a",
@@ -993,55 +993,55 @@
       "acogs": 96
     },
     {
-      "id": "PSC_0t5e22",
+      "id": "PSC_6023o6",
       "name": "Triply Frying Pan  - 20",
       "productGroupId": "PG_vf9yhj",
       "productCategoryId": "PC_d7uwz1",
-      "amrp": 1,
+      "amrp": 1456,
       "acogs": 362
     },
     {
-      "id": "PSC_jxw1nm",
+      "id": "PSC_h5lpwb",
       "name": "Triply Frying Pan  - 22",
       "productGroupId": "PG_vf9yhj",
       "productCategoryId": "PC_d7uwz1",
-      "amrp": 1,
+      "amrp": 1627,
       "acogs": 437
     },
     {
-      "id": "PSC_9vwydh",
+      "id": "PSC_kqcee6",
       "name": "Triply Frying Pan  - 24",
       "productGroupId": "PG_vf9yhj",
       "productCategoryId": "PC_d7uwz1",
-      "amrp": 1,
+      "amrp": 1799,
       "acogs": 514
     },
     {
-      "id": "PSC_86qyow",
+      "id": "PSC_k22m8t",
       "name": "Triply Sauce Pan  - 14",
       "productGroupId": "PG_vf9yhj",
       "productCategoryId": "PC_d7uwz1",
-      "amrp": 1,
+      "amrp": 1370,
       "acogs": 370
     },
     {
-      "id": "PSC_tlbzxq",
+      "id": "PSC_s9sv30",
       "name": "Triply Sauce Pan  - 16",
       "productGroupId": "PG_vf9yhj",
       "productCategoryId": "PC_d7uwz1",
-      "amrp": 1,
+      "amrp": 1541,
       "acogs": 432
     },
     {
-      "id": "PSC_u4md56",
+      "id": "PSC_thku42",
       "name": "Triply Sauce Pan  - 18",
       "productGroupId": "PG_vf9yhj",
       "productCategoryId": "PC_d7uwz1",
-      "amrp": 1,
+      "amrp": 1713,
       "acogs": 528
     },
     {
-      "id": "PSC_gry5dw",
+      "id": "PSC_qfloe6",
       "name": "Stainless Steel Frying Pan  - 20",
       "productGroupId": "PG_vf9yhj",
       "productCategoryId": "PC_d7uwz1",
@@ -1049,7 +1049,7 @@
       "acogs": 163
     },
     {
-      "id": "PSC_0gb5ee",
+      "id": "PSC_jsxf3u",
       "name": "Stainless Steel Frying Pan  - 22",
       "productGroupId": "PG_vf9yhj",
       "productCategoryId": "PC_d7uwz1",
@@ -1057,7 +1057,7 @@
       "acogs": 203
     },
     {
-      "id": "PSC_ml92ne",
+      "id": "PSC_m5x0y0",
       "name": "Stainless Steel Frying Pan  - 24",
       "productGroupId": "PG_vf9yhj",
       "productCategoryId": "PC_d7uwz1",
@@ -1065,7 +1065,7 @@
       "acogs": 229
     },
     {
-      "id": "PSC_sz0mtl",
+      "id": "PSC_1xyz4e",
       "name": "Stainless Steel Hammerred Frying Pan  - 20",
       "productGroupId": "PG_vf9yhj",
       "productCategoryId": "PC_d7uwz1",
@@ -1073,7 +1073,7 @@
       "acogs": 174
     },
     {
-      "id": "PSC_q7lgfe",
+      "id": "PSC_emb3n3",
       "name": "Stainless Steel Hammerred Frying Pan  - 22",
       "productGroupId": "PG_vf9yhj",
       "productCategoryId": "PC_d7uwz1",
@@ -1081,15 +1081,15 @@
       "acogs": 218
     },
     {
-      "id": "PSC_8wwzmg",
+      "id": "PSC_2pcagw",
       "name": "Stainless Steel Hammerred Frying Pan  - 24",
       "productGroupId": "PG_vf9yhj",
       "productCategoryId": "PC_d7uwz1",
-      "amrp": 1,
+      "amrp": 1028,
       "acogs": 245
     },
     {
-      "id": "PSC_92vxnu",
+      "id": "PSC_s6j9wx",
       "name": "Hand Towels Combed 600 GSM set of2  - 60X40",
       "productGroupId": "PG_zhux4k",
       "productCategoryId": "PC_h01yup",
@@ -1097,7 +1097,7 @@
       "acogs": 118
     },
     {
-      "id": "PSC_cmbett",
+      "id": "PSC_rx44wv",
       "name": "Hand Towels Combed 600 GSM Set of 4 - 60X40",
       "productGroupId": "PG_zhux4k",
       "productCategoryId": "PC_h01yup",
@@ -1105,7 +1105,7 @@
       "acogs": 236
     },
     {
-      "id": "PSC_6kunu6",
+      "id": "PSC_ueryxw",
       "name": "Hand Towels Bamboo set of 2   - 60X40",
       "productGroupId": "PG_zhux4k",
       "productCategoryId": "PC_h01yup",
@@ -1113,7 +1113,7 @@
       "acogs": 146
     },
     {
-      "id": "PSC_9gvekl",
+      "id": "PSC_lxl70z",
       "name": "Hand Towels Bamboo set of 4  - 60X40",
       "productGroupId": "PG_zhux4k",
       "productCategoryId": "PC_h01yup",
@@ -1121,7 +1121,7 @@
       "acogs": 292
     },
     {
-      "id": "PSC_ygqlkk",
+      "id": "PSC_n0xyya",
       "name": "Hand Towels Combed 400 GSM set of 2  - 60X40",
       "productGroupId": "PG_zhux4k",
       "productCategoryId": "PC_h01yup",
@@ -1129,7 +1129,7 @@
       "acogs": 76
     },
     {
-      "id": "PSC_684su5",
+      "id": "PSC_xqtemr",
       "name": "Hand Towels Combed 400 GSM set of 4 - 60X40",
       "productGroupId": "PG_zhux4k",
       "productCategoryId": "PC_h01yup",
@@ -1137,87 +1137,87 @@
       "acogs": 152
     },
     {
-      "id": "PSC_y0iu9q",
+      "id": "PSC_m2se5f",
       "name": "Triply Kadhai  - 20",
       "productGroupId": "PG_vf9yhj",
       "productCategoryId": "PC_21bqv5",
-      "amrp": 1,
+      "amrp": 1713,
       "acogs": 505
     },
     {
-      "id": "PSC_ut5mbt",
+      "id": "PSC_6l8god",
       "name": "Triply Kadhai  - 22",
       "productGroupId": "PG_vf9yhj",
       "productCategoryId": "PC_21bqv5",
-      "amrp": 1,
+      "amrp": 1970,
       "acogs": 583
     },
     {
-      "id": "PSC_nt1j38",
+      "id": "PSC_qvqw96",
       "name": "Triply Kadhai  - 24",
       "productGroupId": "PG_vf9yhj",
       "productCategoryId": "PC_21bqv5",
-      "amrp": 2,
+      "amrp": 2142,
       "acogs": 669
     },
     {
-      "id": "PSC_nu6ecn",
+      "id": "PSC_0v536l",
       "name": "Triply Kadhai  - 26",
       "productGroupId": "PG_vf9yhj",
       "productCategoryId": "PC_21bqv5",
-      "amrp": 2,
+      "amrp": 2313,
       "acogs": 759
     },
     {
-      "id": "PSC_mqcdek",
+      "id": "PSC_x3xd22",
       "name": "Triply Kadhai  - 28",
       "productGroupId": "PG_vf9yhj",
       "productCategoryId": "PC_21bqv5",
-      "amrp": 2,
+      "amrp": 2484,
       "acogs": 842
     },
     {
-      "id": "PSC_kx06k8",
+      "id": "PSC_pfuolh",
       "name": "Triply Kadhai  - 30",
       "productGroupId": "PG_vf9yhj",
       "productCategoryId": "PC_21bqv5",
-      "amrp": 2,
+      "amrp": 2741,
       "acogs": 940
     },
     {
-      "id": "PSC_00uyh9",
+      "id": "PSC_nbnsuu",
       "name": "Gol Kadhai  - 22",
       "productGroupId": "PG_vf9yhj",
       "productCategoryId": "PC_21bqv5",
-      "amrp": 1,
+      "amrp": 1627,
       "acogs": 448
     },
     {
-      "id": "PSC_1xvjq0",
+      "id": "PSC_ccffct",
       "name": "Gol Kadhai  - 24",
       "productGroupId": "PG_vf9yhj",
       "productCategoryId": "PC_21bqv5",
-      "amrp": 1,
+      "amrp": 1713,
       "acogs": 523
     },
     {
-      "id": "PSC_wt8mbs",
+      "id": "PSC_70ovhl",
       "name": "Gol Kadhai  - 26",
       "productGroupId": "PG_vf9yhj",
       "productCategoryId": "PC_21bqv5",
-      "amrp": 1,
+      "amrp": 1884,
       "acogs": 598
     },
     {
-      "id": "PSC_rqpnjh",
+      "id": "PSC_7l5irz",
       "name": "Gol Kadhai  - 28",
       "productGroupId": "PG_vf9yhj",
       "productCategoryId": "PC_21bqv5",
-      "amrp": 2,
+      "amrp": 2056,
       "acogs": 655
     },
     {
-      "id": "PSC_hothpj",
+      "id": "PSC_c6m98s",
       "name": "Stainless Steel Sauce pan  - 14",
       "productGroupId": "PG_vf9yhj",
       "productCategoryId": "PC_mg39l4",
@@ -1225,7 +1225,7 @@
       "acogs": 170
     },
     {
-      "id": "PSC_9g3p22",
+      "id": "PSC_mrn3ed",
       "name": "Stainless Steel Sauce pan  - 16",
       "productGroupId": "PG_vf9yhj",
       "productCategoryId": "PC_mg39l4",
@@ -1233,7 +1233,7 @@
       "acogs": 199
     },
     {
-      "id": "PSC_01i29k",
+      "id": "PSC_ryh50q",
       "name": "Stainless Steel Sauce pan  - 18",
       "productGroupId": "PG_vf9yhj",
       "productCategoryId": "PC_mg39l4",
@@ -1241,31 +1241,31 @@
       "acogs": 232
     },
     {
-      "id": "PSC_5360sh",
+      "id": "PSC_m227bx",
       "name": "Stainless Steel Hammerred Sauce Pan  - 14",
       "productGroupId": "PG_vf9yhj",
       "productCategoryId": "PC_mg39l4",
-      "amrp": 1,
+      "amrp": 1113,
       "acogs": 300
     },
     {
-      "id": "PSC_i9scae",
+      "id": "PSC_gtj1kl",
       "name": "Stainless Steel Hammerred Sauce Pan  - 16",
       "productGroupId": "PG_vf9yhj",
       "productCategoryId": "PC_mg39l4",
-      "amrp": 1,
+      "amrp": 1285,
       "acogs": 364
     },
     {
-      "id": "PSC_43nrpx",
+      "id": "PSC_noitxx",
       "name": "Stainless Steel Hammerred Sauce Pan  - 18",
       "productGroupId": "PG_vf9yhj",
       "productCategoryId": "PC_mg39l4",
-      "amrp": 1,
+      "amrp": 1371,
       "acogs": 431
     },
     {
-      "id": "PSC_ipre1a",
+      "id": "PSC_hq1we3",
       "name": "Tope Encapsulated  - 14",
       "productGroupId": "PG_vf9yhj",
       "productCategoryId": "PC_edydxr",
@@ -1273,7 +1273,7 @@
       "acogs": 170
     },
     {
-      "id": "PSC_zyl6pi",
+      "id": "PSC_vubg72",
       "name": "Tope Encapsulated  - 16",
       "productGroupId": "PG_vf9yhj",
       "productCategoryId": "PC_edydxr",
@@ -1281,7 +1281,7 @@
       "acogs": 199
     },
     {
-      "id": "PSC_kpkb2s",
+      "id": "PSC_zbgwfe",
       "name": "Tope Encapsulated  - 18",
       "productGroupId": "PG_vf9yhj",
       "productCategoryId": "PC_edydxr",
@@ -1289,79 +1289,79 @@
       "acogs": 241
     },
     {
-      "id": "PSC_omgjbf",
+      "id": "PSC_6fyjbo",
       "name": "Tope Encapsulated  - 20",
       "productGroupId": "PG_vf9yhj",
       "productCategoryId": "PC_edydxr",
-      "amrp": 1,
+      "amrp": 1027,
       "acogs": 290
     },
     {
-      "id": "PSC_wkv7pz",
+      "id": "PSC_nd42mi",
       "name": "Tope Encapsulated  - 22",
       "productGroupId": "PG_vf9yhj",
       "productCategoryId": "PC_edydxr",
-      "amrp": 1,
+      "amrp": 1199,
       "acogs": 367
     },
     {
-      "id": "PSC_y5z1my",
+      "id": "PSC_ehwkx1",
       "name": "Tope Encapsulated  - 24",
       "productGroupId": "PG_vf9yhj",
       "productCategoryId": "PC_edydxr",
-      "amrp": 1,
+      "amrp": 1370,
       "acogs": 437
     },
     {
-      "id": "PSC_g2mn93",
+      "id": "PSC_lf3m7b",
       "name": "Tope Hammerred - 14",
       "productGroupId": "PG_vf9yhj",
       "productCategoryId": "PC_edydxr",
-      "amrp": 1,
+      "amrp": 1027,
       "acogs": 281
     },
     {
-      "id": "PSC_qq77rf",
+      "id": "PSC_2z39hk",
       "name": "Tope Hammerred - 16",
       "productGroupId": "PG_vf9yhj",
       "productCategoryId": "PC_edydxr",
-      "amrp": 1,
+      "amrp": 1113,
       "acogs": 302
     },
     {
-      "id": "PSC_j0t6sa",
+      "id": "PSC_b8cqkb",
       "name": "Tope Hammerred - 18",
       "productGroupId": "PG_vf9yhj",
       "productCategoryId": "PC_edydxr",
-      "amrp": 1,
+      "amrp": 1242,
       "acogs": 351
     },
     {
-      "id": "PSC_alnmwy",
+      "id": "PSC_z7w59a",
       "name": "Tope Hammerred - 19",
       "productGroupId": "PG_vf9yhj",
       "productCategoryId": "PC_edydxr",
-      "amrp": 1,
+      "amrp": 1327,
       "acogs": 404
     },
     {
-      "id": "PSC_eopykf",
+      "id": "PSC_3b5p9t",
       "name": "Tope Hammerred - 22",
       "productGroupId": "PG_vf9yhj",
       "productCategoryId": "PC_edydxr",
-      "amrp": 1,
+      "amrp": 1456,
       "acogs": 469
     },
     {
-      "id": "PSC_b2f521",
+      "id": "PSC_btjugt",
       "name": "Tope Hammerred - 24",
       "productGroupId": "PG_vf9yhj",
       "productCategoryId": "PC_edydxr",
-      "amrp": 1,
+      "amrp": 1713,
       "acogs": 534
     },
     {
-      "id": "PSC_8x3bvg",
+      "id": "PSC_q5x66g",
       "name": "Stainless Steel Tope - 14",
       "productGroupId": "PG_vf9yhj",
       "productCategoryId": "PC_edydxr",
@@ -1369,87 +1369,87 @@
       "acogs": 258
     },
     {
-      "id": "PSC_2t8yy3",
+      "id": "PSC_r0o8tf",
       "name": "Stainless Steel Tope - 16",
       "productGroupId": "PG_vf9yhj",
       "productCategoryId": "PC_edydxr",
-      "amrp": 1,
+      "amrp": 1028,
       "acogs": 276
     },
     {
-      "id": "PSC_glzdg9",
+      "id": "PSC_shwsxt",
       "name": "Stainless Steel Tope - 18",
       "productGroupId": "PG_vf9yhj",
       "productCategoryId": "PC_edydxr",
-      "amrp": 1,
+      "amrp": 1113,
       "acogs": 322
     },
     {
-      "id": "PSC_mjcqiq",
+      "id": "PSC_5pfcic",
       "name": "Stainless Steel Tope - 20",
       "productGroupId": "PG_vf9yhj",
       "productCategoryId": "PC_edydxr",
-      "amrp": 1,
+      "amrp": 1199,
       "acogs": 370
     },
     {
-      "id": "PSC_clois8",
+      "id": "PSC_1lhxts",
       "name": "Stainless Steel Tope - 22",
       "productGroupId": "PG_vf9yhj",
       "productCategoryId": "PC_edydxr",
-      "amrp": 1,
+      "amrp": 1285,
       "acogs": 430
     },
     {
-      "id": "PSC_bjc7cb",
+      "id": "PSC_27yvi0",
       "name": "Stainless Steel Tope - 24",
       "productGroupId": "PG_vf9yhj",
       "productCategoryId": "PC_edydxr",
-      "amrp": 1,
+      "amrp": 1456,
       "acogs": 489
     },
     {
-      "id": "PSC_2p1nxl",
+      "id": "PSC_uy4f41",
       "name": "Stainless Steel Tope Combo  - 16/18/20",
       "productGroupId": "PG_vf9yhj",
       "productCategoryId": "PC_edydxr",
-      "amrp": 3,
-      "acogs": 1
+      "amrp": 3684,
+      "acogs": 1407
     },
     {
-      "id": "PSC_uzqurg",
+      "id": "PSC_raoyqk",
       "name": "Towels Bamboo 2 Bath & 2 Hand  - 73X150",
       "productGroupId": "PG_zhux4k",
       "productCategoryId": "PC_ncey5g",
-      "amrp": 3,
+      "amrp": 3044,
       "acogs": 808
     },
     {
-      "id": "PSC_69knxh",
+      "id": "PSC_hfm008",
       "name": "Triply WOK - 20",
       "productGroupId": "PG_vf9yhj",
       "productCategoryId": "PC_e0ut7i",
-      "amrp": 1,
+      "amrp": 1713,
       "acogs": 432
     },
     {
-      "id": "PSC_0w24qg",
+      "id": "PSC_6ufis7",
       "name": "Triply WOK - 22",
       "productGroupId": "PG_vf9yhj",
       "productCategoryId": "PC_e0ut7i",
-      "amrp": 1,
+      "amrp": 1799,
       "acogs": 504
     },
     {
-      "id": "PSC_v2sj3m",
+      "id": "PSC_nfg8xw",
       "name": "Triply WOK - 24",
       "productGroupId": "PG_vf9yhj",
       "productCategoryId": "PC_e0ut7i",
-      "amrp": 1,
+      "amrp": 1970,
       "acogs": 600
     },
     {
-      "id": "PSC_rg506o",
+      "id": "PSC_1v60wf",
       "name": "Head Towel  -",
       "productGroupId": "PG_zhux4k",
       "productCategoryId": "PC_9kyg3s",
@@ -1457,7 +1457,7 @@
       "acogs": 90
     },
     {
-      "id": "PSC_8fl5oi",
+      "id": "PSC_nrynnj",
       "name": "Gym Towel  -",
       "productGroupId": "PG_zhux4k",
       "productCategoryId": "PC_43yr0v",
