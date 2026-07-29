@@ -575,8 +575,11 @@ function renderMasterTable(container, arr, cols, opts){
 
   html += `<button class="btn danger" id="deleteSelBtn">Delete selected</button>`;
 
-  const scrollOpen = opts.tableMaxHeight ? `<div class="scrollbox" style="max-height:${opts.tableMaxHeight};">` : '';
-  const scrollClose = opts.tableMaxHeight ? `</div>` : '';
+  // Frozen header + independent scroll is the default for every master table
+  // once it grows long, rather than something each screen has to opt into.
+  const maxH = opts.tableMaxHeight === false ? null : (opts.tableMaxHeight || '420px');
+  const scrollOpen = maxH ? `<div class="scrollbox" style="max-height:${maxH};">` : '';
+  const scrollClose = maxH ? `</div>` : '';
   html += scrollOpen;
   html += `<table class="mastertable"><colgroup><col style="width:34px;">`;
   cols.forEach(c=> html += `<col${c.width?` style="width:${c.width}px;"`:''}>`);
