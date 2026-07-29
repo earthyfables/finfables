@@ -536,7 +536,10 @@ function resolveValueForCol(col, text){
     return hit ? hit.id : '';
   }
   if(col.type === 'number'){
-    const n = parseFloat(text);
+    // Strip thousands-separator commas (and stray currency symbols/spaces) before parsing —
+    // otherwise parseFloat("1,500") silently returns 1, dropping everything after the comma.
+    const cleaned = text.replace(/[,₹$\s]/g, '');
+    const n = parseFloat(cleaned);
     return isNaN(n) ? '' : n;
   }
   return text;
