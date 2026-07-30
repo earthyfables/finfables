@@ -953,6 +953,45 @@ function wireMasterTabBar(container){
   });
 }
 
+function renderCodbChannelMapping(container){
+  const items = DATA.codbLineItems;
+  const pms = DATA.partnerModels;
+  if(!items.length || !pms.length){
+    container.innerHTML = `<div class="footnote">Need CODB Line Items and Partner-Models both defined to map channels.</div>`;
+    return;
+  }
+  let html = `<hr style="border:none; border-top:1px solid var(--line); margin:26px 0;">`;
+  html += `<div class="cyclelabel" style="font-size:14px; font-weight:700; color:var(--ink); margin-bottom:8px;">Channel Mapping</div>`;
+  html += `<div class="footnote" style="margin-bottom:14px;">Tick which Partner-Models each CODB Line Item applies to. Only ticked combinations show up as inputs in the CODB Rate Card — leave a row fully unticked to show it for every Partner-Model (unfiltered).</div>`;
+  html += `<div class="panel" style="display:inline-block;"><div class="scrollbox" style="max-height:65vh; overflow-x:auto;"><table class="mdmtable"><thead><tr><th>CODB Line Item</th>`;
+  pms.forEach(pm=> html += `<th style="text-align:center;">${pmLabel(pm)}</th>`);
+  html += `</tr></thead><tbody>`;
+  items.forEach(li=>{
+    if(!li.mappedPartnerModels) li.mappedPartnerModels = [];
+    html += `<tr><td>${li.name}</td>`;
+    pms.forEach(pm=>{
+      const checked = li.mappedPartnerModels.includes(pm.id);
+      html += `<td style="text-align:center;"><input type="checkbox" class="codbchanmap" data-li="${li.id}" data-pm="${pm.id}" ${checked?'checked':''}></td>`;
+    });
+    html += `</tr>`;
+  });
+  html += `</tbody></table></div></div>`;
+  container.innerHTML = html;
+
+  container.querySelectorAll('.codbchanmap').forEach(cb=>{
+    cb.addEventListener('change', ()=>{
+      const li = items.find(x=>x.id===cb.dataset.li);
+      if(!li.mappedPartnerModels) li.mappedPartnerModels = [];
+      if(cb.checked){
+        if(!li.mappedPartnerModels.includes(cb.dataset.pm)) li.mappedPartnerModels.push(cb.dataset.pm);
+      } else {
+        li.mappedPartnerModels = li.mappedPartnerModels.filter(id=> id!==cb.dataset.pm);
+      }
+      markDirty();
+    });
+  });
+}
+
 function renderMarketplaceDeductionMapping(container){
   const filterBrandId = container.dataset.filterBrand || '';
   const filterItemId = container.dataset.filterItem || '';
@@ -1082,6 +1121,9 @@ function renderCodbDeductionMappingScreen(container){
       {key:'rateBasis', label:'Rate Basis', type:'select', options:()=>CODB_RATE_BASIS_OPTIONS.map(v=>({id:v,label:v})), width:180},
       {key:'structure', label:'Structure', type:'select', options:()=>['Marketplace','Other','Product wise','MP Mapping only'].map(v=>({id:v,label:v})), width:150}
     ], {prefix:'CLI', tableMaxHeight:'65vh', allowAdd:false, paste:false});
+    const chanHost = document.createElement('div');
+    host.appendChild(chanHost);
+    renderCodbChannelMapping(chanHost);
   } else if(codbDeductionMappingSubTab === 'marketplaceMapping'){
     renderMarketplaceDeductionMapping(host);
   } else {
@@ -1137,6 +1179,7 @@ function renderCodbMarketplaceFees(container){
 
   pms.forEach(pm=>{
     mpLineItems.forEach(li=>{
+      if(!isChannelMapped(li, pm.id)) return;
       if(!store[pm.id][li.id]) store[pm.id][li.id] = {};
       const grid = store[pm.id][li.id];
       combos.forEach(c=>{ if(!grid[c.key]) grid[c.key] = {}; });
@@ -1182,6 +1225,7 @@ function renderCodbMarketplaceFees(container){
   let boxIdx = 0;
   pms.forEach(pm=>{
     mpLineItems.forEach(li=>{
+      if(!isChannelMapped(li, pm.id)) return;
       const box = pasteBoxes[boxIdx]; boxIdx++;
       if(!box) return;
       const grid = store[pm.id][li.id];
@@ -1234,16 +1278,17 @@ function renderCodbOtherFees(container){
   if(otherHasData) html += `<button class="btn-sm danger" id="clearOtherBtn" style="margin-bottom:14px;">🗑 Delete all Other Fees data</button>`;
 
   otherLineItems.forEach(li=>{
+    const mappedPms = pms.filter(pm=> isChannelMapped(li, pm.id));
     pms.forEach(pm=>{ if(!store[pm.id][li.id]) store[pm.id][li.id] = {}; });
 
     html += `<h3 style="margin:24px 0 8px 0; font-size:15px; font-family:'Times New Roman', Times, serif;">${li.name}${li.rateBasis ? ` <span style="font-weight:400; color:var(--ink-soft); font-style:italic; font-size:13px;">(${li.rateBasis})</span>` : ''}</h3>`;
-    html += pasteBoxHtml('Pdt Cat | Weight | ' + pms.map(pmLabel).join(' | '));
-    html += `<div class="panel"><div class="scrollbox" style="max-height:420px; overflow-x:auto;"><table class="ledger compact"><colgroup><col style="width:150px;"><col style="width:90px;">${pms.map(()=>'<col style="width:150px;">').join('')}</colgroup><thead><tr><th style="text-align:left;">Pdt Cat</th><th>Weight</th>`;
-    pms.forEach(pm=> html += `<th>${pmLabel(pm)}</th>`);
+    html += pasteBoxHtml('Pdt Cat | Weight | ' + mappedPms.map(pmLabel).join(' | '));
+    html += `<div class="panel"><div class="scrollbox" style="max-height:420px; overflow-x:auto;"><table class="ledger compact"><colgroup><col style="width:150px;"><col style="width:90px;">${mappedPms.map(()=>'<col style="width:150px;">').join('')}</colgroup><thead><tr><th style="text-align:left;">Pdt Cat</th><th>Weight</th>`;
+    mappedPms.forEach(pm=> html += `<th>${pmLabel(pm)}</th>`);
     html += `</tr></thead><tbody>`;
     combos.forEach(c=>{
       html += `<tr><td>${c.catName}</td><td>${c.weight ?? ''}</td>`;
-      pms.forEach(pm=>{
+      mappedPms.forEach(pm=>{
         const v = store[pm.id][li.id][c.key];
         html += `<td><input type="number" step="any" class="codbothercell" data-li="${li.id}" data-pm="${pm.id}" data-combo="${c.key}" value="${v!==undefined && v!==''? v : ''}"></td>`;
       });
@@ -1274,6 +1319,7 @@ function renderCodbOtherFees(container){
   const pasteBoxes = container.querySelectorAll('.pastebox');
   let boxIdx = 0;
   otherLineItems.forEach(li=>{
+    const mappedPms = pms.filter(pm=> isChannelMapped(li, pm.id));
     const box = pasteBoxes[boxIdx]; boxIdx++;
     if(!box) return;
     const importBtn = box.querySelector('#importBtn');
@@ -1288,7 +1334,7 @@ function renderCodbOtherFees(container){
         const weightText = parts[1].trim();
         const combo = combos.find(c=> normalizeText(c.catName) === normalizeText(catName) && String(c.weight ?? '') === weightText);
         if(!combo) return;
-        pms.forEach((pm,i2)=>{
+        mappedPms.forEach((pm,i2)=>{
           if(!store[pm.id][li.id]) store[pm.id][li.id] = {};
           const n = cleanNum(parts[i2+2]);
           if(n !== null) store[pm.id][li.id][combo.key] = n;
@@ -1549,6 +1595,13 @@ function cleanNum(text){
 // collapses any run of whitespace to a single space and trims, so a
 // double-space (very common when names are typed/copied from Excel) doesn't
 // silently fail to match and cause that row's paste to be dropped.
+// A CODB Line Item with no channel mapping ticked shows for every Partner-Model
+// (unfiltered, backward compatible); once any box is ticked, only those show.
+function isChannelMapped(li, pmId){
+  if(!li.mappedPartnerModels || !li.mappedPartnerModels.length) return true;
+  return li.mappedPartnerModels.includes(pmId);
+}
+
 function normalizeText(s){
   return String(s||'').trim().replace(/\s+/g,' ').toLowerCase();
 }
