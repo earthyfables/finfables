@@ -1237,14 +1237,14 @@ function renderCategoryMix(host){
   if(!catMixAll[categoryMixChannelId]) catMixAll[categoryMixChannelId] = {};
   const mix = catMixAll[categoryMixChannelId];
 
-  let html = `<div class="addform" style="margin-bottom:14px;"><div class="addfield" style="width:280px;"><label>Partner-Model</label>
-    <select id="categoryMixChannelSelect">${pms.map(pm=>`<option value="${pm.id}" ${pm.id===categoryMixChannelId?'selected':''}>${pmLabel(pm)}</option>`).join('')}</select>
-  </div></div>`;
+  let html = `<div class="pillbar" style="margin-bottom:14px;">${pms.map(pm=>`<button class="pill ${pm.id===categoryMixChannelId?'active':''}" data-categorymixpm="${pm.id}">${pmLabel(pm)}</button>`).join('')}</div>`;
 
   if(!cats.length){
     html += `<div class="footnote">No Product Categories yet — add some in Pareto Master first.</div>`;
     host.innerHTML = html;
-    host.querySelector('#categoryMixChannelSelect').addEventListener('change', (e)=>{ categoryMixChannelId = e.target.value; renderCategoryMix(host); });
+    host.querySelectorAll('[data-categorymixpm]').forEach(btn=>{
+      btn.addEventListener('click', ()=>{ categoryMixChannelId = btn.dataset.categorymixpm; renderCategoryMix(host); });
+    });
     return;
   }
   cats.forEach(c=>{ if(!mix[c.id]) mix[c.id] = {}; });
@@ -1289,7 +1289,9 @@ function renderCategoryMix(host){
   html += `</tbody></table></div></div>`;
 
   host.innerHTML = html;
-  host.querySelector('#categoryMixChannelSelect').addEventListener('change', (e)=>{ categoryMixChannelId = e.target.value; renderCategoryMix(host); });
+  host.querySelectorAll('[data-categorymixpm]').forEach(btn=>{
+    btn.addEventListener('click', ()=>{ categoryMixChannelId = btn.dataset.categorymixpm; renderCategoryMix(host); });
+  });
   host.querySelectorAll('.catmixcell').forEach(inp=>{
     inp.addEventListener('change', ()=>{
       mix[inp.dataset.cat][inp.dataset.month] = inp.value===''?'':parseFloat(inp.value);
@@ -1343,16 +1345,20 @@ function renderParetoMix(host){
   const mix = paretoMixAll[paretoMixChannelId][paretoMixCategoryId];
 
   let html = `<div class="footnote" style="margin-bottom:14px;">For the selected Partner-Model and Product Category, split that category's month value across its Product Sub Categories — the first one auto-balances to 100%.</div>`;
-  html += `<div class="addform" style="margin-bottom:14px;">
-    <div class="addfield" style="width:260px;"><label>Partner-Model</label><select id="paretoMixChannelSelect">${pms.map(pm=>`<option value="${pm.id}" ${pm.id===paretoMixChannelId?'selected':''}>${pmLabel(pm)}</option>`).join('')}</select></div>
-    <div class="addfield" style="width:220px;"><label>Product Category</label><select id="paretoMixCategorySelect">${allCats.map(c=>`<option value="${c.id}" ${c.id===paretoMixCategoryId?'selected':''}>${c.name}</option>`).join('')}</select></div>
-  </div>`;
+  html += `<div class="cyclelabel" style="color:var(--ink-soft); margin-bottom:6px; font-size:11px; text-transform:uppercase; letter-spacing:0.05em; font-weight:700;">Partner-Model</div>`;
+  html += `<div class="pillbar" style="margin-bottom:12px;">${pms.map(pm=>`<button class="pill ${pm.id===paretoMixChannelId?'active':''}" data-paretomixpm="${pm.id}">${pmLabel(pm)}</button>`).join('')}</div>`;
+  html += `<div class="cyclelabel" style="color:var(--ink-soft); margin-bottom:6px; font-size:11px; text-transform:uppercase; letter-spacing:0.05em; font-weight:700;">Product Category</div>`;
+  html += `<div class="pillbar" style="margin-bottom:14px;">${allCats.map(c=>`<button class="pill ${c.id===paretoMixCategoryId?'active':''}" data-paretomixcat="${c.id}">${c.name}</button>`).join('')}</div>`;
 
   if(!subCats.length){
     html += `<div class="footnote">No Product Sub Categories under this category yet — add some in Pareto Master first.</div>`;
     host.innerHTML = html;
-    host.querySelector('#paretoMixChannelSelect').addEventListener('change', (e)=>{ paretoMixChannelId = e.target.value; renderParetoMix(host); });
-    host.querySelector('#paretoMixCategorySelect').addEventListener('change', (e)=>{ paretoMixCategoryId = e.target.value; renderParetoMix(host); });
+    host.querySelectorAll('[data-paretomixpm]').forEach(btn=>{
+      btn.addEventListener('click', ()=>{ paretoMixChannelId = btn.dataset.paretomixpm; renderParetoMix(host); });
+    });
+    host.querySelectorAll('[data-paretomixcat]').forEach(btn=>{
+      btn.addEventListener('click', ()=>{ paretoMixCategoryId = btn.dataset.paretomixcat; renderParetoMix(host); });
+    });
     return;
   }
   subCats.forEach(sc=>{ if(!mix[sc.id]) mix[sc.id] = {}; });
@@ -1398,13 +1404,11 @@ function renderParetoMix(host){
   html += `</tbody></table></div></div>`;
 
   host.innerHTML = html;
-  host.querySelector('#paretoMixChannelSelect').addEventListener('change', (e)=>{
-    paretoMixChannelId = e.target.value;
-    renderParetoMix(host);
+  host.querySelectorAll('[data-paretomixpm]').forEach(btn=>{
+    btn.addEventListener('click', ()=>{ paretoMixChannelId = btn.dataset.paretomixpm; renderParetoMix(host); });
   });
-  host.querySelector('#paretoMixCategorySelect').addEventListener('change', (e)=>{
-    paretoMixCategoryId = e.target.value;
-    renderParetoMix(host);
+  host.querySelectorAll('[data-paretomixcat]').forEach(btn=>{
+    btn.addEventListener('click', ()=>{ paretoMixCategoryId = btn.dataset.paretomixcat; renderParetoMix(host); });
   });
   host.querySelectorAll('.paretomixcell').forEach(inp=>{
     inp.addEventListener('change', ()=>{
