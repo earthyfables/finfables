@@ -1032,7 +1032,7 @@ function renderCodbDeductionMappingScreen(container){
     {key:'name', label:'CODB Line Item', width:240},
     {key:'expenseLineItemId', label:'Expense Line Item', type:'select', options:()=>optList(DATA.expenseLineItems, x=>x.name), width:220},
     {key:'rateBasis', label:'Rate Basis', type:'select', options:()=>CODB_RATE_BASIS_OPTIONS.map(v=>({id:v,label:v})), width:180},
-    {key:'structure', label:'Structure', type:'select', options:()=>['Marketplace','Other'].map(v=>({id:v,label:v})), width:130}
+    {key:'structure', label:'Structure', type:'select', options:()=>['Marketplace','Other','NA'].map(v=>({id:v,label:v==='NA'?'NA (Not Applicable)':v})), width:150}
   ], {prefix:'CLI', addLabel:'Add', tableMaxHeight:'320px', onChange: ()=> renderMarketplaceDeductionMapping(container.querySelector('#marketplaceMappingHost'))});
   const mmHost = container.querySelector('#marketplaceMappingHost');
   renderMarketplaceDeductionMapping(mmHost);
@@ -1061,7 +1061,7 @@ function renderCodbMarketplaceFees(container){
   const pms = DATA.partnerModels;
   const products = DATA.productCategories;
   const bands = DATA.aspBands;
-  const mpLineItems = DATA.codbLineItems.filter(li=> li.structure !== 'Other');
+  const mpLineItems = DATA.codbLineItems.filter(li=> li.structure !== 'Other' && li.structure !== 'NA');
 
   if(!pms.length){ container.innerHTML = `<div class="footnote">No Partner-Models defined yet — add some in "Partner-Model Master" first.</div>`; return; }
   if(!mpLineItems.length){ container.innerHTML = `<div class="footnote">No Marketplace-structure CODB Line Items defined yet — set a Line Item\'s Structure to "Marketplace" in CODB Deduction Mapping.</div>`; return; }
