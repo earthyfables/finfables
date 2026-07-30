@@ -1065,7 +1065,7 @@ function renderCodbDeductionMappingScreen(container){
   if(codbDeductionMappingSubTab === 'lineItems'){
     renderMasterTable(host, DATA.codbLineItems, [
       {key:'name', label:'CODB Line Item', width:240},
-      {key:'expenseLineItemId', label:'Expense Line Item', type:'select', options:()=>optList(DATA.expenseLineItems.filter(x=>x.type==='CODB'), x=>x.name), width:220}
+      {key:'expenseLineItemId', label:'Expense Line Item', type:'select', options:()=>optList(DATA.expenseLineItems.filter(x=>x.type==='CODB' || x.type==='CAC'), x=>x.name), width:220}
     ], {prefix:'CLI', addLabel:'Add', tableMaxHeight:'65vh'});
   } else if(codbDeductionMappingSubTab === 'rateStructure'){
     host.innerHTML = `<div class="footnote" style="margin-bottom:14px;">Rate Basis and Structure for each CODB Line Item — moved here from the main list; more corrections to come.</div>`;
@@ -1364,7 +1364,7 @@ function renderCodbProductWiseFees(container){
 
 function renderMiscInputsScreen(container){
   const excludedNames = ['CAC','CODB','COGS'].map(normalizeText);
-  const miscItems = DATA.expenseLineItems.filter(x=> x.type !== 'CODB' && !excludedNames.includes(normalizeText(x.name)));
+  const miscItems = DATA.expenseLineItems.filter(x=> x.type === 'MISC' && !excludedNames.includes(normalizeText(x.name)));
 
   if(!miscItems.length){
     container.innerHTML = `<div class="footnote">No qualifying Expense Line Items yet — add some in "Expense Line Item Master" (anything other than a CODB-type item or "CAC" shows up here automatically).</div>`;
@@ -2020,11 +2020,11 @@ const TABS = {
     ], {prefix:'BPM', addLabel:'Add mapping'})
   },
   expenseLineItems:{
-    title:'Expense Line Item Master', desc:'Expense name and category are free-text. GST rate is a number. Type determines where the item can be used (CODB Line Items only accept CODB-type; Misc Inputs auto-populates from everything else).',
+    title:'Expense Line Item Master', desc:'Expense name and category are free-text. GST rate is a number. Type routes the item: Misc auto-populates Miscellaneous Inputs; CODB/CAC are selectable in the CODB and CAC tab; COGS is not yet wired up.',
     render:(el)=> renderMasterTable(el, DATA.expenseLineItems, [
       {key:'name', label:'Expense line item', width:220},
       {key:'category', label:'Category', width:160},
-      {key:'type', label:'Type', type:'select', options:()=>[{id:'MISC',label:'MISC'},{id:'CODB',label:'CODB'}], width:110},
+      {key:'type', label:'Type', type:'select', options:()=>[{id:'MISC',label:'Misc'},{id:'CODB',label:'CODB'},{id:'CAC',label:'CAC'},{id:'COGS',label:'COGS'}], width:110},
       {key:'gstRate', label:'GST rate %', type:'number', width:110},
       {key:'creditorDays', label:'Creditor Days', type:'number', width:120}
     ], {prefix:'EL', addLabel:'Add', buildRow:(row)=>({type: row.type || 'MISC'})})
