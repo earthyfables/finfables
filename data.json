@@ -15,7 +15,7 @@
       "Feb",
       "Mar"
     ],
-    "savedAt": "2026-07-30T08:35:08.918Z",
+    "savedAt": "2026-07-30T09:17:52.668Z",
     "activeCycleId": "CYC_p9c3kh"
   },
   "channels": [
@@ -504,11 +504,6 @@
       "id": "CLI_zw5eze",
       "name": "Variable Costs - Offline",
       "expenseLineItemId": "EL_vpsayp"
-    },
-    {
-      "id": "CLI_fk4ybo",
-      "name": "CAC",
-      "expenseLineItemId": "EL_1tskzd"
     }
   ],
   "marketplaceDeductionMapping": [
