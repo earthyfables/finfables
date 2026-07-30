@@ -509,7 +509,7 @@ const SEED = {
   productGroups:[{id:"PG1",name:"Personal Care"}],
   productCategories:[{id:"PC1",name:"Towels",productGroupId:"PG1"}],
   productSubCategories:[{id:"PSC1",name:"Bath Towel",productGroupId:"PG1",productCategoryId:"PC1",amrp:100,acogs:40}],
-  salesInputByCycle:{'':[]}, codbRateCardByCycle:{'':[]}, miscInputsByCycle:{'':[]}, cashFlowItemsByCycle:{'':[]}, discMarginGstByCycle:{'':[]}
+  salesInputByCycle:{'':[]}, codbRateCardByCycle:{'':[]}, miscInputsByCycle:{'':[]}, cashFlowItemsByCycle:{'':[]}, discMarginGstByCycle:{'':{}}
 };
 
 function uid(prefix){ return prefix + "_" + Math.random().toString(36).slice(2,8); }
@@ -1392,6 +1392,106 @@ function renderSalesInputsScreen(container){
   renderSalesInputSubTable(container.querySelector('#salesInputSubHost'), salesInputSubTab);
 }
 
+const DMG_METRICS = [
+  {key:'discount', label:'Disc %'},
+  {key:'margin', label:'Margin %'},
+  {key:'gst', label:'GST %'}
+];
+
+function renderRateGrid(host, metric, label, pms){
+  const store = getCycleObj('discMarginGstByCycle');
+  if(!store[metric]) store[metric] = {};
+  const grid = store[metric];
+  pms.forEach(pm=>{ if(!grid[pm.id]) grid[pm.id] = {}; });
+
+  const cellClass = metric + 'ratecell';
+  let html = `<div class="cyclelabel" style="color:var(--ink); margin:0 0 8px 0; font-size:13px; font-weight:700;">${label}</div>`;
+  html += pasteBoxHtml('Month | ' + pms.map(pmLabel).join(' | '));
+
+  const hasData = pms.some(pm=> Object.values(grid[pm.id]||{}).some(v=> v!==undefined && v!==''));
+  if(hasData) html += `<button class="btn-sm danger" data-clearmetric="${metric}" style="margin-bottom:10px;">🗑 Delete all ${label} data</button>`;
+
+  html += `<div class="panel"><div class="scrollbox" style="max-height:380px; overflow-x:auto;"><table class="ledger compact"><colgroup><col style="width:110px;">${pms.map(()=>'<col style="width:140px;">').join('')}</colgroup><thead><tr><th>Month</th>`;
+  pms.forEach(pm=> html += `<th>${pmLabel(pm)}</th>`);
+  html += `</tr></thead><tbody>`;
+  MONTHS.forEach(m=>{
+    html += `<tr><td>${m}</td>`;
+    pms.forEach(pm=>{
+      const v = grid[pm.id][m];
+      const display = (v!==undefined && v!=='') ? Number(v).toFixed(1) : '';
+      html += `<td><input type="number" step="0.1" class="${cellClass}" data-pm="${pm.id}" data-month="${m}" value="${display}"></td>`;
+    });
+    html += `</tr>`;
+  });
+  html += `</tbody></table></div></div>`;
+  return html;
+}
+
+function renderDiscMarginGst(container){
+  const pms = DATA.partnerModels;
+  if(!pms.length){
+    container.innerHTML = `<div class="footnote">No Partner-Models defined yet — add some in "3. Partner-Model master" first.</div>`;
+    return;
+  }
+  let html = `<div class="footnote" style="margin-bottom:14px;">Partner-Model wise, month wise. Will later apply as: Discount% on MRP → Margin% on (MRP − Discount) → GST% on (MRP − Discount − Margin)/(1+GST%)×GST%.</div>`;
+  DMG_METRICS.forEach((m,i)=>{
+    html += renderRateGrid(container, m.key, m.label, pms);
+    if(i < DMG_METRICS.length-1) html += `<hr style="border:none; border-top:1px solid var(--line); margin:22px 0;">`;
+  });
+  container.innerHTML = html;
+
+  const store = getCycleObj('discMarginGstByCycle');
+  container.querySelectorAll('[data-clearmetric]').forEach(btn=>{
+    btn.addEventListener('click', ()=>{
+      const metric = btn.dataset.clearmetric;
+      const label = DMG_METRICS.find(x=>x.key===metric).label;
+      if(!confirm(`Delete all ${label} data? This cannot be undone.`)) return;
+      pms.forEach(pm=>{ store[metric][pm.id] = {}; });
+      markDirty();
+      renderDiscMarginGst(container);
+    });
+  });
+
+  DMG_METRICS.forEach(({key:metric})=>{
+    const grid = store[metric];
+    container.querySelectorAll('.'+metric+'ratecell').forEach(inp=>{
+      inp.addEventListener('change', ()=>{
+        const n = cleanNum(inp.value);
+        grid[inp.dataset.pm][inp.dataset.month] = n===null ? '' : n;
+        markDirty();
+        renderDiscMarginGst(container);
+      });
+    });
+  });
+
+  // Each metric's paste box is matched to its grid by DOM order (one .pastebox per grid, in the same order as DMG_METRICS).
+  const pasteBoxes = container.querySelectorAll('.pastebox');
+  DMG_METRICS.forEach(({key:metric}, i)=>{
+    const box = pasteBoxes[i];
+    if(!box) return;
+    const grid = store[metric];
+    const importBtn = box.querySelector('#importBtn');
+    const clearBtn = box.querySelector('#clearPasteBtn');
+    if(importBtn) importBtn.addEventListener('click', ()=>{
+      const text = box.querySelector('#pasteArea').value;
+      const lines = text.split(/\r?\n/).map(l=>l.trim()).filter(Boolean);
+      lines.forEach(line=>{
+        const parts = line.split('\t');
+        if(parts.length < 2) return;
+        const month = parts[0].trim();
+        if(!MONTHS.includes(month)) return;
+        pms.forEach((pm,i2)=>{
+          if(!grid[pm.id]) grid[pm.id] = {};
+          const n = cleanNum(parts[i2+1]);
+          if(n !== null) grid[pm.id][month] = n;
+        });
+      });
+      markDirty();
+      renderDiscMarginGst(container);
+    });
+    if(clearBtn) clearBtn.addEventListener('click', ()=>{ box.querySelector('#pasteArea').value=''; });
+  });
+}
 
 const TABS = {
   brands:{
@@ -1455,13 +1555,7 @@ const TABS = {
   },
   discMarginGst:{
     title:'Discount / Margin / GST %', desc:'Partner-Model wise, month wise. Will later apply as: Discount% on MRP → Margin% on (MRP − Discount) → GST% on (MRP − Discount − Margin)/(1+GST%)×GST%.',
-    render:(el)=> renderMasterTable(el, getCycleData('discMarginGstByCycle'), [
-      {key:'partnerModelId', label:'Partner-Model', type:'select', options:()=>DATA.partnerModels.map(pm=>({id:pm.id, label:pmLabel(pm)})), width:200},
-      {key:'month', label:'Month', type:'select', options:()=>MONTHS.map(m=>({id:m,label:m})), width:120},
-      {key:'discountPct', label:'Discount%', type:'number', width:110},
-      {key:'marginPct', label:'Margin%', type:'number', width:110},
-      {key:'gstPct', label:'GST%', type:'number', width:110}
-    ], {prefix:'DMG', addLabel:'Add'})
+    render: renderDiscMarginGst
   },
   codbRateCard:{
     title:'CODB Rate Card', desc:'Channel-wise rate for each CODB line item, and the base it is applied on.',
@@ -1861,13 +1955,13 @@ function renderCyclePanel(){
 
 function copyCycleInputData(destCycleId, srcCycleId){
   if(!srcCycleId) return;
-  ['salesInputByCycle','codbRateCardByCycle','miscInputsByCycle','cashFlowItemsByCycle','discMarginGstByCycle'].forEach(k=>{
+  ['salesInputByCycle','codbRateCardByCycle','miscInputsByCycle','cashFlowItemsByCycle'].forEach(k=>{
     const srcRows = (DATA[k] && DATA[k][srcCycleId]) || [];
     DATA[k] = DATA[k] || {};
     // Deep-copy with fresh row ids so edits in the new cycle never collide with the source.
     DATA[k][destCycleId] = srcRows.map(r=> ({...r, id: uid('COPY')}));
   });
-  ['monthlyGMVByCycle','channelMixByCycle','categoryMixByCycle','paretoMixByCycle'].forEach(k=>{
+  ['monthlyGMVByCycle','channelMixByCycle','categoryMixByCycle','paretoMixByCycle','discMarginGstByCycle'].forEach(k=>{
     const srcObj = (DATA[k] && DATA[k][srcCycleId]) || {};
     DATA[k] = DATA[k] || {};
     DATA[k][destCycleId] = JSON.parse(JSON.stringify(srcObj));
