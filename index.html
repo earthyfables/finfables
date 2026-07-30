@@ -1028,12 +1028,12 @@ function renderCodbDeductionMappingScreen(container){
 function renderCodbRateCardScreen(container){
   const pms = DATA.partnerModels;
   const lineItems = DATA.codbLineItems;
-  const products = DATA.productSubCategories;
+  const products = DATA.productCategories;
   const bands = DATA.aspBands;
 
   if(!pms.length){ container.innerHTML = `<div class="footnote">No Partner-Models defined yet — add some in "Partner-Model Master" first.</div>`; return; }
   if(!lineItems.length){ container.innerHTML = `<div class="footnote">No CODB Line Items defined yet — add some in "CODB Deduction Mapping" first.</div>`; return; }
-  if(!products.length){ container.innerHTML = `<div class="footnote">No Product Sub Categories defined yet — add some in "Pareto Master" first.</div>`; return; }
+  if(!products.length){ container.innerHTML = `<div class="footnote">No Product Categories defined yet — add some in "Pareto Master" first.</div>`; return; }
   if(!bands.length){ container.innerHTML = `<div class="footnote">No ASP Bands defined yet — add some in "ASP Band Master" first.</div>`; return; }
 
   const store = getCycleObj('codbRateCardByCycle'); // {pmId: {lineItemId: {productId: {bandId: value}}}}
@@ -1045,10 +1045,10 @@ function renderCodbRateCardScreen(container){
     });
   });
 
-  let html = `<div class="footnote" style="margin-bottom:14px;">Auto-populated from your masters — one row per Partner-Model × Product × Fee Type, ASP Bands as columns.</div>`;
-  html += pasteBoxHtml('Partner-Model | Product | Fee Type | ' + bands.map(b=>b.name).join(' | '));
+  let html = `<div class="footnote" style="margin-bottom:14px;">Auto-populated from your masters — one row per Partner-Model × Product Category × Fee Type, ASP Bands as columns.</div>`;
+  html += pasteBoxHtml('Partner-Model | Pdt Cat | Fee Type | ' + bands.map(b=>b.name).join(' | '));
 
-  html += `<div class="panel"><div class="scrollbox" style="max-height:560px;"><table class="ledger"><thead><tr><th style="text-align:left;">Partner-Model</th><th style="text-align:left;">Product</th><th style="text-align:left;">Fee Type</th>`;
+  html += `<div class="panel"><div class="scrollbox" style="max-height:560px;"><table class="ledger"><thead><tr><th style="text-align:left;">Partner-Model</th><th style="text-align:left;">Pdt Cat</th><th style="text-align:left;">Fee Type</th>`;
   bands.forEach(b=> html += `<th>${b.name}</th>`);
   html += `</tr></thead><tbody>`;
   pms.forEach(pm=>{
@@ -1646,7 +1646,7 @@ const TABS = {
     render: renderDiscMarginGst
   },
   codbRateCard:{
-    title:'CODB Rate Card', desc:'Partner-Model × Product × Fee Type, rate per ASP Band. ASP Bands come from the ASP Band Master — add/remove/rename bands there and the columns here follow.',
+    title:'CODB Rate Card', desc:'Partner-Model × Product Category × Fee Type, rate per ASP Band. ASP Bands come from the ASP Band Master — add/remove/rename bands there and the columns here follow.',
     render: renderCodbRateCardScreen
   },
   miscInputs:{
