@@ -346,7 +346,7 @@
 
     <div class="navgroup">
       <h4>Inputs</h4>
-      <button class="navitem" data-tab="salesInput"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="23 6 13.5 15.5 8.5 10.5 1 18"/><polyline points="17 6 23 6 23 12"/></svg><span>SKU × Channel Sales Input</span></button>
+      <button class="navitem" data-tab="salesInput"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="23 6 13.5 15.5 8.5 10.5 1 18"/><polyline points="17 6 23 6 23 12"/></svg><span>Sales Inputs</span></button>
       <button class="navitem" data-tab="codbRateCard"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="4" y1="21" x2="4" y2="14"/><line x1="4" y1="10" x2="4" y2="3"/><line x1="12" y1="21" x2="12" y2="12"/><line x1="12" y1="8" x2="12" y2="3"/><line x1="20" y1="21" x2="20" y2="16"/><line x1="20" y1="12" x2="20" y2="3"/><line x1="1" y1="14" x2="7" y2="14"/><line x1="9" y1="8" x2="15" y2="8"/><line x1="17" y1="16" x2="23" y2="16"/></svg><span>CODB Rate Card</span></button>
       <button class="navitem" data-tab="miscInputs"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="1.4"/><circle cx="19" cy="12" r="1.4"/><circle cx="5" cy="12" r="1.4"/></svg><span>Misc. Inputs</span></button>
       <button class="navitem" data-tab="cashFlowItems"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="23 4 23 10 17 10"/><polyline points="1 20 1 14 7 14"/><path d="M3.51 9a9 9 0 0114.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0020.49 15"/></svg><span>Cash Flow Adjustments</span></button>
@@ -1000,6 +1000,42 @@ function renderParetoMasterScreen(container){
   renderParetoSubTable(container.querySelector('#paretoSubHost'), paretoSubTab);
 }
 
+const SALES_INPUT_SUB_TABS = [
+  {key:'channelSales', label:'Channel Sales'}
+];
+let salesInputSubTab = 'channelSales';
+
+function renderSalesInputSubTable(host, key){
+  if(key === 'channelSales'){
+    renderEditableTable(host, getCycleData('salesInputByCycle'), [
+      {key:'skuId', label:'SKU (Pdt Sub Cat)', type:'select', options:()=>optList(DATA.productSubCategories,s=>s.name)},
+      {key:'channelId', label:'Channel', type:'select', options:()=>optList(DATA.channels,c=>c.name)},
+      {key:'month', label:'Month', type:'select', options:()=>MONTHS.map(m=>({id:m,label:m}))},
+      {key:'qty', label:'Gross Qty', type:'number'},
+      {key:'discountPct', label:'Discount %', type:'number'},
+      {key:'amrp', label:'AMRP', type:'number'},
+      {key:'acogs', label:'ACOGS', type:'number'},
+      {key:'gstPct', label:'GST %', type:'number'}
+    ], {prefix:'SI'});
+  }
+}
+
+function renderSalesInputsScreen(container){
+  let pillsHtml = `<div class="pillbar">`;
+  SALES_INPUT_SUB_TABS.forEach(t=>{
+    pillsHtml += `<button class="pill ${t.key===salesInputSubTab?'active':''}" data-salesinputtab="${t.key}">${t.label}</button>`;
+  });
+  pillsHtml += `</div>`;
+  container.innerHTML = pillsHtml + `<div id="salesInputSubHost"></div>`;
+  container.querySelectorAll('[data-salesinputtab]').forEach(btn=>{
+    btn.addEventListener('click', ()=>{
+      salesInputSubTab = btn.dataset.salesinputtab;
+      renderSalesInputsScreen(container);
+    });
+  });
+  renderSalesInputSubTable(container.querySelector('#salesInputSubHost'), salesInputSubTab);
+}
+
 const TABS = {
   brands:{
     title:'Brand Master', desc:'Brand is free-text. Brand group is a fixed option.',
@@ -1057,17 +1093,8 @@ const TABS = {
     render: renderParetoMasterScreen
   },
   salesInput:{
-    title:'SKU × Channel Sales Input', desc:'Secondary gross qty, discount, AMRP, ACOGS and GST per Product Sub Category, per channel, per month.',
-    render:(el)=> renderEditableTable(el, getCycleData('salesInputByCycle'), [
-      {key:'skuId', label:'SKU (Pdt Sub Cat)', type:'select', options:()=>optList(DATA.productSubCategories,s=>s.name)},
-      {key:'channelId', label:'Channel', type:'select', options:()=>optList(DATA.channels,c=>c.name)},
-      {key:'month', label:'Month', type:'select', options:()=>MONTHS.map(m=>({id:m,label:m}))},
-      {key:'qty', label:'Gross Qty', type:'number'},
-      {key:'discountPct', label:'Discount %', type:'number'},
-      {key:'amrp', label:'AMRP', type:'number'},
-      {key:'acogs', label:'ACOGS', type:'number'},
-      {key:'gstPct', label:'GST %', type:'number'}
-    ], {prefix:'SI'})
+    title:'Sales Inputs', desc:'Secondary gross qty, discount, AMRP, ACOGS and GST per Product Sub Category, per channel, per month.',
+    render: renderSalesInputsScreen
   },
   codbRateCard:{
     title:'CODB Rate Card', desc:'Channel-wise rate for each CODB line item, and the base it is applied on.',
