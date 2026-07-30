@@ -15,7 +15,7 @@
       "Feb",
       "Mar"
     ],
-    "savedAt": "2026-07-30T07:00:46.504Z",
+    "savedAt": "2026-07-30T08:16:53.096Z",
     "activeCycleId": "CYC_p9c3kh"
   },
   "channels": [
@@ -6737,6 +6737,142 @@
           "Feb": 0.44,
           "Mar": 0.48
         }
+      }
+    }
+  },
+  "discMarginGstByCycle": {
+    "CYC_p9c3kh": {
+      "discount": {
+        "PM_2nak1i": {
+          "Aug": 20,
+          "Sep": 20,
+          "Oct": 20,
+          "Nov": 20,
+          "Dec": 20,
+          "Jan": 20,
+          "Feb": 20,
+          "Mar": 20
+        },
+        "PM_rkv6uj": {
+          "Aug": 20,
+          "Sep": 20,
+          "Oct": 20,
+          "Nov": 20,
+          "Dec": 20,
+          "Jan": 20,
+          "Feb": 20,
+          "Mar": 20
+        },
+        "PM_y0jzso": {
+          "Aug": 20,
+          "Sep": 20,
+          "Oct": 20,
+          "Nov": 20,
+          "Dec": 20,
+          "Jan": 20,
+          "Feb": 20,
+          "Mar": 20
+        },
+        "PM_esn20h": {
+          "Aug": 20,
+          "Sep": 20,
+          "Oct": 20,
+          "Nov": 20,
+          "Dec": 20,
+          "Jan": 20,
+          "Feb": 20,
+          "Mar": 20
+        },
+        "PM_jgo2r9": {
+          "Aug": 20,
+          "Sep": 20,
+          "Oct": 20,
+          "Nov": 20,
+          "Dec": 20,
+          "Jan": 20,
+          "Feb": 20,
+          "Mar": 20
+        },
+        "PM_2gw084": {
+          "Aug": 20,
+          "Sep": 20,
+          "Oct": 20,
+          "Nov": 20,
+          "Dec": 20,
+          "Jan": 20,
+          "Feb": 20,
+          "Mar": 20
+        }
+      },
+      "margin": {
+        "PM_2nak1i": {
+          "Aug": 0,
+          "Sep": 0,
+          "Oct": 0,
+          "Nov": 0,
+          "Dec": 0,
+          "Jan": 0,
+          "Feb": 0,
+          "Mar": 0
+        },
+        "PM_rkv6uj": {
+          "Aug": 0,
+          "Sep": 0,
+          "Oct": 0,
+          "Nov": 0,
+          "Dec": 0,
+          "Jan": 0,
+          "Feb": 0,
+          "Mar": 0
+        },
+        "PM_y0jzso": {
+          "Aug": 0,
+          "Sep": 0,
+          "Oct": 0,
+          "Nov": 0,
+          "Dec": 0,
+          "Jan": 0,
+          "Feb": 0,
+          "Mar": 0
+        },
+        "PM_esn20h": {
+          "Aug": 0,
+          "Sep": 0,
+          "Oct": 0,
+          "Nov": 0,
+          "Dec": 0,
+          "Jan": 0,
+          "Feb": 0,
+          "Mar": 0
+        },
+        "PM_jgo2r9": {
+          "Aug": 0,
+          "Sep": 0,
+          "Oct": 0,
+          "Nov": 0,
+          "Dec": 0,
+          "Jan": 0,
+          "Feb": 0,
+          "Mar": 0
+        },
+        "PM_2gw084": {
+          "Aug": 0,
+          "Sep": 0,
+          "Oct": 0,
+          "Nov": 0,
+          "Dec": 0,
+          "Jan": 0,
+          "Feb": 0,
+          "Mar": 0
+        }
+      },
+      "gst": {
+        "PM_2nak1i": {},
+        "PM_rkv6uj": {},
+        "PM_y0jzso": {},
+        "PM_esn20h": {},
+        "PM_jgo2r9": {},
+        "PM_2gw084": {}
       }
     }
   }
