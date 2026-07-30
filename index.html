@@ -95,6 +95,14 @@
   .cyclepanel select option{color:#1B2338; background:#fff;}
   .cyclepanel .cyclelabel{font-size:10px; text-transform:uppercase; letter-spacing:0.08em; color:#6B76A0; font-weight:700; margin:8px 0 4px 0;}
   .cyclepanel .cyclesummary{font-size:11px; color:#ECCB7D; font-style:italic; margin-top:6px; line-height:1.4;}
+  .cyclepanel .cycleactions{display:flex; gap:6px; margin-top:8px;}
+  .cyclepanel .cycleactionbtn{
+    flex:1; background:rgba(255,255,255,0.06); border:1px solid rgba(255,255,255,0.14); color:#B9C1DC;
+    padding:6px 8px; border-radius:6px; font-family:'Times New Roman', Times, serif; font-size:11px;
+    font-weight:700; cursor:pointer; transition:all 0.15s ease;
+  }
+  .cyclepanel .cycleactionbtn:hover{border-color:#ECCB7D; color:#fff;}
+  .cyclepanel .cycleactionbtn.danger:hover{border-color:var(--neg); color:#F0A0A0;}
   .cyclepanel .newcyclebtn{
     width:100%; background:rgba(236,203,125,0.12); border:1px dashed #ECCB7D; color:#ECCB7D;
     padding:7px 9px; border-radius:6px; font-family:'Times New Roman', Times, serif; font-size:12px; font-weight:700;
@@ -407,7 +415,8 @@ function cycleLabel(cycle){
   const endMonth = months[months.length-1];
   const fy = cycle.fy || '';
   const version = cycle.version || 'AOP';
-  return `${brand?brand.name:'—'} · ${fy} · ${version} · ${cycle.startMonth}-${endMonth}`;
+  const draftTag = cycle.published === false ? ' (Draft)' : '';
+  return `${brand?brand.name:'—'} · ${fy} · ${version} · ${cycle.startMonth}-${endMonth}${draftTag}`;
 }
 function getActiveCycle(){
   return (DATA.aopCycles||[]).find(c=>c.id===DATA.meta.activeCycleId) || null;
@@ -525,6 +534,7 @@ async function loadData(){
     if(x.creditorDays===undefined) x.creditorDays = '';
   });
   if(!DATA.aopCycles) DATA.aopCycles = [];
+  DATA.aopCycles.forEach(c=>{ if(c.published===undefined) c.published = true; });
   if(DATA.meta.activeCycleId===undefined) DATA.meta.activeCycleId = '';
   applyActiveCycle();
   const fyLabelEl = document.getElementById('fyLabel');
@@ -1393,11 +1403,40 @@ function renderCyclePanel(){
 
   html += `<div class="cyclesummary">${active ? cycleLabel(active) : 'No cycle selected — using default FY (Apr–Mar)'}</div>`;
 
+  if(active){
+    html += `<div class="cycleactions">
+      <button class="cycleactionbtn" id="togglePublishBtn">${active.published ? '↩ Unpublish' : '✓ Publish'}</button>
+      <button class="cycleactionbtn danger" id="deleteCycleBtn">🗑 Delete</button>
+    </div>`;
+  }
+
   panel.innerHTML = html;
 
   const sel = panel.querySelector('#cycleSelect');
   if(sel) sel.addEventListener('change', ()=>{
     DATA.meta.activeCycleId = sel.value;
+    applyActiveCycle();
+    markDirty();
+    render();
+  });
+
+  const publishBtn = panel.querySelector('#togglePublishBtn');
+  if(publishBtn) publishBtn.addEventListener('click', ()=>{
+    active.published = !active.published;
+    markDirty();
+    render();
+  });
+
+  const deleteBtn = panel.querySelector('#deleteCycleBtn');
+  if(deleteBtn) deleteBtn.addEventListener('click', ()=>{
+    const ok = confirm(`Delete "${cycleLabel(active)}"?\n\nThis also permanently deletes all Sales Input, Rate Card, Misc Inputs and Cash Flow data entered for this cycle. This cannot be undone.`);
+    if(!ok) return;
+    const idx = DATA.aopCycles.findIndex(c=>c.id===active.id);
+    if(idx > -1) DATA.aopCycles.splice(idx,1);
+    ['salesInputByCycle','codbRateCardByCycle','miscInputsByCycle','cashFlowItemsByCycle'].forEach(k=>{
+      if(DATA[k]) delete DATA[k][active.id];
+    });
+    if(DATA.meta.activeCycleId === active.id) DATA.meta.activeCycleId = '';
     applyActiveCycle();
     markDirty();
     render();
@@ -1427,7 +1466,7 @@ function copyCycleInputData(destCycleId, srcCycleId){
 }
 
 function createAndActivateCycle(brandId, fy, startMonth, version, copyFromId){
-  const newCycle = {id: uid('CYC'), brandId, fy, startMonth, version};
+  const newCycle = {id: uid('CYC'), brandId, fy, startMonth, version, published:false};
   DATA.aopCycles.push(newCycle);
   copyCycleInputData(newCycle.id, copyFromId);
   DATA.meta.activeCycleId = newCycle.id;
