@@ -126,22 +126,22 @@
   .sidebarsave-status{font-size:10.5px; color:#8590B3; margin-top:8px; text-align:center; font-style:italic; line-height:1.4;}
 
   /* Main */
-  .main{flex:1; min-width:0; padding:30px 38px 60px 38px; overflow-x:auto;}
+  .main{flex:1; min-width:0; padding:22px 28px 44px 28px; overflow-x:auto;}
   .topbar{
     display:flex; align-items:baseline; justify-content:space-between;
-    margin-bottom:26px; flex-wrap:wrap; gap:12px;
-    padding-bottom:18px; border-bottom:1px solid var(--line);
+    margin-bottom:18px; flex-wrap:wrap; gap:12px;
+    padding-bottom:12px; border-bottom:1px solid var(--line);
   }
   .titleblock h1{
     font-family:'Times New Roman', Times, serif;
-    font-size:25px; margin:0 0 4px 0; font-weight:700;
+    font-size:21px; margin:0 0 3px 0; font-weight:700;
     color:var(--ink); letter-spacing:0.01em;
   }
-  .titleblock .sub{color:var(--ink-soft); font-size:13px; font-style:italic;}
+  .titleblock .sub{color:var(--ink-soft); font-size:12.5px; font-style:italic;}
   #fileInput{display:none;}
 
   .btn{
-    font-family:'Times New Roman', Times, serif; font-size:13px; padding:9px 17px; border-radius:7px;
+    font-family:'Times New Roman', Times, serif; font-size:12.5px; padding:7px 14px; border-radius:6px;
     border:1px solid var(--line); background:var(--surface); color:var(--ink);
     cursor:pointer; font-weight:700; transition:all 0.15s ease;
     box-shadow:var(--shadow-sm);
@@ -176,16 +176,23 @@
   .pill:hover{border-color:var(--accent); color:var(--accent);}
   .pill.active{background:var(--accent); color:#fff; border-color:var(--accent-dark); box-shadow:var(--shadow-sm);}
 
-  /* Paste-from-Excel box */
-  .pastebox{border:1px solid var(--line); border-radius:var(--radius); padding:14px 16px; margin-bottom:18px; background:#FAFBFD;}
-  .pastebox-label{font-size:13px; font-weight:700; color:var(--ink); margin-bottom:8px;}
-  .pastebox-row{display:flex; gap:12px; align-items:flex-start;}
-  .pastebox textarea{
-    flex:1; min-height:64px; resize:vertical; font-family:'Times New Roman', Times, serif; font-size:13px;
-    border:1px solid var(--line); border-radius:6px; padding:9px 11px; color:var(--ink); background:#fff;
+  /* Paste-from-Excel bar — compact, single line */
+  .pastebox{
+    display:flex; align-items:center; gap:8px;
+    border:1px solid var(--line); border-radius:6px; padding:4px 6px 4px 10px; margin-bottom:12px; background:#FAFBFD;
   }
-  .pastebox textarea:focus{outline:none; border-color:var(--accent); box-shadow:0 0 0 3px var(--accent-soft);}
-  .pastebox-btns{display:flex; flex-direction:column; gap:8px;}
+  .pastebox-label{font-size:11px; font-weight:700; color:var(--ink-soft); white-space:nowrap; flex:none;}
+  .pastebox-row{display:contents;}
+  .pastebox textarea{
+    flex:1; height:28px; min-height:28px; max-height:28px; resize:none; overflow:hidden; line-height:1.3;
+    font-family:'Times New Roman', Times, serif; font-size:12.5px;
+    border:1px solid var(--line); border-radius:5px; padding:4px 8px; color:var(--ink); background:#fff;
+  }
+  .pastebox textarea:focus{
+    height:60px; max-height:60px; overflow:auto;
+    outline:none; border-color:var(--accent); box-shadow:0 0 0 2px var(--accent-soft);
+  }
+  .pastebox-btns{display:flex; gap:6px; flex:none;}
 
   /* Inline add-row form */
   .addform{display:flex; gap:14px; flex-wrap:wrap; align-items:flex-end; margin-bottom:16px;}
@@ -199,7 +206,7 @@
 
   .panel{
     background:var(--surface); border:1px solid var(--line); border-radius:var(--radius);
-    padding:24px 26px; margin-bottom:22px;
+    padding:16px 18px; margin-bottom:16px;
     box-shadow:var(--shadow-sm);
   }
   .panel h2{
@@ -292,6 +299,8 @@
   .btn-sm:hover{border-color:var(--accent); color:var(--accent);}
   .btn-sm.danger{color:var(--neg); border-color:#E3B8B8;}
   .btn-sm.danger:hover{background:var(--neg-soft);}
+  .btn-sm.primary{background:var(--accent); color:#fff; border-color:var(--accent-dark);}
+  .btn-sm.primary:hover{color:#fff; background:#2A3D75;}
   .actionsrow{display:inline-flex; gap:6px; white-space:nowrap;}
 
   /* Output ledger tables */
@@ -725,14 +734,12 @@ function renderMasterTable(container, arr, cols, opts){
 
   let html = '';
   if(opts.paste !== false){
-    html += `<div class="pastebox">
-      <div class="pastebox-label">📋 Paste from Excel — columns: ${pasteHint}</div>
-      <div class="pastebox-row">
-        <textarea id="pasteArea" placeholder="Copy cells from Excel and paste here (Ctrl+V)…"></textarea>
-        <div class="pastebox-btns">
-          <button class="btn primary" id="importBtn">Import rows</button>
-          <button class="btn" id="clearPasteBtn">Clear</button>
-        </div>
+    html += `<div class="pastebox" title="Columns: ${pasteHint}">
+      <span class="pastebox-label">Paste (${pasteHint}):</span>
+      <textarea id="pasteArea" placeholder="Ctrl+V…"></textarea>
+      <div class="pastebox-btns">
+        <button class="btn-sm primary" id="importBtn">Import</button>
+        <button class="btn-sm" id="clearPasteBtn">Clear</button>
       </div>
     </div>`;
   }
@@ -1093,14 +1100,12 @@ function pctTotalCell(total){
 function pmLabel(pm){ return `${pm.partner} (${pm.model})`; }
 
 function pasteBoxHtml(hint){
-  return `<div class="pastebox">
-    <div class="pastebox-label">📋 Paste from Excel — columns: ${hint}</div>
-    <div class="pastebox-row">
-      <textarea id="pasteArea" placeholder="Copy cells from Excel and paste here (Ctrl+V)…"></textarea>
-      <div class="pastebox-btns">
-        <button class="btn primary" id="importBtn">Import rows</button>
-        <button class="btn" id="clearPasteBtn">Clear</button>
-      </div>
+  return `<div class="pastebox" title="Columns: ${hint}">
+    <span class="pastebox-label">Paste (${hint}):</span>
+    <textarea id="pasteArea" placeholder="Ctrl+V…"></textarea>
+    <div class="pastebox-btns">
+      <button class="btn-sm primary" id="importBtn">Import</button>
+      <button class="btn-sm" id="clearPasteBtn">Clear</button>
     </div>
   </div>`;
 }
