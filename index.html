@@ -777,13 +777,15 @@ function renderMasterTable(container, arr, cols, opts){
     </div>`;
   }
 
-  html += `<div class="addform">`;
-  cols.forEach(c=>{
-    const w = c.width || 130;
-    html += `<div class="addfield" style="width:${w}px;"><label>${c.label}</label>${fieldInput({}, c).replace('data-key','data-addkey')}</div>`;
-  });
-  html += `<button class="btn primary addbtn" id="addRowBtn2">${opts.addLabel || 'Add'}</button>`;
-  html += `</div>`;
+  if(opts.allowAdd !== false){
+    html += `<div class="addform">`;
+    cols.forEach(c=>{
+      const w = c.width || 130;
+      html += `<div class="addfield" style="width:${w}px;"><label>${c.label}</label>${fieldInput({}, c).replace('data-key','data-addkey')}</div>`;
+    });
+    html += `<button class="btn primary addbtn" id="addRowBtn2">${opts.addLabel || 'Add'}</button>`;
+    html += `</div>`;
+  }
 
   html += `<button class="btn danger" id="deleteSelBtn">Delete selected</button>`;
 
@@ -1068,14 +1070,14 @@ function renderCodbDeductionMappingScreen(container){
       {key:'expenseLineItemId', label:'Expense Line Item', type:'select', options:()=>optList(DATA.expenseLineItems.filter(x=>x.type==='CODB' || x.type==='CAC'), x=>x.name), width:220}
     ], {prefix:'CLI', addLabel:'Add', tableMaxHeight:'65vh'});
   } else if(codbDeductionMappingSubTab === 'rateStructure'){
-    host.innerHTML = `<div class="footnote" style="margin-bottom:14px;">Rate Basis and Structure for each CODB Line Item — moved here from the main list; more corrections to come.</div>`;
+    host.innerHTML = `<div class="footnote" style="margin-bottom:14px;">Rate Basis and Structure for each CODB Line Item — add new items in the "CODB Line Items" tab; this only maps what's already there. More corrections to come.</div>`;
     const rsHost = document.createElement('div');
     host.appendChild(rsHost);
     renderMasterTable(rsHost, DATA.codbLineItems, [
       {key:'name', label:'CODB Line Item', width:240},
       {key:'rateBasis', label:'Rate Basis', type:'select', options:()=>CODB_RATE_BASIS_OPTIONS.map(v=>({id:v,label:v})), width:180},
       {key:'structure', label:'Structure', type:'select', options:()=>['Marketplace','Other','Product wise'].map(v=>({id:v,label:v})), width:150}
-    ], {prefix:'CLI', addLabel:'Add', tableMaxHeight:'65vh'});
+    ], {prefix:'CLI', tableMaxHeight:'65vh', allowAdd:false, paste:false});
   } else if(codbDeductionMappingSubTab === 'marketplaceMapping'){
     renderMarketplaceDeductionMapping(host);
   } else {
