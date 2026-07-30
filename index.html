@@ -1127,17 +1127,26 @@ function renderChannelMix(host){
   html += `</tbody></table></div></div>`;
 
   html += `<div class="cyclelabel" style="color:var(--ink-soft); margin:18px 0 8px 0; font-size:11px; text-transform:uppercase; letter-spacing:0.05em; font-weight:700;">Resulting Partner-Model GMV (read-only)</div>`;
-  html += `<div class="panel"><div class="scrollbox" style="max-height:320px; overflow-x:auto;"><table class="ledger compact"><colgroup><col style="width:130px;">${pms.map(()=>'<col style="width:150px;">').join('')}</colgroup><thead><tr><th>Month</th>`;
+  html += `<div class="panel"><div class="scrollbox" style="max-height:320px; overflow-x:auto;"><table class="ledger compact"><colgroup><col style="width:130px;">${pms.map(()=>'<col style="width:150px;">').join('')}<col style="width:150px;"></colgroup><thead><tr><th>Month</th>`;
   pms.forEach(pm=> html += `<th>${pmLabel(pm)}</th>`);
-  html += `</tr></thead><tbody>`;
+  html += `<th>Total</th></tr></thead><tbody>`;
+  const pmColTotals = pms.map(()=>0);
   MONTHS.forEach(m=>{
     html += `<tr><td>${m}</td>`;
-    pms.forEach(pm=>{
+    let rowTotal = 0;
+    pms.forEach((pm,i)=>{
       const val = (+gmv[m]||0) * (+mix[pm.id][m]||0) / 100;
+      rowTotal += val;
+      pmColTotals[i] += val;
       html += `<td>${fmt(val)}</td>`;
     });
+    html += `<td style="font-weight:700;">${fmt(rowTotal)}</td>`;
     html += `</tr>`;
   });
+  html += `<tr class="subtotal"><td>FY Total</td>`;
+  let grandTotal = 0;
+  pmColTotals.forEach(t=>{ grandTotal += t; html += `<td>${fmt(t)}</td>`; });
+  html += `<td>${fmt(grandTotal)}</td></tr>`;
   html += `</tbody></table></div></div>`;
 
   host.innerHTML = html;
@@ -1217,16 +1226,25 @@ function renderParetoMix(host){
   html += `<div class="cyclelabel" style="color:var(--ink-soft); margin:18px 0 8px 0; font-size:11px; text-transform:uppercase; letter-spacing:0.05em; font-weight:700;">Resulting Pareto × Partner-Model × Month GMV (read-only)</div>`;
   html += `<div class="panel"><div class="scrollbox" style="max-height:320px;"><table class="ledger"><thead><tr><th>Pdt Sub Cat</th>`;
   MONTHS.forEach(m=> html += `<th>${m}</th>`);
-  html += `</tr></thead><tbody>`;
+  html += `<th class="total-col">FY Total</th></tr></thead><tbody>`;
+  const monthColTotals = MONTHS.map(()=>0);
   subCats.forEach(sc=>{
     html += `<tr><td>${sc.name}</td>`;
-    MONTHS.forEach(m=>{
+    let rowTotal = 0;
+    MONTHS.forEach((m,i)=>{
       const channelMonthGMV = (+gmv[m]||0) * (+(chMix[paretoMixChannelId]&&chMix[paretoMixChannelId][m])||0) / 100;
       const val = channelMonthGMV * (+mix[sc.id][m]||0) / 100;
+      rowTotal += val;
+      monthColTotals[i] += val;
       html += `<td>${fmt(val)}</td>`;
     });
+    html += `<td class="total-col" style="font-weight:700;">${fmt(rowTotal)}</td>`;
     html += `</tr>`;
   });
+  html += `<tr class="subtotal"><td>Total</td>`;
+  let grandTotal2 = 0;
+  monthColTotals.forEach(t=>{ grandTotal2 += t; html += `<td>${fmt(t)}</td>`; });
+  html += `<td class="total-col">${fmt(grandTotal2)}</td></tr>`;
   html += `</tbody></table></div></div>`;
 
   host.innerHTML = html;
