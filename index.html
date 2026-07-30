@@ -1037,33 +1037,34 @@ function renderCodbRateCardScreen(container){
   if(!bands.length){ container.innerHTML = `<div class="footnote">No ASP Bands defined yet — add some in "ASP Band Master" first.</div>`; return; }
 
   const store = getCycleObj('codbRateCardByCycle'); // {pmId: {lineItemId: {productId: {bandId: value}}}}
-
-  let html = `<div class="footnote" style="margin-bottom:14px;">Auto-populated from your masters — one block per Partner-Model, one table per CODB Line Item, every Product as a row, ASP Bands as columns.</div>`;
-
   pms.forEach(pm=>{
     if(!store[pm.id]) store[pm.id] = {};
-    html += `<h3 style="margin:24px 0 10px 0; font-size:16px; font-family:'Times New Roman', Times, serif;">${pmLabel(pm)}</h3>`;
     lineItems.forEach(li=>{
       if(!store[pm.id][li.id]) store[pm.id][li.id] = {};
-      const grid = store[pm.id][li.id];
-      products.forEach(p=>{ if(!grid[p.id]) grid[p.id] = {}; });
+      products.forEach(p=>{ if(!store[pm.id][li.id][p.id]) store[pm.id][li.id][p.id] = {}; });
+    });
+  });
 
-      html += `<div class="cyclelabel" style="margin:14px 0 6px 0; font-size:13px; font-weight:700; color:var(--ink);">${li.name}${li.rateBasis ? ` <span style="font-weight:400; color:var(--ink-soft); font-style:italic;">(${li.rateBasis})</span>` : ''}</div>`;
-      html += pasteBoxHtml('Product | ' + bands.map(b=>b.name).join(' | '));
-      html += `<div class="panel"><div class="scrollbox" style="max-height:320px;"><table class="ledger"><thead><tr><th>Product</th>`;
-      bands.forEach(b=> html += `<th>${b.name}</th>`);
-      html += `</tr></thead><tbody>`;
+  let html = `<div class="footnote" style="margin-bottom:14px;">Auto-populated from your masters — one row per Partner-Model × Product × Fee Type, ASP Bands as columns.</div>`;
+  html += pasteBoxHtml('Partner-Model | Product | Fee Type | ' + bands.map(b=>b.name).join(' | '));
+
+  html += `<div class="panel"><div class="scrollbox" style="max-height:560px;"><table class="ledger"><thead><tr><th style="text-align:left;">Partner-Model</th><th style="text-align:left;">Product</th><th style="text-align:left;">Fee Type</th>`;
+  bands.forEach(b=> html += `<th>${b.name}</th>`);
+  html += `</tr></thead><tbody>`;
+  pms.forEach(pm=>{
+    lineItems.forEach(li=>{
       products.forEach(p=>{
-        html += `<tr><td>${p.name}</td>`;
+        const cell = store[pm.id][li.id][p.id];
+        html += `<tr><td>${pmLabel(pm)}</td><td>${p.name}</td><td>${li.name}</td>`;
         bands.forEach(b=>{
-          const v = grid[p.id][b.id];
+          const v = cell[b.id];
           html += `<td><input type="number" step="any" class="codbratecell" data-pm="${pm.id}" data-li="${li.id}" data-product="${p.id}" data-band="${b.id}" value="${v!==undefined && v!==''? v : ''}"></td>`;
         });
         html += `</tr>`;
       });
-      html += `</tbody></table></div></div>`;
     });
   });
+  html += `</tbody></table></div></div>`;
 
   container.innerHTML = html;
 
@@ -1076,36 +1077,24 @@ function renderCodbRateCardScreen(container){
     });
   });
 
-  // Each block's paste box is matched to its grid by DOM order (Partner-Model x Line Item, same order as the loops above).
-  const pasteBoxes = container.querySelectorAll('.pastebox');
-  let boxIdx = 0;
-  pms.forEach(pm=>{
-    lineItems.forEach(li=>{
-      const box = pasteBoxes[boxIdx]; boxIdx++;
-      if(!box) return;
-      const grid = store[pm.id][li.id];
-      const importBtn = box.querySelector('#importBtn');
-      const clearBtn = box.querySelector('#clearPasteBtn');
-      if(importBtn) importBtn.addEventListener('click', ()=>{
-        const text = box.querySelector('#pasteArea').value;
-        const lines = text.split(/\r?\n/).map(l=>l.trim()).filter(Boolean);
-        lines.forEach(line=>{
-          const parts = line.split('\t');
-          if(parts.length < 2) return;
-          const pname = parts[0].trim();
-          const p = products.find(pp=> normalizeText(pp.name) === normalizeText(pname));
-          if(!p) return;
-          if(!grid[p.id]) grid[p.id] = {};
-          bands.forEach((b,i2)=>{
-            const n = cleanNum(parts[i2+1]);
-            if(n !== null) grid[p.id][b.id] = n;
-          });
-        });
-        markDirty();
-        renderCodbRateCardScreen(container);
+  wirePasteBox(container, (rows)=>{
+    rows.forEach(parts=>{
+      if(parts.length < 4) return;
+      const pmName = parts[0].trim();
+      const productName = parts[1].trim();
+      const liName = parts[2].trim();
+      const pm = pms.find(x=> normalizeText(pmLabel(x)) === normalizeText(pmName));
+      const p = products.find(x=> normalizeText(x.name) === normalizeText(productName));
+      const li = lineItems.find(x=> normalizeText(x.name) === normalizeText(liName));
+      if(!pm || !p || !li) return;
+      const cell = store[pm.id][li.id][p.id];
+      bands.forEach((b,i2)=>{
+        const n = cleanNum(parts[i2+3]);
+        if(n !== null) cell[b.id] = n;
       });
-      if(clearBtn) clearBtn.addEventListener('click', ()=>{ box.querySelector('#pasteArea').value=''; });
     });
+    markDirty();
+    renderCodbRateCardScreen(container);
   });
 }
 
