@@ -1393,7 +1393,8 @@ function renderMiscInputsScreen(container){
     html += `<tr><td>${li.name}</td>`;
     MONTHS.forEach(m=>{
       const v = store[li.id][m];
-      html += `<td><input type="number" step="any" class="misccell" data-li="${li.id}" data-month="${m}" value="${v!==undefined && v!==''? v : ''}"></td>`;
+      const display = (v!==undefined && v!=='') ? Math.round(v).toLocaleString('en-IN') : '';
+      html += `<td><input type="text" inputmode="decimal" class="misccell" data-li="${li.id}" data-month="${m}" value="${display}"></td>`;
     });
     html += `</tr>`;
   });
