@@ -15,7 +15,7 @@
       "Feb",
       "Mar"
     ],
-    "savedAt": "2026-07-30T15:05:36.006Z",
+    "savedAt": "2026-07-30T15:06:52.145Z",
     "activeCycleId": "CYC_p9c3kh"
   },
   "channels": [
@@ -143,7 +143,7 @@
       "category": "CAC",
       "gstRate": 18,
       "creditorDays": 30,
-      "type": "CODB"
+      "type": "CAC"
     },
     {
       "id": "EL_cpucaa",
@@ -191,7 +191,7 @@
       "category": "Material",
       "gstRate": 5,
       "creditorDays": 60,
-      "type": "MISC"
+      "type": "COGS"
     },
     {
       "id": "EL_mtzob3",
@@ -541,13 +541,6 @@
       "expenseLineItemId": "EL_vpsayp",
       "structure": "Other",
       "rateBasis": "% NSV"
-    },
-    {
-      "id": "CLI_25bcs2",
-      "name": "CAC",
-      "expenseLineItemId": "EL_1tskzd",
-      "rateBasis": "% NSV",
-      "structure": "MP Mapping only"
     }
   ],
   "marketplaceDeductionMapping": [
@@ -2516,16 +2509,97 @@
       "EL_vpsayp": {
         "Aug": ""
       },
-      "EL_cpucaa": {},
-      "EL_aaeffh": {},
-      "EL_ry6t0e": {},
-      "EL_hbh005": {},
-      "EL_jzy1qi": {},
+      "EL_cpucaa": {
+        "Aug": 92000,
+        "Sep": 92000,
+        "Oct": 92000,
+        "Nov": 92000,
+        "Dec": 92000,
+        "Jan": 92000,
+        "Feb": 92000,
+        "Mar": 92000
+      },
+      "EL_aaeffh": {
+        "Aug": 54050,
+        "Sep": 54050,
+        "Oct": 54050,
+        "Nov": 54050,
+        "Dec": 54050,
+        "Jan": 54050,
+        "Feb": 54050,
+        "Mar": 54050
+      },
+      "EL_ry6t0e": {
+        "Aug": 500000,
+        "Sep": 500000,
+        "Oct": 500000,
+        "Nov": 500000,
+        "Dec": 500000,
+        "Jan": 500000,
+        "Feb": 500000,
+        "Mar": 500000
+      },
+      "EL_hbh005": {
+        "Aug": 56100,
+        "Sep": 56100,
+        "Oct": 56100,
+        "Nov": 56100,
+        "Dec": 56100,
+        "Jan": 56100,
+        "Feb": 56100,
+        "Mar": 56100
+      },
+      "EL_jzy1qi": {
+        "Aug": 71500,
+        "Sep": 71500,
+        "Oct": 71500,
+        "Nov": 71500,
+        "Dec": 71500,
+        "Jan": 71500,
+        "Feb": 71500,
+        "Mar": 71500
+      },
       "EL_notxgv": {},
-      "EL_mtzob3": {},
-      "EL_5z2vyj": {},
-      "EL_94zxca": {},
-      "EL_qhsirw": {}
+      "EL_mtzob3": {
+        "Aug": 15000,
+        "Sep": 15000,
+        "Oct": 15000,
+        "Nov": 15000,
+        "Dec": 15000,
+        "Jan": 15000,
+        "Feb": 15000,
+        "Mar": 15000
+      },
+      "EL_5z2vyj": {
+        "Aug": 10000,
+        "Sep": 10000,
+        "Oct": 10000,
+        "Nov": 10000,
+        "Dec": 10000,
+        "Jan": 10000,
+        "Feb": 10000,
+        "Mar": 10000
+      },
+      "EL_94zxca": {
+        "Aug": 1500,
+        "Sep": 1500,
+        "Oct": 1500,
+        "Nov": 1500,
+        "Dec": 1500,
+        "Jan": 1500,
+        "Feb": 1500,
+        "Mar": 1500
+      },
+      "EL_qhsirw": {
+        "Aug": 30000,
+        "Sep": 30000,
+        "Oct": 30000,
+        "Nov": 30000,
+        "Dec": 30000,
+        "Jan": 30000,
+        "Feb": 30000,
+        "Mar": 30000
+      }
     }
   },
   "cashFlowItemsByCycle": {
