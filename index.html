@@ -1031,7 +1031,8 @@ function renderCodbDeductionMappingScreen(container){
   renderMasterTable(container.querySelector('#codbLineItemsHost'), DATA.codbLineItems, [
     {key:'name', label:'CODB Line Item', width:240},
     {key:'expenseLineItemId', label:'Expense Line Item', type:'select', options:()=>optList(DATA.expenseLineItems, x=>x.name), width:220},
-    {key:'rateBasis', label:'Rate Basis', type:'select', options:()=>CODB_RATE_BASIS_OPTIONS.map(v=>({id:v,label:v})), width:180}
+    {key:'rateBasis', label:'Rate Basis', type:'select', options:()=>CODB_RATE_BASIS_OPTIONS.map(v=>({id:v,label:v})), width:180},
+    {key:'structure', label:'Structure', type:'select', options:()=>['Marketplace','Other'].map(v=>({id:v,label:v})), width:130}
   ], {prefix:'CLI', addLabel:'Add', tableMaxHeight:'320px', onChange: ()=> renderMarketplaceDeductionMapping(container.querySelector('#marketplaceMappingHost'))});
   const mmHost = container.querySelector('#marketplaceMappingHost');
   renderMarketplaceDeductionMapping(mmHost);
@@ -1039,46 +1040,79 @@ function renderCodbDeductionMappingScreen(container){
 
 function renderCodbRateCardScreen(container){
   const pms = DATA.partnerModels;
-  const lineItems = DATA.codbLineItems;
+  const allLineItems = DATA.codbLineItems;
   const products = DATA.productCategories;
   const bands = DATA.aspBands;
 
   if(!pms.length){ container.innerHTML = `<div class="footnote">No Partner-Models defined yet — add some in "Partner-Model Master" first.</div>`; return; }
-  if(!lineItems.length){ container.innerHTML = `<div class="footnote">No CODB Line Items defined yet — add some in "CODB Deduction Mapping" first.</div>`; return; }
-  if(!products.length){ container.innerHTML = `<div class="footnote">No Product Categories defined yet — add some in "Pareto Master" first.</div>`; return; }
-  if(!bands.length){ container.innerHTML = `<div class="footnote">No ASP Bands defined yet — add some in "ASP Band Master" first.</div>`; return; }
+  if(!allLineItems.length){ container.innerHTML = `<div class="footnote">No CODB Line Items defined yet — add some in "CODB Deduction Mapping" first.</div>`; return; }
 
-  const store = getCycleObj('codbRateCardByCycle'); // {pmId: {lineItemId: {productId: {bandId: value}}}}
-  pms.forEach(pm=>{
-    if(!store[pm.id]) store[pm.id] = {};
-    lineItems.forEach(li=>{
-      if(!store[pm.id][li.id]) store[pm.id][li.id] = {};
-      products.forEach(p=>{ if(!store[pm.id][li.id][p.id]) store[pm.id][li.id][p.id] = {}; });
-    });
-  });
+  const mpLineItems = allLineItems.filter(li=> li.structure !== 'Other');
+  const otherLineItems = allLineItems.filter(li=> li.structure === 'Other');
 
-  let html = `<div class="footnote" style="margin-bottom:14px;">Auto-populated from your masters — one block per Partner-Model + Fee Type, every Product Category as a row, ASP Bands as columns.</div>`;
+  const store = getCycleObj('codbRateCardByCycle');
+  // Marketplace-format: {pmId: {liId: {productId: {bandId: value}}}}
+  // Other-format:        {pmId: {liId: {month: value}}}
+  pms.forEach(pm=>{ if(!store[pm.id]) store[pm.id] = {}; });
 
-  pms.forEach(pm=>{
-    lineItems.forEach(li=>{
-      const grid = store[pm.id][li.id];
-      html += `<h3 style="margin:24px 0 8px 0; font-size:15px; font-family:'Times New Roman', Times, serif;">${pmLabel(pm)} - ${li.name}${li.rateBasis ? ` <span style="font-weight:400; color:var(--ink-soft); font-style:italic; font-size:13px;">(${li.rateBasis})</span>` : ''}</h3>`;
-      html += pasteBoxHtml('Partner-Model | Fee Type | Pdt Cat | ' + bands.map(b=>b.name).join(' | '));
-      html += `<div class="panel"><div class="scrollbox" style="max-height:320px;"><table class="ledger"><thead><tr><th style="text-align:left;">Partner-Model</th><th style="text-align:left;">Fee Type</th><th style="text-align:left;">Pdt Cat</th>`;
-      bands.forEach(b=> html += `<th>${b.name}</th>`);
+  let html = '';
+
+  if(mpLineItems.length){
+    if(!products.length || !bands.length){
+      html += `<div class="footnote" style="margin-bottom:14px;">Marketplace fee types need Product Categories and ASP Bands defined — add some in "Pareto Master" / "ASP Band Master" first.</div>`;
+    } else {
+      html += `<div class="cyclelabel" style="font-size:14px; font-weight:700; color:var(--ink); margin-bottom:8px;">Marketplace Fees</div>`;
+      html += `<div class="footnote" style="margin-bottom:14px;">One block per Partner-Model + Fee Type, every Product Category as a row, ASP Bands as columns.</div>`;
+      pms.forEach(pm=>{
+        mpLineItems.forEach(li=>{
+          if(!store[pm.id][li.id]) store[pm.id][li.id] = {};
+          const grid = store[pm.id][li.id];
+          products.forEach(p=>{ if(!grid[p.id]) grid[p.id] = {}; });
+
+          html += `<h3 style="margin:24px 0 8px 0; font-size:15px; font-family:'Times New Roman', Times, serif;">${pmLabel(pm)} - ${li.name}${li.rateBasis ? ` <span style="font-weight:400; color:var(--ink-soft); font-style:italic; font-size:13px;">(${li.rateBasis})</span>` : ''}</h3>`;
+          html += pasteBoxHtml('Partner-Model | Fee Type | Pdt Cat | ' + bands.map(b=>b.name).join(' | '));
+          html += `<div class="panel"><div class="scrollbox" style="max-height:320px;"><table class="ledger"><thead><tr><th style="text-align:left;">Partner-Model</th><th style="text-align:left;">Fee Type</th><th style="text-align:left;">Pdt Cat</th>`;
+          bands.forEach(b=> html += `<th>${b.name}</th>`);
+          html += `</tr></thead><tbody>`;
+          products.forEach(p=>{
+            const cell = grid[p.id];
+            html += `<tr><td>${pmLabel(pm)}</td><td>${li.name}</td><td>${p.name}</td>`;
+            bands.forEach(b=>{
+              const v = cell[b.id];
+              html += `<td><input type="number" step="any" class="codbratecell" data-pm="${pm.id}" data-li="${li.id}" data-product="${p.id}" data-band="${b.id}" value="${v!==undefined && v!==''? v : ''}"></td>`;
+            });
+            html += `</tr>`;
+          });
+          html += `</tbody></table></div></div>`;
+        });
+      });
+    }
+  }
+
+  if(otherLineItems.length){
+    html += `<div class="cyclelabel" style="font-size:14px; font-weight:700; color:var(--ink); margin:28px 0 8px 0;">Other Fees</div>`;
+    html += `<div class="footnote" style="margin-bottom:14px;">One block per Fee Type — Partner-Model as columns, Months as rows.</div>`;
+    otherLineItems.forEach(li=>{
+      pms.forEach(pm=>{ if(!store[pm.id][li.id]) store[pm.id][li.id] = {}; });
+
+      html += `<h3 style="margin:24px 0 8px 0; font-size:15px; font-family:'Times New Roman', Times, serif;">${li.name}${li.rateBasis ? ` <span style="font-weight:400; color:var(--ink-soft); font-style:italic; font-size:13px;">(${li.rateBasis})</span>` : ''}</h3>`;
+      html += pasteBoxHtml('Month | ' + pms.map(pmLabel).join(' | '));
+      html += `<div class="panel"><div class="scrollbox" style="max-height:320px; overflow-x:auto;"><table class="ledger compact"><colgroup><col style="width:130px;">${pms.map(()=>'<col style="width:150px;">').join('')}</colgroup><thead><tr><th>Month</th>`;
+      pms.forEach(pm=> html += `<th>${pmLabel(pm)}</th>`);
       html += `</tr></thead><tbody>`;
-      products.forEach(p=>{
-        const cell = grid[p.id];
-        html += `<tr><td>${pmLabel(pm)}</td><td>${li.name}</td><td>${p.name}</td>`;
-        bands.forEach(b=>{
-          const v = cell[b.id];
-          html += `<td><input type="number" step="any" class="codbratecell" data-pm="${pm.id}" data-li="${li.id}" data-product="${p.id}" data-band="${b.id}" value="${v!==undefined && v!==''? v : ''}"></td>`;
+      MONTHS.forEach(m=>{
+        html += `<tr><td>${m}</td>`;
+        pms.forEach(pm=>{
+          const v = store[pm.id][li.id][m];
+          html += `<td><input type="number" step="any" class="codbothercell" data-li="${li.id}" data-pm="${pm.id}" data-month="${m}" value="${v!==undefined && v!==''? v : ''}"></td>`;
         });
         html += `</tr>`;
       });
       html += `</tbody></table></div></div>`;
     });
-  });
+  }
+
+  if(!html) html = `<div class="footnote">No CODB Line Items defined yet — add some in "CODB Deduction Mapping" first.</div>`;
 
   container.innerHTML = html;
 
@@ -1090,37 +1124,72 @@ function renderCodbRateCardScreen(container){
       renderCodbRateCardScreen(container);
     });
   });
+  container.querySelectorAll('.codbothercell').forEach(inp=>{
+    inp.addEventListener('change', ()=>{
+      const n = cleanNum(inp.value);
+      store[inp.dataset.pm][inp.dataset.li][inp.dataset.month] = n===null ? '' : n;
+      markDirty();
+      renderCodbRateCardScreen(container);
+    });
+  });
 
-  // Each block's paste box is matched to its grid by DOM order (Partner-Model x Fee Type, same order as the loops above).
+  // Marketplace blocks' paste boxes are matched by DOM order (Partner-Model x MP Fee Type).
+  // Other-Fee blocks' paste boxes follow directly after, matched by DOM order (one per Other Fee Type).
   const pasteBoxes = container.querySelectorAll('.pastebox');
   let boxIdx = 0;
-  pms.forEach(pm=>{
-    lineItems.forEach(li=>{
-      const box = pasteBoxes[boxIdx]; boxIdx++;
-      if(!box) return;
-      const grid = store[pm.id][li.id];
-      const importBtn = box.querySelector('#importBtn');
-      const clearBtn = box.querySelector('#clearPasteBtn');
-      if(importBtn) importBtn.addEventListener('click', ()=>{
-        const text = box.querySelector('#pasteArea').value;
-        const lines2 = text.split(/\r?\n/).map(l=>l.trim()).filter(Boolean);
-        lines2.forEach(line=>{
-          const parts = line.split('\t');
-          if(parts.length < 4) return;
-          const pname = parts[2].trim();
-          const p = products.find(pp=> normalizeText(pp.name) === normalizeText(pname));
-          if(!p) return;
-          const cell = grid[p.id];
-          bands.forEach((b,i2)=>{
-            const n = cleanNum(parts[i2+3]);
-            if(n !== null) cell[b.id] = n;
+  if(mpLineItems.length && products.length && bands.length){
+    pms.forEach(pm=>{
+      mpLineItems.forEach(li=>{
+        const box = pasteBoxes[boxIdx]; boxIdx++;
+        if(!box) return;
+        const grid = store[pm.id][li.id];
+        const importBtn = box.querySelector('#importBtn');
+        const clearBtn = box.querySelector('#clearPasteBtn');
+        if(importBtn) importBtn.addEventListener('click', ()=>{
+          const text = box.querySelector('#pasteArea').value;
+          const lines2 = text.split(/\r?\n/).map(l=>l.trim()).filter(Boolean);
+          lines2.forEach(line=>{
+            const parts = line.split('\t');
+            if(parts.length < 4) return;
+            const pname = parts[2].trim();
+            const p = products.find(pp=> normalizeText(pp.name) === normalizeText(pname));
+            if(!p) return;
+            const cell = grid[p.id];
+            bands.forEach((b,i2)=>{
+              const n = cleanNum(parts[i2+3]);
+              if(n !== null) cell[b.id] = n;
+            });
           });
+          markDirty();
+          renderCodbRateCardScreen(container);
         });
-        markDirty();
-        renderCodbRateCardScreen(container);
+        if(clearBtn) clearBtn.addEventListener('click', ()=>{ box.querySelector('#pasteArea').value=''; });
       });
-      if(clearBtn) clearBtn.addEventListener('click', ()=>{ box.querySelector('#pasteArea').value=''; });
     });
+  }
+  otherLineItems.forEach(li=>{
+    const box = pasteBoxes[boxIdx]; boxIdx++;
+    if(!box) return;
+    const importBtn = box.querySelector('#importBtn');
+    const clearBtn = box.querySelector('#clearPasteBtn');
+    if(importBtn) importBtn.addEventListener('click', ()=>{
+      const text = box.querySelector('#pasteArea').value;
+      const lines2 = text.split(/\r?\n/).map(l=>l.trim()).filter(Boolean);
+      lines2.forEach(line=>{
+        const parts = line.split('\t');
+        if(parts.length < 2) return;
+        const month = parts[0].trim();
+        if(!MONTHS.includes(month)) return;
+        pms.forEach((pm,i2)=>{
+          if(!store[pm.id][li.id]) store[pm.id][li.id] = {};
+          const n = cleanNum(parts[i2+1]);
+          if(n !== null) store[pm.id][li.id][month] = n;
+        });
+      });
+      markDirty();
+      renderCodbRateCardScreen(container);
+    });
+    if(clearBtn) clearBtn.addEventListener('click', ()=>{ box.querySelector('#pasteArea').value=''; });
   });
 }
 
@@ -1672,7 +1741,7 @@ const TABS = {
     render: renderDiscMarginGst
   },
   codbRateCard:{
-    title:'CODB Rate Card', desc:'Partner-Model × Product Category × Fee Type, rate per ASP Band. ASP Bands come from the ASP Band Master — add/remove/rename bands there and the columns here follow.',
+    title:'CODB Rate Card', desc:'Marketplace fee types: Partner-Model × Fee Type × Pdt Cat, rate per ASP Band. Other fee types: simpler Partner-Model × Month grid. Set each CODB Line Item Structure field (Marketplace / Other) in CODB Deduction Mapping.',
     render: renderCodbRateCardScreen
   },
   miscInputs:{
