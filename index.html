@@ -1055,13 +1055,10 @@ function renderParetoMasterScreen(container){
 const SALES_INPUT_SUB_TABS = [
   {key:'monthlyGMV', label:'Month wise GMV'},
   {key:'channelMix', label:'Channel Mix %'},
-  {key:'categoryMix', label:'Category Mix %'},
   {key:'paretoMix', label:'Pareto Mix %'}
 ];
 let salesInputSubTab = 'monthlyGMV';
 let paretoMixChannelId = '';
-let categoryMixChannelId = '';
-let paretoMixCategoryId = '';
 
 // Generic "first item auto-balances to 100%" helper used by Channel Mix,
 // Category Mix and Pareto Mix — the first item in the list is never directly
@@ -1252,112 +1249,6 @@ function renderChannelMix(host){
   });
 }
 
-function renderCategoryMix(host){
-  const pms = DATA.partnerModels;
-  if(!pms.length){
-    host.innerHTML = `<div class="footnote">No Partner-Models defined yet — add some in "3. Partner-Model master" first.</div>`;
-    return;
-  }
-  if(!categoryMixChannelId || !pms.some(pm=>pm.id===categoryMixChannelId)){
-    categoryMixChannelId = pms[0].id;
-  }
-  const cats = DATA.productCategories;
-  const gmv = getCycleObj('monthlyGMVByCycle');
-  const chMix = getCycleObj('channelMixByCycle');
-  const catMixAll = getCycleObj('categoryMixByCycle');
-  if(!catMixAll[categoryMixChannelId]) catMixAll[categoryMixChannelId] = {};
-  const mix = catMixAll[categoryMixChannelId];
-
-  let html = `<div class="pillbar" style="margin-bottom:14px;">${pms.map(pm=>`<button class="pill ${pm.id===categoryMixChannelId?'active':''}" data-categorymixpm="${pm.id}">${pmLabel(pm)}</button>`).join('')}</div>`;
-
-  if(!cats.length){
-    html += `<div class="footnote">No Product Categories yet — add some in Pareto Master first.</div>`;
-    host.innerHTML = html;
-    host.querySelectorAll('[data-categorymixpm]').forEach(btn=>{
-      btn.addEventListener('click', ()=>{ categoryMixChannelId = btn.dataset.categorymixpm; renderCategoryMix(host); });
-    });
-    return;
-  }
-  cats.forEach(c=>{ if(!mix[c.id]) mix[c.id] = {}; });
-
-  html = `<div class="footnote" style="margin-bottom:14px;">For the selected Partner-Model, split its month GMV across Product Categories. <strong>${cats[0].name}</strong> auto-balances to 100% — enter the rest.</div>` + html;
-  html += pasteBoxHtml('Pdt Cat | ' + MONTHS.join(' | ') + ' (first category auto-balances, skip it)');
-  const hasCatMixData = Object.values(mix).some(m=> Object.values(m||{}).some(v=> v!==undefined && v!==''));
-  if(hasCatMixData) html += `<button class="btn-sm danger" id="clearCategoryMixBtn" style="margin-bottom:10px;">🗑 Delete all Category Mix data for ${pmLabel(pms.find(p=>p.id===categoryMixChannelId))}</button>`;
-
-  html += `<div class="panel"><div class="scrollbox" style="max-height:420px;"><table class="ledger"><thead><tr><th>Pdt Cat</th>`;
-  MONTHS.forEach(m=> html += `<th>${m}</th>`);
-  html += `</tr></thead><tbody>`;
-  cats.forEach((c,ci)=>{
-    html += `<tr><td>${c.name}${ci===0?' (auto)':''}</td>`;
-    MONTHS.forEach(m=> html += pctCellHtml(cats, mix, c, ci, m, 'catmixcell', 'cat'));
-    html += `</tr>`;
-  });
-  html += `<tr class="subtotal"><td>Total</td>`;
-  MONTHS.forEach(()=> html += pctTotalCell(100));
-  html += `</tr></tbody></table></div></div>`;
-
-  html += `<div class="cyclelabel" style="color:var(--ink-soft); margin:18px 0 8px 0; font-size:11px; text-transform:uppercase; letter-spacing:0.05em; font-weight:700;">Resulting Category GMV (read-only)</div>`;
-  html += `<div class="panel"><div class="scrollbox" style="max-height:320px;"><table class="ledger"><thead><tr><th>Pdt Cat</th>`;
-  MONTHS.forEach(m=> html += `<th>${m}</th>`);
-  html += `<th class="total-col">FY Total</th></tr></thead><tbody>`;
-  const monthColTotals = MONTHS.map(()=>0);
-  cats.forEach(c=>{
-    html += `<tr><td>${c.name}</td>`;
-    let rowTotal = 0;
-    MONTHS.forEach((m,mi)=>{
-      const pct = getDifferentialPct(cats, mix, c.id, m);
-      const channelPct = getDifferentialPct(pms, chMix, categoryMixChannelId, m);
-      const channelMonthGMV = (+gmv[m]||0) * channelPct / 100;
-      const val = channelMonthGMV * pct / 100;
-      rowTotal += val; monthColTotals[mi] += val;
-      html += `<td>${fmt(val)}</td>`;
-    });
-    html += `<td class="total-col" style="font-weight:700;">${fmt(rowTotal)}</td></tr>`;
-  });
-  html += `<tr class="subtotal"><td>Total</td>`;
-  let grand = 0;
-  monthColTotals.forEach(t=>{ grand += t; html += `<td>${fmt(t)}</td>`; });
-  html += `<td class="total-col">${fmt(grand)}</td></tr>`;
-  html += `</tbody></table></div></div>`;
-
-  host.innerHTML = html;
-  host.querySelectorAll('[data-categorymixpm]').forEach(btn=>{
-    btn.addEventListener('click', ()=>{ categoryMixChannelId = btn.dataset.categorymixpm; renderCategoryMix(host); });
-  });
-  const clearCategoryMixBtn = host.querySelector('#clearCategoryMixBtn');
-  if(clearCategoryMixBtn) clearCategoryMixBtn.addEventListener('click', ()=>{
-    if(!confirm('Delete all Category Mix % data for this Partner-Model? This cannot be undone.')) return;
-    cats.forEach(c=>{ mix[c.id] = {}; });
-    markDirty();
-    renderCategoryMix(host);
-  });
-  host.querySelectorAll('.catmixcell').forEach(inp=>{
-    inp.addEventListener('change', ()=>{
-      mix[inp.dataset.cat][inp.dataset.month] = inp.value===''?'':parseFloat(inp.value);
-      markDirty();
-      renderCategoryMix(host);
-    });
-  });
-
-  wirePasteBox(host, (rows)=>{
-    rows.forEach(parts=>{
-      if(parts.length < 2) return;
-      const catName = parts[0].trim();
-      const idx = cats.findIndex(c=> c.name.toLowerCase() === catName.toLowerCase());
-      if(idx <= 0) return; // skip unmatched or the auto-balancing first category
-      const c = cats[idx];
-      if(!mix[c.id]) mix[c.id] = {};
-      MONTHS.forEach((m,i)=>{
-        const n = cleanNum(parts[i+1]);
-        if(n !== null) mix[c.id][m] = n;
-      });
-    });
-    markDirty();
-    renderCategoryMix(host);
-  });
-}
-
 function renderParetoMix(host){
   const pms = DATA.partnerModels;
   if(!pms.length){
@@ -1367,37 +1258,21 @@ function renderParetoMix(host){
   if(!paretoMixChannelId || !pms.some(pm=>pm.id===paretoMixChannelId)){
     paretoMixChannelId = pms[0].id;
   }
-  const allCats = DATA.productCategories;
-  if(!allCats.length){
-    host.innerHTML = `<div class="footnote">No Product Categories yet — add some in Pareto Master first.</div>`;
-    return;
-  }
-  if(!paretoMixCategoryId || !allCats.some(c=>c.id===paretoMixCategoryId)){
-    paretoMixCategoryId = allCats[0].id;
-  }
-  const subCats = DATA.productSubCategories.filter(sc=> sc.productCategoryId === paretoMixCategoryId);
+  const subCats = DATA.productSubCategories;
   const gmv = getCycleObj('monthlyGMVByCycle');
   const chMix = getCycleObj('channelMixByCycle');
-  const catMix = getCycleObj('categoryMixByCycle');
   const paretoMixAll = getCycleObj('paretoMixByCycle');
   if(!paretoMixAll[paretoMixChannelId]) paretoMixAll[paretoMixChannelId] = {};
-  if(!paretoMixAll[paretoMixChannelId][paretoMixCategoryId]) paretoMixAll[paretoMixChannelId][paretoMixCategoryId] = {};
-  const mix = paretoMixAll[paretoMixChannelId][paretoMixCategoryId];
+  const mix = paretoMixAll[paretoMixChannelId];
 
-  let html = `<div class="footnote" style="margin-bottom:14px;">For the selected Partner-Model and Product Category, split that category's month value across its Product Sub Categories — the first one auto-balances to 100%.</div>`;
-  html += `<div class="cyclelabel" style="color:var(--ink-soft); margin-bottom:6px; font-size:11px; text-transform:uppercase; letter-spacing:0.05em; font-weight:700;">Partner-Model</div>`;
-  html += `<div class="pillbar" style="margin-bottom:12px;">${pms.map(pm=>`<button class="pill ${pm.id===paretoMixChannelId?'active':''}" data-paretomixpm="${pm.id}">${pmLabel(pm)}</button>`).join('')}</div>`;
-  html += `<div class="cyclelabel" style="color:var(--ink-soft); margin-bottom:6px; font-size:11px; text-transform:uppercase; letter-spacing:0.05em; font-weight:700;">Product Category</div>`;
-  html += `<div class="pillbar" style="margin-bottom:14px;">${allCats.map(c=>`<button class="pill ${c.id===paretoMixCategoryId?'active':''}" data-paretomixcat="${c.id}">${c.name}</button>`).join('')}</div>`;
+  let html = `<div class="footnote" style="margin-bottom:14px;">For the selected Partner-Model, split its month GMV across Product Sub Categories (Pareto) — the first one auto-balances to 100%.</div>`;
+  html += `<div class="pillbar" style="margin-bottom:14px;">${pms.map(pm=>`<button class="pill ${pm.id===paretoMixChannelId?'active':''}" data-paretomixpm="${pm.id}">${pmLabel(pm)}</button>`).join('')}</div>`;
 
   if(!subCats.length){
-    html += `<div class="footnote">No Product Sub Categories under this category yet — add some in Pareto Master first.</div>`;
+    html += `<div class="footnote">No Product Sub Categories yet — add some in Pareto Master first.</div>`;
     host.innerHTML = html;
     host.querySelectorAll('[data-paretomixpm]').forEach(btn=>{
       btn.addEventListener('click', ()=>{ paretoMixChannelId = btn.dataset.paretomixpm; renderParetoMix(host); });
-    });
-    host.querySelectorAll('[data-paretomixcat]').forEach(btn=>{
-      btn.addEventListener('click', ()=>{ paretoMixCategoryId = btn.dataset.paretomixcat; renderParetoMix(host); });
     });
     return;
   }
@@ -1406,11 +1281,10 @@ function renderParetoMix(host){
   html += pasteBoxHtml('Pdt Sub Cat | ' + MONTHS.join(' | ') + ' (first sub-category auto-balances, skip it)');
   const hasParetoMixData = Object.values(mix).some(m=> Object.values(m||{}).some(v=> v!==undefined && v!==''));
   if(hasParetoMixData){
-    const catName = allCats.find(c=>c.id===paretoMixCategoryId).name;
-    html += `<button class="btn-sm danger" id="clearParetoMixBtn" style="margin-bottom:10px;">🗑 Delete all Pareto Mix data for ${pmLabel(pms.find(p=>p.id===paretoMixChannelId))} · ${catName}</button>`;
+    html += `<button class="btn-sm danger" id="clearParetoMixBtn" style="margin-bottom:10px;">🗑 Delete all Pareto Mix data for ${pmLabel(pms.find(p=>p.id===paretoMixChannelId))}</button>`;
   }
 
-  html += `<div class="panel"><div class="scrollbox" style="max-height:420px;"><table class="ledger"><thead><tr><th>Pdt Sub Cat</th>`;
+  html += `<div class="panel"><div class="scrollbox" style="max-height:460px;"><table class="ledger"><thead><tr><th>Pdt Sub Cat</th>`;
   MONTHS.forEach(m=> html += `<th>${m}</th>`);
   html += `</tr></thead><tbody>`;
   subCats.forEach((sc,si)=>{
@@ -1432,32 +1306,27 @@ function renderParetoMix(host){
     let rowTotal = 0;
     MONTHS.forEach((m,mi)=>{
       const scPct = getDifferentialPct(subCats, mix, sc.id, m);
-      const catPct = getDifferentialPct(allCats, catMix[paretoMixChannelId]||{}, paretoMixCategoryId, m);
       const channelPct = getDifferentialPct(pms, chMix, paretoMixChannelId, m);
       const channelMonthGMV = (+gmv[m]||0) * channelPct / 100;
-      const categoryMonthGMV = channelMonthGMV * catPct / 100;
-      const val = categoryMonthGMV * scPct / 100;
+      const val = channelMonthGMV * scPct / 100;
       rowTotal += val; monthColTotals[mi] += val;
       html += `<td>${fmt(val)}</td>`;
     });
     html += `<td class="total-col" style="font-weight:700;">${fmt(rowTotal)}</td></tr>`;
   });
   html += `<tr class="subtotal"><td>Total</td>`;
-  let grand2 = 0;
-  monthColTotals.forEach(t=>{ grand2 += t; html += `<td>${fmt(t)}</td>`; });
-  html += `<td class="total-col">${fmt(grand2)}</td></tr>`;
+  let grand = 0;
+  monthColTotals.forEach(t=>{ grand += t; html += `<td>${fmt(t)}</td>`; });
+  html += `<td class="total-col">${fmt(grand)}</td></tr>`;
   html += `</tbody></table></div></div>`;
 
   host.innerHTML = html;
   host.querySelectorAll('[data-paretomixpm]').forEach(btn=>{
     btn.addEventListener('click', ()=>{ paretoMixChannelId = btn.dataset.paretomixpm; renderParetoMix(host); });
   });
-  host.querySelectorAll('[data-paretomixcat]').forEach(btn=>{
-    btn.addEventListener('click', ()=>{ paretoMixCategoryId = btn.dataset.paretomixcat; renderParetoMix(host); });
-  });
   const clearParetoMixBtn = host.querySelector('#clearParetoMixBtn');
   if(clearParetoMixBtn) clearParetoMixBtn.addEventListener('click', ()=>{
-    if(!confirm('Delete all Pareto Mix % data for this Partner-Model + Category? This cannot be undone.')) return;
+    if(!confirm('Delete all Pareto Mix % data for this Partner-Model? This cannot be undone.')) return;
     subCats.forEach(sc=>{ mix[sc.id] = {}; });
     markDirty();
     renderParetoMix(host);
@@ -1491,7 +1360,6 @@ function renderParetoMix(host){
 function renderSalesInputSubTable(host, key){
   if(key === 'monthlyGMV') renderMonthlyGMV(host);
   else if(key === 'channelMix') renderChannelMix(host);
-  else if(key === 'categoryMix') renderCategoryMix(host);
   else if(key === 'paretoMix') renderParetoMix(host);
 }
 
