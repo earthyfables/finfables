@@ -15,7 +15,7 @@
       "Feb",
       "Mar"
     ],
-    "savedAt": "2026-07-30T08:34:35.935Z",
+    "savedAt": "2026-07-30T08:35:08.918Z",
     "activeCycleId": "CYC_p9c3kh"
   },
   "channels": [
@@ -418,11 +418,6 @@
     {
       "id": "CLI_we7tng",
       "name": "PGW Costs",
-      "expenseLineItemId": "EL_vpsayp"
-    },
-    {
-      "id": "CLI_jk3s81",
-      "name": "Shrinkage Cost",
       "expenseLineItemId": "EL_vpsayp"
     },
     {
