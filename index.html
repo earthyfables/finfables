@@ -304,13 +304,14 @@
   }
   .ledger th:first-child{text-align:left;}
   .ledger td{padding:6px 11px; text-align:right; border-bottom:1px solid var(--line); white-space:nowrap; font-variant-numeric:tabular-nums;}
-  .ledger td input[type=number]{
+  .ledger td input[type=number], .ledger td input.gmvcell{
     width:90px; border:1px solid var(--line) !important; border-radius:5px; padding:5px 7px;
     background:#fff; color:var(--ink); font-size:13px;
   }
-  .ledger td input[type=number]:focus{
+  .ledger td input[type=number]:focus, .ledger td input.gmvcell:focus{
     outline:none; border-color:var(--accent) !important; box-shadow:0 0 0 2px var(--accent-soft);
   }
+  .ledger td input.gmvcell{text-align:right; font-variant-numeric:tabular-nums; font-family:'Times New Roman', Times, serif;}
   .ledger td:first-child{text-align:left; white-space:normal; font-variant-numeric:normal;}
   .ledger tr.section td:first-child{font-weight:700; color:var(--ink); padding-top:18px; font-size:14px;}
   .ledger tr.subtotal td{font-weight:700; border-top:1px solid var(--ink); border-bottom:1px double var(--ink);}
@@ -1116,7 +1117,8 @@ function renderMonthlyGMV(host){
   html += `<div class="panel"><div class="scrollbox" style="max-height:460px;"><table class="ledger compact"><colgroup><col style="width:130px;"><col style="width:150px;"></colgroup><thead><tr><th>Month</th><th>GMV</th></tr></thead><tbody>`;
   MONTHS.forEach(m=>{
     const v = gmv[m];
-    html += `<tr><td>${m}</td><td><input type="number" step="1" class="gmvcell" data-month="${m}" value="${v!==undefined && v!==''? Math.round(v) : ''}"></td></tr>`;
+    const display = (v!==undefined && v!=='') ? Math.round(v).toLocaleString('en-IN') : '';
+    html += `<tr><td>${m}</td><td><input type="text" inputmode="decimal" class="gmvcell" data-month="${m}" value="${display}"></td></tr>`;
   });
   html += `<tr class="subtotal"><td>FY Total</td><td>${fmt(total)}</td></tr>`;
   html += `</tbody></table></div></div>`;
@@ -1124,7 +1126,8 @@ function renderMonthlyGMV(host){
 
   host.querySelectorAll('.gmvcell').forEach(inp=>{
     inp.addEventListener('change', ()=>{
-      gmv[inp.dataset.month] = inp.value===''?'':Math.round(parseFloat(inp.value));
+      const n = cleanNum(inp.value);
+      gmv[inp.dataset.month] = n===null ? '' : Math.round(n);
       markDirty();
       renderMonthlyGMV(host);
     });
