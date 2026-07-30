@@ -270,6 +270,7 @@
   .scrollbox{overflow-y:auto; border:1px solid var(--line); border-radius:var(--radius);}
   .scrollbox table{margin:0;}
   .scrollbox thead th{position:sticky; top:0; z-index:2; box-shadow:0 1px 0 var(--line);}
+  .scrollbox tr.subtotal td, .scrollbox tr.grand td{position:sticky; bottom:0; background:var(--surface); z-index:1; box-shadow:0 -1px 0 var(--ink);}
   .mdmtable{border-collapse:collapse; font-size:12.8px;}
   .mdmtable thead th{background:#F7F8FB; padding:8px 10px; border-bottom:1px solid var(--line); white-space:nowrap; position:sticky; top:0; z-index:2; box-shadow:0 1px 0 var(--line);}
   .mdmtable tbody td{padding:6px 10px; border-bottom:1px solid var(--line); white-space:nowrap;}
@@ -1021,10 +1022,36 @@ function renderParetoMasterScreen(container){
 const SALES_INPUT_SUB_TABS = [
   {key:'monthlyGMV', label:'Month wise GMV'},
   {key:'channelMix', label:'Channel Mix %'},
+  {key:'categoryMix', label:'Category Mix %'},
   {key:'paretoMix', label:'Pareto Mix %'}
 ];
 let salesInputSubTab = 'monthlyGMV';
 let paretoMixChannelId = '';
+let categoryMixChannelId = '';
+let paretoMixCategoryId = '';
+
+// Generic "first item auto-balances to 100%" helper used by Channel Mix,
+// Category Mix and Pareto Mix — the first item in the list is never directly
+// editable; its % is always 100 minus whatever the other items sum to, so
+// the group can never fail to total 100%.
+function getDifferentialPct(items, mixObj, itemId, month){
+  const idx = items.findIndex(it=>it.id===itemId);
+  if(idx <= 0){
+    let sumOthers = 0;
+    for(let i=1;i<items.length;i++) sumOthers += (+((mixObj[items[i].id]||{})[month])||0);
+    return 100 - sumOthers;
+  }
+  return (+((mixObj[itemId]||{})[month])||0);
+}
+function pctCellHtml(items, mixObj, item, itemIdx, month, cellClass, dataAttrName){
+  if(itemIdx === 0){
+    const v = getDifferentialPct(items, mixObj, item.id, month);
+    const color = v < 0 ? 'var(--neg)' : 'var(--ink-soft)';
+    return `<td style="font-style:italic; color:${color};" title="Auto-balances to 100%">${v.toFixed(1)}</td>`;
+  }
+  const raw = (mixObj[item.id]||{})[month];
+  return `<td><input type="number" step="any" class="${cellClass}" data-${dataAttrName}="${item.id}" data-month="${month}" value="${raw ?? ''}"></td>`;
+}
 
 function pctTotalCell(total){
   const near100 = Math.abs(total-100) < 0.01;
@@ -1100,28 +1127,22 @@ function renderChannelMix(host){
   const mix = getCycleObj('channelMixByCycle'); // keyed by Partner-Model id
   const pms = DATA.partnerModels;
 
-  let html = `<div class="footnote" style="margin-bottom:14px;">Split each month's GMV across Partner-Models (from the Partner-Model master) — each month's row should total 100%.</div>`;
   if(!pms.length){
-    html += `<div class="footnote">No Partner-Models defined yet — add some in "3. Partner-Model master" first.</div>`;
-    host.innerHTML = html;
+    host.innerHTML = `<div class="footnote">No Partner-Models defined yet — add some in "3. Partner-Model master" first.</div>`;
     return;
   }
+  pms.forEach(pm=>{ if(!mix[pm.id]) mix[pm.id] = {}; });
 
-  html += pasteBoxHtml('Month | ' + pms.map(pmLabel).join(' | '));
+  let html = `<div class="footnote" style="margin-bottom:14px;">Split each month's GMV across Partner-Models. <strong>${pmLabel(pms[0])}</strong> auto-balances to make each month total 100% — enter the rest.</div>`;
+  html += pasteBoxHtml('Month | ' + pms.slice(1).map(pmLabel).join(' | ') + ' (first Partner-Model auto-balances, do not paste it)');
 
   html += `<div class="panel"><div class="scrollbox" style="max-height:460px; overflow-x:auto;"><table class="ledger compact"><colgroup><col style="width:130px;">${pms.map(()=>'<col style="width:150px;">').join('')}<col style="width:90px;"></colgroup><thead><tr><th>Month</th>`;
-  pms.forEach(pm=> html += `<th>${pmLabel(pm)}</th>`);
+  pms.forEach((pm,i)=> html += `<th>${pmLabel(pm)}${i===0?' (auto)':''}</th>`);
   html += `<th>Total</th></tr></thead><tbody>`;
   MONTHS.forEach(m=>{
     html += `<tr><td>${m}</td>`;
-    let rowTotal = 0;
-    pms.forEach(pm=>{
-      if(!mix[pm.id]) mix[pm.id] = {};
-      const v = mix[pm.id][m];
-      rowTotal += (+v||0);
-      html += `<td><input type="number" step="any" class="mixcell" data-pm="${pm.id}" data-month="${m}" value="${v ?? ''}"></td>`;
-    });
-    html += pctTotalCell(rowTotal);
+    pms.forEach((pm,i)=> html += pctCellHtml(pms, mix, pm, i, m, 'mixcell', 'pm'));
+    html += pctTotalCell(100); // always 100 by construction
     html += `</tr>`;
   });
   html += `</tbody></table></div></div>`;
@@ -1135,7 +1156,8 @@ function renderChannelMix(host){
     html += `<tr><td>${m}</td>`;
     let rowTotal = 0;
     pms.forEach((pm,i)=>{
-      const val = (+gmv[m]||0) * (+mix[pm.id][m]||0) / 100;
+      const pct = getDifferentialPct(pms, mix, pm.id, m);
+      const val = (+gmv[m]||0) * pct / 100;
       rowTotal += val;
       pmColTotals[i] += val;
       html += `<td>${fmt(val)}</td>`;
@@ -1163,7 +1185,7 @@ function renderChannelMix(host){
       if(parts.length < 2) return;
       const month = parts[0].trim();
       if(!MONTHS.includes(month)) return;
-      pms.forEach((pm,i)=>{
+      pms.slice(1).forEach((pm,i)=>{
         if(!mix[pm.id]) mix[pm.id] = {};
         const n = cleanNum(parts[i+1]);
         if(n !== null) mix[pm.id][month] = n;
@@ -1171,6 +1193,100 @@ function renderChannelMix(host){
     });
     markDirty();
     renderChannelMix(host);
+  });
+}
+
+function renderCategoryMix(host){
+  const pms = DATA.partnerModels;
+  if(!pms.length){
+    host.innerHTML = `<div class="footnote">No Partner-Models defined yet — add some in "3. Partner-Model master" first.</div>`;
+    return;
+  }
+  if(!categoryMixChannelId || !pms.some(pm=>pm.id===categoryMixChannelId)){
+    categoryMixChannelId = pms[0].id;
+  }
+  const cats = DATA.productCategories;
+  const gmv = getCycleObj('monthlyGMVByCycle');
+  const chMix = getCycleObj('channelMixByCycle');
+  const catMixAll = getCycleObj('categoryMixByCycle');
+  if(!catMixAll[categoryMixChannelId]) catMixAll[categoryMixChannelId] = {};
+  const mix = catMixAll[categoryMixChannelId];
+
+  let html = `<div class="addform" style="margin-bottom:14px;"><div class="addfield" style="width:280px;"><label>Partner-Model</label>
+    <select id="categoryMixChannelSelect">${pms.map(pm=>`<option value="${pm.id}" ${pm.id===categoryMixChannelId?'selected':''}>${pmLabel(pm)}</option>`).join('')}</select>
+  </div></div>`;
+
+  if(!cats.length){
+    html += `<div class="footnote">No Product Categories yet — add some in Pareto Master first.</div>`;
+    host.innerHTML = html;
+    host.querySelector('#categoryMixChannelSelect').addEventListener('change', (e)=>{ categoryMixChannelId = e.target.value; renderCategoryMix(host); });
+    return;
+  }
+  cats.forEach(c=>{ if(!mix[c.id]) mix[c.id] = {}; });
+
+  html = `<div class="footnote" style="margin-bottom:14px;">For the selected Partner-Model, split its month GMV across Product Categories. <strong>${cats[0].name}</strong> auto-balances to 100% — enter the rest.</div>` + html;
+  html += pasteBoxHtml('Pdt Cat | ' + MONTHS.join(' | ') + ' (first category auto-balances, skip it)');
+
+  html += `<div class="panel"><div class="scrollbox" style="max-height:420px;"><table class="ledger"><thead><tr><th>Pdt Cat</th>`;
+  MONTHS.forEach(m=> html += `<th>${m}</th>`);
+  html += `</tr></thead><tbody>`;
+  cats.forEach((c,ci)=>{
+    html += `<tr><td>${c.name}${ci===0?' (auto)':''}</td>`;
+    MONTHS.forEach(m=> html += pctCellHtml(cats, mix, c, ci, m, 'catmixcell', 'cat'));
+    html += `</tr>`;
+  });
+  html += `<tr class="subtotal"><td>Total</td>`;
+  MONTHS.forEach(()=> html += pctTotalCell(100));
+  html += `</tr></tbody></table></div></div>`;
+
+  html += `<div class="cyclelabel" style="color:var(--ink-soft); margin:18px 0 8px 0; font-size:11px; text-transform:uppercase; letter-spacing:0.05em; font-weight:700;">Resulting Category GMV (read-only)</div>`;
+  html += `<div class="panel"><div class="scrollbox" style="max-height:320px;"><table class="ledger"><thead><tr><th>Pdt Cat</th>`;
+  MONTHS.forEach(m=> html += `<th>${m}</th>`);
+  html += `<th class="total-col">FY Total</th></tr></thead><tbody>`;
+  const monthColTotals = MONTHS.map(()=>0);
+  cats.forEach(c=>{
+    html += `<tr><td>${c.name}</td>`;
+    let rowTotal = 0;
+    MONTHS.forEach((m,mi)=>{
+      const pct = getDifferentialPct(cats, mix, c.id, m);
+      const channelMonthGMV = (+gmv[m]||0) * (+(chMix[categoryMixChannelId]&&chMix[categoryMixChannelId][m])||0) / 100;
+      const val = channelMonthGMV * pct / 100;
+      rowTotal += val; monthColTotals[mi] += val;
+      html += `<td>${fmt(val)}</td>`;
+    });
+    html += `<td class="total-col" style="font-weight:700;">${fmt(rowTotal)}</td></tr>`;
+  });
+  html += `<tr class="subtotal"><td>Total</td>`;
+  let grand = 0;
+  monthColTotals.forEach(t=>{ grand += t; html += `<td>${fmt(t)}</td>`; });
+  html += `<td class="total-col">${fmt(grand)}</td></tr>`;
+  html += `</tbody></table></div></div>`;
+
+  host.innerHTML = html;
+  host.querySelector('#categoryMixChannelSelect').addEventListener('change', (e)=>{ categoryMixChannelId = e.target.value; renderCategoryMix(host); });
+  host.querySelectorAll('.catmixcell').forEach(inp=>{
+    inp.addEventListener('change', ()=>{
+      mix[inp.dataset.cat][inp.dataset.month] = inp.value===''?'':parseFloat(inp.value);
+      markDirty();
+      renderCategoryMix(host);
+    });
+  });
+
+  wirePasteBox(host, (rows)=>{
+    rows.forEach(parts=>{
+      if(parts.length < 2) return;
+      const catName = parts[0].trim();
+      const idx = cats.findIndex(c=> c.name.toLowerCase() === catName.toLowerCase());
+      if(idx <= 0) return; // skip unmatched or the auto-balancing first category
+      const c = cats[idx];
+      if(!mix[c.id]) mix[c.id] = {};
+      MONTHS.forEach((m,i)=>{
+        const n = cleanNum(parts[i+1]);
+        if(n !== null) mix[c.id][m] = n;
+      });
+    });
+    markDirty();
+    renderCategoryMix(host);
   });
 }
 
@@ -1183,44 +1299,50 @@ function renderParetoMix(host){
   if(!paretoMixChannelId || !pms.some(pm=>pm.id===paretoMixChannelId)){
     paretoMixChannelId = pms[0].id;
   }
-  const subCats = DATA.productSubCategories;
-  const gmv = getCycleObj('monthlyGMVByCycle');
-  const chMix = getCycleObj('channelMixByCycle');
-  const paretoMixAll = getCycleObj('paretoMixByCycle');
-  if(!paretoMixAll[paretoMixChannelId]) paretoMixAll[paretoMixChannelId] = {};
-  const mix = paretoMixAll[paretoMixChannelId];
-
-  let html = `<div class="footnote" style="margin-bottom:14px;">For the selected Partner-Model, split its month GMV across Product Sub Categories (Pareto) — each month's column should total 100%.</div>`;
-  html += `<div class="addform" style="margin-bottom:14px;"><div class="addfield" style="width:280px;"><label>Partner-Model</label>
-    <select id="paretoMixChannelSelect">${pms.map(pm=>`<option value="${pm.id}" ${pm.id===paretoMixChannelId?'selected':''}>${pmLabel(pm)}</option>`).join('')}</select>
-  </div></div>`;
-
-  if(!subCats.length){
-    html += `<div class="footnote">No Product Sub Categories yet — add some in Pareto Master first.</div>`;
-    host.innerHTML = html;
-    host.querySelector('#paretoMixChannelSelect').addEventListener('change', (e)=>{ paretoMixChannelId = e.target.value; renderParetoMix(host); });
+  const allCats = DATA.productCategories;
+  if(!allCats.length){
+    host.innerHTML = `<div class="footnote">No Product Categories yet — add some in Pareto Master first.</div>`;
     return;
   }
+  if(!paretoMixCategoryId || !allCats.some(c=>c.id===paretoMixCategoryId)){
+    paretoMixCategoryId = allCats[0].id;
+  }
+  const subCats = DATA.productSubCategories.filter(sc=> sc.productCategoryId === paretoMixCategoryId);
+  const gmv = getCycleObj('monthlyGMVByCycle');
+  const chMix = getCycleObj('channelMixByCycle');
+  const catMix = getCycleObj('categoryMixByCycle');
+  const paretoMixAll = getCycleObj('paretoMixByCycle');
+  if(!paretoMixAll[paretoMixChannelId]) paretoMixAll[paretoMixChannelId] = {};
+  if(!paretoMixAll[paretoMixChannelId][paretoMixCategoryId]) paretoMixAll[paretoMixChannelId][paretoMixCategoryId] = {};
+  const mix = paretoMixAll[paretoMixChannelId][paretoMixCategoryId];
 
-  html += pasteBoxHtml('Pdt Sub Cat | ' + MONTHS.join(' | '));
+  let html = `<div class="footnote" style="margin-bottom:14px;">For the selected Partner-Model and Product Category, split that category's month value across its Product Sub Categories — the first one auto-balances to 100%.</div>`;
+  html += `<div class="addform" style="margin-bottom:14px;">
+    <div class="addfield" style="width:260px;"><label>Partner-Model</label><select id="paretoMixChannelSelect">${pms.map(pm=>`<option value="${pm.id}" ${pm.id===paretoMixChannelId?'selected':''}>${pmLabel(pm)}</option>`).join('')}</select></div>
+    <div class="addfield" style="width:220px;"><label>Product Category</label><select id="paretoMixCategorySelect">${allCats.map(c=>`<option value="${c.id}" ${c.id===paretoMixCategoryId?'selected':''}>${c.name}</option>`).join('')}</select></div>
+  </div>`;
 
-  html += `<div class="panel"><div class="scrollbox" style="max-height:460px;"><table class="ledger"><thead><tr><th>Pdt Sub Cat</th>`;
+  if(!subCats.length){
+    html += `<div class="footnote">No Product Sub Categories under this category yet — add some in Pareto Master first.</div>`;
+    host.innerHTML = html;
+    host.querySelector('#paretoMixChannelSelect').addEventListener('change', (e)=>{ paretoMixChannelId = e.target.value; renderParetoMix(host); });
+    host.querySelector('#paretoMixCategorySelect').addEventListener('change', (e)=>{ paretoMixCategoryId = e.target.value; renderParetoMix(host); });
+    return;
+  }
+  subCats.forEach(sc=>{ if(!mix[sc.id]) mix[sc.id] = {}; });
+
+  html += pasteBoxHtml('Pdt Sub Cat | ' + MONTHS.join(' | ') + ' (first sub-category auto-balances, skip it)');
+
+  html += `<div class="panel"><div class="scrollbox" style="max-height:420px;"><table class="ledger"><thead><tr><th>Pdt Sub Cat</th>`;
   MONTHS.forEach(m=> html += `<th>${m}</th>`);
   html += `</tr></thead><tbody>`;
-  subCats.forEach(sc=>{
-    if(!mix[sc.id]) mix[sc.id] = {};
-    html += `<tr><td>${sc.name}</td>`;
-    MONTHS.forEach(m=>{
-      const v = mix[sc.id][m];
-      html += `<td><input type="number" step="any" class="paretomixcell" data-sc="${sc.id}" data-month="${m}" value="${v ?? ''}"></td>`;
-    });
+  subCats.forEach((sc,si)=>{
+    html += `<tr><td>${sc.name}${si===0?' (auto)':''}</td>`;
+    MONTHS.forEach(m=> html += pctCellHtml(subCats, mix, sc, si, m, 'paretomixcell', 'sc'));
     html += `</tr>`;
   });
   html += `<tr class="subtotal"><td>Total</td>`;
-  MONTHS.forEach(m=>{
-    const total = subCats.reduce((s,sc)=> s+(+mix[sc.id][m]||0), 0);
-    html += pctTotalCell(total);
-  });
+  MONTHS.forEach(()=> html += pctTotalCell(100));
   html += `</tr></tbody></table></div></div>`;
 
   html += `<div class="cyclelabel" style="color:var(--ink-soft); margin:18px 0 8px 0; font-size:11px; text-transform:uppercase; letter-spacing:0.05em; font-weight:700;">Resulting Pareto × Partner-Model × Month GMV (read-only)</div>`;
@@ -1231,25 +1353,30 @@ function renderParetoMix(host){
   subCats.forEach(sc=>{
     html += `<tr><td>${sc.name}</td>`;
     let rowTotal = 0;
-    MONTHS.forEach((m,i)=>{
+    MONTHS.forEach((m,mi)=>{
+      const scPct = getDifferentialPct(subCats, mix, sc.id, m);
+      const catPct = getDifferentialPct(allCats, catMix[paretoMixChannelId]||{}, paretoMixCategoryId, m);
       const channelMonthGMV = (+gmv[m]||0) * (+(chMix[paretoMixChannelId]&&chMix[paretoMixChannelId][m])||0) / 100;
-      const val = channelMonthGMV * (+mix[sc.id][m]||0) / 100;
-      rowTotal += val;
-      monthColTotals[i] += val;
+      const categoryMonthGMV = channelMonthGMV * catPct / 100;
+      const val = categoryMonthGMV * scPct / 100;
+      rowTotal += val; monthColTotals[mi] += val;
       html += `<td>${fmt(val)}</td>`;
     });
-    html += `<td class="total-col" style="font-weight:700;">${fmt(rowTotal)}</td>`;
-    html += `</tr>`;
+    html += `<td class="total-col" style="font-weight:700;">${fmt(rowTotal)}</td></tr>`;
   });
   html += `<tr class="subtotal"><td>Total</td>`;
-  let grandTotal2 = 0;
-  monthColTotals.forEach(t=>{ grandTotal2 += t; html += `<td>${fmt(t)}</td>`; });
-  html += `<td class="total-col">${fmt(grandTotal2)}</td></tr>`;
+  let grand2 = 0;
+  monthColTotals.forEach(t=>{ grand2 += t; html += `<td>${fmt(t)}</td>`; });
+  html += `<td class="total-col">${fmt(grand2)}</td></tr>`;
   html += `</tbody></table></div></div>`;
 
   host.innerHTML = html;
   host.querySelector('#paretoMixChannelSelect').addEventListener('change', (e)=>{
     paretoMixChannelId = e.target.value;
+    renderParetoMix(host);
+  });
+  host.querySelector('#paretoMixCategorySelect').addEventListener('change', (e)=>{
+    paretoMixCategoryId = e.target.value;
     renderParetoMix(host);
   });
   host.querySelectorAll('.paretomixcell').forEach(inp=>{
@@ -1264,8 +1391,9 @@ function renderParetoMix(host){
     rows.forEach(parts=>{
       if(parts.length < 2) return;
       const scName = parts[0].trim();
-      const sc = subCats.find(s=> s.name.toLowerCase() === scName.toLowerCase());
-      if(!sc) return;
+      const idx = subCats.findIndex(s=> s.name.toLowerCase() === scName.toLowerCase());
+      if(idx <= 0) return; // skip unmatched or the auto-balancing first sub-category
+      const sc = subCats[idx];
       if(!mix[sc.id]) mix[sc.id] = {};
       MONTHS.forEach((m,i)=>{
         const n = cleanNum(parts[i+1]);
@@ -1280,6 +1408,7 @@ function renderParetoMix(host){
 function renderSalesInputSubTable(host, key){
   if(key === 'monthlyGMV') renderMonthlyGMV(host);
   else if(key === 'channelMix') renderChannelMix(host);
+  else if(key === 'categoryMix') renderCategoryMix(host);
   else if(key === 'paretoMix') renderParetoMix(host);
 }
 
@@ -1733,7 +1862,7 @@ function renderCyclePanel(){
     if(!ok) return;
     const idx = DATA.aopCycles.findIndex(c=>c.id===active.id);
     if(idx > -1) DATA.aopCycles.splice(idx,1);
-    ['salesInputByCycle','codbRateCardByCycle','miscInputsByCycle','cashFlowItemsByCycle','monthlyGMVByCycle','channelMixByCycle','paretoMixByCycle'].forEach(k=>{
+    ['salesInputByCycle','codbRateCardByCycle','miscInputsByCycle','cashFlowItemsByCycle','monthlyGMVByCycle','channelMixByCycle','categoryMixByCycle','paretoMixByCycle'].forEach(k=>{
       if(DATA[k]) delete DATA[k][active.id];
     });
     if(DATA.meta.activeCycleId === active.id) DATA.meta.activeCycleId = '';
@@ -1763,7 +1892,7 @@ function copyCycleInputData(destCycleId, srcCycleId){
     // Deep-copy with fresh row ids so edits in the new cycle never collide with the source.
     DATA[k][destCycleId] = srcRows.map(r=> ({...r, id: uid('COPY')}));
   });
-  ['monthlyGMVByCycle','channelMixByCycle','paretoMixByCycle'].forEach(k=>{
+  ['monthlyGMVByCycle','channelMixByCycle','categoryMixByCycle','paretoMixByCycle'].forEach(k=>{
     const srcObj = (DATA[k] && DATA[k][srcCycleId]) || {};
     DATA[k] = DATA[k] || {};
     DATA[k][destCycleId] = JSON.parse(JSON.stringify(srcObj));
