@@ -1071,7 +1071,8 @@ function pctCellHtml(items, mixObj, item, itemIdx, month, cellClass, dataAttrNam
     return `<td style="font-style:italic; color:${color};" title="Auto-balances to 100%">${v.toFixed(1)}</td>`;
   }
   const raw = (mixObj[item.id]||{})[month];
-  return `<td><input type="number" step="any" class="${cellClass}" data-${dataAttrName}="${item.id}" data-month="${month}" value="${raw ?? ''}"></td>`;
+  const display = (raw!==undefined && raw!=='') ? Number(raw).toFixed(1) : '';
+  return `<td><input type="number" step="0.1" class="${cellClass}" data-${dataAttrName}="${item.id}" data-month="${month}" value="${display}"></td>`;
 }
 
 function pctTotalCell(total){
@@ -1273,7 +1274,8 @@ function renderCategoryMix(host){
     let rowTotal = 0;
     MONTHS.forEach((m,mi)=>{
       const pct = getDifferentialPct(cats, mix, c.id, m);
-      const channelMonthGMV = (+gmv[m]||0) * (+(chMix[categoryMixChannelId]&&chMix[categoryMixChannelId][m])||0) / 100;
+      const channelPct = getDifferentialPct(pms, chMix, categoryMixChannelId, m);
+      const channelMonthGMV = (+gmv[m]||0) * channelPct / 100;
       const val = channelMonthGMV * pct / 100;
       rowTotal += val; monthColTotals[mi] += val;
       html += `<td>${fmt(val)}</td>`;
@@ -1380,7 +1382,8 @@ function renderParetoMix(host){
     MONTHS.forEach((m,mi)=>{
       const scPct = getDifferentialPct(subCats, mix, sc.id, m);
       const catPct = getDifferentialPct(allCats, catMix[paretoMixChannelId]||{}, paretoMixCategoryId, m);
-      const channelMonthGMV = (+gmv[m]||0) * (+(chMix[paretoMixChannelId]&&chMix[paretoMixChannelId][m])||0) / 100;
+      const channelPct = getDifferentialPct(pms, chMix, paretoMixChannelId, m);
+      const channelMonthGMV = (+gmv[m]||0) * channelPct / 100;
       const categoryMonthGMV = channelMonthGMV * catPct / 100;
       const val = categoryMonthGMV * scPct / 100;
       rowTotal += val; monthColTotals[mi] += val;
