@@ -614,7 +614,11 @@ function fieldInput(row, col){
 
 function renderEditableTable(container, arr, cols, opts){
   opts = opts || {};
-  let html = `<table><thead><tr>`;
+  let html = '';
+  if(arr.length){
+    html += `<button class="btn-sm danger" id="deleteAllRowsBtn" style="margin-bottom:10px;">🗑 Delete all rows</button>`;
+  }
+  html += `<table><thead><tr>`;
   cols.forEach(c=> html += `<th>${c.label}</th>`);
   html += `<th style="width:30px;"></th></tr></thead><tbody>`;
   arr.forEach((row,idx)=>{
@@ -644,6 +648,14 @@ function renderEditableTable(container, arr, cols, opts){
       if(opts.onChange) opts.onChange();
       markDirty();
     });
+  });
+  const deleteAllBtn = container.querySelector('#deleteAllRowsBtn');
+  if(deleteAllBtn) deleteAllBtn.addEventListener('click', ()=>{
+    if(!confirm(`Delete all ${arr.length} row(s)? This cannot be undone.`)) return;
+    arr.length = 0;
+    renderEditableTable(container, arr, cols, opts);
+    if(opts.onChange) opts.onChange();
+    markDirty();
   });
   container.querySelector('#addRowBtn').addEventListener('click', ()=>{
     const blank = {id: uid(opts.prefix||'ROW')};
@@ -1113,8 +1125,10 @@ function cleanNum(text){
 function renderMonthlyGMV(host){
   const gmv = getCycleObj('monthlyGMVByCycle');
   const total = MONTHS.reduce((s,m)=> s+(+gmv[m]||0), 0);
+  const hasData = Object.keys(gmv).some(k=> gmv[k]!==undefined && gmv[k]!=='');
   let html = `<div class="footnote" style="margin-bottom:14px;">Enter total GMV for each month. This feeds Channel Mix % below to derive Partner-Model-wise GMV.</div>`;
   html += pasteBoxHtml('Month | GMV');
+  if(hasData) html += `<button class="btn-sm danger" id="clearGmvBtn" style="margin-bottom:10px;">🗑 Delete all GMV data</button>`;
   html += `<div class="panel"><div class="scrollbox" style="max-height:460px;"><table class="ledger compact"><colgroup><col style="width:130px;"><col style="width:150px;"></colgroup><thead><tr><th>Month</th><th>GMV</th></tr></thead><tbody>`;
   MONTHS.forEach(m=>{
     const v = gmv[m];
@@ -1124,6 +1138,14 @@ function renderMonthlyGMV(host){
   html += `<tr class="subtotal"><td>FY Total</td><td>${fmt(total)}</td></tr>`;
   html += `</tbody></table></div></div>`;
   host.innerHTML = html;
+
+  const clearBtn = host.querySelector('#clearGmvBtn');
+  if(clearBtn) clearBtn.addEventListener('click', ()=>{
+    if(!confirm('Delete all GMV data for this cycle? This cannot be undone.')) return;
+    Object.keys(gmv).forEach(k=> delete gmv[k]);
+    markDirty();
+    renderMonthlyGMV(host);
+  });
 
   host.querySelectorAll('.gmvcell').forEach(inp=>{
     inp.addEventListener('change', ()=>{
@@ -1160,6 +1182,8 @@ function renderChannelMix(host){
 
   let html = `<div class="footnote" style="margin-bottom:14px;">Split each month's GMV across Partner-Models. <strong>${pmLabel(pms[0])}</strong> auto-balances to make each month total 100% — enter the rest.</div>`;
   html += pasteBoxHtml('Month | ' + pms.slice(1).map(pmLabel).join(' | ') + ' (first Partner-Model auto-balances, do not paste it)');
+  const hasChannelMixData = pms.some(pm=> Object.values(mix[pm.id]||{}).some(v=> v!==undefined && v!==''));
+  if(hasChannelMixData) html += `<button class="btn-sm danger" id="clearChannelMixBtn" style="margin-bottom:10px;">🗑 Delete all Channel Mix data</button>`;
 
   html += `<div class="panel"><div class="scrollbox" style="max-height:460px; overflow-x:auto;"><table class="ledger compact"><colgroup><col style="width:130px;">${pms.map(()=>'<col style="width:150px;">').join('')}<col style="width:90px;"></colgroup><thead><tr><th>Month</th>`;
   pms.forEach((pm,i)=> html += `<th>${pmLabel(pm)}${i===0?' (auto)':''}</th>`);
@@ -1197,6 +1221,13 @@ function renderChannelMix(host){
   html += `</tbody></table></div></div>`;
 
   host.innerHTML = html;
+  const clearChannelMixBtn = host.querySelector('#clearChannelMixBtn');
+  if(clearChannelMixBtn) clearChannelMixBtn.addEventListener('click', ()=>{
+    if(!confirm('Delete all Channel Mix % data for this cycle? This cannot be undone.')) return;
+    pms.forEach(pm=>{ mix[pm.id] = {}; });
+    markDirty();
+    renderChannelMix(host);
+  });
   host.querySelectorAll('.mixcell').forEach(inp=>{
     inp.addEventListener('change', ()=>{
       mix[inp.dataset.pm][inp.dataset.month] = inp.value===''?'':parseFloat(inp.value);
@@ -1251,6 +1282,8 @@ function renderCategoryMix(host){
 
   html = `<div class="footnote" style="margin-bottom:14px;">For the selected Partner-Model, split its month GMV across Product Categories. <strong>${cats[0].name}</strong> auto-balances to 100% — enter the rest.</div>` + html;
   html += pasteBoxHtml('Pdt Cat | ' + MONTHS.join(' | ') + ' (first category auto-balances, skip it)');
+  const hasCatMixData = Object.values(mix).some(m=> Object.values(m||{}).some(v=> v!==undefined && v!==''));
+  if(hasCatMixData) html += `<button class="btn-sm danger" id="clearCategoryMixBtn" style="margin-bottom:10px;">🗑 Delete all Category Mix data for ${pmLabel(pms.find(p=>p.id===categoryMixChannelId))}</button>`;
 
   html += `<div class="panel"><div class="scrollbox" style="max-height:420px;"><table class="ledger"><thead><tr><th>Pdt Cat</th>`;
   MONTHS.forEach(m=> html += `<th>${m}</th>`);
@@ -1291,6 +1324,13 @@ function renderCategoryMix(host){
   host.innerHTML = html;
   host.querySelectorAll('[data-categorymixpm]').forEach(btn=>{
     btn.addEventListener('click', ()=>{ categoryMixChannelId = btn.dataset.categorymixpm; renderCategoryMix(host); });
+  });
+  const clearCategoryMixBtn = host.querySelector('#clearCategoryMixBtn');
+  if(clearCategoryMixBtn) clearCategoryMixBtn.addEventListener('click', ()=>{
+    if(!confirm('Delete all Category Mix % data for this Partner-Model? This cannot be undone.')) return;
+    cats.forEach(c=>{ mix[c.id] = {}; });
+    markDirty();
+    renderCategoryMix(host);
   });
   host.querySelectorAll('.catmixcell').forEach(inp=>{
     inp.addEventListener('change', ()=>{
@@ -1364,6 +1404,11 @@ function renderParetoMix(host){
   subCats.forEach(sc=>{ if(!mix[sc.id]) mix[sc.id] = {}; });
 
   html += pasteBoxHtml('Pdt Sub Cat | ' + MONTHS.join(' | ') + ' (first sub-category auto-balances, skip it)');
+  const hasParetoMixData = Object.values(mix).some(m=> Object.values(m||{}).some(v=> v!==undefined && v!==''));
+  if(hasParetoMixData){
+    const catName = allCats.find(c=>c.id===paretoMixCategoryId).name;
+    html += `<button class="btn-sm danger" id="clearParetoMixBtn" style="margin-bottom:10px;">🗑 Delete all Pareto Mix data for ${pmLabel(pms.find(p=>p.id===paretoMixChannelId))} · ${catName}</button>`;
+  }
 
   html += `<div class="panel"><div class="scrollbox" style="max-height:420px;"><table class="ledger"><thead><tr><th>Pdt Sub Cat</th>`;
   MONTHS.forEach(m=> html += `<th>${m}</th>`);
@@ -1409,6 +1454,13 @@ function renderParetoMix(host){
   });
   host.querySelectorAll('[data-paretomixcat]').forEach(btn=>{
     btn.addEventListener('click', ()=>{ paretoMixCategoryId = btn.dataset.paretomixcat; renderParetoMix(host); });
+  });
+  const clearParetoMixBtn = host.querySelector('#clearParetoMixBtn');
+  if(clearParetoMixBtn) clearParetoMixBtn.addEventListener('click', ()=>{
+    if(!confirm('Delete all Pareto Mix % data for this Partner-Model + Category? This cannot be undone.')) return;
+    subCats.forEach(sc=>{ mix[sc.id] = {}; });
+    markDirty();
+    renderParetoMix(host);
   });
   host.querySelectorAll('.paretomixcell').forEach(inp=>{
     inp.addEventListener('change', ()=>{
