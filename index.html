@@ -1085,10 +1085,10 @@ function renderCodbDeductionMappingScreen(container){
   } else if(codbDeductionMappingSubTab === 'marketplaceMapping'){
     renderMarketplaceDeductionMapping(host);
   } else {
-    host.innerHTML = `<div class="footnote" style="margin-bottom:14px;">CAC — % NSV, Partner-Model wise, Month wise.</div>`;
+    host.innerHTML = `<div class="footnote" style="margin-bottom:14px;">CAC — % on GMV, Partner-Model wise, Month wise.</div>`;
     const cacHost = document.createElement('div');
     host.appendChild(cacHost);
-    renderSingleRateGrid(cacHost, 'cac', 'CAC %');
+    renderSingleRateGrid(cacHost, 'cac', 'CAC % (on GMV)');
   }
 }
 
@@ -2043,7 +2043,7 @@ const TABS = {
     ], {prefix:'ASP', addLabel:'Add'})
   },
   codbDeductionMapping:{
-    title:'CODB and CAC', desc:'Define CODB line items, their Rate Basis/Structure, Marketplace deduction mapping, and CAC (% NSV, month wise, Partner-Model wise).',
+    title:'CODB and CAC', desc:'Define CODB line items, their Rate Basis/Structure, Marketplace deduction mapping, and CAC (% on GMV, month wise, Partner-Model wise).',
     render: renderCodbDeductionMappingScreen
   },
   paretoMaster:{
