@@ -15,7 +15,7 @@
       "Feb",
       "Mar"
     ],
-    "savedAt": "2026-07-30T11:39:18.056Z",
+    "savedAt": "2026-07-30T12:01:58.367Z",
     "activeCycleId": "CYC_p9c3kh"
   },
   "channels": [
@@ -447,7 +447,7 @@
       "id": "CLI_qilzq1",
       "name": "Shipping Fee - Mfg to WH",
       "expenseLineItemId": "EL_vpsayp",
-      "structure": "Other",
+      "structure": "Product wise",
       "rateBasis": "Rs Per Gross Qty"
     },
     {
