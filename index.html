@@ -764,7 +764,7 @@ function renderMasterTable(container, arr, cols, opts){
 
   // Frozen header + independent scroll is the default for every master table
   // once it grows long, rather than something each screen has to opt into.
-  const maxH = opts.tableMaxHeight === false ? null : (opts.tableMaxHeight || '420px');
+  const maxH = opts.tableMaxHeight === false ? null : (opts.tableMaxHeight || '65vh');
   const scrollOpen = maxH ? `<div class="scrollbox" style="max-height:${maxH};">` : '';
   const scrollClose = maxH ? `</div>` : '';
   html += scrollOpen;
@@ -970,7 +970,7 @@ function renderMarketplaceDeductionMapping(container){
         html += `<div class="footnote" style="margin-bottom:16px;">No Partner-Model mapping for ${b.name} yet — add one in "4. Brand → Partner Mapping".</div>`;
         return;
       }
-      html += `<div class="scrollbox mdm-scrollbox" style="max-height:340px; overflow-x:auto; margin-bottom:22px;"><table class="mdmtable"><thead><tr><th>CODB / Expense Item</th><th style="text-align:center;">Sel All</th>`;
+      html += `<div class="scrollbox mdm-scrollbox" style="max-height:65vh; overflow-x:auto; margin-bottom:22px;"><table class="mdmtable"><thead><tr><th>CODB / Expense Item</th><th style="text-align:center;">Sel All</th>`;
       brandCols.forEach(c=> html += `<th style="text-align:center;">${c.partner}<br><span style="font-weight:400;">${c.model}</span></th>`);
       html += `</tr></thead><tbody>`;
       rowItems.forEach(item=>{
@@ -1041,7 +1041,7 @@ function renderCodbDeductionMappingScreen(container){
       {key:'expenseLineItemId', label:'Expense Line Item', type:'select', options:()=>optList(DATA.expenseLineItems, x=>x.name), width:220},
       {key:'rateBasis', label:'Rate Basis', type:'select', options:()=>CODB_RATE_BASIS_OPTIONS.map(v=>({id:v,label:v})), width:180},
       {key:'structure', label:'Structure', type:'select', options:()=>['Marketplace','Other','Product wise'].map(v=>({id:v,label:v})), width:150}
-    ], {prefix:'CLI', addLabel:'Add', tableMaxHeight:'520px'});
+    ], {prefix:'CLI', addLabel:'Add', tableMaxHeight:'65vh'});
   } else {
     renderMarketplaceDeductionMapping(host);
   }
@@ -1098,7 +1098,7 @@ function renderCodbMarketplaceFees(container){
 
       html += `<h3 style="margin:24px 0 8px 0; font-size:15px; font-family:'Times New Roman', Times, serif;">${pmLabel(pm)} - ${li.name}${li.rateBasis ? ` <span style="font-weight:400; color:var(--ink-soft); font-style:italic; font-size:13px;">(${li.rateBasis})</span>` : ''}</h3>`;
       html += pasteBoxHtml('Partner-Model | Fee Type | Pdt Cat | Weight | ' + bands.map(b=>b.name).join(' | '));
-      html += `<div class="panel"><div class="scrollbox" style="max-height:320px;"><table class="ledger"><thead><tr><th style="text-align:left;">Partner-Model</th><th style="text-align:left;">Fee Type</th><th style="text-align:left;">Pdt Cat</th><th>Weight</th>`;
+      html += `<div class="panel"><div class="scrollbox" style="max-height:65vh;"><table class="ledger"><thead><tr><th style="text-align:left;">Partner-Model</th><th style="text-align:left;">Fee Type</th><th style="text-align:left;">Pdt Cat</th><th>Weight</th>`;
       bands.forEach(b=> html += `<th>${b.name}</th>`);
       html += `</tr></thead><tbody>`;
       combos.forEach(c=>{
@@ -1193,7 +1193,7 @@ function renderCodbOtherFees(container){
 
     html += `<h3 style="margin:24px 0 8px 0; font-size:15px; font-family:'Times New Roman', Times, serif;">${li.name}${li.rateBasis ? ` <span style="font-weight:400; color:var(--ink-soft); font-style:italic; font-size:13px;">(${li.rateBasis})</span>` : ''}</h3>`;
     html += pasteBoxHtml('Pdt Cat | Weight | ' + pms.map(pmLabel).join(' | '));
-    html += `<div class="panel"><div class="scrollbox" style="max-height:320px; overflow-x:auto;"><table class="ledger compact"><colgroup><col style="width:150px;"><col style="width:90px;">${pms.map(()=>'<col style="width:150px;">').join('')}</colgroup><thead><tr><th style="text-align:left;">Pdt Cat</th><th>Weight</th>`;
+    html += `<div class="panel"><div class="scrollbox" style="max-height:65vh; overflow-x:auto;"><table class="ledger compact"><colgroup><col style="width:150px;"><col style="width:90px;">${pms.map(()=>'<col style="width:150px;">').join('')}</colgroup><thead><tr><th style="text-align:left;">Pdt Cat</th><th>Weight</th>`;
     pms.forEach(pm=> html += `<th>${pmLabel(pm)}</th>`);
     html += `</tr></thead><tbody>`;
     combos.forEach(c=>{
@@ -1465,7 +1465,7 @@ function renderMonthlyGMV(host){
   let html = `<div class="footnote" style="margin-bottom:14px;">Enter total GMV for each month. This feeds Channel Mix % below to derive Partner-Model-wise GMV.</div>`;
   html += pasteBoxHtml('Month | GMV');
   if(hasData) html += `<button class="btn-sm danger" id="clearGmvBtn" style="margin-bottom:10px;">🗑 Delete all GMV data</button>`;
-  html += `<div class="panel"><div class="scrollbox" style="max-height:460px;"><table class="ledger compact"><colgroup><col style="width:130px;"><col style="width:150px;"></colgroup><thead><tr><th>Month</th><th>GMV</th></tr></thead><tbody>`;
+  html += `<div class="panel"><div class="scrollbox" style="max-height:65vh;"><table class="ledger compact"><colgroup><col style="width:130px;"><col style="width:150px;"></colgroup><thead><tr><th>Month</th><th>GMV</th></tr></thead><tbody>`;
   MONTHS.forEach(m=>{
     const v = gmv[m];
     const display = (v!==undefined && v!=='') ? Math.round(v).toLocaleString('en-IN') : '';
@@ -1521,7 +1521,7 @@ function renderChannelMix(host){
   const hasChannelMixData = pms.some(pm=> Object.values(mix[pm.id]||{}).some(v=> v!==undefined && v!==''));
   if(hasChannelMixData) html += `<button class="btn-sm danger" id="clearChannelMixBtn" style="margin-bottom:10px;">🗑 Delete all Channel Mix data</button>`;
 
-  html += `<div class="panel"><div class="scrollbox" style="max-height:460px; overflow-x:auto;"><table class="ledger compact"><colgroup><col style="width:130px;">${pms.map(()=>'<col style="width:150px;">').join('')}<col style="width:90px;"></colgroup><thead><tr><th>Month</th>`;
+  html += `<div class="panel"><div class="scrollbox" style="max-height:65vh; overflow-x:auto;"><table class="ledger compact"><colgroup><col style="width:130px;">${pms.map(()=>'<col style="width:150px;">').join('')}<col style="width:90px;"></colgroup><thead><tr><th>Month</th>`;
   pms.forEach((pm,i)=> html += `<th>${pmLabel(pm)}${i===0?' (auto)':''}</th>`);
   html += `<th>Total</th></tr></thead><tbody>`;
   MONTHS.forEach(m=>{
@@ -1533,7 +1533,7 @@ function renderChannelMix(host){
   html += `</tbody></table></div></div>`;
 
   html += `<div class="cyclelabel" style="color:var(--ink-soft); margin:18px 0 8px 0; font-size:11px; text-transform:uppercase; letter-spacing:0.05em; font-weight:700;">Resulting Partner-Model GMV (read-only)</div>`;
-  html += `<div class="panel"><div class="scrollbox" style="max-height:320px; overflow-x:auto;"><table class="ledger compact"><colgroup><col style="width:130px;">${pms.map(()=>'<col style="width:150px;">').join('')}<col style="width:150px;"></colgroup><thead><tr><th>Month</th>`;
+  html += `<div class="panel"><div class="scrollbox" style="max-height:65vh; overflow-x:auto;"><table class="ledger compact"><colgroup><col style="width:130px;">${pms.map(()=>'<col style="width:150px;">').join('')}<col style="width:150px;"></colgroup><thead><tr><th>Month</th>`;
   pms.forEach(pm=> html += `<th>${pmLabel(pm)}</th>`);
   html += `<th>Total</th></tr></thead><tbody>`;
   const pmColTotals = pms.map(()=>0);
@@ -1623,7 +1623,7 @@ function renderParetoMix(host){
     html += `<button class="btn-sm danger" id="clearParetoMixBtn" style="margin-bottom:10px;">🗑 Delete all Pareto Mix data for ${pmLabel(pms.find(p=>p.id===paretoMixChannelId))}</button>`;
   }
 
-  html += `<div class="panel"><div class="scrollbox" style="max-height:460px;"><table class="ledger"><thead><tr><th>Pdt Sub Cat</th>`;
+  html += `<div class="panel"><div class="scrollbox" style="max-height:65vh;"><table class="ledger"><thead><tr><th>Pdt Sub Cat</th>`;
   MONTHS.forEach(m=> html += `<th>${m}</th>`);
   html += `</tr></thead><tbody>`;
   subCats.forEach((sc,si)=>{
@@ -1636,7 +1636,7 @@ function renderParetoMix(host){
   html += `</tr></tbody></table></div></div>`;
 
   html += `<div class="cyclelabel" style="color:var(--ink-soft); margin:18px 0 8px 0; font-size:11px; text-transform:uppercase; letter-spacing:0.05em; font-weight:700;">Resulting Pareto × Partner-Model × Month GMV (read-only)</div>`;
-  html += `<div class="panel"><div class="scrollbox" style="max-height:320px;"><table class="ledger"><thead><tr><th>Pdt Sub Cat</th>`;
+  html += `<div class="panel"><div class="scrollbox" style="max-height:65vh;"><table class="ledger"><thead><tr><th>Pdt Sub Cat</th>`;
   MONTHS.forEach(m=> html += `<th>${m}</th>`);
   html += `<th class="total-col">FY Total</th></tr></thead><tbody>`;
   const monthColTotals = MONTHS.map(()=>0);
@@ -1737,7 +1737,7 @@ function renderRateGrid(host, metric, label, pms){
   const hasData = pms.some(pm=> Object.values(grid[pm.id]||{}).some(v=> v!==undefined && v!==''));
   if(hasData) html += `<button class="btn-sm danger" data-clearmetric="${metric}" style="margin-bottom:10px;">🗑 Delete all ${label} data</button>`;
 
-  html += `<div class="panel"><div class="scrollbox" style="max-height:380px; overflow-x:auto;"><table class="ledger compact"><colgroup><col style="width:110px;">${pms.map(()=>'<col style="width:140px;">').join('')}</colgroup><thead><tr><th>Month</th>`;
+  html += `<div class="panel"><div class="scrollbox" style="max-height:65vh; overflow-x:auto;"><table class="ledger compact"><colgroup><col style="width:110px;">${pms.map(()=>'<col style="width:140px;">').join('')}</colgroup><thead><tr><th>Month</th>`;
   pms.forEach(pm=> html += `<th>${pmLabel(pm)}</th>`);
   html += `</tr></thead><tbody>`;
   MONTHS.forEach(m=>{
@@ -2132,7 +2132,7 @@ function renderPLCFTable(sections){
 
 function renderPLCF(container){
   let html = `<div class="footnote" style="margin-bottom:16px;">Structure only — matches the reviewed model layout, not yet linked to Sales Input / Rate Cards / Cash Flow Adjustments. Values will populate once the input data is finalized and connected.</div>`;
-  html += `<div class="panel"><div class="scrollbox" style="max-height:640px;">${renderPLCFTable(PLCF_SECTIONS)}</div></div>`;
+  html += `<div class="panel"><div class="scrollbox" style="max-height:75vh;">${renderPLCFTable(PLCF_SECTIONS)}</div></div>`;
   container.innerHTML = html;
 }
 
@@ -2145,7 +2145,7 @@ function renderPartnerModelPL(container){
     const plOnlySections = PLCF_SECTIONS.slice(0,2); // Profit & Loss + Key Ratios only
     pms.forEach(pm=>{
       html += `<h3 style="margin:18px 0 8px 0;">${pm.partner} — ${pm.model}</h3>`;
-      html += `<div class="panel"><div class="scrollbox" style="max-height:420px;">${renderPLCFTable(plOnlySections)}</div></div>`;
+      html += `<div class="panel"><div class="scrollbox" style="max-height:65vh;">${renderPLCFTable(plOnlySections)}</div></div>`;
     });
   }
   container.innerHTML = html;
