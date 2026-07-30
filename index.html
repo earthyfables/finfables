@@ -438,6 +438,14 @@ function getCycleData(byCycleKey){
   if(!DATA[byCycleKey][ck]) DATA[byCycleKey][ck] = [];
   return DATA[byCycleKey][ck];
 }
+// Same idea as getCycleData, but for cycle-scoped values that are naturally
+// keyed objects (e.g. {month: value}) rather than row arrays.
+function getCycleObj(byCycleKey){
+  const ck = DATA.meta.activeCycleId || '';
+  if(!DATA[byCycleKey]) DATA[byCycleKey] = {};
+  if(!DATA[byCycleKey][ck]) DATA[byCycleKey][ck] = {};
+  return DATA[byCycleKey][ck];
+}
 
 const SEED = {
   meta:{fyLabel:"FY 2026-27", months:DEFAULT_MONTHS, savedAt:null, activeCycleId:''},
@@ -1001,23 +1009,175 @@ function renderParetoMasterScreen(container){
 }
 
 const SALES_INPUT_SUB_TABS = [
-  {key:'channelSales', label:'Channel Sales'}
+  {key:'monthlyGMV', label:'Month wise GMV'},
+  {key:'channelMix', label:'Channel Mix %'},
+  {key:'paretoMix', label:'Pareto Mix %'}
 ];
-let salesInputSubTab = 'channelSales';
+let salesInputSubTab = 'monthlyGMV';
+let paretoMixChannelId = '';
+
+function pctTotalCell(total){
+  const near100 = Math.abs(total-100) < 0.01;
+  const color = total===0 ? 'var(--ink-soft)' : (near100 ? 'var(--gold)' : 'var(--neg)');
+  return `<td class="total-col" style="color:${color}; font-weight:700;">${total.toFixed(1)}%</td>`;
+}
+
+function renderMonthlyGMV(host){
+  const gmv = getCycleObj('monthlyGMVByCycle');
+  const total = MONTHS.reduce((s,m)=> s+(+gmv[m]||0), 0);
+  let html = `<div class="footnote" style="margin-bottom:14px;">Enter total GMV for each month. This feeds Channel Mix % below to derive channel-wise GMV.</div>`;
+  html += `<div class="panel"><div class="scrollbox" style="max-height:220px;"><table class="ledger"><thead><tr><th>₹</th>`;
+  MONTHS.forEach(m=> html += `<th>${m}</th>`);
+  html += `<th class="total-col">FY Total</th></tr></thead><tbody><tr><td>GMV</td>`;
+  MONTHS.forEach(m=>{
+    html += `<td><input type="number" step="any" class="gmvcell" data-month="${m}" value="${gmv[m] ?? ''}"></td>`;
+  });
+  html += `<td class="total-col">${fmt(total)}</td></tr></tbody></table></div></div>`;
+  host.innerHTML = html;
+  host.querySelectorAll('.gmvcell').forEach(inp=>{
+    inp.addEventListener('change', ()=>{
+      gmv[inp.dataset.month] = inp.value===''?'':parseFloat(inp.value);
+      markDirty();
+      renderMonthlyGMV(host);
+    });
+  });
+}
+
+function renderChannelMix(host){
+  const gmv = getCycleObj('monthlyGMVByCycle');
+  const mix = getCycleObj('channelMixByCycle');
+  const channels = DATA.channels;
+
+  let html = `<div class="footnote" style="margin-bottom:14px;">Split each month's GMV across channels — each month's column should total 100%.</div>`;
+  if(!channels.length){
+    html += `<div class="footnote">No channels defined yet.</div>`;
+    host.innerHTML = html;
+    return;
+  }
+
+  html += `<div class="panel"><div class="scrollbox" style="max-height:420px;"><table class="ledger"><thead><tr><th>Channel</th>`;
+  MONTHS.forEach(m=> html += `<th>${m}</th>`);
+  html += `</tr></thead><tbody>`;
+  channels.forEach(ch=>{
+    if(!mix[ch.id]) mix[ch.id] = {};
+    html += `<tr><td>${ch.name}</td>`;
+    MONTHS.forEach(m=>{
+      const v = mix[ch.id][m];
+      html += `<td><input type="number" step="any" class="mixcell" data-channel="${ch.id}" data-month="${m}" value="${v ?? ''}"></td>`;
+    });
+    html += `</tr>`;
+  });
+  html += `<tr class="subtotal"><td>Total</td>`;
+  MONTHS.forEach(m=>{
+    const total = channels.reduce((s,ch)=> s+(+mix[ch.id][m]||0), 0);
+    html += pctTotalCell(total);
+  });
+  html += `</tr></tbody></table></div></div>`;
+
+  html += `<div class="cyclelabel" style="color:var(--ink-soft); margin:18px 0 8px 0; font-size:11px; text-transform:uppercase; letter-spacing:0.05em; font-weight:700;">Resulting Channel GMV (read-only)</div>`;
+  html += `<div class="panel"><div class="scrollbox" style="max-height:320px;"><table class="ledger"><thead><tr><th>Channel</th>`;
+  MONTHS.forEach(m=> html += `<th>${m}</th>`);
+  html += `</tr></thead><tbody>`;
+  channels.forEach(ch=>{
+    html += `<tr><td>${ch.name}</td>`;
+    MONTHS.forEach(m=>{
+      const val = (+gmv[m]||0) * (+mix[ch.id][m]||0) / 100;
+      html += `<td>${fmt(val)}</td>`;
+    });
+    html += `</tr>`;
+  });
+  html += `</tbody></table></div></div>`;
+
+  host.innerHTML = html;
+  host.querySelectorAll('.mixcell').forEach(inp=>{
+    inp.addEventListener('change', ()=>{
+      mix[inp.dataset.channel][inp.dataset.month] = inp.value===''?'':parseFloat(inp.value);
+      markDirty();
+      renderChannelMix(host);
+    });
+  });
+}
+
+function renderParetoMix(host){
+  const channels = DATA.channels;
+  if(!channels.length){
+    host.innerHTML = `<div class="footnote">No channels defined yet — add some in Channels first.</div>`;
+    return;
+  }
+  if(!paretoMixChannelId || !channels.some(c=>c.id===paretoMixChannelId)){
+    paretoMixChannelId = channels[0].id;
+  }
+  const subCats = DATA.productSubCategories;
+  const gmv = getCycleObj('monthlyGMVByCycle');
+  const chMix = getCycleObj('channelMixByCycle');
+  const paretoMixAll = getCycleObj('paretoMixByCycle');
+  if(!paretoMixAll[paretoMixChannelId]) paretoMixAll[paretoMixChannelId] = {};
+  const mix = paretoMixAll[paretoMixChannelId];
+
+  let html = `<div class="footnote" style="margin-bottom:14px;">For the selected channel, split its month GMV across Product Sub Categories (Pareto) — each month's column should total 100%.</div>`;
+  html += `<div class="addform" style="margin-bottom:14px;"><div class="addfield" style="width:260px;"><label>Channel</label>
+    <select id="paretoMixChannelSelect">${channels.map(c=>`<option value="${c.id}" ${c.id===paretoMixChannelId?'selected':''}>${c.name}</option>`).join('')}</select>
+  </div></div>`;
+
+  if(!subCats.length){
+    html += `<div class="footnote">No Product Sub Categories yet — add some in Pareto Master first.</div>`;
+    host.innerHTML = html;
+    host.querySelector('#paretoMixChannelSelect').addEventListener('change', (e)=>{ paretoMixChannelId = e.target.value; renderParetoMix(host); });
+    return;
+  }
+
+  html += `<div class="panel"><div class="scrollbox" style="max-height:420px;"><table class="ledger"><thead><tr><th>Pdt Sub Cat</th>`;
+  MONTHS.forEach(m=> html += `<th>${m}</th>`);
+  html += `</tr></thead><tbody>`;
+  subCats.forEach(sc=>{
+    if(!mix[sc.id]) mix[sc.id] = {};
+    html += `<tr><td>${sc.name}</td>`;
+    MONTHS.forEach(m=>{
+      const v = mix[sc.id][m];
+      html += `<td><input type="number" step="any" class="paretomixcell" data-sc="${sc.id}" data-month="${m}" value="${v ?? ''}"></td>`;
+    });
+    html += `</tr>`;
+  });
+  html += `<tr class="subtotal"><td>Total</td>`;
+  MONTHS.forEach(m=>{
+    const total = subCats.reduce((s,sc)=> s+(+mix[sc.id][m]||0), 0);
+    html += pctTotalCell(total);
+  });
+  html += `</tr></tbody></table></div></div>`;
+
+  html += `<div class="cyclelabel" style="color:var(--ink-soft); margin:18px 0 8px 0; font-size:11px; text-transform:uppercase; letter-spacing:0.05em; font-weight:700;">Resulting Pareto × Channel × Month GMV (read-only)</div>`;
+  html += `<div class="panel"><div class="scrollbox" style="max-height:320px;"><table class="ledger"><thead><tr><th>Pdt Sub Cat</th>`;
+  MONTHS.forEach(m=> html += `<th>${m}</th>`);
+  html += `</tr></thead><tbody>`;
+  subCats.forEach(sc=>{
+    html += `<tr><td>${sc.name}</td>`;
+    MONTHS.forEach(m=>{
+      const channelMonthGMV = (+gmv[m]||0) * (+(chMix[paretoMixChannelId]&&chMix[paretoMixChannelId][m])||0) / 100;
+      const val = channelMonthGMV * (+mix[sc.id][m]||0) / 100;
+      html += `<td>${fmt(val)}</td>`;
+    });
+    html += `</tr>`;
+  });
+  html += `</tbody></table></div></div>`;
+
+  host.innerHTML = html;
+  host.querySelector('#paretoMixChannelSelect').addEventListener('change', (e)=>{
+    paretoMixChannelId = e.target.value;
+    renderParetoMix(host);
+  });
+  host.querySelectorAll('.paretomixcell').forEach(inp=>{
+    inp.addEventListener('change', ()=>{
+      mix[inp.dataset.sc][inp.dataset.month] = inp.value===''?'':parseFloat(inp.value);
+      markDirty();
+      renderParetoMix(host);
+    });
+  });
+}
 
 function renderSalesInputSubTable(host, key){
-  if(key === 'channelSales'){
-    renderEditableTable(host, getCycleData('salesInputByCycle'), [
-      {key:'skuId', label:'SKU (Pdt Sub Cat)', type:'select', options:()=>optList(DATA.productSubCategories,s=>s.name)},
-      {key:'channelId', label:'Channel', type:'select', options:()=>optList(DATA.channels,c=>c.name)},
-      {key:'month', label:'Month', type:'select', options:()=>MONTHS.map(m=>({id:m,label:m}))},
-      {key:'qty', label:'Gross Qty', type:'number'},
-      {key:'discountPct', label:'Discount %', type:'number'},
-      {key:'amrp', label:'AMRP', type:'number'},
-      {key:'acogs', label:'ACOGS', type:'number'},
-      {key:'gstPct', label:'GST %', type:'number'}
-    ], {prefix:'SI'});
-  }
+  if(key === 'monthlyGMV') renderMonthlyGMV(host);
+  else if(key === 'channelMix') renderChannelMix(host);
+  else if(key === 'paretoMix') renderParetoMix(host);
 }
 
 function renderSalesInputsScreen(container){
@@ -1470,7 +1630,7 @@ function renderCyclePanel(){
     if(!ok) return;
     const idx = DATA.aopCycles.findIndex(c=>c.id===active.id);
     if(idx > -1) DATA.aopCycles.splice(idx,1);
-    ['salesInputByCycle','codbRateCardByCycle','miscInputsByCycle','cashFlowItemsByCycle'].forEach(k=>{
+    ['salesInputByCycle','codbRateCardByCycle','miscInputsByCycle','cashFlowItemsByCycle','monthlyGMVByCycle','channelMixByCycle','paretoMixByCycle'].forEach(k=>{
       if(DATA[k]) delete DATA[k][active.id];
     });
     if(DATA.meta.activeCycleId === active.id) DATA.meta.activeCycleId = '';
@@ -1499,6 +1659,11 @@ function copyCycleInputData(destCycleId, srcCycleId){
     DATA[k] = DATA[k] || {};
     // Deep-copy with fresh row ids so edits in the new cycle never collide with the source.
     DATA[k][destCycleId] = srcRows.map(r=> ({...r, id: uid('COPY')}));
+  });
+  ['monthlyGMVByCycle','channelMixByCycle','paretoMixByCycle'].forEach(k=>{
+    const srcObj = (DATA[k] && DATA[k][srcCycleId]) || {};
+    DATA[k] = DATA[k] || {};
+    DATA[k][destCycleId] = JSON.parse(JSON.stringify(srcObj));
   });
 }
 
