@@ -846,22 +846,34 @@ function renderMasterTable(container, arr, cols, opts){
   if(importBtn) importBtn.addEventListener('click', ()=>{
     const text = container.querySelector('#pasteArea').value;
     const lines = text.split(/\r?\n/).map(l=>l.trim()).filter(Boolean);
-    let added = 0, skipped = 0;
+    const keyCol = cols[0].key;
+    let added = 0, updated = 0;
     lines.forEach(line=>{
       const parts = line.split('\t');
-      const row = {id: uid(opts.prefix||'ROW')};
+      const row = {};
       cols.forEach((c,i)=>{ row[c.key] = resolveValueForCol(c, parts[i]); });
-      if(opts.buildRow) Object.assign(row, opts.buildRow(row) || {});
-      if(isDuplicateRow(row, arr, cols)){
-        skipped++;
+      const keyVal = row[keyCol];
+      const existing = (keyVal!=='' && keyVal!=null)
+        ? arr.find(r=> normalizeText(r[keyCol]) === normalizeText(keyVal))
+        : null;
+      if(existing){
+        // Same key (e.g. same name) already in the table — update its other
+        // fields with the newly pasted values instead of adding a duplicate row.
+        // A blank pasted cell leaves the existing value alone rather than wiping it.
+        cols.forEach(c=>{
+          if(row[c.key] !== '' && row[c.key] != null) existing[c.key] = row[c.key];
+        });
+        updated++;
         return;
       }
+      row.id = uid(opts.prefix||'ROW');
+      if(opts.buildRow) Object.assign(row, opts.buildRow(row) || {});
       arr.push(row);
       added++;
     });
     rerender();
-    if(skipped > 0){
-      alert(`Imported ${added} row(s). Skipped ${skipped} duplicate row(s) already in the table.`);
+    if(updated > 0){
+      alert(`Imported ${added} new row(s), updated ${updated} existing row(s) with the new values.`);
     }
   });
 
