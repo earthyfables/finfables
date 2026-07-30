@@ -15,7 +15,7 @@
       "Feb",
       "Mar"
     ],
-    "savedAt": "2026-07-30T12:40:16.731Z",
+    "savedAt": "2026-07-30T13:03:28.155Z",
     "activeCycleId": "CYC_p9c3kh"
   },
   "channels": [
@@ -146,57 +146,41 @@
       "type": "MISC"
     },
     {
-      "id": "EL_2ft97u",
-      "name": "Brand Marketing",
-      "category": "Other Expenses",
-      "gstRate": 18,
-      "creditorDays": 30,
-      "type": "MISC"
-    },
-    {
-      "id": "EL_3ffb7u",
-      "name": "Royalty",
-      "category": "Other Expenses",
-      "gstRate": 18,
-      "creditorDays": 30,
-      "type": "MISC"
-    },
-    {
       "id": "EL_cpucaa",
-      "name": "Salaries - Direct",
-      "category": "Other Expenses",
+      "name": "Salary",
+      "category": "Salaries",
       "gstRate": 0,
       "creditorDays": 0,
       "type": "MISC"
     },
     {
       "id": "EL_aaeffh",
-      "name": "Overheads - Direct",
-      "category": "Other Expenses",
-      "gstRate": 18,
-      "creditorDays": 30,
-      "type": "MISC"
-    },
-    {
-      "id": "EL_ry6t0e",
-      "name": "Overheads - Rent",
-      "category": "Other Expenses",
-      "gstRate": 18,
-      "creditorDays": 30,
-      "type": "MISC"
-    },
-    {
-      "id": "EL_hbh005",
-      "name": "Salaries - Indirect",
-      "category": "Other Expenses",
-      "gstRate": 18,
+      "name": "WH Salary",
+      "category": "WH Expenses",
+      "gstRate": 0,
       "creditorDays": 0,
       "type": "MISC"
     },
     {
+      "id": "EL_ry6t0e",
+      "name": "Founder Salary",
+      "category": "Salaries",
+      "gstRate": 0,
+      "creditorDays": 0,
+      "type": "MISC"
+    },
+    {
+      "id": "EL_hbh005",
+      "name": "Rent",
+      "category": "Overheads",
+      "gstRate": 18,
+      "creditorDays": 30,
+      "type": "MISC"
+    },
+    {
       "id": "EL_jzy1qi",
-      "name": "Overheads - Indirect",
-      "category": "Other Expenses",
+      "name": "Agency - Marketing",
+      "category": "Overheads",
       "gstRate": 18,
       "creditorDays": 30,
       "type": "MISC"
@@ -210,11 +194,35 @@
       "type": "MISC"
     },
     {
-      "id": "EL_ykcdna",
-      "name": "Inter company",
-      "category": "IC",
+      "id": "EL_mtzob3",
+      "name": "CA Agency",
+      "category": "Oveheads",
       "gstRate": 18,
-      "creditorDays": 360,
+      "creditorDays": 30,
+      "type": "MISC"
+    },
+    {
+      "id": "EL_5z2vyj",
+      "name": "Electricity",
+      "category": "Overheads",
+      "gstRate": 18,
+      "creditorDays": 30,
+      "type": "MISC"
+    },
+    {
+      "id": "EL_94zxca",
+      "name": "Internet",
+      "category": "Overheads",
+      "gstRate": 18,
+      "creditorDays": 30,
+      "type": "MISC"
+    },
+    {
+      "id": "EL_qhsirw",
+      "name": "Miscellaneous",
+      "category": "Overheads",
+      "gstRate": 18,
+      "creditorDays": 30,
       "type": "MISC"
     }
   ],
@@ -2483,40 +2491,35 @@
     }
   },
   "miscInputsByCycle": {
-    "": [
-      {
-        "id": "MI1",
-        "lineItemId": "EL6",
-        "month": "Apr",
-        "amount": 200000
+    "": {
+      "EL6": {
+        "Apr": 200000
       },
-      {
-        "id": "MI2",
-        "lineItemId": "EL7",
-        "month": "Apr",
-        "amount": 350000
+      "EL7": {
+        "Apr": 350000
       },
-      {
-        "id": "MI3",
-        "lineItemId": "EL8",
-        "month": "Apr",
-        "amount": 100000
+      "EL8": {
+        "Apr": 100000
       },
-      {
-        "id": "MI4",
-        "lineItemId": "EL9",
-        "month": "Apr",
-        "amount": 80000
+      "EL9": {
+        "Apr": 80000
       }
-    ],
-    "CYC_p9c3kh": [
-      {
-        "id": "MI_oisfha",
-        "lineItemId": "EL_vpsayp",
-        "month": "Aug",
-        "amount": ""
-      }
-    ]
+    },
+    "CYC_p9c3kh": {
+      "EL_vpsayp": {
+        "Aug": ""
+      },
+      "EL_cpucaa": {},
+      "EL_aaeffh": {},
+      "EL_ry6t0e": {},
+      "EL_hbh005": {},
+      "EL_jzy1qi": {},
+      "EL_notxgv": {},
+      "EL_mtzob3": {},
+      "EL_5z2vyj": {},
+      "EL_94zxca": {},
+      "EL_qhsirw": {}
+    }
   },
   "cashFlowItemsByCycle": {
     "": [
@@ -12240,6 +12243,68 @@
           "Jan": 10,
           "Feb": 10,
           "Mar": 10
+        }
+      },
+      "cac": {
+        "PM_2nak1i": {
+          "Aug": 20,
+          "Sep": 20,
+          "Oct": 20,
+          "Nov": 18,
+          "Dec": 18,
+          "Jan": 18,
+          "Feb": 18,
+          "Mar": 18
+        },
+        "PM_rkv6uj": {
+          "Aug": 20,
+          "Sep": 20,
+          "Oct": 20,
+          "Nov": 18,
+          "Dec": 18,
+          "Jan": 18,
+          "Feb": 18,
+          "Mar": 18
+        },
+        "PM_y0jzso": {
+          "Aug": 20,
+          "Sep": 20,
+          "Oct": 20,
+          "Nov": 18,
+          "Dec": 18,
+          "Jan": 18,
+          "Feb": 18,
+          "Mar": 18
+        },
+        "PM_esn20h": {
+          "Aug": 20,
+          "Sep": 20,
+          "Oct": 20,
+          "Nov": 18,
+          "Dec": 18,
+          "Jan": 18,
+          "Feb": 18,
+          "Mar": 18
+        },
+        "PM_jgo2r9": {
+          "Aug": 20,
+          "Sep": 20,
+          "Oct": 20,
+          "Nov": 18,
+          "Dec": 18,
+          "Jan": 18,
+          "Feb": 18,
+          "Mar": 18
+        },
+        "PM_2gw084": {
+          "Aug": 20,
+          "Sep": 20,
+          "Oct": 20,
+          "Nov": 18,
+          "Dec": 18,
+          "Jan": 18,
+          "Feb": 18,
+          "Mar": 18
         }
       }
     }
