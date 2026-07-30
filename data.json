@@ -15,7 +15,7 @@
       "Feb",
       "Mar"
     ],
-    "savedAt": "2026-07-30T03:37:12.027Z",
+    "savedAt": "2026-07-30T05:14:21.226Z",
     "activeCycleId": "CYC_p9c3kh"
   },
   "channels": [
@@ -1622,6 +1622,53 @@
   },
   "monthlyGMVByCycle": {
     "": {},
-    "CYC_p9c3kh": {}
+    "CYC_p9c3kh": {
+      "Aug": 8744393.767,
+      "Sep": 9196457.317,
+      "Oct": 10992751.33,
+      "Nov": 10353866.8,
+      "Dec": 10378464.71,
+      "Jan": 10888553.06,
+      "Feb": 10958775.24,
+      "Mar": 11530815.65
+    }
+  },
+  "channelMixByCycle": {
+    "CYC_p9c3kh": {
+      "PM_2nak1i": {},
+      "PM_rkv6uj": {},
+      "PM_y0jzso": {},
+      "PM_esn20h": {},
+      "PM_jgo2r9": {},
+      "PM_2gw084": {}
+    }
+  },
+  "categoryMixByCycle": {
+    "CYC_p9c3kh": {
+      "PM_2nak1i": {
+        "PC_r2a5ac": {},
+        "PC_ofapit": {},
+        "PC_t2rz6a": {},
+        "PC_d7uwz1": {},
+        "PC_h01yup": {},
+        "PC_21bqv5": {},
+        "PC_mg39l4": {},
+        "PC_edydxr": {},
+        "PC_ncey5g": {},
+        "PC_e0ut7i": {},
+        "PC_9kyg3s": {},
+        "PC_43yr0v": {}
+      }
+    }
+  },
+  "paretoMixByCycle": {
+    "CYC_p9c3kh": {
+      "PM_2nak1i": {
+        "PC_r2a5ac": {
+          "PSC_gt25jv": {},
+          "PSC_1sz2at": {}
+        }
+      }
+    }
   }
 }
