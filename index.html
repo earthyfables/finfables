@@ -361,7 +361,7 @@
       <button class="navitem" data-tab="brandPartnerMapping"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="6" y1="3" x2="6" y2="15"/><circle cx="18" cy="6" r="3"/><circle cx="6" cy="18" r="3"/><path d="M18 9a9 9 0 01-9 9"/></svg><span>Brand → Partner Mapping</span></button>
       <button class="navitem" data-tab="expenseLineItems"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 00-2 2v16l3-2 3 2 3-2 3 2V4a2 2 0 00-2-2z"/><line x1="8" y1="8" x2="14" y2="8"/><line x1="8" y1="12" x2="14" y2="12"/></svg><span>Expense Line Item Master</span></button>
       <button class="navitem" data-tab="aspBands"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/><circle cx="3" cy="6" r="1"/><circle cx="9" cy="12" r="1"/><circle cx="15" cy="18" r="1"/></svg><span>ASP Band Master</span></button>
-      <button class="navitem" data-tab="codbDeductionMapping"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="19" y1="5" x2="5" y2="19"/><circle cx="6.5" cy="6.5" r="2.5"/><circle cx="17.5" cy="17.5" r="2.5"/></svg><span>CODB Deduction Mapping</span></button>
+      <button class="navitem" data-tab="codbDeductionMapping"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="19" y1="5" x2="5" y2="19"/><circle cx="6.5" cy="6.5" r="2.5"/><circle cx="17.5" cy="17.5" r="2.5"/></svg><span>CODB and CAC</span></button>
       <button class="navitem" data-tab="paretoMaster"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="6" y1="20" x2="6" y2="15"/><line x1="12" y1="20" x2="12" y2="9"/><line x1="18" y1="20" x2="18" y2="4"/></svg><span>Pareto Master</span></button>
     </div>
 
@@ -1050,7 +1050,9 @@ let codbDeductionMappingSubTab = 'lineItems';
 function renderCodbDeductionMappingScreen(container){
   const pillsHtml = `<div class="pillbar">
     <button class="pill ${codbDeductionMappingSubTab==='lineItems'?'active':''}" data-cdmtab="lineItems">CODB Line Items</button>
+    <button class="pill ${codbDeductionMappingSubTab==='rateStructure'?'active':''}" data-cdmtab="rateStructure">Rate Basis &amp; Structure</button>
     <button class="pill ${codbDeductionMappingSubTab==='marketplaceMapping'?'active':''}" data-cdmtab="marketplaceMapping">Marketplace Deduction Mapping</button>
+    <button class="pill ${codbDeductionMappingSubTab==='cac'?'active':''}" data-cdmtab="cac">CAC</button>
   </div>`;
   container.innerHTML = pillsHtml + `<div id="codbDeductionMappingSubHost"></div>`;
   container.querySelectorAll('[data-cdmtab]').forEach(btn=>{
@@ -1063,12 +1065,24 @@ function renderCodbDeductionMappingScreen(container){
   if(codbDeductionMappingSubTab === 'lineItems'){
     renderMasterTable(host, DATA.codbLineItems, [
       {key:'name', label:'CODB Line Item', width:240},
-      {key:'expenseLineItemId', label:'Expense Line Item', type:'select', options:()=>optList(DATA.expenseLineItems, x=>x.name), width:220},
+      {key:'expenseLineItemId', label:'Expense Line Item', type:'select', options:()=>optList(DATA.expenseLineItems.filter(x=>x.type==='CODB'), x=>x.name), width:220}
+    ], {prefix:'CLI', addLabel:'Add', tableMaxHeight:'65vh'});
+  } else if(codbDeductionMappingSubTab === 'rateStructure'){
+    host.innerHTML = `<div class="footnote" style="margin-bottom:14px;">Rate Basis and Structure for each CODB Line Item — moved here from the main list; more corrections to come.</div>`;
+    const rsHost = document.createElement('div');
+    host.appendChild(rsHost);
+    renderMasterTable(rsHost, DATA.codbLineItems, [
+      {key:'name', label:'CODB Line Item', width:240},
       {key:'rateBasis', label:'Rate Basis', type:'select', options:()=>CODB_RATE_BASIS_OPTIONS.map(v=>({id:v,label:v})), width:180},
       {key:'structure', label:'Structure', type:'select', options:()=>['Marketplace','Other','Product wise'].map(v=>({id:v,label:v})), width:150}
     ], {prefix:'CLI', addLabel:'Add', tableMaxHeight:'65vh'});
-  } else {
+  } else if(codbDeductionMappingSubTab === 'marketplaceMapping'){
     renderMarketplaceDeductionMapping(host);
+  } else {
+    host.innerHTML = `<div class="footnote" style="margin-bottom:14px;">CAC — % NSV, Partner-Model wise, Month wise.</div>`;
+    const cacHost = document.createElement('div');
+    host.appendChild(cacHost);
+    renderSingleRateGrid(cacHost, 'cac', 'CAC %');
   }
 }
 
@@ -1843,6 +1857,62 @@ function renderRateGrid(host, metric, label, pms){
   return html;
 }
 
+// renderRateGrid only builds an HTML string — this wrapper actually renders it
+// into a host and wires up editing/paste/delete for a single standalone metric
+// (used by CAC; Discount/Margin/Returns wire 3 metrics together separately).
+function renderSingleRateGrid(container, metric, label){
+  const pms = DATA.partnerModels;
+  if(!pms.length){
+    container.innerHTML = `<div class="footnote">No Partner-Models defined yet — add some in "Partner-Model Master" first.</div>`;
+    return;
+  }
+  container.innerHTML = renderRateGrid(container, metric, label, pms);
+
+  const store = getCycleObj('discMarginGstByCycle');
+  const grid = store[metric];
+
+  const clearBtn = container.querySelector('[data-clearmetric]');
+  if(clearBtn) clearBtn.addEventListener('click', ()=>{
+    if(!confirm(`Delete all ${label} data? This cannot be undone.`)) return;
+    pms.forEach(pm=>{ grid[pm.id] = {}; });
+    markDirty();
+    renderSingleRateGrid(container, metric, label);
+  });
+
+  container.querySelectorAll('.'+metric+'ratecell').forEach(inp=>{
+    inp.addEventListener('change', ()=>{
+      const n = cleanNum(inp.value);
+      grid[inp.dataset.pm][inp.dataset.month] = n===null ? '' : n;
+      markDirty();
+      renderSingleRateGrid(container, metric, label);
+    });
+  });
+
+  const box = container.querySelector('.pastebox');
+  if(box){
+    const importBtn = box.querySelector('#importBtn');
+    const clearPasteBtn = box.querySelector('#clearPasteBtn');
+    if(importBtn) importBtn.addEventListener('click', ()=>{
+      const text = box.querySelector('#pasteArea').value;
+      const lines = text.split(/\r?\n/).map(l=>l.trim()).filter(Boolean);
+      lines.forEach(line=>{
+        const parts = line.split('\t');
+        if(parts.length < 2) return;
+        const month = parts[0].trim();
+        if(!MONTHS.includes(month)) return;
+        pms.forEach((pm,i2)=>{
+          if(!grid[pm.id]) grid[pm.id] = {};
+          const n = cleanNum(parts[i2+1]);
+          if(n !== null) grid[pm.id][month] = n;
+        });
+      });
+      markDirty();
+      renderSingleRateGrid(container, metric, label);
+    });
+    if(clearPasteBtn) clearPasteBtn.addEventListener('click', ()=>{ box.querySelector('#pasteArea').value=''; });
+  }
+}
+
 function renderDiscMarginGst(container){
   const pms = DATA.partnerModels;
   if(!pms.length){
@@ -1949,10 +2019,11 @@ const TABS = {
     ], {prefix:'BPM', addLabel:'Add mapping'})
   },
   expenseLineItems:{
-    title:'Expense Line Item Master', desc:'Expense name and category are free-text. GST rate is a number.',
+    title:'Expense Line Item Master', desc:'Expense name and category are free-text. GST rate is a number. Type determines where the item can be used (CODB Line Items only accept CODB-type; Misc Inputs auto-populates from everything else).',
     render:(el)=> renderMasterTable(el, DATA.expenseLineItems, [
       {key:'name', label:'Expense line item', width:220},
       {key:'category', label:'Category', width:160},
+      {key:'type', label:'Type', type:'select', options:()=>[{id:'CODB',label:'CODB'},{id:'MISC',label:'MISC'}], width:110},
       {key:'gstRate', label:'GST rate %', type:'number', width:110},
       {key:'creditorDays', label:'Creditor Days', type:'number', width:120}
     ], {prefix:'EL', addLabel:'Add', buildRow:(row)=>({type: row.type || 'MISC'})})
@@ -1964,7 +2035,7 @@ const TABS = {
     ], {prefix:'ASP', addLabel:'Add'})
   },
   codbDeductionMapping:{
-    title:'CODB Deduction Mapping', desc:'Define CODB line items, then map which Brand → Partner-Models deduct each one directly at the marketplace.',
+    title:'CODB and CAC', desc:'Define CODB line items, their Rate Basis/Structure, Marketplace deduction mapping, and CAC (% NSV, month wise, Partner-Model wise).',
     render: renderCodbDeductionMappingScreen
   },
   paretoMaster:{
