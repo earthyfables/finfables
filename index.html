@@ -31,10 +31,9 @@
     color:var(--ink);
     font-family:'Times New Roman', Times, serif;
     font-size:14.5px;
-    min-height:100vh;
     -webkit-font-smoothing:antialiased;
   }
-  .app{display:flex; min-height:100vh;}
+  .app{display:flex;}
 
   /* Sidebar */
   .sidebar{
@@ -1340,6 +1339,7 @@ function renderParetoSubTable(host, key){
   } else {
     renderMasterTable(host, DATA.productSubCategories, [
       {key:'name', label:'Pdt Sub Cat', width:220},
+      {key:'weight', label:'Weight', type:'number', width:100},
       {key:'productGroupId', label:'Pdt Grp', type:'select', options:()=>optList(DATA.productGroups,g=>g.name), width:170},
       {key:'productCategoryId', label:'Pdt Cat', type:'select', options:()=>optList(DATA.productCategories,c=>c.name), width:170},
       {key:'amrp', label:'AMRP', type:'number', width:110},
