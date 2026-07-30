@@ -15,7 +15,7 @@
       "Feb",
       "Mar"
     ],
-    "savedAt": "2026-07-30T13:03:28.155Z",
+    "savedAt": "2026-07-30T13:04:39.421Z",
     "activeCycleId": "CYC_p9c3kh"
   },
   "channels": [
@@ -135,7 +135,7 @@
       "category": "CODB",
       "gstRate": 18,
       "creditorDays": 30,
-      "type": "MISC"
+      "type": "CODB"
     },
     {
       "id": "EL_1tskzd",
@@ -143,7 +143,7 @@
       "category": "CAC",
       "gstRate": 18,
       "creditorDays": 30,
-      "type": "MISC"
+      "type": "CODB"
     },
     {
       "id": "EL_cpucaa",
