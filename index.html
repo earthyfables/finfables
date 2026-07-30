@@ -1070,23 +1070,23 @@ function renderCodbRateCardScreen(container){
 
 function renderCodbMarketplaceFees(container){
   const pms = DATA.partnerModels;
-  const products = DATA.productCategories;
+  const combos = getUniquePdtCatWeightCombos();
   const bands = DATA.aspBands;
   const mpLineItems = DATA.codbLineItems.filter(li=> li.structure !== 'Other' && li.structure !== 'Product wise');
 
   if(!pms.length){ container.innerHTML = `<div class="footnote">No Partner-Models defined yet — add some in "Partner-Model Master" first.</div>`; return; }
-  if(!mpLineItems.length){ container.innerHTML = `<div class="footnote">No Marketplace-structure CODB Line Items defined yet — set a Line Item\'s Structure to "Marketplace" in CODB Deduction Mapping.</div>`; return; }
-  if(!products.length || !bands.length){ container.innerHTML = `<div class="footnote">Marketplace fee types need Product Categories and ASP Bands defined — add some in "Pareto Master" / "ASP Band Master" first.</div>`; return; }
+  if(!mpLineItems.length){ container.innerHTML = `<div class="footnote">No Marketplace-structure CODB Line Items defined yet — set a Line Item's Structure to "Marketplace" in CODB Deduction Mapping.</div>`; return; }
+  if(!combos.length || !bands.length){ container.innerHTML = `<div class="footnote">Marketplace fee types need Product Sub Categories (with a Product Category + Weight) and ASP Bands defined — add some in "Pareto Master" / "ASP Band Master" first.</div>`; return; }
 
-  const store = getCycleObj('codbRateCardByCycle'); // {pmId: {liId: {productId: {bandId: value}}}}
+  const store = getCycleObj('codbRateCardByCycle'); // {pmId: {liId: {comboKey: {bandId: value}}}}
   pms.forEach(pm=>{ if(!store[pm.id]) store[pm.id] = {}; });
 
-  let html = `<div class="footnote" style="margin-bottom:14px;">One block per Partner-Model + Fee Type, every Product Category as a row, ASP Bands as columns.</div>`;
+  let html = `<div class="footnote" style="margin-bottom:14px;">One block per Partner-Model + Fee Type, one row per unique Product Category + Weight combination, ASP Bands as columns.</div>`;
 
   let mpHasData = false;
   pms.forEach(pm=> mpLineItems.forEach(li=>{
     const grid = store[pm.id][li.id] || {};
-    if(Object.values(grid).some(prod=> Object.values(prod||{}).some(v=> v!==undefined && v!==''))) mpHasData = true;
+    if(Object.values(grid).some(row=> Object.values(row||{}).some(v=> v!==undefined && v!==''))) mpHasData = true;
   }));
   if(mpHasData) html += `<button class="btn-sm danger" id="clearMpBtn" style="margin-bottom:14px;">🗑 Delete all Marketplace Fees data</button>`;
 
@@ -1094,19 +1094,19 @@ function renderCodbMarketplaceFees(container){
     mpLineItems.forEach(li=>{
       if(!store[pm.id][li.id]) store[pm.id][li.id] = {};
       const grid = store[pm.id][li.id];
-      products.forEach(p=>{ if(!grid[p.id]) grid[p.id] = {}; });
+      combos.forEach(c=>{ if(!grid[c.key]) grid[c.key] = {}; });
 
       html += `<h3 style="margin:24px 0 8px 0; font-size:15px; font-family:'Times New Roman', Times, serif;">${pmLabel(pm)} - ${li.name}${li.rateBasis ? ` <span style="font-weight:400; color:var(--ink-soft); font-style:italic; font-size:13px;">(${li.rateBasis})</span>` : ''}</h3>`;
-      html += pasteBoxHtml('Partner-Model | Fee Type | Pdt Cat | ' + bands.map(b=>b.name).join(' | '));
-      html += `<div class="panel"><div class="scrollbox" style="max-height:320px;"><table class="ledger"><thead><tr><th style="text-align:left;">Partner-Model</th><th style="text-align:left;">Fee Type</th><th style="text-align:left;">Pdt Cat</th>`;
+      html += pasteBoxHtml('Partner-Model | Fee Type | Pdt Cat | Weight | ' + bands.map(b=>b.name).join(' | '));
+      html += `<div class="panel"><div class="scrollbox" style="max-height:320px;"><table class="ledger"><thead><tr><th style="text-align:left;">Partner-Model</th><th style="text-align:left;">Fee Type</th><th style="text-align:left;">Pdt Cat</th><th>Weight</th>`;
       bands.forEach(b=> html += `<th>${b.name}</th>`);
       html += `</tr></thead><tbody>`;
-      products.forEach(p=>{
-        const cell = grid[p.id];
-        html += `<tr><td>${pmLabel(pm)}</td><td>${li.name}</td><td>${p.name}</td>`;
+      combos.forEach(c=>{
+        const cell = grid[c.key];
+        html += `<tr><td>${pmLabel(pm)}</td><td>${li.name}</td><td>${c.catName}</td><td>${c.weight ?? ''}</td>`;
         bands.forEach(b=>{
           const v = cell[b.id];
-          html += `<td><input type="number" step="any" class="codbratecell" data-pm="${pm.id}" data-li="${li.id}" data-product="${p.id}" data-band="${b.id}" value="${v!==undefined && v!==''? v : ''}"></td>`;
+          html += `<td><input type="number" step="any" class="codbratecell" data-pm="${pm.id}" data-li="${li.id}" data-combo="${c.key}" data-band="${b.id}" value="${v!==undefined && v!==''? v : ''}"></td>`;
         });
         html += `</tr>`;
       });
@@ -1127,7 +1127,7 @@ function renderCodbMarketplaceFees(container){
   container.querySelectorAll('.codbratecell').forEach(inp=>{
     inp.addEventListener('change', ()=>{
       const n = cleanNum(inp.value);
-      store[inp.dataset.pm][inp.dataset.li][inp.dataset.product][inp.dataset.band] = n===null ? '' : n;
+      store[inp.dataset.pm][inp.dataset.li][inp.dataset.combo][inp.dataset.band] = n===null ? '' : n;
       markDirty();
       renderCodbMarketplaceFees(container);
     });
@@ -1147,13 +1147,14 @@ function renderCodbMarketplaceFees(container){
         const lines2 = text.split(/\r?\n/).map(l=>l.trim()).filter(Boolean);
         lines2.forEach(line=>{
           const parts = line.split('\t');
-          if(parts.length < 4) return;
-          const pname = parts[2].trim();
-          const p = products.find(pp=> normalizeText(pp.name) === normalizeText(pname));
-          if(!p) return;
-          const cell = grid[p.id];
+          if(parts.length < 5) return;
+          const catName = parts[2].trim();
+          const weightText = parts[3].trim();
+          const combo = combos.find(c=> normalizeText(c.catName) === normalizeText(catName) && String(c.weight ?? '') === weightText);
+          if(!combo) return;
+          const cell = grid[combo.key];
           bands.forEach((b,i2)=>{
-            const n = cleanNum(parts[i2+3]);
+            const n = cleanNum(parts[i2+4]);
             if(n !== null) cell[b.id] = n;
           });
         });
@@ -1165,19 +1166,20 @@ function renderCodbMarketplaceFees(container){
   });
 }
 
+
 function renderCodbOtherFees(container){
   const pms = DATA.partnerModels;
-  const products = DATA.productCategories;
+  const combos = getUniquePdtCatWeightCombos();
   const otherLineItems = DATA.codbLineItems.filter(li=> li.structure === 'Other');
 
   if(!pms.length){ container.innerHTML = `<div class="footnote">No Partner-Models defined yet — add some in "Partner-Model Master" first.</div>`; return; }
   if(!otherLineItems.length){ container.innerHTML = `<div class="footnote">No "Other"-structure CODB Line Items defined yet — set a Line Item's Structure to "Other" in CODB Deduction Mapping.</div>`; return; }
-  if(!products.length){ container.innerHTML = `<div class="footnote">No Product Categories defined yet — add some in "Pareto Master" first.</div>`; return; }
+  if(!combos.length){ container.innerHTML = `<div class="footnote">No Product Sub Categories (with a Product Category + Weight) defined yet — add some in "Pareto Master" first.</div>`; return; }
 
-  const store = getCycleObj('codbRateCardByCycle'); // {pmId: {liId: {productId: value}}}
+  const store = getCycleObj('codbRateCardByCycle'); // {pmId: {liId: {comboKey: value}}}
   pms.forEach(pm=>{ if(!store[pm.id]) store[pm.id] = {}; });
 
-  let html = `<div class="footnote" style="margin-bottom:14px;">One block per Fee Type — Partner-Model as columns, Product Category as rows.</div>`;
+  let html = `<div class="footnote" style="margin-bottom:14px;">One block per Fee Type — Partner-Model as columns, one row per unique Product Category + Weight combination.</div>`;
 
   let otherHasData = false;
   pms.forEach(pm=> otherLineItems.forEach(li=>{
@@ -1190,15 +1192,15 @@ function renderCodbOtherFees(container){
     pms.forEach(pm=>{ if(!store[pm.id][li.id]) store[pm.id][li.id] = {}; });
 
     html += `<h3 style="margin:24px 0 8px 0; font-size:15px; font-family:'Times New Roman', Times, serif;">${li.name}${li.rateBasis ? ` <span style="font-weight:400; color:var(--ink-soft); font-style:italic; font-size:13px;">(${li.rateBasis})</span>` : ''}</h3>`;
-    html += pasteBoxHtml('Pdt Cat | ' + pms.map(pmLabel).join(' | '));
-    html += `<div class="panel"><div class="scrollbox" style="max-height:320px; overflow-x:auto;"><table class="ledger compact"><colgroup><col style="width:150px;">${pms.map(()=>'<col style="width:150px;">').join('')}</colgroup><thead><tr><th style="text-align:left;">Pdt Cat</th>`;
+    html += pasteBoxHtml('Pdt Cat | Weight | ' + pms.map(pmLabel).join(' | '));
+    html += `<div class="panel"><div class="scrollbox" style="max-height:320px; overflow-x:auto;"><table class="ledger compact"><colgroup><col style="width:150px;"><col style="width:90px;">${pms.map(()=>'<col style="width:150px;">').join('')}</colgroup><thead><tr><th style="text-align:left;">Pdt Cat</th><th>Weight</th>`;
     pms.forEach(pm=> html += `<th>${pmLabel(pm)}</th>`);
     html += `</tr></thead><tbody>`;
-    products.forEach(p=>{
-      html += `<tr><td>${p.name}</td>`;
+    combos.forEach(c=>{
+      html += `<tr><td>${c.catName}</td><td>${c.weight ?? ''}</td>`;
       pms.forEach(pm=>{
-        const v = store[pm.id][li.id][p.id];
-        html += `<td><input type="number" step="any" class="codbothercell" data-li="${li.id}" data-pm="${pm.id}" data-product="${p.id}" value="${v!==undefined && v!==''? v : ''}"></td>`;
+        const v = store[pm.id][li.id][c.key];
+        html += `<td><input type="number" step="any" class="codbothercell" data-li="${li.id}" data-pm="${pm.id}" data-combo="${c.key}" value="${v!==undefined && v!==''? v : ''}"></td>`;
       });
       html += `</tr>`;
     });
@@ -1218,7 +1220,7 @@ function renderCodbOtherFees(container){
   container.querySelectorAll('.codbothercell').forEach(inp=>{
     inp.addEventListener('change', ()=>{
       const n = cleanNum(inp.value);
-      store[inp.dataset.pm][inp.dataset.li][inp.dataset.product] = n===null ? '' : n;
+      store[inp.dataset.pm][inp.dataset.li][inp.dataset.combo] = n===null ? '' : n;
       markDirty();
       renderCodbOtherFees(container);
     });
@@ -1236,14 +1238,15 @@ function renderCodbOtherFees(container){
       const lines2 = text.split(/\r?\n/).map(l=>l.trim()).filter(Boolean);
       lines2.forEach(line=>{
         const parts = line.split('\t');
-        if(parts.length < 2) return;
-        const pname = parts[0].trim();
-        const p = products.find(pp=> normalizeText(pp.name) === normalizeText(pname));
-        if(!p) return;
+        if(parts.length < 3) return;
+        const catName = parts[0].trim();
+        const weightText = parts[1].trim();
+        const combo = combos.find(c=> normalizeText(c.catName) === normalizeText(catName) && String(c.weight ?? '') === weightText);
+        if(!combo) return;
         pms.forEach((pm,i2)=>{
           if(!store[pm.id][li.id]) store[pm.id][li.id] = {};
-          const n = cleanNum(parts[i2+1]);
-          if(n !== null) store[pm.id][li.id][p.id] = n;
+          const n = cleanNum(parts[i2+2]);
+          if(n !== null) store[pm.id][li.id][combo.key] = n;
         });
       });
       markDirty();
@@ -1252,6 +1255,7 @@ function renderCodbOtherFees(container){
     if(clearBtn) clearBtn.addEventListener('click', ()=>{ box.querySelector('#pasteArea').value=''; });
   });
 }
+
 
 function renderCodbProductWiseFees(container){
   const subCats = DATA.productSubCategories;
@@ -1435,6 +1439,23 @@ function cleanNum(text){
 // silently fail to match and cause that row's paste to be dropped.
 function normalizeText(s){
   return String(s||'').trim().replace(/\s+/g,' ').toLowerCase();
+}
+// Product Sub Categories carry a Weight; CODB Marketplace/Other fees need rows
+// keyed by the unique (Product Category, Weight) combination found across all
+// Sub Categories, not one row per Sub Category or one row per bare Category.
+function getUniquePdtCatWeightCombos(){
+  const seen = new Map();
+  DATA.productSubCategories.forEach(sc=>{
+    const catId = sc.productCategoryId;
+    if(!catId) return;
+    const weight = sc.weight;
+    const key = catId + '::' + (weight ?? '');
+    if(!seen.has(key)){
+      const cat = DATA.productCategories.find(c=>c.id===catId);
+      seen.set(key, {key, catId, catName: cat ? cat.name : '—', weight});
+    }
+  });
+  return Array.from(seen.values());
 }
 
 function renderMonthlyGMV(host){
