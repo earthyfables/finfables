@@ -1032,7 +1032,7 @@ function renderCodbDeductionMappingScreen(container){
     {key:'name', label:'CODB Line Item', width:240},
     {key:'expenseLineItemId', label:'Expense Line Item', type:'select', options:()=>optList(DATA.expenseLineItems, x=>x.name), width:220},
     {key:'rateBasis', label:'Rate Basis', type:'select', options:()=>CODB_RATE_BASIS_OPTIONS.map(v=>({id:v,label:v})), width:180},
-    {key:'structure', label:'Structure', type:'select', options:()=>['Marketplace','Other','NA'].map(v=>({id:v,label:v==='NA'?'NA (Not Applicable)':v})), width:150}
+    {key:'structure', label:'Structure', type:'select', options:()=>['Marketplace','Other','Product wise'].map(v=>({id:v,label:v})), width:150}
   ], {prefix:'CLI', addLabel:'Add', tableMaxHeight:'320px', onChange: ()=> renderMarketplaceDeductionMapping(container.querySelector('#marketplaceMappingHost'))});
   const mmHost = container.querySelector('#marketplaceMappingHost');
   renderMarketplaceDeductionMapping(mmHost);
@@ -1044,6 +1044,7 @@ function renderCodbRateCardScreen(container){
   const pillsHtml = `<div class="pillbar">
     <button class="pill ${codbRateCardSubTab==='marketplace'?'active':''}" data-codbratetab="marketplace">Marketplace Related</button>
     <button class="pill ${codbRateCardSubTab==='other'?'active':''}" data-codbratetab="other">Others</button>
+    <button class="pill ${codbRateCardSubTab==='productwise'?'active':''}" data-codbratetab="productwise">Product wise</button>
   </div>`;
   container.innerHTML = pillsHtml + `<div id="codbRateCardSubHost"></div>`;
   container.querySelectorAll('[data-codbratetab]').forEach(btn=>{
@@ -1054,14 +1055,15 @@ function renderCodbRateCardScreen(container){
   });
   const host = container.querySelector('#codbRateCardSubHost');
   if(codbRateCardSubTab === 'marketplace') renderCodbMarketplaceFees(host);
-  else renderCodbOtherFees(host);
+  else if(codbRateCardSubTab === 'other') renderCodbOtherFees(host);
+  else renderCodbProductWiseFees(host);
 }
 
 function renderCodbMarketplaceFees(container){
   const pms = DATA.partnerModels;
   const products = DATA.productCategories;
   const bands = DATA.aspBands;
-  const mpLineItems = DATA.codbLineItems.filter(li=> li.structure !== 'Other' && li.structure !== 'NA');
+  const mpLineItems = DATA.codbLineItems.filter(li=> li.structure !== 'Other' && li.structure !== 'Product wise');
 
   if(!pms.length){ container.innerHTML = `<div class="footnote">No Partner-Models defined yet — add some in "Partner-Model Master" first.</div>`; return; }
   if(!mpLineItems.length){ container.innerHTML = `<div class="footnote">No Marketplace-structure CODB Line Items defined yet — set a Line Item\'s Structure to "Marketplace" in CODB Deduction Mapping.</div>`; return; }
@@ -1207,6 +1209,69 @@ function renderCodbOtherFees(container){
       });
       markDirty();
       renderCodbOtherFees(container);
+    });
+    if(clearBtn) clearBtn.addEventListener('click', ()=>{ box.querySelector('#pasteArea').value=''; });
+  });
+}
+
+function renderCodbProductWiseFees(container){
+  const subCats = DATA.productSubCategories;
+  const pwLineItems = DATA.codbLineItems.filter(li=> li.structure === 'Product wise');
+
+  if(!pwLineItems.length){ container.innerHTML = `<div class="footnote">No "Product wise"-structure CODB Line Items defined yet — set a Line Item's Structure to "Product wise" in CODB Deduction Mapping.</div>`; return; }
+  if(!subCats.length){ container.innerHTML = `<div class="footnote">No Product Sub Categories defined yet — add some in "Pareto Master" first.</div>`; return; }
+
+  const store = getCycleObj('codbRateCardByCycle');
+  if(!store.__productWise) store.__productWise = {};
+  const pwStore = store.__productWise; // {liId: {subCatId: value}}
+
+  let html = `<div class="footnote" style="margin-bottom:14px;">One block per Fee Type — every Product Sub Category as a row, single rate value (no Partner-Model or Month breakdown).</div>`;
+
+  pwLineItems.forEach(li=>{
+    if(!pwStore[li.id]) pwStore[li.id] = {};
+
+    html += `<h3 style="margin:24px 0 8px 0; font-size:15px; font-family:'Times New Roman', Times, serif;">${li.name}${li.rateBasis ? ` <span style="font-weight:400; color:var(--ink-soft); font-style:italic; font-size:13px;">(${li.rateBasis})</span>` : ''}</h3>`;
+    html += pasteBoxHtml('Pdt Sub Cat | Rate');
+    html += `<div class="panel"><div class="scrollbox" style="max-height:420px;"><table class="ledger compact"><colgroup><col style="width:220px;"><col style="width:150px;"></colgroup><thead><tr><th style="text-align:left;">Pdt Sub Cat</th><th>Rate</th></tr></thead><tbody>`;
+    subCats.forEach(sc=>{
+      const v = pwStore[li.id][sc.id];
+      html += `<tr><td>${sc.name}</td><td><input type="number" step="any" class="codbpwcell" data-li="${li.id}" data-sc="${sc.id}" value="${v!==undefined && v!==''? v : ''}"></td></tr>`;
+    });
+    html += `</tbody></table></div></div>`;
+  });
+
+  container.innerHTML = html;
+
+  container.querySelectorAll('.codbpwcell').forEach(inp=>{
+    inp.addEventListener('change', ()=>{
+      const n = cleanNum(inp.value);
+      pwStore[inp.dataset.li][inp.dataset.sc] = n===null ? '' : n;
+      markDirty();
+      renderCodbProductWiseFees(container);
+    });
+  });
+
+  const pasteBoxes = container.querySelectorAll('.pastebox');
+  let boxIdx = 0;
+  pwLineItems.forEach(li=>{
+    const box = pasteBoxes[boxIdx]; boxIdx++;
+    if(!box) return;
+    const importBtn = box.querySelector('#importBtn');
+    const clearBtn = box.querySelector('#clearPasteBtn');
+    if(importBtn) importBtn.addEventListener('click', ()=>{
+      const text = box.querySelector('#pasteArea').value;
+      const lines2 = text.split(/\r?\n/).map(l=>l.trim()).filter(Boolean);
+      lines2.forEach(line=>{
+        const parts = line.split('\t');
+        if(parts.length < 2) return;
+        const scName = parts[0].trim();
+        const sc = subCats.find(s=> normalizeText(s.name) === normalizeText(scName));
+        if(!sc) return;
+        const n = cleanNum(parts[1]);
+        if(n !== null) pwStore[li.id][sc.id] = n;
+      });
+      markDirty();
+      renderCodbProductWiseFees(container);
     });
     if(clearBtn) clearBtn.addEventListener('click', ()=>{ box.querySelector('#pasteArea').value=''; });
   });
