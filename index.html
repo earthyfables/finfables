@@ -511,7 +511,7 @@ const SEED = {
   productGroups:[{id:"PG1",name:"Personal Care"}],
   productCategories:[{id:"PC1",name:"Towels",productGroupId:"PG1"}],
   productSubCategories:[{id:"PSC1",name:"Bath Towel",productGroupId:"PG1",productCategoryId:"PC1",amrp:100,acogs:40}],
-  salesInputByCycle:{'':[]}, codbRateCardByCycle:{'':[]}, miscInputsByCycle:{'':[]}, cashFlowItemsByCycle:{'':[]}, discMarginGstByCycle:{'':{}}
+  salesInputByCycle:{'':[]}, codbRateCardByCycle:{'':{}}, miscInputsByCycle:{'':[]}, cashFlowItemsByCycle:{'':[]}, discMarginGstByCycle:{'':{}}
 };
 
 function uid(prefix){ return prefix + "_" + Math.random().toString(36).slice(2,8); }
@@ -549,13 +549,15 @@ async function loadData(){
   // Migrate salesInput/codbRateCard/miscInputs/cashFlowItems from the old flat-array
   // shape into the new cycle-scoped shape ({'': [...], [cycleId]: [...]}) so that
   // pre-existing data lands in the default (no-cycle) bucket rather than being lost.
-  ['salesInputByCycle','codbRateCardByCycle','miscInputsByCycle','cashFlowItemsByCycle'].forEach(k=>{
+  ['salesInputByCycle','miscInputsByCycle','cashFlowItemsByCycle'].forEach(k=>{
     if(!DATA[k]){
       const oldKey = k.replace('ByCycle','');
       DATA[k] = { '': Array.isArray(DATA[oldKey]) ? DATA[oldKey] : [] };
     }
     if(!DATA[k]['']) DATA[k][''] = [];
   });
+  if(!DATA.codbRateCardByCycle) DATA.codbRateCardByCycle = {'':{}};
+  if(!DATA.codbRateCardByCycle['']) DATA.codbRateCardByCycle[''] = {};
   if(!DATA.productSubCategories){
     // Migrate any pre-existing SKU Master rows into the new Product Sub Category master
     // so nothing is lost when upgrading from the old SKU-based structure.
@@ -1024,20 +1026,87 @@ function renderCodbDeductionMappingScreen(container){
 }
 
 function renderCodbRateCardScreen(container){
+  const pms = DATA.partnerModels;
+  const lineItems = DATA.codbLineItems;
+  const products = DATA.productSubCategories;
   const bands = DATA.aspBands;
-  if(!bands.length){
-    container.innerHTML = `<div class="footnote">No ASP Bands defined yet — add some in "ASP Band Master" first.</div>`;
-    return;
-  }
-  const cols = [
-    {key:'partnerModelId', label:'Partner-Model', type:'select', options:()=>DATA.partnerModels.map(pm=>({id:pm.id, label:pmLabel(pm)})), width:180},
-    {key:'productSubCategoryId', label:'Product', type:'select', options:()=>optList(DATA.productSubCategories, s=>s.name), width:200},
-    {key:'codbLineItemId', label:'Fee Type', type:'select', options:()=>optList(DATA.codbLineItems, x=>x.name), width:180}
-  ];
-  bands.forEach(b=>{
-    cols.push({key:'band_'+b.id, label:b.name, type:'number', width:100});
+
+  if(!pms.length){ container.innerHTML = `<div class="footnote">No Partner-Models defined yet — add some in "Partner-Model Master" first.</div>`; return; }
+  if(!lineItems.length){ container.innerHTML = `<div class="footnote">No CODB Line Items defined yet — add some in "CODB Deduction Mapping" first.</div>`; return; }
+  if(!products.length){ container.innerHTML = `<div class="footnote">No Product Sub Categories defined yet — add some in "Pareto Master" first.</div>`; return; }
+  if(!bands.length){ container.innerHTML = `<div class="footnote">No ASP Bands defined yet — add some in "ASP Band Master" first.</div>`; return; }
+
+  const store = getCycleObj('codbRateCardByCycle'); // {pmId: {lineItemId: {productId: {bandId: value}}}}
+
+  let html = `<div class="footnote" style="margin-bottom:14px;">Auto-populated from your masters — one block per Partner-Model, one table per CODB Line Item, every Product as a row, ASP Bands as columns.</div>`;
+
+  pms.forEach(pm=>{
+    if(!store[pm.id]) store[pm.id] = {};
+    html += `<h3 style="margin:24px 0 10px 0; font-size:16px; font-family:'Times New Roman', Times, serif;">${pmLabel(pm)}</h3>`;
+    lineItems.forEach(li=>{
+      if(!store[pm.id][li.id]) store[pm.id][li.id] = {};
+      const grid = store[pm.id][li.id];
+      products.forEach(p=>{ if(!grid[p.id]) grid[p.id] = {}; });
+
+      html += `<div class="cyclelabel" style="margin:14px 0 6px 0; font-size:13px; font-weight:700; color:var(--ink);">${li.name}${li.rateBasis ? ` <span style="font-weight:400; color:var(--ink-soft); font-style:italic;">(${li.rateBasis})</span>` : ''}</div>`;
+      html += pasteBoxHtml('Product | ' + bands.map(b=>b.name).join(' | '));
+      html += `<div class="panel"><div class="scrollbox" style="max-height:320px;"><table class="ledger"><thead><tr><th>Product</th>`;
+      bands.forEach(b=> html += `<th>${b.name}</th>`);
+      html += `</tr></thead><tbody>`;
+      products.forEach(p=>{
+        html += `<tr><td>${p.name}</td>`;
+        bands.forEach(b=>{
+          const v = grid[p.id][b.id];
+          html += `<td><input type="number" step="any" class="codbratecell" data-pm="${pm.id}" data-li="${li.id}" data-product="${p.id}" data-band="${b.id}" value="${v!==undefined && v!==''? v : ''}"></td>`;
+        });
+        html += `</tr>`;
+      });
+      html += `</tbody></table></div></div>`;
+    });
   });
-  renderMasterTable(container, getCycleData('codbRateCardByCycle'), cols, {prefix:'RC', addLabel:'Add', tableMaxHeight:'520px'});
+
+  container.innerHTML = html;
+
+  container.querySelectorAll('.codbratecell').forEach(inp=>{
+    inp.addEventListener('change', ()=>{
+      const n = cleanNum(inp.value);
+      store[inp.dataset.pm][inp.dataset.li][inp.dataset.product][inp.dataset.band] = n===null ? '' : n;
+      markDirty();
+      renderCodbRateCardScreen(container);
+    });
+  });
+
+  // Each block's paste box is matched to its grid by DOM order (Partner-Model x Line Item, same order as the loops above).
+  const pasteBoxes = container.querySelectorAll('.pastebox');
+  let boxIdx = 0;
+  pms.forEach(pm=>{
+    lineItems.forEach(li=>{
+      const box = pasteBoxes[boxIdx]; boxIdx++;
+      if(!box) return;
+      const grid = store[pm.id][li.id];
+      const importBtn = box.querySelector('#importBtn');
+      const clearBtn = box.querySelector('#clearPasteBtn');
+      if(importBtn) importBtn.addEventListener('click', ()=>{
+        const text = box.querySelector('#pasteArea').value;
+        const lines = text.split(/\r?\n/).map(l=>l.trim()).filter(Boolean);
+        lines.forEach(line=>{
+          const parts = line.split('\t');
+          if(parts.length < 2) return;
+          const pname = parts[0].trim();
+          const p = products.find(pp=> normalizeText(pp.name) === normalizeText(pname));
+          if(!p) return;
+          if(!grid[p.id]) grid[p.id] = {};
+          bands.forEach((b,i2)=>{
+            const n = cleanNum(parts[i2+1]);
+            if(n !== null) grid[p.id][b.id] = n;
+          });
+        });
+        markDirty();
+        renderCodbRateCardScreen(container);
+      });
+      if(clearBtn) clearBtn.addEventListener('click', ()=>{ box.querySelector('#pasteArea').value=''; });
+    });
+  });
 }
 
 const PARETO_SUB_TABS = [
@@ -1979,13 +2048,13 @@ function renderCyclePanel(){
 
 function copyCycleInputData(destCycleId, srcCycleId){
   if(!srcCycleId) return;
-  ['salesInputByCycle','codbRateCardByCycle','miscInputsByCycle','cashFlowItemsByCycle'].forEach(k=>{
+  ['salesInputByCycle','miscInputsByCycle','cashFlowItemsByCycle'].forEach(k=>{
     const srcRows = (DATA[k] && DATA[k][srcCycleId]) || [];
     DATA[k] = DATA[k] || {};
     // Deep-copy with fresh row ids so edits in the new cycle never collide with the source.
     DATA[k][destCycleId] = srcRows.map(r=> ({...r, id: uid('COPY')}));
   });
-  ['monthlyGMVByCycle','channelMixByCycle','categoryMixByCycle','paretoMixByCycle','discMarginGstByCycle'].forEach(k=>{
+  ['monthlyGMVByCycle','channelMixByCycle','categoryMixByCycle','paretoMixByCycle','discMarginGstByCycle','codbRateCardByCycle'].forEach(k=>{
     const srcObj = (DATA[k] && DATA[k][srcCycleId]) || {};
     DATA[k] = DATA[k] || {};
     DATA[k][destCycleId] = JSON.parse(JSON.stringify(srcObj));
