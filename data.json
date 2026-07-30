@@ -15,7 +15,7 @@
       "Feb",
       "Mar"
     ],
-    "savedAt": "2026-07-30T13:04:39.421Z",
+    "savedAt": "2026-07-30T13:24:25.949Z",
     "activeCycleId": "CYC_p9c3kh"
   },
   "channels": [
@@ -541,6 +541,13 @@
       "expenseLineItemId": "EL_vpsayp",
       "structure": "Other",
       "rateBasis": "% NSV"
+    },
+    {
+      "id": "CLI_25bcs2",
+      "name": "CAC",
+      "expenseLineItemId": "EL_1tskzd",
+      "rateBasis": "% NSV",
+      "structure": "Marketplace"
     }
   ],
   "marketplaceDeductionMapping": [
