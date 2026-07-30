@@ -295,6 +295,7 @@
 
   /* Output ledger tables */
   .ledger{width:100%; border-collapse:collapse; font-family:'Times New Roman', Times, serif; font-size:13px;}
+  .ledger.compact{width:auto; table-layout:fixed;}
   .ledger th{
     text-align:right; padding:8px 11px; border-bottom:2px solid var(--accent-dark);
     font-family:'Times New Roman', Times, serif; font-weight:700; white-space:nowrap; color:var(--ink-soft);
@@ -1065,7 +1066,7 @@ function renderMonthlyGMV(host){
   const total = MONTHS.reduce((s,m)=> s+(+gmv[m]||0), 0);
   let html = `<div class="footnote" style="margin-bottom:14px;">Enter total GMV for each month. This feeds Channel Mix % below to derive Partner-Model-wise GMV.</div>`;
   html += pasteBoxHtml('Month | GMV');
-  html += `<div class="panel"><div class="scrollbox" style="max-height:460px;"><table class="ledger"><thead><tr><th>Month</th><th>GMV</th></tr></thead><tbody>`;
+  html += `<div class="panel"><div class="scrollbox" style="max-height:460px;"><table class="ledger compact"><colgroup><col style="width:130px;"><col style="width:150px;"></colgroup><thead><tr><th>Month</th><th>GMV</th></tr></thead><tbody>`;
   MONTHS.forEach(m=>{
     html += `<tr><td>${m}</td><td><input type="number" step="any" class="gmvcell" data-month="${m}" value="${gmv[m] ?? ''}"></td></tr>`;
   });
@@ -1108,7 +1109,7 @@ function renderChannelMix(host){
 
   html += pasteBoxHtml('Month | ' + pms.map(pmLabel).join(' | '));
 
-  html += `<div class="panel"><div class="scrollbox" style="max-height:460px; overflow-x:auto;"><table class="ledger"><thead><tr><th>Month</th>`;
+  html += `<div class="panel"><div class="scrollbox" style="max-height:460px; overflow-x:auto;"><table class="ledger compact"><colgroup><col style="width:130px;">${pms.map(()=>'<col style="width:150px;">').join('')}<col style="width:90px;"></colgroup><thead><tr><th>Month</th>`;
   pms.forEach(pm=> html += `<th>${pmLabel(pm)}</th>`);
   html += `<th>Total</th></tr></thead><tbody>`;
   MONTHS.forEach(m=>{
@@ -1126,7 +1127,7 @@ function renderChannelMix(host){
   html += `</tbody></table></div></div>`;
 
   html += `<div class="cyclelabel" style="color:var(--ink-soft); margin:18px 0 8px 0; font-size:11px; text-transform:uppercase; letter-spacing:0.05em; font-weight:700;">Resulting Partner-Model GMV (read-only)</div>`;
-  html += `<div class="panel"><div class="scrollbox" style="max-height:320px; overflow-x:auto;"><table class="ledger"><thead><tr><th>Month</th>`;
+  html += `<div class="panel"><div class="scrollbox" style="max-height:320px; overflow-x:auto;"><table class="ledger compact"><colgroup><col style="width:130px;">${pms.map(()=>'<col style="width:150px;">').join('')}</colgroup><thead><tr><th>Month</th>`;
   pms.forEach(pm=> html += `<th>${pmLabel(pm)}</th>`);
   html += `</tr></thead><tbody>`;
   MONTHS.forEach(m=>{
@@ -1194,7 +1195,7 @@ function renderParetoMix(host){
 
   html += pasteBoxHtml('Month | ' + subCats.map(s=>s.name).join(' | '));
 
-  html += `<div class="panel"><div class="scrollbox" style="max-height:460px; overflow-x:auto;"><table class="ledger"><thead><tr><th>Month</th>`;
+  html += `<div class="panel"><div class="scrollbox" style="max-height:460px; overflow-x:auto;"><table class="ledger compact"><colgroup><col style="width:130px;">${subCats.map(()=>'<col style="width:150px;">').join('')}<col style="width:90px;"></colgroup><thead><tr><th>Month</th>`;
   subCats.forEach(sc=> html += `<th>${sc.name}</th>`);
   html += `<th>Total</th></tr></thead><tbody>`;
   MONTHS.forEach(m=>{
@@ -1212,7 +1213,7 @@ function renderParetoMix(host){
   html += `</tbody></table></div></div>`;
 
   html += `<div class="cyclelabel" style="color:var(--ink-soft); margin:18px 0 8px 0; font-size:11px; text-transform:uppercase; letter-spacing:0.05em; font-weight:700;">Resulting Pareto × Partner-Model × Month GMV (read-only)</div>`;
-  html += `<div class="panel"><div class="scrollbox" style="max-height:320px; overflow-x:auto;"><table class="ledger"><thead><tr><th>Month</th>`;
+  html += `<div class="panel"><div class="scrollbox" style="max-height:320px; overflow-x:auto;"><table class="ledger compact"><colgroup><col style="width:130px;">${subCats.map(()=>'<col style="width:150px;">').join('')}</colgroup><thead><tr><th>Month</th>`;
   subCats.forEach(sc=> html += `<th>${sc.name}</th>`);
   html += `</tr></thead><tbody>`;
   MONTHS.forEach(m=>{
