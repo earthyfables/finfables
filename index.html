@@ -1038,81 +1038,63 @@ function renderCodbDeductionMappingScreen(container){
   renderMarketplaceDeductionMapping(mmHost);
 }
 
+let codbRateCardSubTab = 'marketplace';
+
 function renderCodbRateCardScreen(container){
+  const pillsHtml = `<div class="pillbar">
+    <button class="pill ${codbRateCardSubTab==='marketplace'?'active':''}" data-codbratetab="marketplace">Marketplace Related</button>
+    <button class="pill ${codbRateCardSubTab==='other'?'active':''}" data-codbratetab="other">Others</button>
+  </div>`;
+  container.innerHTML = pillsHtml + `<div id="codbRateCardSubHost"></div>`;
+  container.querySelectorAll('[data-codbratetab]').forEach(btn=>{
+    btn.addEventListener('click', ()=>{
+      codbRateCardSubTab = btn.dataset.codbratetab;
+      renderCodbRateCardScreen(container);
+    });
+  });
+  const host = container.querySelector('#codbRateCardSubHost');
+  if(codbRateCardSubTab === 'marketplace') renderCodbMarketplaceFees(host);
+  else renderCodbOtherFees(host);
+}
+
+function renderCodbMarketplaceFees(container){
   const pms = DATA.partnerModels;
-  const allLineItems = DATA.codbLineItems;
   const products = DATA.productCategories;
   const bands = DATA.aspBands;
+  const mpLineItems = DATA.codbLineItems.filter(li=> li.structure !== 'Other');
 
   if(!pms.length){ container.innerHTML = `<div class="footnote">No Partner-Models defined yet — add some in "Partner-Model Master" first.</div>`; return; }
-  if(!allLineItems.length){ container.innerHTML = `<div class="footnote">No CODB Line Items defined yet — add some in "CODB Deduction Mapping" first.</div>`; return; }
+  if(!mpLineItems.length){ container.innerHTML = `<div class="footnote">No Marketplace-structure CODB Line Items defined yet — set a Line Item\'s Structure to "Marketplace" in CODB Deduction Mapping.</div>`; return; }
+  if(!products.length || !bands.length){ container.innerHTML = `<div class="footnote">Marketplace fee types need Product Categories and ASP Bands defined — add some in "Pareto Master" / "ASP Band Master" first.</div>`; return; }
 
-  const mpLineItems = allLineItems.filter(li=> li.structure !== 'Other');
-  const otherLineItems = allLineItems.filter(li=> li.structure === 'Other');
-
-  const store = getCycleObj('codbRateCardByCycle');
-  // Marketplace-format: {pmId: {liId: {productId: {bandId: value}}}}
-  // Other-format:        {pmId: {liId: {month: value}}}
+  const store = getCycleObj('codbRateCardByCycle'); // {pmId: {liId: {productId: {bandId: value}}}}
   pms.forEach(pm=>{ if(!store[pm.id]) store[pm.id] = {}; });
 
-  let html = '';
+  let html = `<div class="footnote" style="margin-bottom:14px;">One block per Partner-Model + Fee Type, every Product Category as a row, ASP Bands as columns.</div>`;
 
-  if(mpLineItems.length){
-    if(!products.length || !bands.length){
-      html += `<div class="footnote" style="margin-bottom:14px;">Marketplace fee types need Product Categories and ASP Bands defined — add some in "Pareto Master" / "ASP Band Master" first.</div>`;
-    } else {
-      html += `<div class="cyclelabel" style="font-size:14px; font-weight:700; color:var(--ink); margin-bottom:8px;">Marketplace Fees</div>`;
-      html += `<div class="footnote" style="margin-bottom:14px;">One block per Partner-Model + Fee Type, every Product Category as a row, ASP Bands as columns.</div>`;
-      pms.forEach(pm=>{
-        mpLineItems.forEach(li=>{
-          if(!store[pm.id][li.id]) store[pm.id][li.id] = {};
-          const grid = store[pm.id][li.id];
-          products.forEach(p=>{ if(!grid[p.id]) grid[p.id] = {}; });
+  pms.forEach(pm=>{
+    mpLineItems.forEach(li=>{
+      if(!store[pm.id][li.id]) store[pm.id][li.id] = {};
+      const grid = store[pm.id][li.id];
+      products.forEach(p=>{ if(!grid[p.id]) grid[p.id] = {}; });
 
-          html += `<h3 style="margin:24px 0 8px 0; font-size:15px; font-family:'Times New Roman', Times, serif;">${pmLabel(pm)} - ${li.name}${li.rateBasis ? ` <span style="font-weight:400; color:var(--ink-soft); font-style:italic; font-size:13px;">(${li.rateBasis})</span>` : ''}</h3>`;
-          html += pasteBoxHtml('Partner-Model | Fee Type | Pdt Cat | ' + bands.map(b=>b.name).join(' | '));
-          html += `<div class="panel"><div class="scrollbox" style="max-height:320px;"><table class="ledger"><thead><tr><th style="text-align:left;">Partner-Model</th><th style="text-align:left;">Fee Type</th><th style="text-align:left;">Pdt Cat</th>`;
-          bands.forEach(b=> html += `<th>${b.name}</th>`);
-          html += `</tr></thead><tbody>`;
-          products.forEach(p=>{
-            const cell = grid[p.id];
-            html += `<tr><td>${pmLabel(pm)}</td><td>${li.name}</td><td>${p.name}</td>`;
-            bands.forEach(b=>{
-              const v = cell[b.id];
-              html += `<td><input type="number" step="any" class="codbratecell" data-pm="${pm.id}" data-li="${li.id}" data-product="${p.id}" data-band="${b.id}" value="${v!==undefined && v!==''? v : ''}"></td>`;
-            });
-            html += `</tr>`;
-          });
-          html += `</tbody></table></div></div>`;
-        });
-      });
-    }
-  }
-
-  if(otherLineItems.length){
-    html += `<div class="cyclelabel" style="font-size:14px; font-weight:700; color:var(--ink); margin:28px 0 8px 0;">Other Fees</div>`;
-    html += `<div class="footnote" style="margin-bottom:14px;">One block per Fee Type — Partner-Model as columns, Months as rows.</div>`;
-    otherLineItems.forEach(li=>{
-      pms.forEach(pm=>{ if(!store[pm.id][li.id]) store[pm.id][li.id] = {}; });
-
-      html += `<h3 style="margin:24px 0 8px 0; font-size:15px; font-family:'Times New Roman', Times, serif;">${li.name}${li.rateBasis ? ` <span style="font-weight:400; color:var(--ink-soft); font-style:italic; font-size:13px;">(${li.rateBasis})</span>` : ''}</h3>`;
-      html += pasteBoxHtml('Month | ' + pms.map(pmLabel).join(' | '));
-      html += `<div class="panel"><div class="scrollbox" style="max-height:320px; overflow-x:auto;"><table class="ledger compact"><colgroup><col style="width:130px;">${pms.map(()=>'<col style="width:150px;">').join('')}</colgroup><thead><tr><th>Month</th>`;
-      pms.forEach(pm=> html += `<th>${pmLabel(pm)}</th>`);
+      html += `<h3 style="margin:24px 0 8px 0; font-size:15px; font-family:'Times New Roman', Times, serif;">${pmLabel(pm)} - ${li.name}${li.rateBasis ? ` <span style="font-weight:400; color:var(--ink-soft); font-style:italic; font-size:13px;">(${li.rateBasis})</span>` : ''}</h3>`;
+      html += pasteBoxHtml('Partner-Model | Fee Type | Pdt Cat | ' + bands.map(b=>b.name).join(' | '));
+      html += `<div class="panel"><div class="scrollbox" style="max-height:320px;"><table class="ledger"><thead><tr><th style="text-align:left;">Partner-Model</th><th style="text-align:left;">Fee Type</th><th style="text-align:left;">Pdt Cat</th>`;
+      bands.forEach(b=> html += `<th>${b.name}</th>`);
       html += `</tr></thead><tbody>`;
-      MONTHS.forEach(m=>{
-        html += `<tr><td>${m}</td>`;
-        pms.forEach(pm=>{
-          const v = store[pm.id][li.id][m];
-          html += `<td><input type="number" step="any" class="codbothercell" data-li="${li.id}" data-pm="${pm.id}" data-month="${m}" value="${v!==undefined && v!==''? v : ''}"></td>`;
+      products.forEach(p=>{
+        const cell = grid[p.id];
+        html += `<tr><td>${pmLabel(pm)}</td><td>${li.name}</td><td>${p.name}</td>`;
+        bands.forEach(b=>{
+          const v = cell[b.id];
+          html += `<td><input type="number" step="any" class="codbratecell" data-pm="${pm.id}" data-li="${li.id}" data-product="${p.id}" data-band="${b.id}" value="${v!==undefined && v!==''? v : ''}"></td>`;
         });
         html += `</tr>`;
       });
       html += `</tbody></table></div></div>`;
     });
-  }
-
-  if(!html) html = `<div class="footnote">No CODB Line Items defined yet — add some in "CODB Deduction Mapping" first.</div>`;
+  });
 
   container.innerHTML = html;
 
@@ -1121,52 +1103,86 @@ function renderCodbRateCardScreen(container){
       const n = cleanNum(inp.value);
       store[inp.dataset.pm][inp.dataset.li][inp.dataset.product][inp.dataset.band] = n===null ? '' : n;
       markDirty();
-      renderCodbRateCardScreen(container);
+      renderCodbMarketplaceFees(container);
     });
   });
+
+  const pasteBoxes = container.querySelectorAll('.pastebox');
+  let boxIdx = 0;
+  pms.forEach(pm=>{
+    mpLineItems.forEach(li=>{
+      const box = pasteBoxes[boxIdx]; boxIdx++;
+      if(!box) return;
+      const grid = store[pm.id][li.id];
+      const importBtn = box.querySelector('#importBtn');
+      const clearBtn = box.querySelector('#clearPasteBtn');
+      if(importBtn) importBtn.addEventListener('click', ()=>{
+        const text = box.querySelector('#pasteArea').value;
+        const lines2 = text.split(/\r?\n/).map(l=>l.trim()).filter(Boolean);
+        lines2.forEach(line=>{
+          const parts = line.split('\t');
+          if(parts.length < 4) return;
+          const pname = parts[2].trim();
+          const p = products.find(pp=> normalizeText(pp.name) === normalizeText(pname));
+          if(!p) return;
+          const cell = grid[p.id];
+          bands.forEach((b,i2)=>{
+            const n = cleanNum(parts[i2+3]);
+            if(n !== null) cell[b.id] = n;
+          });
+        });
+        markDirty();
+        renderCodbMarketplaceFees(container);
+      });
+      if(clearBtn) clearBtn.addEventListener('click', ()=>{ box.querySelector('#pasteArea').value=''; });
+    });
+  });
+}
+
+function renderCodbOtherFees(container){
+  const pms = DATA.partnerModels;
+  const otherLineItems = DATA.codbLineItems.filter(li=> li.structure === 'Other');
+
+  if(!pms.length){ container.innerHTML = `<div class="footnote">No Partner-Models defined yet — add some in "Partner-Model Master" first.</div>`; return; }
+  if(!otherLineItems.length){ container.innerHTML = `<div class="footnote">No "Other"-structure CODB Line Items defined yet — set a Line Item\'s Structure to "Other" in CODB Deduction Mapping.</div>`; return; }
+
+  const store = getCycleObj('codbRateCardByCycle'); // {pmId: {liId: {month: value}}}
+  pms.forEach(pm=>{ if(!store[pm.id]) store[pm.id] = {}; });
+
+  let html = `<div class="footnote" style="margin-bottom:14px;">One block per Fee Type — Partner-Model as columns, Months as rows.</div>`;
+
+  otherLineItems.forEach(li=>{
+    pms.forEach(pm=>{ if(!store[pm.id][li.id]) store[pm.id][li.id] = {}; });
+
+    html += `<h3 style="margin:24px 0 8px 0; font-size:15px; font-family:'Times New Roman', Times, serif;">${li.name}${li.rateBasis ? ` <span style="font-weight:400; color:var(--ink-soft); font-style:italic; font-size:13px;">(${li.rateBasis})</span>` : ''}</h3>`;
+    html += pasteBoxHtml('Month | ' + pms.map(pmLabel).join(' | '));
+    html += `<div class="panel"><div class="scrollbox" style="max-height:320px; overflow-x:auto;"><table class="ledger compact"><colgroup><col style="width:130px;">${pms.map(()=>'<col style="width:150px;">').join('')}</colgroup><thead><tr><th>Month</th>`;
+    pms.forEach(pm=> html += `<th>${pmLabel(pm)}</th>`);
+    html += `</tr></thead><tbody>`;
+    MONTHS.forEach(m=>{
+      html += `<tr><td>${m}</td>`;
+      pms.forEach(pm=>{
+        const v = store[pm.id][li.id][m];
+        html += `<td><input type="number" step="any" class="codbothercell" data-li="${li.id}" data-pm="${pm.id}" data-month="${m}" value="${v!==undefined && v!==''? v : ''}"></td>`;
+      });
+      html += `</tr>`;
+    });
+    html += `</tbody></table></div></div>`;
+  });
+
+  container.innerHTML = html;
+
   container.querySelectorAll('.codbothercell').forEach(inp=>{
     inp.addEventListener('change', ()=>{
       const n = cleanNum(inp.value);
       store[inp.dataset.pm][inp.dataset.li][inp.dataset.month] = n===null ? '' : n;
       markDirty();
-      renderCodbRateCardScreen(container);
+      renderCodbOtherFees(container);
     });
   });
 
-  // Marketplace blocks' paste boxes are matched by DOM order (Partner-Model x MP Fee Type).
-  // Other-Fee blocks' paste boxes follow directly after, matched by DOM order (one per Other Fee Type).
   const pasteBoxes = container.querySelectorAll('.pastebox');
   let boxIdx = 0;
-  if(mpLineItems.length && products.length && bands.length){
-    pms.forEach(pm=>{
-      mpLineItems.forEach(li=>{
-        const box = pasteBoxes[boxIdx]; boxIdx++;
-        if(!box) return;
-        const grid = store[pm.id][li.id];
-        const importBtn = box.querySelector('#importBtn');
-        const clearBtn = box.querySelector('#clearPasteBtn');
-        if(importBtn) importBtn.addEventListener('click', ()=>{
-          const text = box.querySelector('#pasteArea').value;
-          const lines2 = text.split(/\r?\n/).map(l=>l.trim()).filter(Boolean);
-          lines2.forEach(line=>{
-            const parts = line.split('\t');
-            if(parts.length < 4) return;
-            const pname = parts[2].trim();
-            const p = products.find(pp=> normalizeText(pp.name) === normalizeText(pname));
-            if(!p) return;
-            const cell = grid[p.id];
-            bands.forEach((b,i2)=>{
-              const n = cleanNum(parts[i2+3]);
-              if(n !== null) cell[b.id] = n;
-            });
-          });
-          markDirty();
-          renderCodbRateCardScreen(container);
-        });
-        if(clearBtn) clearBtn.addEventListener('click', ()=>{ box.querySelector('#pasteArea').value=''; });
-      });
-    });
-  }
   otherLineItems.forEach(li=>{
     const box = pasteBoxes[boxIdx]; boxIdx++;
     if(!box) return;
@@ -1187,7 +1203,7 @@ function renderCodbRateCardScreen(container){
         });
       });
       markDirty();
-      renderCodbRateCardScreen(container);
+      renderCodbOtherFees(container);
     });
     if(clearBtn) clearBtn.addEventListener('click', ()=>{ box.querySelector('#pasteArea').value=''; });
   });
