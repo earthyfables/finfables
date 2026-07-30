@@ -15,7 +15,7 @@
       "Feb",
       "Mar"
     ],
-    "savedAt": "2026-07-30T12:06:47.476Z",
+    "savedAt": "2026-07-30T12:11:09.641Z",
     "activeCycleId": "CYC_p9c3kh"
   },
   "channels": [
@@ -132,7 +132,7 @@
     {
       "id": "EL_vpsayp",
       "name": "CODB",
-      "category": "Other Expenses",
+      "category": "CODB",
       "gstRate": 18,
       "creditorDays": 30,
       "type": "MISC"
@@ -140,7 +140,7 @@
     {
       "id": "EL_1tskzd",
       "name": "CAC",
-      "category": "Other Expenses",
+      "category": "CAC",
       "gstRate": 18,
       "creditorDays": 30,
       "type": "MISC"
@@ -3011,6 +3011,14 @@
         "lineItemId": "EL9",
         "month": "Apr",
         "amount": 80000
+      }
+    ],
+    "CYC_p9c3kh": [
+      {
+        "id": "MI_oisfha",
+        "lineItemId": "EL_vpsayp",
+        "month": "Aug",
+        "amount": ""
       }
     ]
   },
