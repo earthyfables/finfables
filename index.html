@@ -693,7 +693,7 @@ function resolveValueForCol(col, text){
   text = (text||'').trim();
   if(col.type === 'select'){
     const opts = col.options();
-    const hit = opts.find(o=> o.label.toLowerCase() === text.toLowerCase());
+    const hit = opts.find(o=> normalizeText(o.label) === normalizeText(text));
     return hit ? hit.id : '';
   }
   if(col.type === 'number'){
@@ -1118,6 +1118,13 @@ function cleanNum(text){
   const n = parseFloat(String(text||'').replace(/[,₹$\s]/g,''));
   return isNaN(n) ? null : n;
 }
+// Used when matching a pasted row name against a master's stored name —
+// collapses any run of whitespace to a single space and trims, so a
+// double-space (very common when names are typed/copied from Excel) doesn't
+// silently fail to match and cause that row's paste to be dropped.
+function normalizeText(s){
+  return String(s||'').trim().replace(/\s+/g,' ').toLowerCase();
+}
 
 function renderMonthlyGMV(host){
   const gmv = getCycleObj('monthlyGMVByCycle');
@@ -1343,7 +1350,7 @@ function renderParetoMix(host){
     rows.forEach(parts=>{
       if(parts.length < 2) return;
       const scName = parts[0].trim();
-      const idx = subCats.findIndex(s=> s.name.toLowerCase() === scName.toLowerCase());
+      const idx = subCats.findIndex(s=> normalizeText(s.name) === normalizeText(scName));
       if(idx <= 0) return; // skip unmatched or the auto-balancing first sub-category
       const sc = subCats[idx];
       if(!mix[sc.id]) mix[sc.id] = {};
