@@ -617,7 +617,10 @@ function fieldInput(row, col){
     return html;
   }
   if(col.type === 'number'){
-    return `<input type="number" step="any" data-key="${col.key}" value="${val}">`;
+    const display = (col.decimals!==undefined && val!=='' && val!==null && val!==undefined)
+      ? Number(val).toFixed(col.decimals)
+      : val;
+    return `<input type="number" step="any" data-key="${col.key}" value="${display}">`;
   }
   return `<input type="text" data-key="${col.key}" value="${val}">`;
 }
@@ -1040,7 +1043,7 @@ function renderParetoSubTable(host, key){
       {key:'productCategoryId', label:'Pdt Cat', type:'select', options:()=>optList(DATA.productCategories,c=>c.name), width:170},
       {key:'amrp', label:'AMRP', type:'number', width:110},
       {key:'acogs', label:'ACOGS', type:'number', width:110},
-      {key:'gstPct', label:'GST%', type:'number', width:100}
+      {key:'gstPct', label:'GST%', type:'number', width:100, decimals:2}
     ], {prefix:'PSC', addLabel:'Add'});
   }
 }
