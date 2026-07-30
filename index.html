@@ -415,8 +415,10 @@ function cycleLabel(cycle){
   const endMonth = months[months.length-1];
   const fy = cycle.fy || '';
   const version = cycle.version || 'AOP';
-  const draftTag = cycle.published === false ? ' (Draft)' : '';
-  return `${brand?brand.name:'—'} · ${fy} · ${version} · ${cycle.startMonth}-${endMonth}${draftTag}`;
+  const isPublished = cycle.published !== false;
+  const dot = isPublished ? '🟢' : '⚪';
+  const draftTag = isPublished ? '' : ' (Draft)';
+  return `${dot} ${brand?brand.name:'—'} · ${fy} · ${version} · ${cycle.startMonth}-${endMonth}${draftTag}`;
 }
 function getActiveCycle(){
   return (DATA.aopCycles||[]).find(c=>c.id===DATA.meta.activeCycleId) || null;
