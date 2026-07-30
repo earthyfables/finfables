@@ -167,7 +167,7 @@
   .mastertab.active svg{opacity:1;}
 
   /* Pill sub-navigation (e.g. Pareto Master's Product Group / Category / Sub Category) */
-  .pillbar{display:flex; gap:8px; flex-wrap:wrap; margin-bottom:20px;}
+  .pillbar{display:flex; gap:8px; flex-wrap:wrap; margin-bottom:20px; position:sticky; top:0; z-index:8; background:var(--bg); padding:6px 0 10px 0;}
   .pill{
     font-family:'Times New Roman', Times, serif; font-size:13px; font-weight:700;
     padding:8px 18px; border-radius:999px; border:1px solid var(--line); background:var(--surface);
@@ -1084,6 +1084,13 @@ function renderCodbMarketplaceFees(container){
 
   let html = `<div class="footnote" style="margin-bottom:14px;">One block per Partner-Model + Fee Type, every Product Category as a row, ASP Bands as columns.</div>`;
 
+  let mpHasData = false;
+  pms.forEach(pm=> mpLineItems.forEach(li=>{
+    const grid = store[pm.id][li.id] || {};
+    if(Object.values(grid).some(prod=> Object.values(prod||{}).some(v=> v!==undefined && v!==''))) mpHasData = true;
+  }));
+  if(mpHasData) html += `<button class="btn-sm danger" id="clearMpBtn" style="margin-bottom:14px;">🗑 Delete all Marketplace Fees data</button>`;
+
   pms.forEach(pm=>{
     mpLineItems.forEach(li=>{
       if(!store[pm.id][li.id]) store[pm.id][li.id] = {};
@@ -1109,6 +1116,14 @@ function renderCodbMarketplaceFees(container){
   });
 
   container.innerHTML = html;
+
+  const clearMpBtn = container.querySelector('#clearMpBtn');
+  if(clearMpBtn) clearMpBtn.addEventListener('click', ()=>{
+    if(!confirm('Delete all Marketplace Fees data? This cannot be undone.')) return;
+    pms.forEach(pm=> mpLineItems.forEach(li=>{ store[pm.id][li.id] = {}; }));
+    markDirty();
+    renderCodbMarketplaceFees(container);
+  });
 
   container.querySelectorAll('.codbratecell').forEach(inp=>{
     inp.addEventListener('change', ()=>{
@@ -1165,6 +1180,13 @@ function renderCodbOtherFees(container){
 
   let html = `<div class="footnote" style="margin-bottom:14px;">One block per Fee Type — Partner-Model as columns, Product Category as rows.</div>`;
 
+  let otherHasData = false;
+  pms.forEach(pm=> otherLineItems.forEach(li=>{
+    const grid = store[pm.id][li.id] || {};
+    if(Object.values(grid).some(v=> v!==undefined && v!=='')) otherHasData = true;
+  }));
+  if(otherHasData) html += `<button class="btn-sm danger" id="clearOtherBtn" style="margin-bottom:14px;">🗑 Delete all Other Fees data</button>`;
+
   otherLineItems.forEach(li=>{
     pms.forEach(pm=>{ if(!store[pm.id][li.id]) store[pm.id][li.id] = {}; });
 
@@ -1185,6 +1207,14 @@ function renderCodbOtherFees(container){
   });
 
   container.innerHTML = html;
+
+  const clearOtherBtn = container.querySelector('#clearOtherBtn');
+  if(clearOtherBtn) clearOtherBtn.addEventListener('click', ()=>{
+    if(!confirm('Delete all Other Fees data? This cannot be undone.')) return;
+    pms.forEach(pm=> otherLineItems.forEach(li=>{ store[pm.id][li.id] = {}; }));
+    markDirty();
+    renderCodbOtherFees(container);
+  });
 
   container.querySelectorAll('.codbothercell').forEach(inp=>{
     inp.addEventListener('change', ()=>{
@@ -1239,6 +1269,9 @@ function renderCodbProductWiseFees(container){
   let html = `<div class="footnote" style="margin-bottom:14px;">Every Product Sub Category as a row, one column per Product-wise Fee Type. Add a new "Product wise" CODB Line Item in CODB Deduction Mapping to get another column here.</div>`;
   html += pasteBoxHtml('Pdt Sub Cat | ' + pwLineItems.map(li=>li.name).join(' | '));
 
+  const pwHasData = pwLineItems.some(li=> Object.values(pwStore[li.id]).some(v=> v!==undefined && v!==''));
+  if(pwHasData) html += `<button class="btn-sm danger" id="clearPwBtn" style="margin-bottom:14px;">🗑 Delete all Product wise data</button>`;
+
   html += `<div class="panel" style="display:inline-block;"><div class="scrollbox" style="max-height:75vh;"><table class="ledger compact"><colgroup><col style="width:420px;">${pwLineItems.map(()=>'<col style="width:150px;">').join('')}</colgroup><thead><tr><th style="text-align:left;">Pdt Sub Cat</th>`;
   pwLineItems.forEach(li=> html += `<th>${li.name}</th>`);
   html += `</tr></thead><tbody>`;
@@ -1253,6 +1286,14 @@ function renderCodbProductWiseFees(container){
   html += `</tbody></table></div></div>`;
 
   container.innerHTML = html;
+
+  const clearPwBtn = container.querySelector('#clearPwBtn');
+  if(clearPwBtn) clearPwBtn.addEventListener('click', ()=>{
+    if(!confirm('Delete all Product wise data? This cannot be undone.')) return;
+    pwLineItems.forEach(li=>{ pwStore[li.id] = {}; });
+    markDirty();
+    renderCodbProductWiseFees(container);
+  });
 
   container.querySelectorAll('.codbpwcell').forEach(inp=>{
     inp.addEventListener('change', ()=>{
