@@ -953,30 +953,40 @@ function wireMasterTabBar(container){
   });
 }
 
-function renderCodbChannelMapping(container){
+function renderRateStructureAndChannelTable(container){
   const items = DATA.codbLineItems;
   const pms = DATA.partnerModels;
-  if(!items.length || !pms.length){
-    container.innerHTML = `<div class="footnote">Need CODB Line Items and Partner-Models both defined to map channels.</div>`;
+  if(!items.length){
+    container.innerHTML = `<div class="footnote">No CODB Line Items defined yet — add some in the "CODB Line Items" tab first.</div>`;
     return;
   }
-  let html = `<hr style="border:none; border-top:1px solid var(--line); margin:26px 0;">`;
-  html += `<div class="cyclelabel" style="font-size:14px; font-weight:700; color:var(--ink); margin-bottom:8px;">Channel Mapping</div>`;
-  html += `<div class="footnote" style="margin-bottom:14px;">Tick which Partner-Models each CODB Line Item applies to. Only ticked combinations show up as inputs in the CODB Rate Card — leave a row fully unticked to show it for every Partner-Model (unfiltered).</div>`;
-  html += `<div class="panel" style="display:inline-block;"><div class="scrollbox" style="max-height:65vh; overflow-x:auto;"><table class="mdmtable"><thead><tr><th>CODB Line Item</th>`;
+
+  let html = `<div class="footnote" style="margin-bottom:14px;">Rate Basis, Structure, and which Partner-Models each CODB Line Item applies to — add new items in the "CODB Line Items" tab; this only maps what's already there. Leave a row's Partner-Model boxes fully unticked to show it for every Partner-Model (unfiltered) in the CODB Rate Card.</div>`;
+  html += `<div class="panel" style="display:inline-block;"><div class="scrollbox" style="max-height:65vh; overflow-x:auto;"><table class="mdmtable"><thead><tr><th>CODB Line Item</th><th>Rate Basis</th><th>Structure</th>`;
   pms.forEach(pm=> html += `<th style="text-align:center;">${pmLabel(pm)}</th>`);
-  html += `</tr></thead><tbody>`;
+  html += `<th></th></tr></thead><tbody>`;
   items.forEach(li=>{
     if(!li.mappedPartnerModels) li.mappedPartnerModels = [];
     html += `<tr><td>${li.name}</td>`;
+    html += `<td>${fieldInput(li, {key:'rateBasis', type:'select', options:()=>CODB_RATE_BASIS_OPTIONS.map(v=>({id:v,label:v}))}).replace('<select', `<select data-li="${li.id}"`)}</td>`;
+    html += `<td>${fieldInput(li, {key:'structure', type:'select', options:()=>['Marketplace','Other','Product wise','MP Mapping only'].map(v=>({id:v,label:v}))}).replace('<select', `<select data-li="${li.id}"`)}</td>`;
     pms.forEach(pm=>{
       const checked = li.mappedPartnerModels.includes(pm.id);
       html += `<td style="text-align:center;"><input type="checkbox" class="codbchanmap" data-li="${li.id}" data-pm="${pm.id}" ${checked?'checked':''}></td>`;
     });
+    html += `<td><button class="btn-sm danger" data-removeli="${li.id}">Remove</button></td>`;
     html += `</tr>`;
   });
   html += `</tbody></table></div></div>`;
   container.innerHTML = html;
+
+  container.querySelectorAll('[data-key="rateBasis"],[data-key="structure"]').forEach(sel=>{
+    sel.addEventListener('change', ()=>{
+      const li = items.find(x=>x.id===sel.dataset.li);
+      if(li) li[sel.dataset.key] = sel.value;
+      markDirty();
+    });
+  });
 
   container.querySelectorAll('.codbchanmap').forEach(cb=>{
     cb.addEventListener('change', ()=>{
@@ -988,6 +998,17 @@ function renderCodbChannelMapping(container){
         li.mappedPartnerModels = li.mappedPartnerModels.filter(id=> id!==cb.dataset.pm);
       }
       markDirty();
+    });
+  });
+
+  container.querySelectorAll('[data-removeli]').forEach(btn=>{
+    btn.addEventListener('click', ()=>{
+      const idx = items.findIndex(x=>x.id===btn.dataset.removeli);
+      if(idx===-1) return;
+      if(!confirm(`Remove "${items[idx].name}"? This removes it everywhere, including the CODB Line Items tab.`)) return;
+      items.splice(idx,1);
+      markDirty();
+      renderRateStructureAndChannelTable(container);
     });
   });
 }
@@ -1113,17 +1134,9 @@ function renderCodbDeductionMappingScreen(container){
       {key:'expenseLineItemId', label:'Expense Line Item', type:'select', options:()=>optList(DATA.expenseLineItems.filter(x=>x.type==='CODB' || x.type==='CAC'), x=>x.name), width:220}
     ], {prefix:'CLI', addLabel:'Add', tableMaxHeight:'65vh'});
   } else if(codbDeductionMappingSubTab === 'rateStructure'){
-    host.innerHTML = `<div class="footnote" style="margin-bottom:14px;">Rate Basis and Structure for each CODB Line Item — add new items in the "CODB Line Items" tab; this only maps what's already there. More corrections to come.</div>`;
     const rsHost = document.createElement('div');
     host.appendChild(rsHost);
-    renderMasterTable(rsHost, DATA.codbLineItems, [
-      {key:'name', label:'CODB Line Item', width:240, readOnly:true},
-      {key:'rateBasis', label:'Rate Basis', type:'select', options:()=>CODB_RATE_BASIS_OPTIONS.map(v=>({id:v,label:v})), width:180},
-      {key:'structure', label:'Structure', type:'select', options:()=>['Marketplace','Other','Product wise','MP Mapping only'].map(v=>({id:v,label:v})), width:150}
-    ], {prefix:'CLI', tableMaxHeight:'65vh', allowAdd:false, paste:false});
-    const chanHost = document.createElement('div');
-    host.appendChild(chanHost);
-    renderCodbChannelMapping(chanHost);
+    renderRateStructureAndChannelTable(rsHost);
   } else if(codbDeductionMappingSubTab === 'marketplaceMapping'){
     renderMarketplaceDeductionMapping(host);
   } else {
