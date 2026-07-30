@@ -1181,7 +1181,7 @@ function renderParetoMix(host){
   if(!paretoMixAll[paretoMixChannelId]) paretoMixAll[paretoMixChannelId] = {};
   const mix = paretoMixAll[paretoMixChannelId];
 
-  let html = `<div class="footnote" style="margin-bottom:14px;">For the selected Partner-Model, split its month GMV across Product Sub Categories (Pareto) — each month's row should total 100%.</div>`;
+  let html = `<div class="footnote" style="margin-bottom:14px;">For the selected Partner-Model, split its month GMV across Product Sub Categories (Pareto) — each month's column should total 100%.</div>`;
   html += `<div class="addform" style="margin-bottom:14px;"><div class="addfield" style="width:280px;"><label>Partner-Model</label>
     <select id="paretoMixChannelSelect">${pms.map(pm=>`<option value="${pm.id}" ${pm.id===paretoMixChannelId?'selected':''}>${pmLabel(pm)}</option>`).join('')}</select>
   </div></div>`;
@@ -1193,33 +1193,35 @@ function renderParetoMix(host){
     return;
   }
 
-  html += pasteBoxHtml('Month | ' + subCats.map(s=>s.name).join(' | '));
+  html += pasteBoxHtml('Pdt Sub Cat | ' + MONTHS.join(' | '));
 
-  html += `<div class="panel"><div class="scrollbox" style="max-height:460px; overflow-x:auto;"><table class="ledger compact"><colgroup><col style="width:130px;">${subCats.map(()=>'<col style="width:150px;">').join('')}<col style="width:90px;"></colgroup><thead><tr><th>Month</th>`;
-  subCats.forEach(sc=> html += `<th>${sc.name}</th>`);
-  html += `<th>Total</th></tr></thead><tbody>`;
-  MONTHS.forEach(m=>{
-    html += `<tr><td>${m}</td>`;
-    let rowTotal = 0;
-    subCats.forEach(sc=>{
-      if(!mix[sc.id]) mix[sc.id] = {};
+  html += `<div class="panel"><div class="scrollbox" style="max-height:460px;"><table class="ledger"><thead><tr><th>Pdt Sub Cat</th>`;
+  MONTHS.forEach(m=> html += `<th>${m}</th>`);
+  html += `</tr></thead><tbody>`;
+  subCats.forEach(sc=>{
+    if(!mix[sc.id]) mix[sc.id] = {};
+    html += `<tr><td>${sc.name}</td>`;
+    MONTHS.forEach(m=>{
       const v = mix[sc.id][m];
-      rowTotal += (+v||0);
       html += `<td><input type="number" step="any" class="paretomixcell" data-sc="${sc.id}" data-month="${m}" value="${v ?? ''}"></td>`;
     });
-    html += pctTotalCell(rowTotal);
     html += `</tr>`;
   });
-  html += `</tbody></table></div></div>`;
+  html += `<tr class="subtotal"><td>Total</td>`;
+  MONTHS.forEach(m=>{
+    const total = subCats.reduce((s,sc)=> s+(+mix[sc.id][m]||0), 0);
+    html += pctTotalCell(total);
+  });
+  html += `</tr></tbody></table></div></div>`;
 
   html += `<div class="cyclelabel" style="color:var(--ink-soft); margin:18px 0 8px 0; font-size:11px; text-transform:uppercase; letter-spacing:0.05em; font-weight:700;">Resulting Pareto × Partner-Model × Month GMV (read-only)</div>`;
-  html += `<div class="panel"><div class="scrollbox" style="max-height:320px; overflow-x:auto;"><table class="ledger compact"><colgroup><col style="width:130px;">${subCats.map(()=>'<col style="width:150px;">').join('')}</colgroup><thead><tr><th>Month</th>`;
-  subCats.forEach(sc=> html += `<th>${sc.name}</th>`);
+  html += `<div class="panel"><div class="scrollbox" style="max-height:320px;"><table class="ledger"><thead><tr><th>Pdt Sub Cat</th>`;
+  MONTHS.forEach(m=> html += `<th>${m}</th>`);
   html += `</tr></thead><tbody>`;
-  MONTHS.forEach(m=>{
-    const channelMonthGMV = (+gmv[m]||0) * (+(chMix[paretoMixChannelId]&&chMix[paretoMixChannelId][m])||0) / 100;
-    html += `<tr><td>${m}</td>`;
-    subCats.forEach(sc=>{
+  subCats.forEach(sc=>{
+    html += `<tr><td>${sc.name}</td>`;
+    MONTHS.forEach(m=>{
+      const channelMonthGMV = (+gmv[m]||0) * (+(chMix[paretoMixChannelId]&&chMix[paretoMixChannelId][m])||0) / 100;
       const val = channelMonthGMV * (+mix[sc.id][m]||0) / 100;
       html += `<td>${fmt(val)}</td>`;
     });
@@ -1243,12 +1245,13 @@ function renderParetoMix(host){
   wirePasteBox(host, (rows)=>{
     rows.forEach(parts=>{
       if(parts.length < 2) return;
-      const month = parts[0].trim();
-      if(!MONTHS.includes(month)) return;
-      subCats.forEach((sc,i)=>{
-        if(!mix[sc.id]) mix[sc.id] = {};
+      const scName = parts[0].trim();
+      const sc = subCats.find(s=> s.name.toLowerCase() === scName.toLowerCase());
+      if(!sc) return;
+      if(!mix[sc.id]) mix[sc.id] = {};
+      MONTHS.forEach((m,i)=>{
         const n = cleanNum(parts[i+1]);
-        if(n !== null) mix[sc.id][month] = n;
+        if(n !== null) mix[sc.id][m] = n;
       });
     });
     markDirty();
