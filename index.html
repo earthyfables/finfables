@@ -1224,21 +1224,23 @@ function renderCodbProductWiseFees(container){
   const store = getCycleObj('codbRateCardByCycle');
   if(!store.__productWise) store.__productWise = {};
   const pwStore = store.__productWise; // {liId: {subCatId: value}}
+  pwLineItems.forEach(li=>{ if(!pwStore[li.id]) pwStore[li.id] = {}; });
 
-  let html = `<div class="footnote" style="margin-bottom:14px;">One block per Fee Type — every Product Sub Category as a row, single rate value (no Partner-Model or Month breakdown).</div>`;
+  let html = `<div class="footnote" style="margin-bottom:14px;">Every Product Sub Category as a row, one column per Product-wise Fee Type. Add a new "Product wise" CODB Line Item in CODB Deduction Mapping to get another column here.</div>`;
+  html += pasteBoxHtml('Pdt Sub Cat | ' + pwLineItems.map(li=>li.name).join(' | '));
 
-  pwLineItems.forEach(li=>{
-    if(!pwStore[li.id]) pwStore[li.id] = {};
-
-    html += `<h3 style="margin:24px 0 8px 0; font-size:15px; font-family:'Times New Roman', Times, serif;">${li.name}${li.rateBasis ? ` <span style="font-weight:400; color:var(--ink-soft); font-style:italic; font-size:13px;">(${li.rateBasis})</span>` : ''}</h3>`;
-    html += pasteBoxHtml('Pdt Sub Cat | Rate');
-    html += `<div class="panel"><div class="scrollbox" style="max-height:420px;"><table class="ledger compact"><colgroup><col style="width:220px;"><col style="width:150px;"></colgroup><thead><tr><th style="text-align:left;">Pdt Sub Cat</th><th>Rate</th></tr></thead><tbody>`;
-    subCats.forEach(sc=>{
+  html += `<div class="panel" style="display:inline-block;"><div class="scrollbox" style="max-height:520px;"><table class="ledger compact"><colgroup><col style="width:340px;">${pwLineItems.map(()=>'<col style="width:150px;">').join('')}</colgroup><thead><tr><th style="text-align:left;">Pdt Sub Cat</th>`;
+  pwLineItems.forEach(li=> html += `<th>${li.name}</th>`);
+  html += `</tr></thead><tbody>`;
+  subCats.forEach(sc=>{
+    html += `<tr><td>${sc.name}</td>`;
+    pwLineItems.forEach(li=>{
       const v = pwStore[li.id][sc.id];
-      html += `<tr><td>${sc.name}</td><td><input type="number" step="any" class="codbpwcell" data-li="${li.id}" data-sc="${sc.id}" value="${v!==undefined && v!==''? v : ''}"></td></tr>`;
+      html += `<td><input type="number" step="any" class="codbpwcell" data-li="${li.id}" data-sc="${sc.id}" value="${v!==undefined && v!==''? v : ''}"></td>`;
     });
-    html += `</tbody></table></div></div>`;
+    html += `</tr>`;
   });
+  html += `</tbody></table></div></div>`;
 
   container.innerHTML = html;
 
@@ -1251,29 +1253,19 @@ function renderCodbProductWiseFees(container){
     });
   });
 
-  const pasteBoxes = container.querySelectorAll('.pastebox');
-  let boxIdx = 0;
-  pwLineItems.forEach(li=>{
-    const box = pasteBoxes[boxIdx]; boxIdx++;
-    if(!box) return;
-    const importBtn = box.querySelector('#importBtn');
-    const clearBtn = box.querySelector('#clearPasteBtn');
-    if(importBtn) importBtn.addEventListener('click', ()=>{
-      const text = box.querySelector('#pasteArea').value;
-      const lines2 = text.split(/\r?\n/).map(l=>l.trim()).filter(Boolean);
-      lines2.forEach(line=>{
-        const parts = line.split('\t');
-        if(parts.length < 2) return;
-        const scName = parts[0].trim();
-        const sc = subCats.find(s=> normalizeText(s.name) === normalizeText(scName));
-        if(!sc) return;
-        const n = cleanNum(parts[1]);
+  wirePasteBox(container, (rows)=>{
+    rows.forEach(parts=>{
+      if(parts.length < 2) return;
+      const scName = parts[0].trim();
+      const sc = subCats.find(s=> normalizeText(s.name) === normalizeText(scName));
+      if(!sc) return;
+      pwLineItems.forEach((li,i)=>{
+        const n = cleanNum(parts[i+1]);
         if(n !== null) pwStore[li.id][sc.id] = n;
       });
-      markDirty();
-      renderCodbProductWiseFees(container);
     });
-    if(clearBtn) clearBtn.addEventListener('click', ()=>{ box.querySelector('#pasteArea').value=''; });
+    markDirty();
+    renderCodbProductWiseFees(container);
   });
 }
 
