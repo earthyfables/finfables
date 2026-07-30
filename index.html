@@ -402,7 +402,27 @@ const BRAND_GROUP_OPTIONS = ["Focus","Rainbow"];
 const MODEL_OPTIONS = ["B2C","B2B"];
 const DEFAULT_PARTNER_GROUPS = ["Website","FAM","MAN","Stores","Other MP","Other Offline","QCK"];
 
-const FY_OPTIONS = ["FY25","FY26","FY27","FY28","FY29","FY30","FY31","FY32"];
+// FY27 is the earliest year this tool ever offers (older years are gone).
+// The list is computed fresh every time it's needed (not a fixed array) so
+// that once a fiscal year's March has passed, it stops appearing as an
+// option for NEW cycles — existing cycles already created in that FY are
+// untouched, this only affects what you can pick when creating a new one.
+function getAvailableFYOptions(){
+  const today = new Date();
+  const y = today.getFullYear();
+  const m = today.getMonth(); // 0 = Jan
+  const currentFYEndYear = (m >= 3) ? y+1 : y; // FY ends Mar of this year
+  const currentFYNum = currentFYEndYear % 100;
+  const startFY = 27;
+  const endFY = Math.max(currentFYNum + 5, startFY); // keep a few years of runway ahead
+  const options = [];
+  for(let yy = startFY; yy <= endFY; yy++){
+    const fyEndYear = 2000 + yy;
+    const fyEndDate = new Date(fyEndYear, 2, 31); // Mar 31 of that FY's ending year
+    if(fyEndDate >= today) options.push('FY'+yy);
+  }
+  return options;
+}
 
 function computeCycleMonths(cycle){
   if(cycle.rollingMonths){
@@ -1818,7 +1838,7 @@ function renderCyclePanel(){
       <div class="cyclelabel">Brand</div>
       <select id="cycleBrand">${DATA.brands.map(b=>`<option value="${b.id}">${b.name}</option>`).join('')}</select>
       <div class="cyclelabel">FY</div>
-      <select id="cycleFY">${FY_OPTIONS.map(fy=>`<option value="${fy}">${fy}</option>`).join('')}</select>
+      <select id="cycleFY">${getAvailableFYOptions().map(fy=>`<option value="${fy}">${fy}</option>`).join('')}</select>
       <div class="cyclelabel">Start Month (always ends Mar)</div>
       <select id="cycleStartMonth">${DEFAULT_MONTHS.map(m=>`<option value="${m}">${m}</option>`).join('')}</select>
       <div class="cyclelabel">Version</div>
