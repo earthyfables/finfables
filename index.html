@@ -289,6 +289,7 @@
   .mastertable tbody td input[type=text],
   .mastertable tbody td input[type=number],
   .mastertable tbody td select{padding:5px 7px; font-size:13px;}
+  .mastertable tbody td .readonlycell{display:inline-block; padding:5px 7px; font-size:13px; color:var(--ink);}
   .mastertable td.actionscell{white-space:nowrap; overflow:visible;}
   .btn-sm{
     font-family:'Times New Roman', Times, serif; font-size:12px; padding:4px 11px; border-radius:5px;
@@ -628,6 +629,9 @@ async function loadData(){
    ----------------------------------------------------------------*/
 function fieldInput(row, col){
   const val = row[col.key] ?? '';
+  if(col.readOnly){
+    return `<span class="readonlycell" data-key="${col.key}">${val}</span>`;
+  }
   if(col.type === 'select'){
     const opts = col.options();
     if(opts.length && !opts.some(o=>o.id===val)){
@@ -1074,7 +1078,7 @@ function renderCodbDeductionMappingScreen(container){
     const rsHost = document.createElement('div');
     host.appendChild(rsHost);
     renderMasterTable(rsHost, DATA.codbLineItems, [
-      {key:'name', label:'CODB Line Item', width:240},
+      {key:'name', label:'CODB Line Item', width:240, readOnly:true},
       {key:'rateBasis', label:'Rate Basis', type:'select', options:()=>CODB_RATE_BASIS_OPTIONS.map(v=>({id:v,label:v})), width:180},
       {key:'structure', label:'Structure', type:'select', options:()=>['Marketplace','Other','Product wise'].map(v=>({id:v,label:v})), width:150}
     ], {prefix:'CLI', tableMaxHeight:'65vh', allowAdd:false, paste:false});
