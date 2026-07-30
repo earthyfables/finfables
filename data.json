@@ -15,7 +15,7 @@
       "Feb",
       "Mar"
     ],
-    "savedAt": "2026-07-30T10:07:45.429Z",
+    "savedAt": "2026-07-30T10:19:48.182Z",
     "activeCycleId": "CYC_p9c3kh"
   },
   "channels": [
@@ -419,109 +419,127 @@
       "id": "CLI_we7tng",
       "name": "PGW Costs",
       "expenseLineItemId": "EL_vpsayp",
-      "structure": "Other"
+      "structure": "Other",
+      "rateBasis": "% NSV"
     },
     {
       "id": "CLI_wnbqlw",
       "name": "WH Cost",
       "expenseLineItemId": "EL_vpsayp",
-      "structure": "Other"
+      "structure": "Other",
+      "rateBasis": "Rs Per Gross Qty"
     },
     {
       "id": "CLI_js18tx",
       "name": "Packing Cost",
       "expenseLineItemId": "EL_vpsayp",
-      "structure": "Other"
+      "structure": "Other",
+      "rateBasis": "Rs Per Gross Qty"
     },
     {
       "id": "CLI_ny357m",
       "name": "Shipping Fee - Forward",
       "expenseLineItemId": "EL_vpsayp",
-      "structure": "Other"
+      "structure": "Other",
+      "rateBasis": "Rs Per Gross Qty"
     },
     {
       "id": "CLI_9ftoyg",
       "name": "COD Charges",
       "expenseLineItemId": "EL_vpsayp",
-      "structure": "Other"
+      "structure": "Other",
+      "rateBasis": "Rs Per COD Qty"
     },
     {
       "id": "CLI_qilzq1",
       "name": "Shipping Fee - Mfg to WH",
       "expenseLineItemId": "EL_vpsayp",
-      "structure": "Other"
+      "structure": "Other",
+      "rateBasis": "Rs Per Gross Qty"
     },
     {
       "id": "CLI_cgf218",
       "name": "Shipping Fee - WH to MP/Consumer",
       "expenseLineItemId": "EL_vpsayp",
-      "structure": "Other"
+      "structure": "Other",
+      "rateBasis": "Rs Per Gross Qty"
     },
     {
       "id": "CLI_u9nlrh",
       "name": "Shipping Fee - MP",
       "expenseLineItemId": "EL_vpsayp",
-      "structure": "Marketplace"
+      "structure": "Marketplace",
+      "rateBasis": "Rs Per Gross Qty"
     },
     {
       "id": "CLI_c5qu8y",
       "name": "Shipping Fee - Return",
       "expenseLineItemId": "EL_vpsayp",
-      "structure": "Marketplace"
+      "structure": "Marketplace",
+      "rateBasis": "Rs Per Returns Qty"
     },
     {
       "id": "CLI_e8xfgb",
       "name": "Closing Fee",
       "expenseLineItemId": "EL_vpsayp",
-      "structure": "Marketplace"
+      "structure": "Marketplace",
+      "rateBasis": "Rs Per Gross Qty"
     },
     {
       "id": "CLI_yusbdc",
       "name": "Fixed Fee",
       "expenseLineItemId": "EL_vpsayp",
-      "structure": "Marketplace"
+      "structure": "Marketplace",
+      "rateBasis": "Rs Per Gross Qty"
     },
     {
       "id": "CLI_zr5pow",
       "name": "Technology Fee",
       "expenseLineItemId": "EL_vpsayp",
-      "structure": "Marketplace"
+      "structure": "Marketplace",
+      "rateBasis": "Rs Per Gross Qty"
     },
     {
       "id": "CLI_yumaqg",
       "name": "Pick and Pack",
       "expenseLineItemId": "EL_vpsayp",
-      "structure": "Marketplace"
+      "structure": "Marketplace",
+      "rateBasis": "Rs Per Gross Qty"
     },
     {
       "id": "CLI_wckj3j",
       "name": "Storage Fees",
       "expenseLineItemId": "EL_vpsayp",
-      "structure": "Marketplace"
+      "structure": "Marketplace",
+      "rateBasis": "Rs Per Gross Qty"
     },
     {
       "id": "CLI_0tteo6",
       "name": "Other FUL",
       "expenseLineItemId": "EL_vpsayp",
-      "structure": "Other"
+      "structure": "Other",
+      "rateBasis": "% NSV"
     },
     {
       "id": "CLI_6qsvs6",
       "name": "Comm Cost",
       "expenseLineItemId": "EL_vpsayp",
-      "structure": "Other"
+      "structure": "Other",
+      "rateBasis": "% NSV"
     },
     {
       "id": "CLI_lpq9o5",
       "name": "Fixed Costs - Offline",
       "expenseLineItemId": "EL_vpsayp",
-      "structure": "Other"
+      "structure": "Other",
+      "rateBasis": "Amt per mth"
     },
     {
       "id": "CLI_zw5eze",
       "name": "Variable Costs - Offline",
       "expenseLineItemId": "EL_vpsayp",
-      "structure": "Other"
+      "structure": "Other",
+      "rateBasis": "% NSV"
     }
   ],
   "marketplaceDeductionMapping": [
