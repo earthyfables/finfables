@@ -1369,11 +1369,19 @@ function renderCyclePanel(){
   const panel = document.getElementById('cyclePanel');
   if(!panel) return;
   const cycles = DATA.aopCycles || [];
+
+  // If cycles exist but none is active (e.g. right after migrating old data,
+  // or the active one was deleted), default to the most recently created one
+  // rather than leaving the dropdown selection inconsistent with the data shown.
+  if(cycles.length && !cycles.some(c=>c.id===DATA.meta.activeCycleId)){
+    DATA.meta.activeCycleId = cycles[cycles.length-1].id;
+    applyActiveCycle();
+  }
   const active = getActiveCycle();
 
   let html = '';
   if(cycles.length){
-    html += `<select id="cycleSelect"><option value="">— Default FY (Apr–Mar) —</option>`;
+    html += `<select id="cycleSelect">`;
     cycles.forEach(c=>{
       html += `<option value="${c.id}" ${c.id===DATA.meta.activeCycleId?'selected':''}>${cycleLabel(c)}</option>`;
     });
