@@ -1141,29 +1141,31 @@ function renderCodbMarketplaceFees(container){
 
 function renderCodbOtherFees(container){
   const pms = DATA.partnerModels;
+  const products = DATA.productCategories;
   const otherLineItems = DATA.codbLineItems.filter(li=> li.structure === 'Other');
 
   if(!pms.length){ container.innerHTML = `<div class="footnote">No Partner-Models defined yet — add some in "Partner-Model Master" first.</div>`; return; }
-  if(!otherLineItems.length){ container.innerHTML = `<div class="footnote">No "Other"-structure CODB Line Items defined yet — set a Line Item\'s Structure to "Other" in CODB Deduction Mapping.</div>`; return; }
+  if(!otherLineItems.length){ container.innerHTML = `<div class="footnote">No "Other"-structure CODB Line Items defined yet — set a Line Item's Structure to "Other" in CODB Deduction Mapping.</div>`; return; }
+  if(!products.length){ container.innerHTML = `<div class="footnote">No Product Categories defined yet — add some in "Pareto Master" first.</div>`; return; }
 
-  const store = getCycleObj('codbRateCardByCycle'); // {pmId: {liId: {month: value}}}
+  const store = getCycleObj('codbRateCardByCycle'); // {pmId: {liId: {productId: value}}}
   pms.forEach(pm=>{ if(!store[pm.id]) store[pm.id] = {}; });
 
-  let html = `<div class="footnote" style="margin-bottom:14px;">One block per Fee Type — Partner-Model as columns, Months as rows.</div>`;
+  let html = `<div class="footnote" style="margin-bottom:14px;">One block per Fee Type — Partner-Model as columns, Product Category as rows.</div>`;
 
   otherLineItems.forEach(li=>{
     pms.forEach(pm=>{ if(!store[pm.id][li.id]) store[pm.id][li.id] = {}; });
 
     html += `<h3 style="margin:24px 0 8px 0; font-size:15px; font-family:'Times New Roman', Times, serif;">${li.name}${li.rateBasis ? ` <span style="font-weight:400; color:var(--ink-soft); font-style:italic; font-size:13px;">(${li.rateBasis})</span>` : ''}</h3>`;
-    html += pasteBoxHtml('Month | ' + pms.map(pmLabel).join(' | '));
-    html += `<div class="panel"><div class="scrollbox" style="max-height:320px; overflow-x:auto;"><table class="ledger compact"><colgroup><col style="width:130px;">${pms.map(()=>'<col style="width:150px;">').join('')}</colgroup><thead><tr><th>Month</th>`;
+    html += pasteBoxHtml('Pdt Cat | ' + pms.map(pmLabel).join(' | '));
+    html += `<div class="panel"><div class="scrollbox" style="max-height:320px; overflow-x:auto;"><table class="ledger compact"><colgroup><col style="width:150px;">${pms.map(()=>'<col style="width:150px;">').join('')}</colgroup><thead><tr><th style="text-align:left;">Pdt Cat</th>`;
     pms.forEach(pm=> html += `<th>${pmLabel(pm)}</th>`);
     html += `</tr></thead><tbody>`;
-    MONTHS.forEach(m=>{
-      html += `<tr><td>${m}</td>`;
+    products.forEach(p=>{
+      html += `<tr><td>${p.name}</td>`;
       pms.forEach(pm=>{
-        const v = store[pm.id][li.id][m];
-        html += `<td><input type="number" step="any" class="codbothercell" data-li="${li.id}" data-pm="${pm.id}" data-month="${m}" value="${v!==undefined && v!==''? v : ''}"></td>`;
+        const v = store[pm.id][li.id][p.id];
+        html += `<td><input type="number" step="any" class="codbothercell" data-li="${li.id}" data-pm="${pm.id}" data-product="${p.id}" value="${v!==undefined && v!==''? v : ''}"></td>`;
       });
       html += `</tr>`;
     });
@@ -1175,7 +1177,7 @@ function renderCodbOtherFees(container){
   container.querySelectorAll('.codbothercell').forEach(inp=>{
     inp.addEventListener('change', ()=>{
       const n = cleanNum(inp.value);
-      store[inp.dataset.pm][inp.dataset.li][inp.dataset.month] = n===null ? '' : n;
+      store[inp.dataset.pm][inp.dataset.li][inp.dataset.product] = n===null ? '' : n;
       markDirty();
       renderCodbOtherFees(container);
     });
@@ -1194,12 +1196,13 @@ function renderCodbOtherFees(container){
       lines2.forEach(line=>{
         const parts = line.split('\t');
         if(parts.length < 2) return;
-        const month = parts[0].trim();
-        if(!MONTHS.includes(month)) return;
+        const pname = parts[0].trim();
+        const p = products.find(pp=> normalizeText(pp.name) === normalizeText(pname));
+        if(!p) return;
         pms.forEach((pm,i2)=>{
           if(!store[pm.id][li.id]) store[pm.id][li.id] = {};
           const n = cleanNum(parts[i2+1]);
-          if(n !== null) store[pm.id][li.id][month] = n;
+          if(n !== null) store[pm.id][li.id][p.id] = n;
         });
       });
       markDirty();
