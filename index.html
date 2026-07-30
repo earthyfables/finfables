@@ -1416,7 +1416,28 @@ function renderCyclePanel(){
     });
   });
 
-  const copyFromSel = panel.querySelector('#cycleCopyFrom');
+function copyCycleInputData(destCycleId, srcCycleId){
+  if(!srcCycleId) return;
+  ['salesInputByCycle','codbRateCardByCycle','miscInputsByCycle','cashFlowItemsByCycle'].forEach(k=>{
+    const srcRows = (DATA[k] && DATA[k][srcCycleId]) || [];
+    DATA[k] = DATA[k] || {};
+    // Deep-copy with fresh row ids so edits in the new cycle never collide with the source.
+    DATA[k][destCycleId] = srcRows.map(r=> ({...r, id: uid('COPY')}));
+  });
+}
+
+function createAndActivateCycle(brandId, fy, startMonth, version, copyFromId){
+  const newCycle = {id: uid('CYC'), brandId, fy, startMonth, version};
+  DATA.aopCycles.push(newCycle);
+  copyCycleInputData(newCycle.id, copyFromId);
+  DATA.meta.activeCycleId = newCycle.id;
+  applyActiveCycle();
+  cycleFormOpen = false;
+  markDirty();
+  render();
+}
+
+const copyFromSel = panel.querySelector('#cycleCopyFrom');
   if(copyFromSel) copyFromSel.addEventListener('change', ()=>{
     const src = cycles.find(c=>c.id===copyFromSel.value);
     if(src){
@@ -1433,6 +1454,7 @@ function renderCyclePanel(){
     const brandId = panel.querySelector('#cycleBrand').value;
     const fy = panel.querySelector('#cycleFY').value;
     const startMonth = panel.querySelector('#cycleStartMonth').value;
+    const copyFromId = copyFromSel ? copyFromSel.value : '';
 
     if(cycleVersionType === 'AOP'){
       const existingAOP = cycles.find(c=>c.brandId===brandId && c.fy===fy && c.version==='AOP');
@@ -1449,34 +1471,16 @@ function renderCyclePanel(){
         }
         // Fall through to creating an LE revision instead.
         const n = nextLENumber(cycles, brandId, fy);
-        const newCycle = {id: uid('CYC'), brandId, fy, startMonth, version:`LE${n}`};
-        DATA.aopCycles.push(newCycle);
-        DATA.meta.activeCycleId = newCycle.id;
-        applyActiveCycle();
-        cycleFormOpen = false;
-        markDirty();
-        render();
+        createAndActivateCycle(brandId, fy, startMonth, `LE${n}`, copyFromId);
         return;
       }
-      const newCycle = {id: uid('CYC'), brandId, fy, startMonth, version:'AOP'};
-      DATA.aopCycles.push(newCycle);
-      DATA.meta.activeCycleId = newCycle.id;
-      applyActiveCycle();
-      cycleFormOpen = false;
-      markDirty();
-      render();
+      createAndActivateCycle(brandId, fy, startMonth, 'AOP', copyFromId);
       return;
     }
 
     // LE: auto-numbered, resets per Brand+FY (each new FY starts back at LE1).
     const n = nextLENumber(cycles, brandId, fy);
-    const newCycle = {id: uid('CYC'), brandId, fy, startMonth, version:`LE${n}`};
-    DATA.aopCycles.push(newCycle);
-    DATA.meta.activeCycleId = newCycle.id;
-    applyActiveCycle();
-    cycleFormOpen = false;
-    markDirty();
-    render();
+    createAndActivateCycle(brandId, fy, startMonth, `LE${n}`, copyFromId);
   });
 }
 
