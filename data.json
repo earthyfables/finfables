@@ -15,7 +15,7 @@
       "Feb",
       "Mar"
     ],
-    "savedAt": "2026-07-30T11:03:33.729Z",
+    "savedAt": "2026-07-30T11:13:56.769Z",
     "activeCycleId": "CYC_p9c3kh"
   },
   "channels": [
@@ -426,7 +426,7 @@
       "id": "CLI_js18tx",
       "name": "Packing Cost",
       "expenseLineItemId": "EL_vpsayp",
-      "structure": "Other",
+      "structure": "NA",
       "rateBasis": "Rs Per Gross Qty"
     },
     {
