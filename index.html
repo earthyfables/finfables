@@ -1022,20 +1022,30 @@ function renderMarketplaceDeductionMapping(container){
   if(saveBtn) saveBtn.addEventListener('click', ()=>{ markDirty(); });
 }
 
+let codbDeductionMappingSubTab = 'lineItems';
 function renderCodbDeductionMappingScreen(container){
-  container.innerHTML = `
-    <div id="codbLineItemsHost"></div>
-    <hr style="border:none; border-top:1px solid var(--line); margin:26px 0;">
-    <div id="marketplaceMappingHost"></div>
-  `;
-  renderMasterTable(container.querySelector('#codbLineItemsHost'), DATA.codbLineItems, [
-    {key:'name', label:'CODB Line Item', width:240},
-    {key:'expenseLineItemId', label:'Expense Line Item', type:'select', options:()=>optList(DATA.expenseLineItems, x=>x.name), width:220},
-    {key:'rateBasis', label:'Rate Basis', type:'select', options:()=>CODB_RATE_BASIS_OPTIONS.map(v=>({id:v,label:v})), width:180},
-    {key:'structure', label:'Structure', type:'select', options:()=>['Marketplace','Other','Product wise'].map(v=>({id:v,label:v})), width:150}
-  ], {prefix:'CLI', addLabel:'Add', tableMaxHeight:'320px', onChange: ()=> renderMarketplaceDeductionMapping(container.querySelector('#marketplaceMappingHost'))});
-  const mmHost = container.querySelector('#marketplaceMappingHost');
-  renderMarketplaceDeductionMapping(mmHost);
+  const pillsHtml = `<div class="pillbar">
+    <button class="pill ${codbDeductionMappingSubTab==='lineItems'?'active':''}" data-cdmtab="lineItems">CODB Line Items</button>
+    <button class="pill ${codbDeductionMappingSubTab==='marketplaceMapping'?'active':''}" data-cdmtab="marketplaceMapping">Marketplace Deduction Mapping</button>
+  </div>`;
+  container.innerHTML = pillsHtml + `<div id="codbDeductionMappingSubHost"></div>`;
+  container.querySelectorAll('[data-cdmtab]').forEach(btn=>{
+    btn.addEventListener('click', ()=>{
+      codbDeductionMappingSubTab = btn.dataset.cdmtab;
+      renderCodbDeductionMappingScreen(container);
+    });
+  });
+  const host = container.querySelector('#codbDeductionMappingSubHost');
+  if(codbDeductionMappingSubTab === 'lineItems'){
+    renderMasterTable(host, DATA.codbLineItems, [
+      {key:'name', label:'CODB Line Item', width:240},
+      {key:'expenseLineItemId', label:'Expense Line Item', type:'select', options:()=>optList(DATA.expenseLineItems, x=>x.name), width:220},
+      {key:'rateBasis', label:'Rate Basis', type:'select', options:()=>CODB_RATE_BASIS_OPTIONS.map(v=>({id:v,label:v})), width:180},
+      {key:'structure', label:'Structure', type:'select', options:()=>['Marketplace','Other','Product wise'].map(v=>({id:v,label:v})), width:150}
+    ], {prefix:'CLI', addLabel:'Add', tableMaxHeight:'520px'});
+  } else {
+    renderMarketplaceDeductionMapping(host);
+  }
 }
 
 let codbRateCardSubTab = 'marketplace';
@@ -1229,7 +1239,7 @@ function renderCodbProductWiseFees(container){
   let html = `<div class="footnote" style="margin-bottom:14px;">Every Product Sub Category as a row, one column per Product-wise Fee Type. Add a new "Product wise" CODB Line Item in CODB Deduction Mapping to get another column here.</div>`;
   html += pasteBoxHtml('Pdt Sub Cat | ' + pwLineItems.map(li=>li.name).join(' | '));
 
-  html += `<div class="panel" style="display:inline-block;"><div class="scrollbox" style="max-height:75vh;"><table class="ledger compact"><colgroup><col style="width:340px;">${pwLineItems.map(()=>'<col style="width:150px;">').join('')}</colgroup><thead><tr><th style="text-align:left;">Pdt Sub Cat</th>`;
+  html += `<div class="panel" style="display:inline-block;"><div class="scrollbox" style="max-height:75vh;"><table class="ledger compact"><colgroup><col style="width:420px;">${pwLineItems.map(()=>'<col style="width:150px;">').join('')}</colgroup><thead><tr><th style="text-align:left;">Pdt Sub Cat</th>`;
   pwLineItems.forEach(li=> html += `<th>${li.name}</th>`);
   html += `</tr></thead><tbody>`;
   subCats.forEach(sc=>{
