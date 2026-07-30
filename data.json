@@ -15,7 +15,8 @@
       "Feb",
       "Mar"
     ],
-    "savedAt": "2026-07-29T14:31:23.408Z"
+    "savedAt": "2026-07-30T03:37:12.027Z",
+    "activeCycleId": "CYC_p9c3kh"
   },
   "channels": [
     {
@@ -1469,5 +1470,158 @@
       "amrp": 499,
       "acogs": 123
     }
-  ]
+  ],
+  "aopCycles": [
+    {
+      "id": "CYC_p9c3kh",
+      "brandId": "BR1",
+      "fy": "FY27",
+      "startMonth": "Aug",
+      "version": "AOP",
+      "published": false
+    }
+  ],
+  "salesInputByCycle": {
+    "": [
+      {
+        "id": "SI1",
+        "skuId": "PSC_ttd6f0",
+        "channelId": "CH1",
+        "month": "Apr",
+        "qty": 10000,
+        "discountPct": 5,
+        "amrp": 100,
+        "acogs": 40,
+        "gstPct": 18
+      },
+      {
+        "id": "SI2",
+        "skuId": "PSC_ttd6f0",
+        "channelId": "CH2",
+        "month": "Apr",
+        "qty": 6000,
+        "discountPct": 8,
+        "amrp": 100,
+        "acogs": 40,
+        "gstPct": 18
+      },
+      {
+        "id": "SI3",
+        "skuId": "PSC_ttd6f0",
+        "channelId": "CH3",
+        "month": "Apr",
+        "qty": 3000,
+        "discountPct": 12,
+        "amrp": 180,
+        "acogs": 70,
+        "gstPct": 18
+      }
+    ]
+  },
+  "codbRateCardByCycle": {
+    "": [
+      {
+        "id": "RC1",
+        "channelId": "CH1",
+        "lineItemId": "EL1",
+        "rateType": "%",
+        "rateValue": 3,
+        "appliedOn": "Net Sales"
+      },
+      {
+        "id": "RC2",
+        "channelId": "CH2",
+        "lineItemId": "EL1",
+        "rateType": "%",
+        "rateValue": 5,
+        "appliedOn": "Net Sales"
+      },
+      {
+        "id": "RC3",
+        "channelId": "CH3",
+        "lineItemId": "EL3",
+        "rateType": "%",
+        "rateValue": 15,
+        "appliedOn": "Gross Sales"
+      },
+      {
+        "id": "RC4",
+        "channelId": "CH1",
+        "lineItemId": "EL2",
+        "rateType": "Value/Unit",
+        "rateValue": 2,
+        "appliedOn": "Qty"
+      },
+      {
+        "id": "RC5",
+        "channelId": "CH2",
+        "lineItemId": "EL2",
+        "rateType": "Value/Unit",
+        "rateValue": 3,
+        "appliedOn": "Qty"
+      },
+      {
+        "id": "RC6",
+        "channelId": "CH3",
+        "lineItemId": "EL2",
+        "rateType": "Value/Unit",
+        "rateValue": 5,
+        "appliedOn": "Qty"
+      }
+    ]
+  },
+  "miscInputsByCycle": {
+    "": [
+      {
+        "id": "MI1",
+        "lineItemId": "EL6",
+        "month": "Apr",
+        "amount": 200000
+      },
+      {
+        "id": "MI2",
+        "lineItemId": "EL7",
+        "month": "Apr",
+        "amount": 350000
+      },
+      {
+        "id": "MI3",
+        "lineItemId": "EL8",
+        "month": "Apr",
+        "amount": 100000
+      },
+      {
+        "id": "MI4",
+        "lineItemId": "EL9",
+        "month": "Apr",
+        "amount": 80000
+      }
+    ]
+  },
+  "cashFlowItemsByCycle": {
+    "": [
+      {
+        "id": "CF1",
+        "category": "Capex",
+        "month": "Apr",
+        "amount": 0
+      },
+      {
+        "id": "CF2",
+        "category": "Change in Working Capital",
+        "month": "Apr",
+        "amount": 0
+      },
+      {
+        "id": "CF3",
+        "category": "Financing Inflow / Outflow",
+        "month": "Apr",
+        "amount": 0
+      }
+    ]
+  },
+  "monthlyGMVByCycle": {
+    "": {},
+    "CYC_p9c3kh": {}
+  }
 }
