@@ -1115,7 +1115,8 @@ function renderMonthlyGMV(host){
   html += pasteBoxHtml('Month | GMV');
   html += `<div class="panel"><div class="scrollbox" style="max-height:460px;"><table class="ledger compact"><colgroup><col style="width:130px;"><col style="width:150px;"></colgroup><thead><tr><th>Month</th><th>GMV</th></tr></thead><tbody>`;
   MONTHS.forEach(m=>{
-    html += `<tr><td>${m}</td><td><input type="number" step="any" class="gmvcell" data-month="${m}" value="${gmv[m] ?? ''}"></td></tr>`;
+    const v = gmv[m];
+    html += `<tr><td>${m}</td><td><input type="number" step="1" class="gmvcell" data-month="${m}" value="${v!==undefined && v!==''? Math.round(v) : ''}"></td></tr>`;
   });
   html += `<tr class="subtotal"><td>FY Total</td><td>${fmt(total)}</td></tr>`;
   html += `</tbody></table></div></div>`;
@@ -1123,7 +1124,7 @@ function renderMonthlyGMV(host){
 
   host.querySelectorAll('.gmvcell').forEach(inp=>{
     inp.addEventListener('change', ()=>{
-      gmv[inp.dataset.month] = inp.value===''?'':parseFloat(inp.value);
+      gmv[inp.dataset.month] = inp.value===''?'':Math.round(parseFloat(inp.value));
       markDirty();
       renderMonthlyGMV(host);
     });
@@ -1135,7 +1136,7 @@ function renderMonthlyGMV(host){
       const month = parts[0].trim();
       if(!MONTHS.includes(month)) return;
       const n = cleanNum(parts[1]);
-      if(n !== null) gmv[month] = n;
+      if(n !== null) gmv[month] = Math.round(n);
     });
     markDirty();
     renderMonthlyGMV(host);
