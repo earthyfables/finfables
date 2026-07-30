@@ -1045,16 +1045,18 @@ function renderCodbRateCardScreen(container){
     });
   });
 
-  let html = `<div class="footnote" style="margin-bottom:14px;">Auto-populated from your masters — one row per Partner-Model × Fee Type × Product Category, ASP Bands as columns.</div>`;
-  html += pasteBoxHtml('Partner-Model | Fee Type | Pdt Cat | ' + bands.map(b=>b.name).join(' | '));
+  let html = `<div class="footnote" style="margin-bottom:14px;">Auto-populated from your masters — one block per Partner-Model + Fee Type, every Product Category as a row, ASP Bands as columns.</div>`;
 
-  html += `<div class="panel"><div class="scrollbox" style="max-height:560px;"><table class="ledger"><thead><tr><th style="text-align:left;">Partner-Model</th><th style="text-align:left;">Fee Type</th><th style="text-align:left;">Pdt Cat</th>`;
-  bands.forEach(b=> html += `<th>${b.name}</th>`);
-  html += `</tr></thead><tbody>`;
   pms.forEach(pm=>{
     lineItems.forEach(li=>{
+      const grid = store[pm.id][li.id];
+      html += `<h3 style="margin:24px 0 8px 0; font-size:15px; font-family:'Times New Roman', Times, serif;">${pmLabel(pm)} - ${li.name}${li.rateBasis ? ` <span style="font-weight:400; color:var(--ink-soft); font-style:italic; font-size:13px;">(${li.rateBasis})</span>` : ''}</h3>`;
+      html += pasteBoxHtml('Partner-Model | Fee Type | Pdt Cat | ' + bands.map(b=>b.name).join(' | '));
+      html += `<div class="panel"><div class="scrollbox" style="max-height:320px;"><table class="ledger"><thead><tr><th style="text-align:left;">Partner-Model</th><th style="text-align:left;">Fee Type</th><th style="text-align:left;">Pdt Cat</th>`;
+      bands.forEach(b=> html += `<th>${b.name}</th>`);
+      html += `</tr></thead><tbody>`;
       products.forEach(p=>{
-        const cell = store[pm.id][li.id][p.id];
+        const cell = grid[p.id];
         html += `<tr><td>${pmLabel(pm)}</td><td>${li.name}</td><td>${p.name}</td>`;
         bands.forEach(b=>{
           const v = cell[b.id];
@@ -1062,9 +1064,9 @@ function renderCodbRateCardScreen(container){
         });
         html += `</tr>`;
       });
+      html += `</tbody></table></div></div>`;
     });
   });
-  html += `</tbody></table></div></div>`;
 
   container.innerHTML = html;
 
@@ -1077,24 +1079,36 @@ function renderCodbRateCardScreen(container){
     });
   });
 
-  wirePasteBox(container, (rows)=>{
-    rows.forEach(parts=>{
-      if(parts.length < 4) return;
-      const pmName = parts[0].trim();
-      const liName = parts[1].trim();
-      const productName = parts[2].trim();
-      const pm = pms.find(x=> normalizeText(pmLabel(x)) === normalizeText(pmName));
-      const li = lineItems.find(x=> normalizeText(x.name) === normalizeText(liName));
-      const p = products.find(x=> normalizeText(x.name) === normalizeText(productName));
-      if(!pm || !p || !li) return;
-      const cell = store[pm.id][li.id][p.id];
-      bands.forEach((b,i2)=>{
-        const n = cleanNum(parts[i2+3]);
-        if(n !== null) cell[b.id] = n;
+  // Each block's paste box is matched to its grid by DOM order (Partner-Model x Fee Type, same order as the loops above).
+  const pasteBoxes = container.querySelectorAll('.pastebox');
+  let boxIdx = 0;
+  pms.forEach(pm=>{
+    lineItems.forEach(li=>{
+      const box = pasteBoxes[boxIdx]; boxIdx++;
+      if(!box) return;
+      const grid = store[pm.id][li.id];
+      const importBtn = box.querySelector('#importBtn');
+      const clearBtn = box.querySelector('#clearPasteBtn');
+      if(importBtn) importBtn.addEventListener('click', ()=>{
+        const text = box.querySelector('#pasteArea').value;
+        const lines2 = text.split(/\r?\n/).map(l=>l.trim()).filter(Boolean);
+        lines2.forEach(line=>{
+          const parts = line.split('\t');
+          if(parts.length < 4) return;
+          const pname = parts[2].trim();
+          const p = products.find(pp=> normalizeText(pp.name) === normalizeText(pname));
+          if(!p) return;
+          const cell = grid[p.id];
+          bands.forEach((b,i2)=>{
+            const n = cleanNum(parts[i2+3]);
+            if(n !== null) cell[b.id] = n;
+          });
+        });
+        markDirty();
+        renderCodbRateCardScreen(container);
       });
+      if(clearBtn) clearBtn.addEventListener('click', ()=>{ box.querySelector('#pasteArea').value=''; });
     });
-    markDirty();
-    renderCodbRateCardScreen(container);
   });
 }
 
