@@ -15,7 +15,7 @@
       "Feb",
       "Mar"
     ],
-    "savedAt": "2026-07-30T11:35:01.812Z",
+    "savedAt": "2026-07-30T11:37:46.994Z",
     "activeCycleId": "CYC_p9c3kh"
   },
   "channels": [
@@ -433,7 +433,7 @@
       "id": "CLI_ny357m",
       "name": "Shipping Fee - Forward",
       "expenseLineItemId": "EL_vpsayp",
-      "structure": "Other",
+      "structure": "Product wise",
       "rateBasis": "Rs Per Gross Qty"
     },
     {
@@ -2400,7 +2400,8 @@
           "PSC_vgqab2": 60,
           "PSC_jfzy5a": 5,
           "PSC_hf2t1m": 5
-        }
+        },
+        "CLI_ny357m": {}
       }
     }
   },
