@@ -1045,17 +1045,17 @@ function renderCodbRateCardScreen(container){
     });
   });
 
-  let html = `<div class="footnote" style="margin-bottom:14px;">Auto-populated from your masters — one row per Partner-Model × Product Category × Fee Type, ASP Bands as columns.</div>`;
-  html += pasteBoxHtml('Partner-Model | Pdt Cat | Fee Type | ' + bands.map(b=>b.name).join(' | '));
+  let html = `<div class="footnote" style="margin-bottom:14px;">Auto-populated from your masters — one row per Partner-Model × Fee Type × Product Category, ASP Bands as columns.</div>`;
+  html += pasteBoxHtml('Partner-Model | Fee Type | Pdt Cat | ' + bands.map(b=>b.name).join(' | '));
 
-  html += `<div class="panel"><div class="scrollbox" style="max-height:560px;"><table class="ledger"><thead><tr><th style="text-align:left;">Partner-Model</th><th style="text-align:left;">Pdt Cat</th><th style="text-align:left;">Fee Type</th>`;
+  html += `<div class="panel"><div class="scrollbox" style="max-height:560px;"><table class="ledger"><thead><tr><th style="text-align:left;">Partner-Model</th><th style="text-align:left;">Fee Type</th><th style="text-align:left;">Pdt Cat</th>`;
   bands.forEach(b=> html += `<th>${b.name}</th>`);
   html += `</tr></thead><tbody>`;
   pms.forEach(pm=>{
     lineItems.forEach(li=>{
       products.forEach(p=>{
         const cell = store[pm.id][li.id][p.id];
-        html += `<tr><td>${pmLabel(pm)}</td><td>${p.name}</td><td>${li.name}</td>`;
+        html += `<tr><td>${pmLabel(pm)}</td><td>${li.name}</td><td>${p.name}</td>`;
         bands.forEach(b=>{
           const v = cell[b.id];
           html += `<td><input type="number" step="any" class="codbratecell" data-pm="${pm.id}" data-li="${li.id}" data-product="${p.id}" data-band="${b.id}" value="${v!==undefined && v!==''? v : ''}"></td>`;
@@ -1081,11 +1081,11 @@ function renderCodbRateCardScreen(container){
     rows.forEach(parts=>{
       if(parts.length < 4) return;
       const pmName = parts[0].trim();
-      const productName = parts[1].trim();
-      const liName = parts[2].trim();
+      const liName = parts[1].trim();
+      const productName = parts[2].trim();
       const pm = pms.find(x=> normalizeText(pmLabel(x)) === normalizeText(pmName));
-      const p = products.find(x=> normalizeText(x.name) === normalizeText(productName));
       const li = lineItems.find(x=> normalizeText(x.name) === normalizeText(liName));
+      const p = products.find(x=> normalizeText(x.name) === normalizeText(productName));
       if(!pm || !p || !li) return;
       const cell = store[pm.id][li.id][p.id];
       bands.forEach((b,i2)=>{
