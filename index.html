@@ -510,7 +510,7 @@ const SEED = {
   productGroups:[{id:"PG1",name:"Personal Care"}],
   productCategories:[{id:"PC1",name:"Towels",productGroupId:"PG1"}],
   productSubCategories:[{id:"PSC1",name:"Bath Towel",productGroupId:"PG1",productCategoryId:"PC1",amrp:100,acogs:40}],
-  salesInputByCycle:{'':[]}, codbRateCardByCycle:{'':{}}, miscInputsByCycle:{'':[]}, cashFlowItemsByCycle:{'':[]}, discMarginGstByCycle:{'':{}}
+  salesInputByCycle:{'':[]}, codbRateCardByCycle:{'':{}}, miscInputsByCycle:{'':{}}, cashFlowItemsByCycle:{'':[]}, discMarginGstByCycle:{'':{}}
 };
 
 function uid(prefix){ return prefix + "_" + Math.random().toString(36).slice(2,8); }
@@ -548,7 +548,7 @@ async function loadData(){
   // Migrate salesInput/codbRateCard/miscInputs/cashFlowItems from the old flat-array
   // shape into the new cycle-scoped shape ({'': [...], [cycleId]: [...]}) so that
   // pre-existing data lands in the default (no-cycle) bucket rather than being lost.
-  ['salesInputByCycle','miscInputsByCycle','cashFlowItemsByCycle'].forEach(k=>{
+  ['salesInputByCycle','cashFlowItemsByCycle'].forEach(k=>{
     if(!DATA[k]){
       const oldKey = k.replace('ByCycle','');
       DATA[k] = { '': Array.isArray(DATA[oldKey]) ? DATA[oldKey] : [] };
@@ -557,6 +557,31 @@ async function loadData(){
   });
   if(!DATA.codbRateCardByCycle) DATA.codbRateCardByCycle = {'':{}};
   if(!DATA.codbRateCardByCycle['']) DATA.codbRateCardByCycle[''] = {};
+  // miscInputsByCycle: migrate from the old array-of-rows shape ({lineItemId, month,
+  // amount} rows) into the new auto-populated {lineItemId: {month: amount}} shape,
+  // converting existing entries rather than losing them.
+  if(!DATA.miscInputsByCycle){
+    const oldRows = Array.isArray(DATA.miscInputs) ? DATA.miscInputs : [];
+    DATA.miscInputsByCycle = { '': {} };
+    oldRows.forEach(r=>{
+      if(!r.lineItemId || !r.month) return;
+      if(!DATA.miscInputsByCycle[''][r.lineItemId]) DATA.miscInputsByCycle[''][r.lineItemId] = {};
+      DATA.miscInputsByCycle[''][r.lineItemId][r.month] = r.amount;
+    });
+  }
+  Object.keys(DATA.miscInputsByCycle).forEach(cycleKey=>{
+    const val = DATA.miscInputsByCycle[cycleKey];
+    if(Array.isArray(val)){
+      const obj = {};
+      val.forEach(r=>{
+        if(!r.lineItemId || !r.month) return;
+        if(!obj[r.lineItemId]) obj[r.lineItemId] = {};
+        obj[r.lineItemId][r.month] = r.amount;
+      });
+      DATA.miscInputsByCycle[cycleKey] = obj;
+    }
+  });
+  if(!DATA.miscInputsByCycle['']) DATA.miscInputsByCycle[''] = {};
   if(!DATA.productSubCategories){
     // Migrate any pre-existing SKU Master rows into the new Product Sub Category master
     // so nothing is lost when upgrading from the old SKU-based structure.
@@ -1323,6 +1348,71 @@ function renderCodbProductWiseFees(container){
   });
 }
 
+function renderMiscInputsScreen(container){
+  const miscItems = DATA.expenseLineItems.filter(x=> x.type !== 'CODB' && normalizeText(x.name) !== normalizeText('CAC'));
+
+  if(!miscItems.length){
+    container.innerHTML = `<div class="footnote">No qualifying Expense Line Items yet — add some in "Expense Line Item Master" (anything other than a CODB-type item or "CAC" shows up here automatically).</div>`;
+    return;
+  }
+
+  const store = getCycleObj('miscInputsByCycle'); // {lineItemId: {month: amount}}
+  miscItems.forEach(li=>{ if(!store[li.id]) store[li.id] = {}; });
+
+  let html = `<div class="footnote" style="margin-bottom:14px;">Auto-populated from Expense Line Item Master — every expense other than CODB-type and CAC. Month wise Amount.</div>`;
+  html += pasteBoxHtml('Line Item | ' + MONTHS.join(' | '));
+
+  const hasData = miscItems.some(li=> Object.values(store[li.id]).some(v=> v!==undefined && v!==''));
+  if(hasData) html += `<button class="btn-sm danger" id="clearMiscBtn" style="margin-bottom:14px;">🗑 Delete all Misc Inputs data</button>`;
+
+  html += `<div class="panel"><div class="scrollbox" style="max-height:65vh; overflow-x:auto;"><table class="ledger"><thead><tr><th style="text-align:left;">Line Item</th>`;
+  MONTHS.forEach(m=> html += `<th>${m}</th>`);
+  html += `</tr></thead><tbody>`;
+  miscItems.forEach(li=>{
+    html += `<tr><td>${li.name}</td>`;
+    MONTHS.forEach(m=>{
+      const v = store[li.id][m];
+      html += `<td><input type="number" step="any" class="misccell" data-li="${li.id}" data-month="${m}" value="${v!==undefined && v!==''? v : ''}"></td>`;
+    });
+    html += `</tr>`;
+  });
+  html += `</tbody></table></div></div>`;
+
+  container.innerHTML = html;
+
+  const clearMiscBtn = container.querySelector('#clearMiscBtn');
+  if(clearMiscBtn) clearMiscBtn.addEventListener('click', ()=>{
+    if(!confirm('Delete all Misc Inputs data? This cannot be undone.')) return;
+    miscItems.forEach(li=>{ store[li.id] = {}; });
+    markDirty();
+    renderMiscInputsScreen(container);
+  });
+
+  container.querySelectorAll('.misccell').forEach(inp=>{
+    inp.addEventListener('change', ()=>{
+      const n = cleanNum(inp.value);
+      store[inp.dataset.li][inp.dataset.month] = n===null ? '' : n;
+      markDirty();
+      renderMiscInputsScreen(container);
+    });
+  });
+
+  wirePasteBox(container, (rows)=>{
+    rows.forEach(parts=>{
+      if(parts.length < 2) return;
+      const liName = parts[0].trim();
+      const li = miscItems.find(x=> normalizeText(x.name) === normalizeText(liName));
+      if(!li) return;
+      MONTHS.forEach((m,i)=>{
+        const n = cleanNum(parts[i+1]);
+        if(n !== null) store[li.id][m] = n;
+      });
+    });
+    markDirty();
+    renderMiscInputsScreen(container);
+  });
+}
+
 const PARETO_SUB_TABS = [
   {key:'productGroups', label:'Product Group'},
   {key:'productCategories', label:'Product Category'},
@@ -1894,12 +1984,8 @@ const TABS = {
     render: renderCodbRateCardScreen
   },
   miscInputs:{
-    title:'Miscellaneous Inputs', desc:'Brand marketing, salaries, overheads, rent — direct monthly amounts.',
-    render:(el)=> renderEditableTable(el, getCycleData('miscInputsByCycle'), [
-      {key:'lineItemId', label:'Line item', type:'select', options:()=>optList(DATA.expenseLineItems.filter(x=>x.type==='MISC'),x=>x.name)},
-      {key:'month', label:'Month', type:'select', options:()=>MONTHS.map(m=>({id:m,label:m}))},
-      {key:'amount', label:'Amount', type:'number'}
-    ], {prefix:'MI'})
+    title:'Miscellaneous Inputs', desc:'Auto-populated from Expense Line Item Master — every expense other than CODB-type and CAC. Month wise Amount.',
+    render: renderMiscInputsScreen
   },
   cashFlowItems:{
     title:'Cash Flow Adjustments', desc:'Capex, working-capital change and financing flows, by month — layered onto EBITDA in the Cash Flow output.',
@@ -2281,13 +2367,13 @@ function renderCyclePanel(){
 
 function copyCycleInputData(destCycleId, srcCycleId){
   if(!srcCycleId) return;
-  ['salesInputByCycle','miscInputsByCycle','cashFlowItemsByCycle'].forEach(k=>{
+  ['salesInputByCycle','cashFlowItemsByCycle'].forEach(k=>{
     const srcRows = (DATA[k] && DATA[k][srcCycleId]) || [];
     DATA[k] = DATA[k] || {};
     // Deep-copy with fresh row ids so edits in the new cycle never collide with the source.
     DATA[k][destCycleId] = srcRows.map(r=> ({...r, id: uid('COPY')}));
   });
-  ['monthlyGMVByCycle','channelMixByCycle','categoryMixByCycle','paretoMixByCycle','discMarginGstByCycle','codbRateCardByCycle'].forEach(k=>{
+  ['monthlyGMVByCycle','channelMixByCycle','categoryMixByCycle','paretoMixByCycle','discMarginGstByCycle','codbRateCardByCycle','miscInputsByCycle'].forEach(k=>{
     const srcObj = (DATA[k] && DATA[k][srcCycleId]) || {};
     DATA[k] = DATA[k] || {};
     DATA[k][destCycleId] = JSON.parse(JSON.stringify(srcObj));
