@@ -313,14 +313,14 @@
   }
   .ledger th:first-child{text-align:left;}
   .ledger td{padding:6px 11px; text-align:right; border-bottom:1px solid var(--line); white-space:nowrap; font-variant-numeric:tabular-nums;}
-  .ledger td input[type=number], .ledger td input.gmvcell{
+  .ledger td input[type=number], .ledger td input.gmvcell, .ledger td input.misccell{
     width:90px; border:1px solid var(--line) !important; border-radius:5px; padding:5px 7px;
     background:#fff; color:var(--ink); font-size:13px;
   }
-  .ledger td input[type=number]:focus, .ledger td input.gmvcell:focus{
+  .ledger td input[type=number]:focus, .ledger td input.gmvcell:focus, .ledger td input.misccell:focus{
     outline:none; border-color:var(--accent) !important; box-shadow:0 0 0 2px var(--accent-soft);
   }
-  .ledger td input.gmvcell{text-align:right; font-variant-numeric:tabular-nums; font-family:'Times New Roman', Times, serif;}
+  .ledger td input.gmvcell, .ledger td input.misccell{text-align:right; font-variant-numeric:tabular-nums; font-family:'Times New Roman', Times, serif;}
   .ledger td:first-child{text-align:left; white-space:normal; font-variant-numeric:normal;}
   .ledger tr.section td:first-child{font-weight:700; color:var(--ink); padding-top:18px; font-size:14px;}
   .ledger tr.subtotal td{font-weight:700; border-top:1px solid var(--ink); border-bottom:1px double var(--ink);}
