@@ -15,7 +15,7 @@
       "Feb",
       "Mar"
     ],
-    "savedAt": "2026-07-30T05:15:24.393Z",
+    "savedAt": "2026-07-30T05:53:45.522Z",
     "activeCycleId": "CYC_p9c3kh"
   },
   "channels": [
@@ -1636,7 +1636,16 @@
   "channelMixByCycle": {
     "CYC_p9c3kh": {
       "PM_2nak1i": {},
-      "PM_rkv6uj": {},
+      "PM_rkv6uj": {
+        "Aug": 100,
+        "Sep": 100,
+        "Oct": 50,
+        "Nov": 50,
+        "Dec": 50,
+        "Jan": 50,
+        "Feb": 50,
+        "Mar": 50
+      },
       "PM_y0jzso": {},
       "PM_esn20h": {},
       "PM_jgo2r9": {},
@@ -1647,17 +1656,681 @@
     "CYC_p9c3kh": {
       "PM_2nak1i": {
         "PC_r2a5ac": {},
-        "PC_ofapit": {},
-        "PC_t2rz6a": {},
-        "PC_d7uwz1": {},
-        "PC_h01yup": {},
-        "PC_21bqv5": {},
-        "PC_mg39l4": {},
-        "PC_edydxr": {},
-        "PC_ncey5g": {},
-        "PC_e0ut7i": {},
-        "PC_9kyg3s": {},
-        "PC_43yr0v": {}
+        "PC_ofapit": {
+          "Aug": 40,
+          "Sep": 40,
+          "Oct": 38,
+          "Nov": 37,
+          "Dec": 37,
+          "Jan": 37,
+          "Feb": 37,
+          "Mar": 37
+        },
+        "PC_t2rz6a": {
+          "Aug": 4,
+          "Sep": 4,
+          "Oct": 4,
+          "Nov": 4,
+          "Dec": 4,
+          "Jan": 4,
+          "Feb": 4,
+          "Mar": 4
+        },
+        "PC_d7uwz1": {
+          "Aug": 5,
+          "Sep": 5,
+          "Oct": 6,
+          "Nov": 6,
+          "Dec": 6,
+          "Jan": 6,
+          "Feb": 6,
+          "Mar": 6
+        },
+        "PC_h01yup": {
+          "Aug": 17,
+          "Sep": 17,
+          "Oct": 16,
+          "Nov": 16,
+          "Dec": 16,
+          "Jan": 16,
+          "Feb": 16,
+          "Mar": 16
+        },
+        "PC_21bqv5": {
+          "Aug": 4,
+          "Sep": 4,
+          "Oct": 4,
+          "Nov": 5,
+          "Dec": 5,
+          "Jan": 5,
+          "Feb": 5,
+          "Mar": 5
+        },
+        "PC_mg39l4": {
+          "Aug": 2,
+          "Sep": 2,
+          "Oct": 2,
+          "Nov": 3,
+          "Dec": 3,
+          "Jan": 3,
+          "Feb": 3,
+          "Mar": 3
+        },
+        "PC_edydxr": {
+          "Aug": 6,
+          "Sep": 6,
+          "Oct": 8,
+          "Nov": 8,
+          "Dec": 8,
+          "Jan": 8,
+          "Feb": 8,
+          "Mar": 8
+        },
+        "PC_ncey5g": {
+          "Aug": 1,
+          "Sep": 1,
+          "Oct": 1,
+          "Nov": 1,
+          "Dec": 1,
+          "Jan": 1,
+          "Feb": 2,
+          "Mar": 2
+        },
+        "PC_e0ut7i": {
+          "Aug": 1,
+          "Sep": 1,
+          "Oct": 1,
+          "Nov": 1,
+          "Dec": 1,
+          "Jan": 1,
+          "Feb": 1,
+          "Mar": 1
+        },
+        "PC_9kyg3s": {
+          "Aug": 1,
+          "Sep": 1,
+          "Oct": 0,
+          "Nov": 1,
+          "Dec": 1,
+          "Jan": 1,
+          "Feb": 1,
+          "Mar": 1
+        },
+        "PC_43yr0v": {
+          "Aug": 0,
+          "Sep": 0,
+          "Oct": 0,
+          "Nov": 0,
+          "Dec": 0,
+          "Jan": 0,
+          "Feb": 0,
+          "Mar": 0
+        }
+      },
+      "PM_rkv6uj": {
+        "PC_r2a5ac": {},
+        "PC_ofapit": {
+          "Aug": 40,
+          "Sep": 40,
+          "Oct": 38,
+          "Nov": 37,
+          "Dec": 37,
+          "Jan": 37,
+          "Feb": 37,
+          "Mar": 37
+        },
+        "PC_t2rz6a": {
+          "Aug": 4,
+          "Sep": 4,
+          "Oct": 4,
+          "Nov": 4,
+          "Dec": 4,
+          "Jan": 4,
+          "Feb": 4,
+          "Mar": 4
+        },
+        "PC_d7uwz1": {
+          "Aug": 5,
+          "Sep": 5,
+          "Oct": 6,
+          "Nov": 6,
+          "Dec": 6,
+          "Jan": 6,
+          "Feb": 6,
+          "Mar": 6
+        },
+        "PC_h01yup": {
+          "Aug": 17,
+          "Sep": 17,
+          "Oct": 16,
+          "Nov": 16,
+          "Dec": 16,
+          "Jan": 16,
+          "Feb": 16,
+          "Mar": 16
+        },
+        "PC_21bqv5": {
+          "Aug": 4,
+          "Sep": 4,
+          "Oct": 4,
+          "Nov": 5,
+          "Dec": 5,
+          "Jan": 5,
+          "Feb": 5,
+          "Mar": 5
+        },
+        "PC_mg39l4": {
+          "Aug": 2,
+          "Sep": 2,
+          "Oct": 2,
+          "Nov": 3,
+          "Dec": 3,
+          "Jan": 3,
+          "Feb": 3,
+          "Mar": 3
+        },
+        "PC_edydxr": {
+          "Aug": 6,
+          "Sep": 6,
+          "Oct": 8,
+          "Nov": 8,
+          "Dec": 8,
+          "Jan": 8,
+          "Feb": 8,
+          "Mar": 8
+        },
+        "PC_ncey5g": {
+          "Aug": 1,
+          "Sep": 1,
+          "Oct": 1,
+          "Nov": 1,
+          "Dec": 1,
+          "Jan": 1,
+          "Feb": 2,
+          "Mar": 2
+        },
+        "PC_e0ut7i": {
+          "Aug": 1,
+          "Sep": 1,
+          "Oct": 1,
+          "Nov": 1,
+          "Dec": 1,
+          "Jan": 1,
+          "Feb": 1,
+          "Mar": 1
+        },
+        "PC_9kyg3s": {
+          "Aug": 1,
+          "Sep": 1,
+          "Oct": 0,
+          "Nov": 1,
+          "Dec": 1,
+          "Jan": 1,
+          "Feb": 1,
+          "Mar": 1
+        },
+        "PC_43yr0v": {
+          "Aug": 0,
+          "Sep": 0,
+          "Oct": 0,
+          "Nov": 0,
+          "Dec": 0,
+          "Jan": 0,
+          "Feb": 0,
+          "Mar": 0
+        }
+      },
+      "PM_y0jzso": {
+        "PC_r2a5ac": {},
+        "PC_ofapit": {
+          "Aug": 40,
+          "Sep": 40,
+          "Oct": 38,
+          "Nov": 37,
+          "Dec": 37,
+          "Jan": 37,
+          "Feb": 37,
+          "Mar": 37
+        },
+        "PC_t2rz6a": {
+          "Aug": 4,
+          "Sep": 4,
+          "Oct": 4,
+          "Nov": 4,
+          "Dec": 4,
+          "Jan": 4,
+          "Feb": 4,
+          "Mar": 4
+        },
+        "PC_d7uwz1": {
+          "Aug": 5,
+          "Sep": 5,
+          "Oct": 6,
+          "Nov": 6,
+          "Dec": 6,
+          "Jan": 6,
+          "Feb": 6,
+          "Mar": 6
+        },
+        "PC_h01yup": {
+          "Aug": 17,
+          "Sep": 17,
+          "Oct": 16,
+          "Nov": 16,
+          "Dec": 16,
+          "Jan": 16,
+          "Feb": 16,
+          "Mar": 16
+        },
+        "PC_21bqv5": {
+          "Aug": 4,
+          "Sep": 4,
+          "Oct": 4,
+          "Nov": 5,
+          "Dec": 5,
+          "Jan": 5,
+          "Feb": 5,
+          "Mar": 5
+        },
+        "PC_mg39l4": {
+          "Aug": 2,
+          "Sep": 2,
+          "Oct": 2,
+          "Nov": 3,
+          "Dec": 3,
+          "Jan": 3,
+          "Feb": 3,
+          "Mar": 3
+        },
+        "PC_edydxr": {
+          "Aug": 6,
+          "Sep": 6,
+          "Oct": 8,
+          "Nov": 8,
+          "Dec": 8,
+          "Jan": 8,
+          "Feb": 8,
+          "Mar": 8
+        },
+        "PC_ncey5g": {
+          "Aug": 1,
+          "Sep": 1,
+          "Oct": 1,
+          "Nov": 1,
+          "Dec": 1,
+          "Jan": 1,
+          "Feb": 2,
+          "Mar": 2
+        },
+        "PC_e0ut7i": {
+          "Aug": 1,
+          "Sep": 1,
+          "Oct": 1,
+          "Nov": 1,
+          "Dec": 1,
+          "Jan": 1,
+          "Feb": 1,
+          "Mar": 1
+        },
+        "PC_9kyg3s": {
+          "Aug": 1,
+          "Sep": 1,
+          "Oct": 0,
+          "Nov": 1,
+          "Dec": 1,
+          "Jan": 1,
+          "Feb": 1,
+          "Mar": 1
+        },
+        "PC_43yr0v": {
+          "Aug": 0,
+          "Sep": 0,
+          "Oct": 0,
+          "Nov": 0,
+          "Dec": 0,
+          "Jan": 0,
+          "Feb": 0,
+          "Mar": 0
+        }
+      },
+      "PM_esn20h": {
+        "PC_r2a5ac": {},
+        "PC_ofapit": {
+          "Aug": 40,
+          "Sep": 40,
+          "Oct": 38,
+          "Nov": 37,
+          "Dec": 37,
+          "Jan": 37,
+          "Feb": 37,
+          "Mar": 37
+        },
+        "PC_t2rz6a": {
+          "Aug": 4,
+          "Sep": 4,
+          "Oct": 4,
+          "Nov": 4,
+          "Dec": 4,
+          "Jan": 4,
+          "Feb": 4,
+          "Mar": 4
+        },
+        "PC_d7uwz1": {
+          "Aug": 5,
+          "Sep": 5,
+          "Oct": 6,
+          "Nov": 6,
+          "Dec": 6,
+          "Jan": 6,
+          "Feb": 6,
+          "Mar": 6
+        },
+        "PC_h01yup": {
+          "Aug": 17,
+          "Sep": 17,
+          "Oct": 16,
+          "Nov": 16,
+          "Dec": 16,
+          "Jan": 16,
+          "Feb": 16,
+          "Mar": 16
+        },
+        "PC_21bqv5": {
+          "Aug": 4,
+          "Sep": 4,
+          "Oct": 4,
+          "Nov": 5,
+          "Dec": 5,
+          "Jan": 5,
+          "Feb": 5,
+          "Mar": 5
+        },
+        "PC_mg39l4": {
+          "Aug": 2,
+          "Sep": 2,
+          "Oct": 2,
+          "Nov": 3,
+          "Dec": 3,
+          "Jan": 3,
+          "Feb": 3,
+          "Mar": 3
+        },
+        "PC_edydxr": {
+          "Aug": 6,
+          "Sep": 6,
+          "Oct": 8,
+          "Nov": 8,
+          "Dec": 8,
+          "Jan": 8,
+          "Feb": 8,
+          "Mar": 8
+        },
+        "PC_ncey5g": {
+          "Aug": 1,
+          "Sep": 1,
+          "Oct": 1,
+          "Nov": 1,
+          "Dec": 1,
+          "Jan": 1,
+          "Feb": 2,
+          "Mar": 2
+        },
+        "PC_e0ut7i": {
+          "Aug": 1,
+          "Sep": 1,
+          "Oct": 1,
+          "Nov": 1,
+          "Dec": 1,
+          "Jan": 1,
+          "Feb": 1,
+          "Mar": 1
+        },
+        "PC_9kyg3s": {
+          "Aug": 1,
+          "Sep": 1,
+          "Oct": 0,
+          "Nov": 1,
+          "Dec": 1,
+          "Jan": 1,
+          "Feb": 1,
+          "Mar": 1
+        },
+        "PC_43yr0v": {
+          "Aug": 0,
+          "Sep": 0,
+          "Oct": 0,
+          "Nov": 0,
+          "Dec": 0,
+          "Jan": 0,
+          "Feb": 0,
+          "Mar": 0
+        }
+      },
+      "PM_jgo2r9": {
+        "PC_r2a5ac": {},
+        "PC_ofapit": {
+          "Aug": 40,
+          "Sep": 40,
+          "Oct": 38,
+          "Nov": 37,
+          "Dec": 37,
+          "Jan": 37,
+          "Feb": 37,
+          "Mar": 37
+        },
+        "PC_t2rz6a": {
+          "Aug": 4,
+          "Sep": 4,
+          "Oct": 4,
+          "Nov": 4,
+          "Dec": 4,
+          "Jan": 4,
+          "Feb": 4,
+          "Mar": 4
+        },
+        "PC_d7uwz1": {
+          "Aug": 5,
+          "Sep": 5,
+          "Oct": 6,
+          "Nov": 6,
+          "Dec": 6,
+          "Jan": 6,
+          "Feb": 6,
+          "Mar": 6
+        },
+        "PC_h01yup": {
+          "Aug": 17,
+          "Sep": 17,
+          "Oct": 16,
+          "Nov": 16,
+          "Dec": 16,
+          "Jan": 16,
+          "Feb": 16,
+          "Mar": 16
+        },
+        "PC_21bqv5": {
+          "Aug": 4,
+          "Sep": 4,
+          "Oct": 4,
+          "Nov": 5,
+          "Dec": 5,
+          "Jan": 5,
+          "Feb": 5,
+          "Mar": 5
+        },
+        "PC_mg39l4": {
+          "Aug": 2,
+          "Sep": 2,
+          "Oct": 2,
+          "Nov": 3,
+          "Dec": 3,
+          "Jan": 3,
+          "Feb": 3,
+          "Mar": 3
+        },
+        "PC_edydxr": {
+          "Aug": 6,
+          "Sep": 6,
+          "Oct": 8,
+          "Nov": 8,
+          "Dec": 8,
+          "Jan": 8,
+          "Feb": 8,
+          "Mar": 8
+        },
+        "PC_ncey5g": {
+          "Aug": 1,
+          "Sep": 1,
+          "Oct": 1,
+          "Nov": 1,
+          "Dec": 1,
+          "Jan": 1,
+          "Feb": 2,
+          "Mar": 2
+        },
+        "PC_e0ut7i": {
+          "Aug": 1,
+          "Sep": 1,
+          "Oct": 1,
+          "Nov": 1,
+          "Dec": 1,
+          "Jan": 1,
+          "Feb": 1,
+          "Mar": 1
+        },
+        "PC_9kyg3s": {
+          "Aug": 1,
+          "Sep": 1,
+          "Oct": 0,
+          "Nov": 1,
+          "Dec": 1,
+          "Jan": 1,
+          "Feb": 1,
+          "Mar": 1
+        },
+        "PC_43yr0v": {
+          "Aug": 0,
+          "Sep": 0,
+          "Oct": 0,
+          "Nov": 0,
+          "Dec": 0,
+          "Jan": 0,
+          "Feb": 0,
+          "Mar": 0
+        }
+      },
+      "PM_2gw084": {
+        "PC_r2a5ac": {},
+        "PC_ofapit": {
+          "Aug": 40,
+          "Sep": 40,
+          "Oct": 38,
+          "Nov": 37,
+          "Dec": 37,
+          "Jan": 37,
+          "Feb": 37,
+          "Mar": 37
+        },
+        "PC_t2rz6a": {
+          "Aug": 4,
+          "Sep": 4,
+          "Oct": 4,
+          "Nov": 4,
+          "Dec": 4,
+          "Jan": 4,
+          "Feb": 4,
+          "Mar": 4
+        },
+        "PC_d7uwz1": {
+          "Aug": 5,
+          "Sep": 5,
+          "Oct": 6,
+          "Nov": 6,
+          "Dec": 6,
+          "Jan": 6,
+          "Feb": 6,
+          "Mar": 6
+        },
+        "PC_h01yup": {
+          "Aug": 17,
+          "Sep": 17,
+          "Oct": 16,
+          "Nov": 16,
+          "Dec": 16,
+          "Jan": 16,
+          "Feb": 16,
+          "Mar": 16
+        },
+        "PC_21bqv5": {
+          "Aug": 4,
+          "Sep": 4,
+          "Oct": 4,
+          "Nov": 5,
+          "Dec": 5,
+          "Jan": 5,
+          "Feb": 5,
+          "Mar": 5
+        },
+        "PC_mg39l4": {
+          "Aug": 2,
+          "Sep": 2,
+          "Oct": 2,
+          "Nov": 3,
+          "Dec": 3,
+          "Jan": 3,
+          "Feb": 3,
+          "Mar": 3
+        },
+        "PC_edydxr": {
+          "Aug": 6,
+          "Sep": 6,
+          "Oct": 8,
+          "Nov": 8,
+          "Dec": 8,
+          "Jan": 8,
+          "Feb": 8,
+          "Mar": 8
+        },
+        "PC_ncey5g": {
+          "Aug": 1,
+          "Sep": 1,
+          "Oct": 1,
+          "Nov": 1,
+          "Dec": 1,
+          "Jan": 1,
+          "Feb": 2,
+          "Mar": 2
+        },
+        "PC_e0ut7i": {
+          "Aug": 1,
+          "Sep": 1,
+          "Oct": 1,
+          "Nov": 1,
+          "Dec": 1,
+          "Jan": 1,
+          "Feb": 1,
+          "Mar": 1
+        },
+        "PC_9kyg3s": {
+          "Aug": 1,
+          "Sep": 1,
+          "Oct": 0,
+          "Nov": 1,
+          "Dec": 1,
+          "Jan": 1,
+          "Feb": 1,
+          "Mar": 1
+        },
+        "PC_43yr0v": {
+          "Aug": 0,
+          "Sep": 0,
+          "Oct": 0,
+          "Nov": 0,
+          "Dec": 0,
+          "Jan": 0,
+          "Feb": 0,
+          "Mar": 0
+        }
       }
     }
   },
