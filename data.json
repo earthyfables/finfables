@@ -15,7 +15,7 @@
       "Feb",
       "Mar"
     ],
-    "savedAt": "2026-07-31T07:00:59.150Z",
+    "savedAt": "2026-07-31T07:05:04.517Z",
     "activeCycleId": "CYC_p9c3kh"
   },
   "channels": [
@@ -1135,667 +1135,445 @@
       "id": "PSC_iupr9z",
       "name": "Bath Mats Cotton reversible  - 50X80",
       "productGroupId": "PG_zhux4k",
-      "productCategoryId": "PC_r2a5ac",
-      "amrp": 951,
-      "acogs": 210,
-      "gstPct": 5
+      "productCategoryId": "PC_r2a5ac"
     },
     {
       "id": "PSC_ud8148",
       "name": "Bath Mats Microfiber  - 60X40",
       "productGroupId": "PG_zhux4k",
-      "productCategoryId": "PC_r2a5ac",
-      "amrp": 475,
-      "acogs": 113,
-      "gstPct": 5
+      "productCategoryId": "PC_r2a5ac"
     },
     {
       "id": "PSC_659x70",
       "name": "Bath Towels Combed 600 GSM Set of 1  - 75x150",
       "productGroupId": "PG_zhux4k",
-      "productCategoryId": "PC_ofapit",
-      "amrp": 951,
-      "acogs": 270,
-      "gstPct": 5
+      "productCategoryId": "PC_ofapit"
     },
     {
       "id": "PSC_vfhh8o",
       "name": "Bath Towels Combed 600 GSM set of 2 - 75x150",
       "productGroupId": "PG_zhux4k",
-      "productCategoryId": "PC_ofapit",
-      "amrp": 1902,
-      "acogs": 540,
-      "gstPct": 5
+      "productCategoryId": "PC_ofapit"
     },
     {
       "id": "PSC_ya8p7s",
       "name": "Bath Towels Combed 600 GSM Set of 1 Small Size - 70X140",
       "productGroupId": "PG_zhux4k",
-      "productCategoryId": "PC_ofapit",
-      "amrp": 899,
-      "acogs": 250,
-      "gstPct": 5
+      "productCategoryId": "PC_ofapit"
     },
     {
       "id": "PSC_grcdkh",
       "name": "Bath Towels Combed Combo 600 GSM set of 1 Bath , 2 Hand   - 75x150",
       "productGroupId": "PG_zhux4k",
-      "productCategoryId": "PC_ofapit",
-      "amrp": 1332,
-      "acogs": 388,
-      "gstPct": 5
+      "productCategoryId": "PC_ofapit"
     },
     {
       "id": "PSC_0dqud5",
       "name": "Bath Towels Combed Combo 600 GSM set of 2 Bath , 2 Hand 2 Face  - 75x150",
       "productGroupId": "PG_zhux4k",
-      "productCategoryId": "PC_ofapit",
-      "amrp": 2570,
-      "acogs": 704,
-      "gstPct": 5
+      "productCategoryId": "PC_ofapit"
     },
     {
       "id": "PSC_bs6c4a",
       "name": "Bath Towels Combed 500 GSM set of 1  - 140X70",
       "productGroupId": "PG_zhux4k",
-      "productCategoryId": "PC_ofapit",
-      "amrp": 665,
-      "acogs": 186,
-      "gstPct": 5
+      "productCategoryId": "PC_ofapit"
     },
     {
       "id": "PSC_gnojd0",
       "name": "Bath Towels Combed 500 GSM set of 2 - 140X70",
       "productGroupId": "PG_zhux4k",
-      "productCategoryId": "PC_ofapit",
-      "amrp": 1330,
-      "acogs": 186,
-      "gstPct": 5
+      "productCategoryId": "PC_ofapit"
     },
     {
       "id": "PSC_2ypjy3",
       "name": "Towels Bamboo Bath Set of 1 - 73X150",
       "productGroupId": "PG_zhux4k",
-      "productCategoryId": "PC_ofapit",
-      "amrp": 1237,
-      "acogs": 331,
-      "gstPct": 5
+      "productCategoryId": "PC_ofapit"
     },
     {
       "id": "PSC_tje05j",
       "name": "Towels Bamboo Set of 2 - 73X150",
       "productGroupId": "PG_zhux4k",
-      "productCategoryId": "PC_ofapit",
-      "amrp": 1274,
-      "acogs": 662,
-      "gstPct": 5
+      "productCategoryId": "PC_ofapit"
     },
     {
       "id": "PSC_j4pq6u",
       "name": "Bath Towels Combed 400 GSM - 70X140",
       "productGroupId": "PG_zhux4k",
-      "productCategoryId": "PC_ofapit",
-      "amrp": 475,
-      "acogs": 145,
-      "gstPct": 5
+      "productCategoryId": "PC_ofapit"
     },
     {
       "id": "PSC_24kez0",
       "name": "Bath Towels Combed 400 GSM Set of 2  - 70X140",
       "productGroupId": "PG_zhux4k",
-      "productCategoryId": "PC_ofapit",
-      "amrp": 899,
-      "acogs": 290,
-      "gstPct": 5
+      "productCategoryId": "PC_ofapit"
     },
     {
       "id": "PSC_57jds1",
       "name": "Face Towels 600 GSM set of 3 - 30X30",
       "productGroupId": "PG_zhux4k",
-      "productCategoryId": "PC_t2rz6a",
-      "amrp": 380,
-      "acogs": 72,
-      "gstPct": 5
+      "productCategoryId": "PC_t2rz6a"
     },
     {
       "id": "PSC_a7uh0h",
       "name": "Face Towels 600 GSM set of 4 - 30X30",
       "productGroupId": "PG_zhux4k",
-      "productCategoryId": "PC_t2rz6a",
-      "amrp": 475,
-      "acogs": 96,
-      "gstPct": 5
+      "productCategoryId": "PC_t2rz6a"
     },
     {
       "id": "PSC_wv5mal",
       "name": "Triply Frying Pan  - 20",
       "productGroupId": "PG_vf9yhj",
-      "productCategoryId": "PC_d7uwz1",
-      "amrp": 1456,
-      "acogs": 362,
-      "gstPct": 5
+      "productCategoryId": "PC_d7uwz1"
     },
     {
       "id": "PSC_0hporz",
       "name": "Triply Frying Pan  - 22",
       "productGroupId": "PG_vf9yhj",
-      "productCategoryId": "PC_d7uwz1",
-      "amrp": 1627,
-      "acogs": 437,
-      "gstPct": 5
+      "productCategoryId": "PC_d7uwz1"
     },
     {
       "id": "PSC_v29f1s",
       "name": "Triply Frying Pan  - 24",
       "productGroupId": "PG_vf9yhj",
-      "productCategoryId": "PC_d7uwz1",
-      "amrp": 1799,
-      "acogs": 514,
-      "gstPct": 5
+      "productCategoryId": "PC_d7uwz1"
     },
     {
       "id": "PSC_ojadqb",
       "name": "Triply Sauce Pan  - 14",
       "productGroupId": "PG_vf9yhj",
-      "productCategoryId": "PC_d7uwz1",
-      "amrp": 1370,
-      "acogs": 370,
-      "gstPct": 5
+      "productCategoryId": "PC_d7uwz1"
     },
     {
       "id": "PSC_5c4qz5",
       "name": "Triply Sauce Pan  - 16",
       "productGroupId": "PG_vf9yhj",
-      "productCategoryId": "PC_d7uwz1",
-      "amrp": 1541,
-      "acogs": 432,
-      "gstPct": 5
+      "productCategoryId": "PC_d7uwz1"
     },
     {
       "id": "PSC_g7o7w9",
       "name": "Triply Sauce Pan  - 18",
       "productGroupId": "PG_vf9yhj",
-      "productCategoryId": "PC_d7uwz1",
-      "amrp": 1713,
-      "acogs": 528,
-      "gstPct": 5
+      "productCategoryId": "PC_d7uwz1"
     },
     {
       "id": "PSC_yn1pzp",
       "name": "Stainless Steel Frying Pan  - 20",
       "productGroupId": "PG_vf9yhj",
-      "productCategoryId": "PC_d7uwz1",
-      "amrp": 771,
-      "acogs": 163,
-      "gstPct": 5
+      "productCategoryId": "PC_d7uwz1"
     },
     {
       "id": "PSC_4uuj75",
       "name": "Stainless Steel Frying Pan  - 22",
       "productGroupId": "PG_vf9yhj",
-      "productCategoryId": "PC_d7uwz1",
-      "amrp": 813,
-      "acogs": 203,
-      "gstPct": 5
+      "productCategoryId": "PC_d7uwz1"
     },
     {
       "id": "PSC_frk6vu",
       "name": "Stainless Steel Frying Pan  - 24",
       "productGroupId": "PG_vf9yhj",
-      "productCategoryId": "PC_d7uwz1",
-      "amrp": 856,
-      "acogs": 229,
-      "gstPct": 5
+      "productCategoryId": "PC_d7uwz1"
     },
     {
       "id": "PSC_7ly51o",
       "name": "Stainless Steel Hammerred Frying Pan  - 20",
       "productGroupId": "PG_vf9yhj",
-      "productCategoryId": "PC_d7uwz1",
-      "amrp": 813,
-      "acogs": 174,
-      "gstPct": 5
+      "productCategoryId": "PC_d7uwz1"
     },
     {
       "id": "PSC_caq3uy",
       "name": "Stainless Steel Hammerred Frying Pan  - 22",
       "productGroupId": "PG_vf9yhj",
-      "productCategoryId": "PC_d7uwz1",
-      "amrp": 856,
-      "acogs": 218,
-      "gstPct": 5
+      "productCategoryId": "PC_d7uwz1"
     },
     {
       "id": "PSC_5fycm5",
       "name": "Stainless Steel Hammerred Frying Pan  - 24",
       "productGroupId": "PG_vf9yhj",
-      "productCategoryId": "PC_d7uwz1",
-      "amrp": 1028,
-      "acogs": 245,
-      "gstPct": 5
+      "productCategoryId": "PC_d7uwz1"
     },
     {
       "id": "PSC_anpbv2",
       "name": "Hand Towels Combed 600 GSM set of2  - 60X40",
       "productGroupId": "PG_zhux4k",
-      "productCategoryId": "PC_h01yup",
-      "amrp": 475,
-      "acogs": 118,
-      "gstPct": 5
+      "productCategoryId": "PC_h01yup"
     },
     {
       "id": "PSC_704ibx",
       "name": "Hand Towels Combed 600 GSM Set of 4 - 60X40",
       "productGroupId": "PG_zhux4k",
-      "productCategoryId": "PC_h01yup",
-      "amrp": 856,
-      "acogs": 236,
-      "gstPct": 5
+      "productCategoryId": "PC_h01yup"
     },
     {
       "id": "PSC_x06zwa",
       "name": "Hand Towels Bamboo set of 2   - 60X40",
       "productGroupId": "PG_zhux4k",
-      "productCategoryId": "PC_h01yup",
-      "amrp": 570,
-      "acogs": 146,
-      "gstPct": 5
+      "productCategoryId": "PC_h01yup"
     },
     {
       "id": "PSC_rilcbv",
       "name": "Hand Towels Bamboo set of 4  - 60X40",
       "productGroupId": "PG_zhux4k",
-      "productCategoryId": "PC_h01yup",
-      "amrp": 951,
-      "acogs": 292,
-      "gstPct": 5
+      "productCategoryId": "PC_h01yup"
     },
     {
       "id": "PSC_dxmvkf",
       "name": "Hand Towels Combed 400 GSM set of 2  - 60X40",
       "productGroupId": "PG_zhux4k",
-      "productCategoryId": "PC_h01yup",
-      "amrp": 284,
-      "acogs": 76,
-      "gstPct": 5
+      "productCategoryId": "PC_h01yup"
     },
     {
       "id": "PSC_cp6bsm",
       "name": "Hand Towels Combed 400 GSM set of 4 - 60X40",
       "productGroupId": "PG_zhux4k",
-      "productCategoryId": "PC_h01yup",
-      "amrp": 499,
-      "acogs": 152,
-      "gstPct": 5
+      "productCategoryId": "PC_h01yup"
     },
     {
       "id": "PSC_nuzmfh",
       "name": "Triply Kadhai  - 20",
       "productGroupId": "PG_vf9yhj",
-      "productCategoryId": "PC_21bqv5",
-      "amrp": 1713,
-      "acogs": 505,
-      "gstPct": 5
+      "productCategoryId": "PC_21bqv5"
     },
     {
       "id": "PSC_hv9vb8",
       "name": "Triply Kadhai  - 22",
       "productGroupId": "PG_vf9yhj",
-      "productCategoryId": "PC_21bqv5",
-      "amrp": 1970,
-      "acogs": 583,
-      "gstPct": 5
+      "productCategoryId": "PC_21bqv5"
     },
     {
       "id": "PSC_ovcbc1",
       "name": "Triply Kadhai  - 24",
       "productGroupId": "PG_vf9yhj",
-      "productCategoryId": "PC_21bqv5",
-      "amrp": 2142,
-      "acogs": 669,
-      "gstPct": 5
+      "productCategoryId": "PC_21bqv5"
     },
     {
       "id": "PSC_ladycs",
       "name": "Triply Kadhai  - 26",
       "productGroupId": "PG_vf9yhj",
-      "productCategoryId": "PC_21bqv5",
-      "amrp": 2313,
-      "acogs": 759,
-      "gstPct": 5
+      "productCategoryId": "PC_21bqv5"
     },
     {
       "id": "PSC_u6k8rr",
       "name": "Triply Kadhai  - 28",
       "productGroupId": "PG_vf9yhj",
-      "productCategoryId": "PC_21bqv5",
-      "amrp": 2484,
-      "acogs": 842,
-      "gstPct": 5
+      "productCategoryId": "PC_21bqv5"
     },
     {
       "id": "PSC_q1n3rj",
       "name": "Triply Kadhai  - 30",
       "productGroupId": "PG_vf9yhj",
-      "productCategoryId": "PC_21bqv5",
-      "amrp": 2741,
-      "acogs": 940,
-      "gstPct": 5
+      "productCategoryId": "PC_21bqv5"
     },
     {
       "id": "PSC_bm2o45",
       "name": "Gol Kadhai  - 22",
       "productGroupId": "PG_vf9yhj",
-      "productCategoryId": "PC_21bqv5",
-      "amrp": 1627,
-      "acogs": 448,
-      "gstPct": 5
+      "productCategoryId": "PC_21bqv5"
     },
     {
       "id": "PSC_wsi4j3",
       "name": "Gol Kadhai  - 24",
       "productGroupId": "PG_vf9yhj",
-      "productCategoryId": "PC_21bqv5",
-      "amrp": 1713,
-      "acogs": 523,
-      "gstPct": 5
+      "productCategoryId": "PC_21bqv5"
     },
     {
       "id": "PSC_kbxmiv",
       "name": "Gol Kadhai  - 26",
       "productGroupId": "PG_vf9yhj",
-      "productCategoryId": "PC_21bqv5",
-      "amrp": 1884,
-      "acogs": 598,
-      "gstPct": 5
+      "productCategoryId": "PC_21bqv5"
     },
     {
       "id": "PSC_vpb25a",
       "name": "Gol Kadhai  - 28",
       "productGroupId": "PG_vf9yhj",
-      "productCategoryId": "PC_21bqv5",
-      "amrp": 2056,
-      "acogs": 655,
-      "gstPct": 5
+      "productCategoryId": "PC_21bqv5"
     },
     {
       "id": "PSC_d97h80",
       "name": "Stainless Steel Sauce pan  - 14",
       "productGroupId": "PG_vf9yhj",
-      "productCategoryId": "PC_mg39l4",
-      "amrp": 771,
-      "acogs": 170,
-      "gstPct": 5
+      "productCategoryId": "PC_mg39l4"
     },
     {
       "id": "PSC_nf1bw4",
       "name": "Stainless Steel Sauce pan  - 16",
       "productGroupId": "PG_vf9yhj",
-      "productCategoryId": "PC_mg39l4",
-      "amrp": 813,
-      "acogs": 199,
-      "gstPct": 5
+      "productCategoryId": "PC_mg39l4"
     },
     {
       "id": "PSC_w9er1a",
       "name": "Stainless Steel Sauce pan  - 18",
       "productGroupId": "PG_vf9yhj",
-      "productCategoryId": "PC_mg39l4",
-      "amrp": 856,
-      "acogs": 232,
-      "gstPct": 5
+      "productCategoryId": "PC_mg39l4"
     },
     {
       "id": "PSC_90pwo5",
       "name": "Stainless Steel Hammerred Sauce Pan  - 14",
       "productGroupId": "PG_vf9yhj",
-      "productCategoryId": "PC_mg39l4",
-      "amrp": 1113,
-      "acogs": 300,
-      "gstPct": 5
+      "productCategoryId": "PC_mg39l4"
     },
     {
       "id": "PSC_0cq05d",
       "name": "Stainless Steel Hammerred Sauce Pan  - 16",
       "productGroupId": "PG_vf9yhj",
-      "productCategoryId": "PC_mg39l4",
-      "amrp": 1285,
-      "acogs": 364,
-      "gstPct": 5
+      "productCategoryId": "PC_mg39l4"
     },
     {
       "id": "PSC_nx00yi",
       "name": "Stainless Steel Hammerred Sauce Pan  - 18",
       "productGroupId": "PG_vf9yhj",
-      "productCategoryId": "PC_mg39l4",
-      "amrp": 1371,
-      "acogs": 431,
-      "gstPct": 5
+      "productCategoryId": "PC_mg39l4"
     },
     {
       "id": "PSC_e0u7eo",
       "name": "Tope Encapsulated  - 14",
       "productGroupId": "PG_vf9yhj",
-      "productCategoryId": "PC_edydxr",
-      "amrp": 684,
-      "acogs": 170,
-      "gstPct": 5
+      "productCategoryId": "PC_edydxr"
     },
     {
       "id": "PSC_iug7mn",
       "name": "Tope Encapsulated  - 16",
       "productGroupId": "PG_vf9yhj",
-      "productCategoryId": "PC_edydxr",
-      "amrp": 770,
-      "acogs": 199,
-      "gstPct": 5
+      "productCategoryId": "PC_edydxr"
     },
     {
       "id": "PSC_hiwn0h",
       "name": "Tope Encapsulated  - 18",
       "productGroupId": "PG_vf9yhj",
-      "productCategoryId": "PC_edydxr",
-      "amrp": 856,
-      "acogs": 241,
-      "gstPct": 5
+      "productCategoryId": "PC_edydxr"
     },
     {
       "id": "PSC_b30bgu",
       "name": "Tope Encapsulated  - 20",
       "productGroupId": "PG_vf9yhj",
-      "productCategoryId": "PC_edydxr",
-      "amrp": 1027,
-      "acogs": 290,
-      "gstPct": 5
+      "productCategoryId": "PC_edydxr"
     },
     {
       "id": "PSC_t8trza",
       "name": "Tope Encapsulated  - 22",
       "productGroupId": "PG_vf9yhj",
-      "productCategoryId": "PC_edydxr",
-      "amrp": 1199,
-      "acogs": 367,
-      "gstPct": 5
+      "productCategoryId": "PC_edydxr"
     },
     {
       "id": "PSC_dncy3l",
       "name": "Tope Encapsulated  - 24",
       "productGroupId": "PG_vf9yhj",
-      "productCategoryId": "PC_edydxr",
-      "amrp": 1370,
-      "acogs": 437,
-      "gstPct": 5
+      "productCategoryId": "PC_edydxr"
     },
     {
       "id": "PSC_d0vkau",
       "name": "Tope Hammerred - 14",
       "productGroupId": "PG_vf9yhj",
-      "productCategoryId": "PC_edydxr",
-      "amrp": 1027,
-      "acogs": 281,
-      "gstPct": 5
+      "productCategoryId": "PC_edydxr"
     },
     {
       "id": "PSC_d8nzsx",
       "name": "Tope Hammerred - 16",
       "productGroupId": "PG_vf9yhj",
-      "productCategoryId": "PC_edydxr",
-      "amrp": 1113,
-      "acogs": 302,
-      "gstPct": 5
+      "productCategoryId": "PC_edydxr"
     },
     {
       "id": "PSC_36ua4u",
       "name": "Tope Hammerred - 18",
       "productGroupId": "PG_vf9yhj",
-      "productCategoryId": "PC_edydxr",
-      "amrp": 1242,
-      "acogs": 351,
-      "gstPct": 5
+      "productCategoryId": "PC_edydxr"
     },
     {
       "id": "PSC_x96g3t",
       "name": "Tope Hammerred - 19",
       "productGroupId": "PG_vf9yhj",
-      "productCategoryId": "PC_edydxr",
-      "amrp": 1327,
-      "acogs": 404,
-      "gstPct": 5
+      "productCategoryId": "PC_edydxr"
     },
     {
       "id": "PSC_hfywd1",
       "name": "Tope Hammerred - 22",
       "productGroupId": "PG_vf9yhj",
-      "productCategoryId": "PC_edydxr",
-      "amrp": 1456,
-      "acogs": 469,
-      "gstPct": 5
+      "productCategoryId": "PC_edydxr"
     },
     {
       "id": "PSC_ru5tr5",
       "name": "Tope Hammerred - 24",
       "productGroupId": "PG_vf9yhj",
-      "productCategoryId": "PC_edydxr",
-      "amrp": 1713,
-      "acogs": 534,
-      "gstPct": 5
+      "productCategoryId": "PC_edydxr"
     },
     {
       "id": "PSC_kwqrmi",
       "name": "Stainless Steel Tope - 14",
       "productGroupId": "PG_vf9yhj",
-      "productCategoryId": "PC_edydxr",
-      "amrp": 856,
-      "acogs": 258,
-      "gstPct": 5
+      "productCategoryId": "PC_edydxr"
     },
     {
       "id": "PSC_mmidz3",
       "name": "Stainless Steel Tope - 16",
       "productGroupId": "PG_vf9yhj",
-      "productCategoryId": "PC_edydxr",
-      "amrp": 1028,
-      "acogs": 276,
-      "gstPct": 5
+      "productCategoryId": "PC_edydxr"
     },
     {
       "id": "PSC_pe58t1",
       "name": "Stainless Steel Tope - 18",
       "productGroupId": "PG_vf9yhj",
-      "productCategoryId": "PC_edydxr",
-      "amrp": 1113,
-      "acogs": 322,
-      "gstPct": 5
+      "productCategoryId": "PC_edydxr"
     },
     {
       "id": "PSC_1m6xgm",
       "name": "Stainless Steel Tope - 20",
       "productGroupId": "PG_vf9yhj",
-      "productCategoryId": "PC_edydxr",
-      "amrp": 1199,
-      "acogs": 370,
-      "gstPct": 5
+      "productCategoryId": "PC_edydxr"
     },
     {
       "id": "PSC_graitd",
       "name": "Stainless Steel Tope - 22",
       "productGroupId": "PG_vf9yhj",
-      "productCategoryId": "PC_edydxr",
-      "amrp": 1285,
-      "acogs": 430,
-      "gstPct": 5
+      "productCategoryId": "PC_edydxr"
     },
     {
       "id": "PSC_exsr1i",
       "name": "Stainless Steel Tope - 24",
       "productGroupId": "PG_vf9yhj",
-      "productCategoryId": "PC_edydxr",
-      "amrp": 1456,
-      "acogs": 489,
-      "gstPct": 5
+      "productCategoryId": "PC_edydxr"
     },
     {
       "id": "PSC_0nb1br",
       "name": "Stainless Steel Tope Combo  - 16/18/20",
       "productGroupId": "PG_vf9yhj",
-      "productCategoryId": "PC_edydxr",
-      "amrp": 3684,
-      "acogs": 1407,
-      "gstPct": 5
+      "productCategoryId": "PC_edydxr"
     },
     {
       "id": "PSC_7f0pvv",
       "name": "Towels Bamboo 2 Bath & 2 Hand  - 73X150",
       "productGroupId": "PG_zhux4k",
-      "productCategoryId": "PC_ncey5g",
-      "amrp": 3044,
-      "acogs": 808,
-      "gstPct": 5
+      "productCategoryId": "PC_ncey5g"
     },
     {
       "id": "PSC_bogr5s",
       "name": "Triply WOK - 20",
       "productGroupId": "PG_vf9yhj",
-      "productCategoryId": "PC_e0ut7i",
-      "amrp": 1713,
-      "acogs": 432,
-      "gstPct": 5
+      "productCategoryId": "PC_e0ut7i"
     },
     {
       "id": "PSC_zjz3g0",
       "name": "Triply WOK - 22",
       "productGroupId": "PG_vf9yhj",
-      "productCategoryId": "PC_e0ut7i",
-      "amrp": 1799,
-      "acogs": 504,
-      "gstPct": 5
+      "productCategoryId": "PC_e0ut7i"
     },
     {
       "id": "PSC_vgqab2",
       "name": "Triply WOK - 24",
       "productGroupId": "PG_vf9yhj",
-      "productCategoryId": "PC_e0ut7i",
-      "amrp": 1970,
-      "acogs": 600,
-      "gstPct": 5
+      "productCategoryId": "PC_e0ut7i"
     },
     {
       "id": "PSC_jfzy5a",
       "name": "Head Towel  -",
       "productGroupId": "PG_zhux4k",
-      "productCategoryId": "PC_9kyg3s",
-      "amrp": 499,
-      "acogs": 90,
-      "gstPct": 5
+      "productCategoryId": "PC_9kyg3s"
     },
     {
       "id": "PSC_hf2t1m",
       "name": "Gym Towel  -",
       "productGroupId": "PG_zhux4k",
-      "productCategoryId": "PC_43yr0v",
-      "amrp": 499,
-      "acogs": 123,
-      "gstPct": 5
+      "productCategoryId": "PC_43yr0v"
     }
   ],
   "aopCycles": [
@@ -18779,5 +18557,751 @@
       "id": "ASP6",
       "name": ">2000"
     }
-  ]
+  ],
+  "paretoInputByCycle": {
+    "": {
+      "PSC_iupr9z": {
+        "amrp": 951,
+        "acogs": 210,
+        "gstPct": 5
+      },
+      "PSC_ud8148": {
+        "amrp": 475,
+        "acogs": 113,
+        "gstPct": 5
+      },
+      "PSC_659x70": {
+        "amrp": 951,
+        "acogs": 270,
+        "gstPct": 5
+      },
+      "PSC_vfhh8o": {
+        "amrp": 1902,
+        "acogs": 540,
+        "gstPct": 5
+      },
+      "PSC_ya8p7s": {
+        "amrp": 899,
+        "acogs": 250,
+        "gstPct": 5
+      },
+      "PSC_grcdkh": {
+        "amrp": 1332,
+        "acogs": 388,
+        "gstPct": 5
+      },
+      "PSC_0dqud5": {
+        "amrp": 2570,
+        "acogs": 704,
+        "gstPct": 5
+      },
+      "PSC_bs6c4a": {
+        "amrp": 665,
+        "acogs": 186,
+        "gstPct": 5
+      },
+      "PSC_gnojd0": {
+        "amrp": 1330,
+        "acogs": 186,
+        "gstPct": 5
+      },
+      "PSC_2ypjy3": {
+        "amrp": 1237,
+        "acogs": 331,
+        "gstPct": 5
+      },
+      "PSC_tje05j": {
+        "amrp": 1274,
+        "acogs": 662,
+        "gstPct": 5
+      },
+      "PSC_j4pq6u": {
+        "amrp": 475,
+        "acogs": 145,
+        "gstPct": 5
+      },
+      "PSC_24kez0": {
+        "amrp": 899,
+        "acogs": 290,
+        "gstPct": 5
+      },
+      "PSC_57jds1": {
+        "amrp": 380,
+        "acogs": 72,
+        "gstPct": 5
+      },
+      "PSC_a7uh0h": {
+        "amrp": 475,
+        "acogs": 96,
+        "gstPct": 5
+      },
+      "PSC_wv5mal": {
+        "amrp": 1456,
+        "acogs": 362,
+        "gstPct": 5
+      },
+      "PSC_0hporz": {
+        "amrp": 1627,
+        "acogs": 437,
+        "gstPct": 5
+      },
+      "PSC_v29f1s": {
+        "amrp": 1799,
+        "acogs": 514,
+        "gstPct": 5
+      },
+      "PSC_ojadqb": {
+        "amrp": 1370,
+        "acogs": 370,
+        "gstPct": 5
+      },
+      "PSC_5c4qz5": {
+        "amrp": 1541,
+        "acogs": 432,
+        "gstPct": 5
+      },
+      "PSC_g7o7w9": {
+        "amrp": 1713,
+        "acogs": 528,
+        "gstPct": 5
+      },
+      "PSC_yn1pzp": {
+        "amrp": 771,
+        "acogs": 163,
+        "gstPct": 5
+      },
+      "PSC_4uuj75": {
+        "amrp": 813,
+        "acogs": 203,
+        "gstPct": 5
+      },
+      "PSC_frk6vu": {
+        "amrp": 856,
+        "acogs": 229,
+        "gstPct": 5
+      },
+      "PSC_7ly51o": {
+        "amrp": 813,
+        "acogs": 174,
+        "gstPct": 5
+      },
+      "PSC_caq3uy": {
+        "amrp": 856,
+        "acogs": 218,
+        "gstPct": 5
+      },
+      "PSC_5fycm5": {
+        "amrp": 1028,
+        "acogs": 245,
+        "gstPct": 5
+      },
+      "PSC_anpbv2": {
+        "amrp": 475,
+        "acogs": 118,
+        "gstPct": 5
+      },
+      "PSC_704ibx": {
+        "amrp": 856,
+        "acogs": 236,
+        "gstPct": 5
+      },
+      "PSC_x06zwa": {
+        "amrp": 570,
+        "acogs": 146,
+        "gstPct": 5
+      },
+      "PSC_rilcbv": {
+        "amrp": 951,
+        "acogs": 292,
+        "gstPct": 5
+      },
+      "PSC_dxmvkf": {
+        "amrp": 284,
+        "acogs": 76,
+        "gstPct": 5
+      },
+      "PSC_cp6bsm": {
+        "amrp": 499,
+        "acogs": 152,
+        "gstPct": 5
+      },
+      "PSC_nuzmfh": {
+        "amrp": 1713,
+        "acogs": 505,
+        "gstPct": 5
+      },
+      "PSC_hv9vb8": {
+        "amrp": 1970,
+        "acogs": 583,
+        "gstPct": 5
+      },
+      "PSC_ovcbc1": {
+        "amrp": 2142,
+        "acogs": 669,
+        "gstPct": 5
+      },
+      "PSC_ladycs": {
+        "amrp": 2313,
+        "acogs": 759,
+        "gstPct": 5
+      },
+      "PSC_u6k8rr": {
+        "amrp": 2484,
+        "acogs": 842,
+        "gstPct": 5
+      },
+      "PSC_q1n3rj": {
+        "amrp": 2741,
+        "acogs": 940,
+        "gstPct": 5
+      },
+      "PSC_bm2o45": {
+        "amrp": 1627,
+        "acogs": 448,
+        "gstPct": 5
+      },
+      "PSC_wsi4j3": {
+        "amrp": 1713,
+        "acogs": 523,
+        "gstPct": 5
+      },
+      "PSC_kbxmiv": {
+        "amrp": 1884,
+        "acogs": 598,
+        "gstPct": 5
+      },
+      "PSC_vpb25a": {
+        "amrp": 2056,
+        "acogs": 655,
+        "gstPct": 5
+      },
+      "PSC_d97h80": {
+        "amrp": 771,
+        "acogs": 170,
+        "gstPct": 5
+      },
+      "PSC_nf1bw4": {
+        "amrp": 813,
+        "acogs": 199,
+        "gstPct": 5
+      },
+      "PSC_w9er1a": {
+        "amrp": 856,
+        "acogs": 232,
+        "gstPct": 5
+      },
+      "PSC_90pwo5": {
+        "amrp": 1113,
+        "acogs": 300,
+        "gstPct": 5
+      },
+      "PSC_0cq05d": {
+        "amrp": 1285,
+        "acogs": 364,
+        "gstPct": 5
+      },
+      "PSC_nx00yi": {
+        "amrp": 1371,
+        "acogs": 431,
+        "gstPct": 5
+      },
+      "PSC_e0u7eo": {
+        "amrp": 684,
+        "acogs": 170,
+        "gstPct": 5
+      },
+      "PSC_iug7mn": {
+        "amrp": 770,
+        "acogs": 199,
+        "gstPct": 5
+      },
+      "PSC_hiwn0h": {
+        "amrp": 856,
+        "acogs": 241,
+        "gstPct": 5
+      },
+      "PSC_b30bgu": {
+        "amrp": 1027,
+        "acogs": 290,
+        "gstPct": 5
+      },
+      "PSC_t8trza": {
+        "amrp": 1199,
+        "acogs": 367,
+        "gstPct": 5
+      },
+      "PSC_dncy3l": {
+        "amrp": 1370,
+        "acogs": 437,
+        "gstPct": 5
+      },
+      "PSC_d0vkau": {
+        "amrp": 1027,
+        "acogs": 281,
+        "gstPct": 5
+      },
+      "PSC_d8nzsx": {
+        "amrp": 1113,
+        "acogs": 302,
+        "gstPct": 5
+      },
+      "PSC_36ua4u": {
+        "amrp": 1242,
+        "acogs": 351,
+        "gstPct": 5
+      },
+      "PSC_x96g3t": {
+        "amrp": 1327,
+        "acogs": 404,
+        "gstPct": 5
+      },
+      "PSC_hfywd1": {
+        "amrp": 1456,
+        "acogs": 469,
+        "gstPct": 5
+      },
+      "PSC_ru5tr5": {
+        "amrp": 1713,
+        "acogs": 534,
+        "gstPct": 5
+      },
+      "PSC_kwqrmi": {
+        "amrp": 856,
+        "acogs": 258,
+        "gstPct": 5
+      },
+      "PSC_mmidz3": {
+        "amrp": 1028,
+        "acogs": 276,
+        "gstPct": 5
+      },
+      "PSC_pe58t1": {
+        "amrp": 1113,
+        "acogs": 322,
+        "gstPct": 5
+      },
+      "PSC_1m6xgm": {
+        "amrp": 1199,
+        "acogs": 370,
+        "gstPct": 5
+      },
+      "PSC_graitd": {
+        "amrp": 1285,
+        "acogs": 430,
+        "gstPct": 5
+      },
+      "PSC_exsr1i": {
+        "amrp": 1456,
+        "acogs": 489,
+        "gstPct": 5
+      },
+      "PSC_0nb1br": {
+        "amrp": 3684,
+        "acogs": 1407,
+        "gstPct": 5
+      },
+      "PSC_7f0pvv": {
+        "amrp": 3044,
+        "acogs": 808,
+        "gstPct": 5
+      },
+      "PSC_bogr5s": {
+        "amrp": 1713,
+        "acogs": 432,
+        "gstPct": 5
+      },
+      "PSC_zjz3g0": {
+        "amrp": 1799,
+        "acogs": 504,
+        "gstPct": 5
+      },
+      "PSC_vgqab2": {
+        "amrp": 1970,
+        "acogs": 600,
+        "gstPct": 5
+      },
+      "PSC_jfzy5a": {
+        "amrp": 499,
+        "acogs": 90,
+        "gstPct": 5
+      },
+      "PSC_hf2t1m": {
+        "amrp": 499,
+        "acogs": 123,
+        "gstPct": 5
+      }
+    },
+    "CYC_p9c3kh": {
+      "PSC_iupr9z": {
+        "amrp": 951,
+        "acogs": 210,
+        "gstPct": 5
+      },
+      "PSC_ud8148": {
+        "amrp": 475,
+        "acogs": 113,
+        "gstPct": 5
+      },
+      "PSC_659x70": {
+        "amrp": 951,
+        "acogs": 270,
+        "gstPct": 5
+      },
+      "PSC_vfhh8o": {
+        "amrp": 1902,
+        "acogs": 540,
+        "gstPct": 5
+      },
+      "PSC_ya8p7s": {
+        "amrp": 899,
+        "acogs": 250,
+        "gstPct": 5
+      },
+      "PSC_grcdkh": {
+        "amrp": 1332,
+        "acogs": 388,
+        "gstPct": 5
+      },
+      "PSC_0dqud5": {
+        "amrp": 2570,
+        "acogs": 704,
+        "gstPct": 5
+      },
+      "PSC_bs6c4a": {
+        "amrp": 665,
+        "acogs": 186,
+        "gstPct": 5
+      },
+      "PSC_gnojd0": {
+        "amrp": 1330,
+        "acogs": 186,
+        "gstPct": 5
+      },
+      "PSC_2ypjy3": {
+        "amrp": 1237,
+        "acogs": 331,
+        "gstPct": 5
+      },
+      "PSC_tje05j": {
+        "amrp": 1274,
+        "acogs": 662,
+        "gstPct": 5
+      },
+      "PSC_j4pq6u": {
+        "amrp": 475,
+        "acogs": 145,
+        "gstPct": 5
+      },
+      "PSC_24kez0": {
+        "amrp": 899,
+        "acogs": 290,
+        "gstPct": 5
+      },
+      "PSC_57jds1": {
+        "amrp": 380,
+        "acogs": 72,
+        "gstPct": 5
+      },
+      "PSC_a7uh0h": {
+        "amrp": 475,
+        "acogs": 96,
+        "gstPct": 5
+      },
+      "PSC_wv5mal": {
+        "amrp": 1456,
+        "acogs": 362,
+        "gstPct": 5
+      },
+      "PSC_0hporz": {
+        "amrp": 1627,
+        "acogs": 437,
+        "gstPct": 5
+      },
+      "PSC_v29f1s": {
+        "amrp": 1799,
+        "acogs": 514,
+        "gstPct": 5
+      },
+      "PSC_ojadqb": {
+        "amrp": 1370,
+        "acogs": 370,
+        "gstPct": 5
+      },
+      "PSC_5c4qz5": {
+        "amrp": 1541,
+        "acogs": 432,
+        "gstPct": 5
+      },
+      "PSC_g7o7w9": {
+        "amrp": 1713,
+        "acogs": 528,
+        "gstPct": 5
+      },
+      "PSC_yn1pzp": {
+        "amrp": 771,
+        "acogs": 163,
+        "gstPct": 5
+      },
+      "PSC_4uuj75": {
+        "amrp": 813,
+        "acogs": 203,
+        "gstPct": 5
+      },
+      "PSC_frk6vu": {
+        "amrp": 856,
+        "acogs": 229,
+        "gstPct": 5
+      },
+      "PSC_7ly51o": {
+        "amrp": 813,
+        "acogs": 174,
+        "gstPct": 5
+      },
+      "PSC_caq3uy": {
+        "amrp": 856,
+        "acogs": 218,
+        "gstPct": 5
+      },
+      "PSC_5fycm5": {
+        "amrp": 1028,
+        "acogs": 245,
+        "gstPct": 5
+      },
+      "PSC_anpbv2": {
+        "amrp": 475,
+        "acogs": 118,
+        "gstPct": 5
+      },
+      "PSC_704ibx": {
+        "amrp": 856,
+        "acogs": 236,
+        "gstPct": 5
+      },
+      "PSC_x06zwa": {
+        "amrp": 570,
+        "acogs": 146,
+        "gstPct": 5
+      },
+      "PSC_rilcbv": {
+        "amrp": 951,
+        "acogs": 292,
+        "gstPct": 5
+      },
+      "PSC_dxmvkf": {
+        "amrp": 284,
+        "acogs": 76,
+        "gstPct": 5
+      },
+      "PSC_cp6bsm": {
+        "amrp": 499,
+        "acogs": 152,
+        "gstPct": 5
+      },
+      "PSC_nuzmfh": {
+        "amrp": 1713,
+        "acogs": 505,
+        "gstPct": 5
+      },
+      "PSC_hv9vb8": {
+        "amrp": 1970,
+        "acogs": 583,
+        "gstPct": 5
+      },
+      "PSC_ovcbc1": {
+        "amrp": 2142,
+        "acogs": 669,
+        "gstPct": 5
+      },
+      "PSC_ladycs": {
+        "amrp": 2313,
+        "acogs": 759,
+        "gstPct": 5
+      },
+      "PSC_u6k8rr": {
+        "amrp": 2484,
+        "acogs": 842,
+        "gstPct": 5
+      },
+      "PSC_q1n3rj": {
+        "amrp": 2741,
+        "acogs": 940,
+        "gstPct": 5
+      },
+      "PSC_bm2o45": {
+        "amrp": 1627,
+        "acogs": 448,
+        "gstPct": 5
+      },
+      "PSC_wsi4j3": {
+        "amrp": 1713,
+        "acogs": 523,
+        "gstPct": 5
+      },
+      "PSC_kbxmiv": {
+        "amrp": 1884,
+        "acogs": 598,
+        "gstPct": 5
+      },
+      "PSC_vpb25a": {
+        "amrp": 2056,
+        "acogs": 655,
+        "gstPct": 5
+      },
+      "PSC_d97h80": {
+        "amrp": 771,
+        "acogs": 170,
+        "gstPct": 5
+      },
+      "PSC_nf1bw4": {
+        "amrp": 813,
+        "acogs": 199,
+        "gstPct": 5
+      },
+      "PSC_w9er1a": {
+        "amrp": 856,
+        "acogs": 232,
+        "gstPct": 5
+      },
+      "PSC_90pwo5": {
+        "amrp": 1113,
+        "acogs": 300,
+        "gstPct": 5
+      },
+      "PSC_0cq05d": {
+        "amrp": 1285,
+        "acogs": 364,
+        "gstPct": 5
+      },
+      "PSC_nx00yi": {
+        "amrp": 1371,
+        "acogs": 431,
+        "gstPct": 5
+      },
+      "PSC_e0u7eo": {
+        "amrp": 684,
+        "acogs": 170,
+        "gstPct": 5
+      },
+      "PSC_iug7mn": {
+        "amrp": 770,
+        "acogs": 199,
+        "gstPct": 5
+      },
+      "PSC_hiwn0h": {
+        "amrp": 856,
+        "acogs": 241,
+        "gstPct": 5
+      },
+      "PSC_b30bgu": {
+        "amrp": 1027,
+        "acogs": 290,
+        "gstPct": 5
+      },
+      "PSC_t8trza": {
+        "amrp": 1199,
+        "acogs": 367,
+        "gstPct": 5
+      },
+      "PSC_dncy3l": {
+        "amrp": 1370,
+        "acogs": 437,
+        "gstPct": 5
+      },
+      "PSC_d0vkau": {
+        "amrp": 1027,
+        "acogs": 281,
+        "gstPct": 5
+      },
+      "PSC_d8nzsx": {
+        "amrp": 1113,
+        "acogs": 302,
+        "gstPct": 5
+      },
+      "PSC_36ua4u": {
+        "amrp": 1242,
+        "acogs": 351,
+        "gstPct": 5
+      },
+      "PSC_x96g3t": {
+        "amrp": 1327,
+        "acogs": 404,
+        "gstPct": 5
+      },
+      "PSC_hfywd1": {
+        "amrp": 1456,
+        "acogs": 469,
+        "gstPct": 5
+      },
+      "PSC_ru5tr5": {
+        "amrp": 1713,
+        "acogs": 534,
+        "gstPct": 5
+      },
+      "PSC_kwqrmi": {
+        "amrp": 856,
+        "acogs": 258,
+        "gstPct": 5
+      },
+      "PSC_mmidz3": {
+        "amrp": 1028,
+        "acogs": 276,
+        "gstPct": 5
+      },
+      "PSC_pe58t1": {
+        "amrp": 1113,
+        "acogs": 322,
+        "gstPct": 5
+      },
+      "PSC_1m6xgm": {
+        "amrp": 1199,
+        "acogs": 370,
+        "gstPct": 5
+      },
+      "PSC_graitd": {
+        "amrp": 1285,
+        "acogs": 430,
+        "gstPct": 5
+      },
+      "PSC_exsr1i": {
+        "amrp": 1456,
+        "acogs": 489,
+        "gstPct": 5
+      },
+      "PSC_0nb1br": {
+        "amrp": 3684,
+        "acogs": 1407,
+        "gstPct": 5
+      },
+      "PSC_7f0pvv": {
+        "amrp": 3044,
+        "acogs": 808,
+        "gstPct": 5
+      },
+      "PSC_bogr5s": {
+        "amrp": 1713,
+        "acogs": 432,
+        "gstPct": 5
+      },
+      "PSC_zjz3g0": {
+        "amrp": 1799,
+        "acogs": 504,
+        "gstPct": 5
+      },
+      "PSC_vgqab2": {
+        "amrp": 1970,
+        "acogs": 600,
+        "gstPct": 5
+      },
+      "PSC_jfzy5a": {
+        "amrp": 499,
+        "acogs": 90,
+        "gstPct": 5
+      },
+      "PSC_hf2t1m": {
+        "amrp": 499,
+        "acogs": 123,
+        "gstPct": 5
+      }
+    }
+  }
 }
