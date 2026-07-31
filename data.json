@@ -15,7 +15,7 @@
       "Feb",
       "Mar"
     ],
-    "savedAt": "2026-07-31T06:12:29.625Z",
+    "savedAt": "2026-07-31T06:56:54.225Z",
     "activeCycleId": "CYC_p9c3kh"
   },
   "channels": [
@@ -18690,12 +18690,66 @@
           "Feb": 18,
           "Mar": 18
         },
-        "PM_lkql7m": {},
-        "PM_8mdlod": {},
-        "PM_zha4pk": {},
-        "PM_rp2j41": {},
-        "PM_w4g7wl": {},
-        "PM_2wvypf": {},
+        "PM_lkql7m": {
+          "Aug": 20,
+          "Sep": 20,
+          "Oct": 20,
+          "Nov": 18,
+          "Dec": 18,
+          "Jan": 18,
+          "Feb": 18,
+          "Mar": 18
+        },
+        "PM_8mdlod": {
+          "Aug": 20,
+          "Sep": 20,
+          "Oct": 20,
+          "Nov": 18,
+          "Dec": 18,
+          "Jan": 18,
+          "Feb": 18,
+          "Mar": 18
+        },
+        "PM_zha4pk": {
+          "Aug": 20,
+          "Sep": 20,
+          "Oct": 20,
+          "Nov": 18,
+          "Dec": 18,
+          "Jan": 18,
+          "Feb": 18,
+          "Mar": 18
+        },
+        "PM_rp2j41": {
+          "Aug": 20,
+          "Sep": 20,
+          "Oct": 20,
+          "Nov": 18,
+          "Dec": 18,
+          "Jan": 18,
+          "Feb": 18,
+          "Mar": 18
+        },
+        "PM_w4g7wl": {
+          "Aug": 20,
+          "Sep": 20,
+          "Oct": 20,
+          "Nov": 18,
+          "Dec": 18,
+          "Jan": 18,
+          "Feb": 18,
+          "Mar": 18
+        },
+        "PM_2wvypf": {
+          "Aug": 20,
+          "Sep": 20,
+          "Oct": 20,
+          "Nov": 18,
+          "Dec": 18,
+          "Jan": 18,
+          "Feb": 18,
+          "Mar": 18
+        },
         "PM_ncdw5a": {}
       }
     }
