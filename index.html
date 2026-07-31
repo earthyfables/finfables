@@ -362,7 +362,7 @@
       <button class="navitem" data-tab="brandPartnerMapping"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="6" y1="3" x2="6" y2="15"/><circle cx="18" cy="6" r="3"/><circle cx="6" cy="18" r="3"/><path d="M18 9a9 9 0 01-9 9"/></svg><span>Brand → Partner Mapping</span></button>
       <button class="navitem" data-tab="expenseLineItems"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 00-2 2v16l3-2 3 2 3-2 3 2V4a2 2 0 00-2-2z"/><line x1="8" y1="8" x2="14" y2="8"/><line x1="8" y1="12" x2="14" y2="12"/></svg><span>Expense Line Item Master</span></button>
       <button class="navitem" data-tab="aspBands"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/><circle cx="3" cy="6" r="1"/><circle cx="9" cy="12" r="1"/><circle cx="15" cy="18" r="1"/></svg><span>ASP Band Master</span></button>
-      <button class="navitem" data-tab="codbDeductionMapping"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="19" y1="5" x2="5" y2="19"/><circle cx="6.5" cy="6.5" r="2.5"/><circle cx="17.5" cy="17.5" r="2.5"/></svg><span>CODB and CAC</span></button>
+      <button class="navitem" data-tab="codbDeductionMapping"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="19" y1="5" x2="5" y2="19"/><circle cx="6.5" cy="6.5" r="2.5"/><circle cx="17.5" cy="17.5" r="2.5"/></svg><span>CODB Master</span></button>
       <button class="navitem" data-tab="paretoMaster"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="6" y1="20" x2="6" y2="15"/><line x1="12" y1="20" x2="12" y2="9"/><line x1="18" y1="20" x2="18" y2="4"/></svg><span>Pareto Master</span></button>
     </div>
 
@@ -2161,7 +2161,7 @@ const TABS = {
     ], {prefix:'BPM', addLabel:'Add mapping'})
   },
   expenseLineItems:{
-    title:'Expense Line Item Master', desc:'Expense name and category are free-text. GST rate is a number. Type routes the item: Misc auto-populates Miscellaneous Inputs; CODB/CAC are selectable in the CODB and CAC tab; COGS is not yet wired up.',
+    title:'Expense Line Item Master', desc:'Expense name and category are free-text. GST rate is a number. Type routes the item: Misc auto-populates Miscellaneous Inputs; CODB/CAC are selectable in the CODB Master tab; COGS is not yet wired up.',
     render:(el)=> renderMasterTable(el, DATA.expenseLineItems, [
       {key:'name', label:'Expense line item', width:220},
       {key:'category', label:'Category', width:160},
@@ -2177,7 +2177,7 @@ const TABS = {
     ], {prefix:'ASP', addLabel:'Add'})
   },
   codbDeductionMapping:{
-    title:'CODB and CAC', desc:'Define CODB line items, their Rate Basis/Structure, and Marketplace deduction mapping (including CAC). The CAC % rate itself is entered in the standalone "CAC %" input tab.',
+    title:'CODB Master', desc:'Define CODB line items, their Rate Basis/Structure, and Marketplace deduction mapping (including CAC). The CAC % rate itself is entered in the standalone "CAC %" input tab.',
     render: renderCodbDeductionMappingScreen
   },
   paretoMaster:{
