@@ -15,7 +15,7 @@
       "Feb",
       "Mar"
     ],
-    "savedAt": "2026-07-30T15:27:08.125Z",
+    "savedAt": "2026-07-31T05:52:33.922Z",
     "activeCycleId": "CYC_p9c3kh"
   },
   "channels": [
@@ -48,40 +48,40 @@
   ],
   "partnerModels": [
     {
-      "id": "PM_2nak1i",
       "partner": "Flipkart",
       "model": "B2C",
-      "partnerGroup": "FAM"
+      "partnerGroup": "FAM",
+      "id": "PM_lkql7m"
     },
     {
-      "id": "PM_rkv6uj",
       "partner": "Amazon",
       "model": "B2C",
-      "partnerGroup": "FAM"
+      "partnerGroup": "FAM",
+      "id": "PM_8mdlod"
     },
     {
-      "id": "PM_y0jzso",
       "partner": "Amazon USA",
       "model": "B2C",
-      "partnerGroup": "PG_ofzjnk"
+      "partnerGroup": "PG_ofzjnk",
+      "id": "PM_zha4pk"
     },
     {
-      "id": "PM_esn20h",
       "partner": "Blinkit",
       "model": "B2C",
-      "partnerGroup": "QCK"
+      "partnerGroup": "QCK",
+      "id": "PM_rp2j41"
     },
     {
-      "id": "PM_jgo2r9",
       "partner": "Website",
       "model": "B2C",
-      "partnerGroup": "Website"
+      "partnerGroup": "Website",
+      "id": "PM_w4g7wl"
     },
     {
-      "id": "PM_2gw084",
       "partner": "Myntra",
       "model": "B2C",
-      "partnerGroup": "MAN"
+      "partnerGroup": "MAN",
+      "id": "PM_2wvypf"
     }
   ],
   "brandPartnerMapping": [
