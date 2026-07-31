@@ -370,6 +370,7 @@
       <h4>Inputs</h4>
       <button class="navitem" data-tab="salesInput"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="23 6 13.5 15.5 8.5 10.5 1 18"/><polyline points="17 6 23 6 23 12"/></svg><span>Sales Inputs</span></button>
       <button class="navitem" data-tab="paretoInput"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 3.05A9 9 0 1020.95 13H11V3.05z"/><path d="M20.49 8.51A9 9 0 0013 3.51v9h9z"/></svg><span>Pareto Input</span></button>
+      <button class="navitem" data-tab="cacInput"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 3"/></svg><span>CAC %</span></button>
       <button class="navitem" data-tab="discMarginGst"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="19" y1="5" x2="5" y2="19"/><circle cx="6.5" cy="6.5" r="2.5"/><circle cx="17.5" cy="17.5" r="2.5"/></svg><span>Discount / Margin / Returns %</span></button>
       <button class="navitem" data-tab="codbRateCard"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="4" y1="21" x2="4" y2="14"/><line x1="4" y1="10" x2="4" y2="3"/><line x1="12" y1="21" x2="12" y2="12"/><line x1="12" y1="8" x2="12" y2="3"/><line x1="20" y1="21" x2="20" y2="16"/><line x1="20" y1="12" x2="20" y2="3"/><line x1="1" y1="14" x2="7" y2="14"/><line x1="9" y1="8" x2="15" y2="8"/><line x1="17" y1="16" x2="23" y2="16"/></svg><span>CODB Rate Card</span></button>
       <button class="navitem" data-tab="miscInputs"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="1.4"/><circle cx="19" cy="12" r="1.4"/><circle cx="5" cy="12" r="1.4"/></svg><span>Misc. Inputs</span></button>
@@ -1120,7 +1121,6 @@ function renderCodbDeductionMappingScreen(container){
     <button class="pill ${codbDeductionMappingSubTab==='lineItems'?'active':''}" data-cdmtab="lineItems">CODB Line Items</button>
     <button class="pill ${codbDeductionMappingSubTab==='rateStructure'?'active':''}" data-cdmtab="rateStructure">Rate Basis &amp; Structure</button>
     <button class="pill ${codbDeductionMappingSubTab==='marketplaceMapping'?'active':''}" data-cdmtab="marketplaceMapping">Marketplace Deduction Mapping</button>
-    <button class="pill ${codbDeductionMappingSubTab==='cac'?'active':''}" data-cdmtab="cac">CAC</button>
   </div>`;
   container.innerHTML = pillsHtml + `<div id="codbDeductionMappingSubHost"></div>`;
   container.querySelectorAll('[data-cdmtab]').forEach(btn=>{
@@ -1139,14 +1139,16 @@ function renderCodbDeductionMappingScreen(container){
     const rsHost = document.createElement('div');
     host.appendChild(rsHost);
     renderRateStructureAndChannelTable(rsHost);
-  } else if(codbDeductionMappingSubTab === 'marketplaceMapping'){
-    renderMarketplaceDeductionMapping(host);
   } else {
-    host.innerHTML = `<div class="footnote" style="margin-bottom:14px;">CAC — % on GMV, Partner-Model wise, Month wise.</div>`;
-    const cacHost = document.createElement('div');
-    host.appendChild(cacHost);
-    renderSingleRateGrid(cacHost, 'cac', 'CAC % (on GMV)');
+    renderMarketplaceDeductionMapping(host);
   }
+}
+
+function renderCacInputScreen(container){
+  const host = document.createElement('div');
+  container.innerHTML = `<div class="footnote" style="margin-bottom:14px;">CAC — % on GMV, Partner-Model wise, Month wise.</div>`;
+  container.appendChild(host);
+  renderSingleRateGrid(host, 'cac', 'CAC % (on GMV)');
 }
 
 let codbRateCardSubTab = 'marketplace';
@@ -2175,7 +2177,7 @@ const TABS = {
     ], {prefix:'ASP', addLabel:'Add'})
   },
   codbDeductionMapping:{
-    title:'CODB and CAC', desc:'Define CODB line items, their Rate Basis/Structure, Marketplace deduction mapping, and CAC (% on GMV, month wise, Partner-Model wise).',
+    title:'CODB and CAC', desc:'Define CODB line items, their Rate Basis/Structure, and Marketplace deduction mapping (including CAC). The CAC % rate itself is entered in the standalone "CAC %" input tab.',
     render: renderCodbDeductionMappingScreen
   },
   paretoMaster:{
@@ -2189,6 +2191,10 @@ const TABS = {
   paretoInput:{
     title:'Pareto Input', desc:'AMRP, ACOGS, and GST% per Product Sub Category — auto-populated from Pareto Master, cycle-scoped so different AOP versions can carry different assumptions.',
     render: renderParetoInputScreen
+  },
+  cacInput:{
+    title:'CAC %', desc:'CAC as % of GMV, Partner-Model wise, Month wise.',
+    render: renderCacInputScreen
   },
   discMarginGst:{
     title:'Discount / Margin / Returns %', desc:'Partner-Model wise, month wise. GST% now lives in the Pareto Input tab (per Product Sub Category). Will later apply as: Discount% on MRP → Margin% on (MRP − Discount) → GST% (from Pareto Input) on (MRP − Discount − Margin)/(1+GST%)×GST%.',
