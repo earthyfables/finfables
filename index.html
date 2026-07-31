@@ -1181,41 +1181,53 @@ function renderCodbRateCardScreen(container){
   pms.forEach(pm=>{ if(!store[pm.id]) store[pm.id] = {}; });
   store[ALL_CHANNEL_KEY] = store[ALL_CHANNEL_KEY] || {};
 
-  let html = `<div class="footnote" style="margin-bottom:14px;">One block per Fee Type, every Product Sub Category as a row, Partner-Model as columns (or a single "All Channels" column for All-Channel items). CAC is entered separately in its own "CAC %" tab.</div>`;
+  // One flat table: a column per (Fee Type, Channel) pair, sitting side by side —
+  // not stacked blocks going down the page.
+  const columns = [];
+  lineItems.forEach(li=>{
+    getEffectiveChannels(li, pms).forEach(pm=>{
+      if(!store[pm.id]) store[pm.id] = {};
+      if(!store[pm.id][li.id]) store[pm.id][li.id] = {};
+      columns.push({li, pm});
+    });
+  });
+
+  let html = `<div class="footnote" style="margin-bottom:14px;">One flat table — every Product Sub Category as a row, one column per Fee Type + Channel (or a single "All Channels" column for All-Channel items). CAC is entered separately in its own "CAC %" tab.</div>`;
+  html += pasteBoxHtml('Pdt Sub Cat | ' + columns.map(c=> `${c.li.name} - ${channelLabel(c.pm)}`).join(' | '));
 
   let hasData = false;
-  lineItems.forEach(li=> getEffectiveChannels(li, pms).forEach(pm=>{
+  columns.forEach(({li,pm})=>{
     const grid = (store[pm.id] && store[pm.id][li.id]) || {};
     if(Object.values(grid).some(v=> v!==undefined && v!=='')) hasData = true;
-  }));
+  });
   if(hasData) html += `<button class="btn-sm danger" id="clearCodbRcBtn" style="margin-bottom:14px;">🗑 Delete all CODB Rate Card data</button>`;
 
+  html += `<div class="panel" style="display:inline-block;"><div class="scrollbox" style="max-height:75vh; overflow-x:auto;"><table class="ledger compact"><colgroup><col style="width:260px;">${columns.map(()=>'<col style="width:150px;">').join('')}</colgroup><thead>`;
+  html += `<tr><th></th>`;
   lineItems.forEach(li=>{
-    const channels = getEffectiveChannels(li, pms);
-    channels.forEach(pm=>{ if(!store[pm.id]) store[pm.id] = {}; if(!store[pm.id][li.id]) store[pm.id][li.id] = {}; });
-
-    html += `<h3 style="margin:24px 0 8px 0; font-size:15px; font-family:'Times New Roman', Times, serif;">${li.name}${li.rateBasis ? ` <span style="font-weight:400; color:var(--ink-soft); font-style:italic; font-size:13px;">(${li.rateBasis})</span>` : ''}</h3>`;
-    html += pasteBoxHtml('Pdt Sub Cat | ' + channels.map(channelLabel).join(' | '));
-    html += `<div class="panel"><div class="scrollbox" style="max-height:65vh; overflow-x:auto;"><table class="ledger compact"><colgroup><col style="width:260px;">${channels.map(()=>'<col style="width:150px;">').join('')}</colgroup><thead><tr><th style="text-align:left;">Pdt Sub Cat</th>`;
-    channels.forEach(pm=> html += `<th>${channelLabel(pm)}</th>`);
-    html += `</tr></thead><tbody>`;
-    subCats.forEach(sc=>{
-      html += `<tr><td>${sc.name}</td>`;
-      channels.forEach(pm=>{
-        const v = store[pm.id][li.id][sc.id];
-        html += `<td><input type="number" step="any" class="codbratecell2" data-li="${li.id}" data-pm="${pm.id}" data-sc="${sc.id}" value="${v!==undefined && v!==''? v : ''}"></td>`;
-      });
-      html += `</tr>`;
-    });
-    html += `</tbody></table></div></div>`;
+    const span = getEffectiveChannels(li, pms).length;
+    if(span<=0) return;
+    html += `<th colspan="${span}">${li.name}${li.rateBasis ? ` <span style="font-weight:400; color:var(--ink-soft); font-style:italic; font-size:12px;">(${li.rateBasis})</span>` : ''}</th>`;
   });
+  html += `</tr><tr><th style="text-align:left;">Pdt Sub Cat</th>`;
+  columns.forEach(({pm})=> html += `<th>${channelLabel(pm)}</th>`);
+  html += `</tr></thead><tbody>`;
+  subCats.forEach(sc=>{
+    html += `<tr><td style="text-align:left;">${sc.name}</td>`;
+    columns.forEach(({li,pm})=>{
+      const v = store[pm.id][li.id][sc.id];
+      html += `<td><input type="number" step="any" class="codbratecell2" data-li="${li.id}" data-pm="${pm.id}" data-sc="${sc.id}" value="${v!==undefined && v!==''? v : ''}"></td>`;
+    });
+    html += `</tr>`;
+  });
+  html += `</tbody></table></div></div>`;
 
   container.innerHTML = html;
 
   const clearBtn = container.querySelector('#clearCodbRcBtn');
   if(clearBtn) clearBtn.addEventListener('click', ()=>{
     if(!confirm('Delete all CODB Rate Card data? This cannot be undone.')) return;
-    lineItems.forEach(li=> getEffectiveChannels(li, pms).forEach(pm=>{ if(store[pm.id]) store[pm.id][li.id] = {}; }));
+    columns.forEach(({li,pm})=>{ if(store[pm.id]) store[pm.id][li.id] = {}; });
     markDirty();
     renderCodbRateCardScreen(container);
   });
@@ -1229,35 +1241,22 @@ function renderCodbRateCardScreen(container){
     });
   });
 
-  const pasteBoxes = container.querySelectorAll('.pastebox');
-  let boxIdx = 0;
-  lineItems.forEach(li=>{
-    const channels = getEffectiveChannels(li, pms);
-    const box = pasteBoxes[boxIdx]; boxIdx++;
-    if(!box) return;
-    const importBtn = box.querySelector('#importBtn');
-    const clearPasteBtn = box.querySelector('#clearPasteBtn');
-    if(importBtn) importBtn.addEventListener('click', ()=>{
-      const text = box.querySelector('#pasteArea').value;
-      const lines2 = text.split(/\r?\n/).map(l=>l.trim()).filter(Boolean);
-      lines2.forEach(line=>{
-        const parts = line.split('\t');
-        if(parts.length < 2) return;
-        const scName = parts[0].trim();
-        const sc = subCats.find(x=> normalizeText(x.name) === normalizeText(scName));
-        if(!sc) return;
-        channels.forEach((pm,i2)=>{
-          if(!store[pm.id][li.id]) store[pm.id][li.id] = {};
-          const n = cleanNum(parts[i2+1]);
-          if(n !== null) store[pm.id][li.id][sc.id] = n;
-        });
+  wirePasteBox(container, (rows)=>{
+    rows.forEach(parts=>{
+      if(parts.length < 2) return;
+      const scName = parts[0].trim();
+      const sc = subCats.find(x=> normalizeText(x.name) === normalizeText(scName));
+      if(!sc) return;
+      columns.forEach(({li,pm}, i)=>{
+        const n = cleanNum(parts[i+1]);
+        if(n !== null) store[pm.id][li.id][sc.id] = n;
       });
-      markDirty();
-      renderCodbRateCardScreen(container);
     });
-    if(clearPasteBtn) clearPasteBtn.addEventListener('click', ()=>{ box.querySelector('#pasteArea').value=''; });
+    markDirty();
+    renderCodbRateCardScreen(container);
   });
 }
+
 
 
 function renderMiscInputsScreen(container){
