@@ -15,7 +15,7 @@
       "Feb",
       "Mar"
     ],
-    "savedAt": "2026-07-31T07:28:29.042Z",
+    "savedAt": "2026-07-31T08:30:21.713Z",
     "activeCycleId": "CYC_p9c3kh"
   },
   "channels": [
@@ -439,11 +439,8 @@
       "expenseLineItemId": "EL_vpsayp",
       "structure": "Product wise",
       "rateBasis": "Rs Per Gross Qty",
-      "mappedPartnerModels": [
-        "PM_lkql7m",
-        "PM_8mdlod",
-        "PM_zha4pk"
-      ]
+      "mappedPartnerModels": [],
+      "allChannel": true
     },
     {
       "id": "CLI_ny357m",
@@ -451,7 +448,9 @@
       "expenseLineItemId": "EL_vpsayp",
       "structure": "Other",
       "rateBasis": "Rs Per Gross Qty",
-      "mappedPartnerModels": []
+      "mappedPartnerModels": [
+        "PM_w4g7wl"
+      ]
     },
     {
       "id": "CLI_9ftoyg",
@@ -459,7 +458,9 @@
       "expenseLineItemId": "EL_vpsayp",
       "structure": "Other",
       "rateBasis": "Rs Per COD Qty",
-      "mappedPartnerModels": []
+      "mappedPartnerModels": [
+        "PM_w4g7wl"
+      ]
     },
     {
       "id": "CLI_qilzq1",
@@ -467,7 +468,8 @@
       "expenseLineItemId": "EL_vpsayp",
       "structure": "Product wise",
       "rateBasis": "Rs Per Gross Qty",
-      "mappedPartnerModels": []
+      "mappedPartnerModels": [],
+      "allChannel": true
     },
     {
       "id": "CLI_cgf218",
@@ -483,7 +485,12 @@
       "expenseLineItemId": "EL_vpsayp",
       "structure": "Marketplace",
       "rateBasis": "Rs Per Gross Qty",
-      "mappedPartnerModels": []
+      "mappedPartnerModels": [
+        "PM_8mdlod",
+        "PM_zha4pk",
+        "PM_rp2j41"
+      ],
+      "allChannel": false
     },
     {
       "id": "CLI_c5qu8y",
@@ -491,7 +498,13 @@
       "expenseLineItemId": "EL_vpsayp",
       "structure": "Marketplace",
       "rateBasis": "Rs Per Returns Qty",
-      "mappedPartnerModels": []
+      "mappedPartnerModels": [
+        "PM_lkql7m",
+        "PM_8mdlod",
+        "PM_zha4pk",
+        "PM_rp2j41",
+        "PM_2wvypf"
+      ]
     },
     {
       "id": "CLI_e8xfgb",
@@ -499,7 +512,13 @@
       "expenseLineItemId": "EL_vpsayp",
       "structure": "Marketplace",
       "rateBasis": "Rs Per Gross Qty",
-      "mappedPartnerModels": []
+      "mappedPartnerModels": [
+        "PM_lkql7m",
+        "PM_8mdlod",
+        "PM_zha4pk",
+        "PM_rp2j41",
+        "PM_2wvypf"
+      ]
     },
     {
       "id": "CLI_yusbdc",
@@ -507,7 +526,13 @@
       "expenseLineItemId": "EL_vpsayp",
       "structure": "Marketplace",
       "rateBasis": "Rs Per Gross Qty",
-      "mappedPartnerModels": []
+      "mappedPartnerModels": [
+        "PM_lkql7m",
+        "PM_8mdlod",
+        "PM_zha4pk",
+        "PM_rp2j41",
+        "PM_2wvypf"
+      ]
     },
     {
       "id": "CLI_zr5pow",
@@ -515,7 +540,13 @@
       "expenseLineItemId": "EL_vpsayp",
       "structure": "Marketplace",
       "rateBasis": "Rs Per Gross Qty",
-      "mappedPartnerModels": []
+      "mappedPartnerModels": [
+        "PM_lkql7m",
+        "PM_8mdlod",
+        "PM_zha4pk",
+        "PM_rp2j41",
+        "PM_2wvypf"
+      ]
     },
     {
       "id": "CLI_yumaqg",
@@ -523,7 +554,13 @@
       "expenseLineItemId": "EL_vpsayp",
       "structure": "Marketplace",
       "rateBasis": "Rs Per Gross Qty",
-      "mappedPartnerModels": []
+      "mappedPartnerModels": [
+        "PM_lkql7m",
+        "PM_8mdlod",
+        "PM_zha4pk",
+        "PM_rp2j41",
+        "PM_2wvypf"
+      ]
     },
     {
       "id": "CLI_wckj3j",
@@ -531,7 +568,13 @@
       "expenseLineItemId": "EL_vpsayp",
       "structure": "Marketplace",
       "rateBasis": "Rs Per Gross Qty",
-      "mappedPartnerModels": []
+      "mappedPartnerModels": [
+        "PM_lkql7m",
+        "PM_8mdlod",
+        "PM_zha4pk",
+        "PM_rp2j41",
+        "PM_2wvypf"
+      ]
     },
     {
       "id": "CLI_0tteo6",
@@ -539,7 +582,8 @@
       "expenseLineItemId": "EL_vpsayp",
       "structure": "Other",
       "rateBasis": "% NSV",
-      "mappedPartnerModels": []
+      "mappedPartnerModels": [],
+      "allChannel": true
     },
     {
       "id": "CLI_6qsvs6",
@@ -547,7 +591,13 @@
       "expenseLineItemId": "EL_vpsayp",
       "structure": "Other",
       "rateBasis": "% NSV",
-      "mappedPartnerModels": []
+      "mappedPartnerModels": [
+        "PM_lkql7m",
+        "PM_8mdlod",
+        "PM_zha4pk",
+        "PM_rp2j41",
+        "PM_2wvypf"
+      ]
     },
     {
       "id": "CLI_lpq9o5",
@@ -3245,7 +3295,8 @@
         "CLI_6qsvs6": {},
         "CLI_lpq9o5": {},
         "CLI_zw5eze": {}
-      }
+      },
+      "__ALL__": {}
     }
   },
   "miscInputsByCycle": {
