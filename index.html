@@ -276,6 +276,9 @@
   .scrollbox{overflow-y:auto; border:1px solid var(--line); border-radius:var(--radius);}
   .scrollbox table{margin:0;}
   .scrollbox thead th{position:sticky; top:0; z-index:2; box-shadow:0 1px 0 var(--line);}
+  .stickyleftcol{position:sticky; left:0; z-index:3; background:var(--surface); box-shadow:1px 0 0 var(--line);}
+  thead .stickyleftcol{z-index:4;}
+  .feegroupend{border-right:2px solid var(--ink) !important;}
   .scrollbox tr.subtotal td, .scrollbox tr.grand td{position:sticky; bottom:0; background:var(--surface); z-index:1; box-shadow:0 -1px 0 var(--ink);}
   .mdmtable{border-collapse:collapse; font-size:12.8px;}
   .mdmtable thead th{background:#F7F8FB; padding:8px 10px; border-bottom:1px solid var(--line); white-space:nowrap; position:sticky; top:0; z-index:2; box-shadow:0 1px 0 var(--line);}
@@ -1202,21 +1205,32 @@ function renderCodbRateCardScreen(container){
   });
   if(hasData) html += `<button class="btn-sm danger" id="clearCodbRcBtn" style="margin-bottom:14px;">🗑 Delete all CODB Rate Card data</button>`;
 
-  html += `<div class="panel" style="display:inline-block;"><div class="scrollbox" style="max-height:75vh; overflow-x:auto;"><table class="ledger compact"><colgroup><col style="width:260px;">${columns.map(()=>'<col style="width:150px;">').join('')}</colgroup><thead>`;
-  html += `<tr><th></th>`;
+  // Track which column index is the last one in its Fee Type's group, for a
+  // visible divider border between fee groups.
+  let colCursor = 0;
+  const groupEndIdx = new Set();
   lineItems.forEach(li=>{
     const span = getEffectiveChannels(li, pms).length;
     if(span<=0) return;
-    html += `<th colspan="${span}">${li.name}${li.rateBasis ? ` <span style="font-weight:400; color:var(--ink-soft); font-style:italic; font-size:12px;">(${li.rateBasis})</span>` : ''}</th>`;
+    colCursor += span;
+    groupEndIdx.add(colCursor - 1);
   });
-  html += `</tr><tr><th style="text-align:left;">Pdt Sub Cat</th>`;
-  columns.forEach(({pm})=> html += `<th>${channelLabel(pm)}</th>`);
+
+  html += `<div class="panel" style="display:inline-block;"><div class="scrollbox" style="max-height:75vh; overflow-x:auto;"><table class="ledger compact"><colgroup><col style="width:340px;">${columns.map(()=>'<col style="width:150px;">').join('')}</colgroup><thead>`;
+  html += `<tr><th class="stickyleftcol"></th>`;
+  lineItems.forEach(li=>{
+    const span = getEffectiveChannels(li, pms).length;
+    if(span<=0) return;
+    html += `<th colspan="${span}" class="feegroupend">${li.name}${li.rateBasis ? ` <span style="font-weight:400; color:var(--ink-soft); font-style:italic; font-size:12px;">(${li.rateBasis})</span>` : ''}</th>`;
+  });
+  html += `</tr><tr><th class="stickyleftcol" style="text-align:left;">Pdt Sub Cat</th>`;
+  columns.forEach(({pm}, i)=> html += `<th${groupEndIdx.has(i)?' class="feegroupend"':''}>${channelLabel(pm)}</th>`);
   html += `</tr></thead><tbody>`;
   subCats.forEach(sc=>{
-    html += `<tr><td style="text-align:left;">${sc.name}</td>`;
-    columns.forEach(({li,pm})=>{
+    html += `<tr><td class="stickyleftcol" style="text-align:left;">${sc.name}</td>`;
+    columns.forEach(({li,pm}, i)=>{
       const v = store[pm.id][li.id][sc.id];
-      html += `<td><input type="number" step="any" class="codbratecell2" data-li="${li.id}" data-pm="${pm.id}" data-sc="${sc.id}" value="${v!==undefined && v!==''? v : ''}"></td>`;
+      html += `<td${groupEndIdx.has(i)?' class="feegroupend"':''}><input type="number" step="any" class="codbratecell2" data-li="${li.id}" data-pm="${pm.id}" data-sc="${sc.id}" value="${v!==undefined && v!==''? v : ''}"></td>`;
     });
     html += `</tr>`;
   });
