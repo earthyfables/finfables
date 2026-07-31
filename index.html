@@ -966,15 +966,14 @@ function renderRateStructureAndChannelTable(container){
     return;
   }
 
-  let html = `<div class="footnote" style="margin-bottom:14px;">Rate Basis, Structure, and which Partner-Models each CODB Line Item applies to — add new items in the "CODB Line Items" tab; this only maps what's already there. Leave a row's Partner-Model boxes fully unticked to show it for every Partner-Model (unfiltered) in the CODB Rate Card. Tick "All Channel" to take the input just once and apply it to every channel, instead of entering it per Partner-Model.</div>`;
-  html += `<div class="panel" style="display:inline-block;"><div class="scrollbox" style="max-height:65vh; overflow-x:auto;"><table class="mdmtable"><thead><tr><th>CODB Line Item</th><th>Rate Basis</th><th>Structure</th><th style="text-align:center;">All Channel</th>`;
+  let html = `<div class="footnote" style="margin-bottom:14px;">Rate Basis and which Partner-Models each CODB Line Item applies to — add new items in the "CODB Line Items" tab; this only maps what's already there. Leave a row's Partner-Model boxes fully unticked to show it for every Partner-Model (unfiltered) in the CODB Rate Card. Tick "All Channel" to take the input just once and apply it to every channel, instead of entering it per Partner-Model. Note: CAC does not appear in the CODB Rate Card — it has its own "CAC %" input tab (% of GMV, not NSV).</div>`;
+  html += `<div class="panel" style="display:inline-block;"><div class="scrollbox" style="max-height:65vh; overflow-x:auto;"><table class="mdmtable"><thead><tr><th>CODB Line Item</th><th>Rate Basis</th><th style="text-align:center;">All Channel</th>`;
   pms.forEach(pm=> html += `<th style="text-align:center;">${pmLabel(pm)}</th>`);
   html += `<th></th></tr></thead><tbody>`;
   items.forEach(li=>{
     if(!li.mappedPartnerModels) li.mappedPartnerModels = [];
     html += `<tr><td>${li.name}</td>`;
     html += `<td>${fieldInput(li, {key:'rateBasis', type:'select', options:()=>CODB_RATE_BASIS_OPTIONS.map(v=>({id:v,label:v}))}).replace('<select', `<select data-li="${li.id}"`)}</td>`;
-    html += `<td>${fieldInput(li, {key:'structure', type:'select', options:()=>['Marketplace','Other','Product wise','MP Mapping only'].map(v=>({id:v,label:v}))}).replace('<select', `<select data-li="${li.id}"`)}</td>`;
     html += `<td style="text-align:center;"><input type="checkbox" class="codballchannel" data-li="${li.id}" ${li.allChannel?'checked':''}></td>`;
     pms.forEach(pm=>{
       const checked = li.mappedPartnerModels.includes(pm.id);
@@ -986,7 +985,7 @@ function renderRateStructureAndChannelTable(container){
   html += `</tbody></table></div></div>`;
   container.innerHTML = html;
 
-  container.querySelectorAll('[data-key="rateBasis"],[data-key="structure"]').forEach(sel=>{
+  container.querySelectorAll('[data-key="rateBasis"]').forEach(sel=>{
     sel.addEventListener('change', ()=>{
       const li = items.find(x=>x.id===sel.dataset.li);
       if(li) li[sel.dataset.key] = sel.value;
@@ -1163,165 +1162,48 @@ function renderCacInputScreen(container){
   renderSingleRateGrid(host, 'cac', 'CAC % (on GMV)');
 }
 
-let codbRateCardSubTab = 'marketplace';
-
 function renderCodbRateCardScreen(container){
-  const pillsHtml = `<div class="pillbar">
-    <button class="pill ${codbRateCardSubTab==='marketplace'?'active':''}" data-codbratetab="marketplace">Marketplace Related</button>
-    <button class="pill ${codbRateCardSubTab==='other'?'active':''}" data-codbratetab="other">Others</button>
-    <button class="pill ${codbRateCardSubTab==='productwise'?'active':''}" data-codbratetab="productwise">Product wise</button>
-  </div>`;
-  container.innerHTML = pillsHtml + `<div id="codbRateCardSubHost"></div>`;
-  container.querySelectorAll('[data-codbratetab]').forEach(btn=>{
-    btn.addEventListener('click', ()=>{
-      codbRateCardSubTab = btn.dataset.codbratetab;
-      renderCodbRateCardScreen(container);
-    });
-  });
-  const host = container.querySelector('#codbRateCardSubHost');
-  if(codbRateCardSubTab === 'marketplace') renderCodbMarketplaceFees(host);
-  else if(codbRateCardSubTab === 'other') renderCodbOtherFees(host);
-  else renderCodbProductWiseFees(host);
-}
-
-function renderCodbMarketplaceFees(container){
   const pms = DATA.partnerModels;
-  const combos = getUniquePdtCatWeightCombos();
-  const bands = DATA.aspBands;
-  const mpLineItems = DATA.codbLineItems.filter(li=> li.structure === 'Marketplace');
+  const subCats = DATA.productSubCategories;
+  const excludedNames = ['cac'];
+  const lineItems = DATA.codbLineItems.filter(li=>{
+    if(excludedNames.includes(normalizeText(li.name))) return false;
+    const exp = DATA.expenseLineItems.find(x=>x.id===li.expenseLineItemId);
+    if(exp && exp.type === 'CAC') return false;
+    return true;
+  });
 
   if(!pms.length){ container.innerHTML = `<div class="footnote">No Partner-Models defined yet — add some in "Partner-Model Master" first.</div>`; return; }
-  if(!mpLineItems.length){ container.innerHTML = `<div class="footnote">No Marketplace-structure CODB Line Items defined yet — set a Line Item's Structure to "Marketplace" in CODB Deduction Mapping.</div>`; return; }
-  if(!combos.length || !bands.length){ container.innerHTML = `<div class="footnote">Marketplace fee types need Product Sub Categories (with a Product Category + Weight) and ASP Bands defined — add some in "Pareto Master" / "ASP Band Master" first.</div>`; return; }
+  if(!lineItems.length){ container.innerHTML = `<div class="footnote">No CODB Line Items defined yet — add some in "CODB Master" first. (CAC does not appear here — see the standalone "CAC %" tab.)</div>`; return; }
+  if(!subCats.length){ container.innerHTML = `<div class="footnote">No Product Sub Categories defined yet — add some in "Pareto Master" first.</div>`; return; }
 
-  const store = getCycleObj('codbRateCardByCycle'); // {pmId: {liId: {comboKey: {bandId: value}}}}
+  const store = getCycleObj('codbRateCardByCycle'); // {pmId: {liId: {subCatId: value}}}
   pms.forEach(pm=>{ if(!store[pm.id]) store[pm.id] = {}; });
   store[ALL_CHANNEL_KEY] = store[ALL_CHANNEL_KEY] || {};
 
-  let html = `<div class="footnote" style="margin-bottom:14px;">One block per Partner-Model (or one for "All Channel" items) + Fee Type, one row per unique Product Category + Weight combination, ASP Bands as columns.</div>`;
+  let html = `<div class="footnote" style="margin-bottom:14px;">One block per Fee Type, every Product Sub Category as a row, Partner-Model as columns (or a single "All Channels" column for All-Channel items). CAC is entered separately in its own "CAC %" tab.</div>`;
 
-  let mpHasData = false;
-  mpLineItems.forEach(li=> getEffectiveChannels(li, pms).forEach(pm=>{
+  let hasData = false;
+  lineItems.forEach(li=> getEffectiveChannels(li, pms).forEach(pm=>{
     const grid = (store[pm.id] && store[pm.id][li.id]) || {};
-    if(Object.values(grid).some(row=> Object.values(row||{}).some(v=> v!==undefined && v!==''))) mpHasData = true;
+    if(Object.values(grid).some(v=> v!==undefined && v!=='')) hasData = true;
   }));
-  if(mpHasData) html += `<button class="btn-sm danger" id="clearMpBtn" style="margin-bottom:14px;">🗑 Delete all Marketplace Fees data</button>`;
+  if(hasData) html += `<button class="btn-sm danger" id="clearCodbRcBtn" style="margin-bottom:14px;">🗑 Delete all CODB Rate Card data</button>`;
 
-  mpLineItems.forEach(li=>{
-    getEffectiveChannels(li, pms).forEach(pm=>{
-      if(!store[pm.id]) store[pm.id] = {};
-      if(!store[pm.id][li.id]) store[pm.id][li.id] = {};
-      const grid = store[pm.id][li.id];
-      combos.forEach(c=>{ if(!grid[c.key]) grid[c.key] = {}; });
-
-      html += `<h3 style="margin:24px 0 8px 0; font-size:15px; font-family:'Times New Roman', Times, serif;">${channelLabel(pm)} - ${li.name}${li.rateBasis ? ` <span style="font-weight:400; color:var(--ink-soft); font-style:italic; font-size:13px;">(${li.rateBasis})</span>` : ''}</h3>`;
-      html += pasteBoxHtml('Partner-Model | Fee Type | Pdt Cat | Weight | ' + bands.map(b=>b.name).join(' | '));
-      html += `<div class="panel"><div class="scrollbox" style="max-height:420px;"><table class="ledger"><thead><tr><th style="text-align:left;">Partner-Model</th><th style="text-align:left;">Fee Type</th><th style="text-align:left;">Pdt Cat</th><th>Weight</th>`;
-      bands.forEach(b=> html += `<th>${b.name}</th>`);
-      html += `</tr></thead><tbody>`;
-      combos.forEach(c=>{
-        const cell = grid[c.key];
-        html += `<tr><td>${channelLabel(pm)}</td><td>${li.name}</td><td>${c.catName}</td><td>${c.weight ?? ''}</td>`;
-        bands.forEach(b=>{
-          const v = cell[b.id];
-          html += `<td><input type="number" step="any" class="codbratecell" data-pm="${pm.id}" data-li="${li.id}" data-combo="${c.key}" data-band="${b.id}" value="${v!==undefined && v!==''? v : ''}"></td>`;
-        });
-        html += `</tr>`;
-      });
-      html += `</tbody></table></div></div>`;
-    });
-  });
-
-  container.innerHTML = html;
-
-  const clearMpBtn = container.querySelector('#clearMpBtn');
-  if(clearMpBtn) clearMpBtn.addEventListener('click', ()=>{
-    if(!confirm('Delete all Marketplace Fees data? This cannot be undone.')) return;
-    mpLineItems.forEach(li=> getEffectiveChannels(li, pms).forEach(pm=>{ if(store[pm.id]) store[pm.id][li.id] = {}; }));
-    markDirty();
-    renderCodbMarketplaceFees(container);
-  });
-
-  container.querySelectorAll('.codbratecell').forEach(inp=>{
-    inp.addEventListener('change', ()=>{
-      const n = cleanNum(inp.value);
-      store[inp.dataset.pm][inp.dataset.li][inp.dataset.combo][inp.dataset.band] = n===null ? '' : n;
-      markDirty();
-      renderCodbMarketplaceFees(container);
-    });
-  });
-
-  const pasteBoxes = container.querySelectorAll('.pastebox');
-  let boxIdx = 0;
-  mpLineItems.forEach(li=>{
-    getEffectiveChannels(li, pms).forEach(pm=>{
-      const box = pasteBoxes[boxIdx]; boxIdx++;
-      if(!box) return;
-      const grid = store[pm.id][li.id];
-      const importBtn = box.querySelector('#importBtn');
-      const clearBtn = box.querySelector('#clearPasteBtn');
-      if(importBtn) importBtn.addEventListener('click', ()=>{
-        const text = box.querySelector('#pasteArea').value;
-        const lines2 = text.split(/\r?\n/).map(l=>l.trim()).filter(Boolean);
-        lines2.forEach(line=>{
-          const parts = line.split('\t');
-          if(parts.length < 5) return;
-          const catName = parts[2].trim();
-          const weightText = parts[3].trim();
-          const combo = combos.find(c=> normalizeText(c.catName) === normalizeText(catName) && String(c.weight ?? '') === weightText);
-          if(!combo) return;
-          const cell = grid[combo.key];
-          bands.forEach((b,i2)=>{
-            const n = cleanNum(parts[i2+4]);
-            if(n !== null) cell[b.id] = n;
-          });
-        });
-        markDirty();
-        renderCodbMarketplaceFees(container);
-      });
-      if(clearBtn) clearBtn.addEventListener('click', ()=>{ box.querySelector('#pasteArea').value=''; });
-    });
-  });
-}
-
-
-
-function renderCodbOtherFees(container){
-  const pms = DATA.partnerModels;
-  const combos = getUniquePdtCatWeightCombos();
-  const otherLineItems = DATA.codbLineItems.filter(li=> li.structure === 'Other');
-
-  if(!pms.length){ container.innerHTML = `<div class="footnote">No Partner-Models defined yet — add some in "Partner-Model Master" first.</div>`; return; }
-  if(!otherLineItems.length){ container.innerHTML = `<div class="footnote">No "Other"-structure CODB Line Items defined yet — set a Line Item's Structure to "Other" in CODB Deduction Mapping.</div>`; return; }
-  if(!combos.length){ container.innerHTML = `<div class="footnote">No Product Sub Categories (with a Product Category + Weight) defined yet — add some in "Pareto Master" first.</div>`; return; }
-
-  const store = getCycleObj('codbRateCardByCycle'); // {pmId: {liId: {comboKey: value}}}
-  pms.forEach(pm=>{ if(!store[pm.id]) store[pm.id] = {}; });
-  store[ALL_CHANNEL_KEY] = store[ALL_CHANNEL_KEY] || {};
-
-  let html = `<div class="footnote" style="margin-bottom:14px;">One block per Fee Type — Partner-Model as columns (or a single "All Channels" column for All-Channel items), one row per unique Product Category + Weight combination.</div>`;
-
-  let otherHasData = false;
-  otherLineItems.forEach(li=> getEffectiveChannels(li, pms).forEach(pm=>{
-    const grid = (store[pm.id] && store[pm.id][li.id]) || {};
-    if(Object.values(grid).some(v=> v!==undefined && v!=='')) otherHasData = true;
-  }));
-  if(otherHasData) html += `<button class="btn-sm danger" id="clearOtherBtn" style="margin-bottom:14px;">🗑 Delete all Other Fees data</button>`;
-
-  otherLineItems.forEach(li=>{
-    const mappedPms = getEffectiveChannels(li, pms);
-    mappedPms.forEach(pm=>{ if(!store[pm.id]) store[pm.id] = {}; if(!store[pm.id][li.id]) store[pm.id][li.id] = {}; });
+  lineItems.forEach(li=>{
+    const channels = getEffectiveChannels(li, pms);
+    channels.forEach(pm=>{ if(!store[pm.id]) store[pm.id] = {}; if(!store[pm.id][li.id]) store[pm.id][li.id] = {}; });
 
     html += `<h3 style="margin:24px 0 8px 0; font-size:15px; font-family:'Times New Roman', Times, serif;">${li.name}${li.rateBasis ? ` <span style="font-weight:400; color:var(--ink-soft); font-style:italic; font-size:13px;">(${li.rateBasis})</span>` : ''}</h3>`;
-    html += pasteBoxHtml('Pdt Cat | Weight | ' + mappedPms.map(channelLabel).join(' | '));
-    html += `<div class="panel"><div class="scrollbox" style="max-height:420px; overflow-x:auto;"><table class="ledger compact"><colgroup><col style="width:150px;"><col style="width:90px;">${mappedPms.map(()=>'<col style="width:150px;">').join('')}</colgroup><thead><tr><th style="text-align:left;">Pdt Cat</th><th>Weight</th>`;
-    mappedPms.forEach(pm=> html += `<th>${channelLabel(pm)}</th>`);
+    html += pasteBoxHtml('Pdt Sub Cat | ' + channels.map(channelLabel).join(' | '));
+    html += `<div class="panel"><div class="scrollbox" style="max-height:65vh; overflow-x:auto;"><table class="ledger compact"><colgroup><col style="width:260px;">${channels.map(()=>'<col style="width:150px;">').join('')}</colgroup><thead><tr><th style="text-align:left;">Pdt Sub Cat</th>`;
+    channels.forEach(pm=> html += `<th>${channelLabel(pm)}</th>`);
     html += `</tr></thead><tbody>`;
-    combos.forEach(c=>{
-      html += `<tr><td>${c.catName}</td><td>${c.weight ?? ''}</td>`;
-      mappedPms.forEach(pm=>{
-        const v = store[pm.id][li.id][c.key];
-        html += `<td><input type="number" step="any" class="codbothercell" data-li="${li.id}" data-pm="${pm.id}" data-combo="${c.key}" value="${v!==undefined && v!==''? v : ''}"></td>`;
+    subCats.forEach(sc=>{
+      html += `<tr><td>${sc.name}</td>`;
+      channels.forEach(pm=>{
+        const v = store[pm.id][li.id][sc.id];
+        html += `<td><input type="number" step="any" class="codbratecell2" data-li="${li.id}" data-pm="${pm.id}" data-sc="${sc.id}" value="${v!==undefined && v!==''? v : ''}"></td>`;
       });
       html += `</tr>`;
     });
@@ -1330,120 +1212,53 @@ function renderCodbOtherFees(container){
 
   container.innerHTML = html;
 
-  const clearOtherBtn = container.querySelector('#clearOtherBtn');
-  if(clearOtherBtn) clearOtherBtn.addEventListener('click', ()=>{
-    if(!confirm('Delete all Other Fees data? This cannot be undone.')) return;
-    otherLineItems.forEach(li=> getEffectiveChannels(li, pms).forEach(pm=>{ if(store[pm.id]) store[pm.id][li.id] = {}; }));
+  const clearBtn = container.querySelector('#clearCodbRcBtn');
+  if(clearBtn) clearBtn.addEventListener('click', ()=>{
+    if(!confirm('Delete all CODB Rate Card data? This cannot be undone.')) return;
+    lineItems.forEach(li=> getEffectiveChannels(li, pms).forEach(pm=>{ if(store[pm.id]) store[pm.id][li.id] = {}; }));
     markDirty();
-    renderCodbOtherFees(container);
+    renderCodbRateCardScreen(container);
   });
 
-  container.querySelectorAll('.codbothercell').forEach(inp=>{
+  container.querySelectorAll('.codbratecell2').forEach(inp=>{
     inp.addEventListener('change', ()=>{
       const n = cleanNum(inp.value);
-      store[inp.dataset.pm][inp.dataset.li][inp.dataset.combo] = n===null ? '' : n;
+      store[inp.dataset.pm][inp.dataset.li][inp.dataset.sc] = n===null ? '' : n;
       markDirty();
-      renderCodbOtherFees(container);
+      renderCodbRateCardScreen(container);
     });
   });
 
   const pasteBoxes = container.querySelectorAll('.pastebox');
   let boxIdx = 0;
-  otherLineItems.forEach(li=>{
-    const mappedPms = getEffectiveChannels(li, pms);
+  lineItems.forEach(li=>{
+    const channels = getEffectiveChannels(li, pms);
     const box = pasteBoxes[boxIdx]; boxIdx++;
     if(!box) return;
     const importBtn = box.querySelector('#importBtn');
-    const clearBtn = box.querySelector('#clearPasteBtn');
+    const clearPasteBtn = box.querySelector('#clearPasteBtn');
     if(importBtn) importBtn.addEventListener('click', ()=>{
       const text = box.querySelector('#pasteArea').value;
       const lines2 = text.split(/\r?\n/).map(l=>l.trim()).filter(Boolean);
       lines2.forEach(line=>{
         const parts = line.split('\t');
-        if(parts.length < 3) return;
-        const catName = parts[0].trim();
-        const weightText = parts[1].trim();
-        const combo = combos.find(c=> normalizeText(c.catName) === normalizeText(catName) && String(c.weight ?? '') === weightText);
-        if(!combo) return;
-        mappedPms.forEach((pm,i2)=>{
+        if(parts.length < 2) return;
+        const scName = parts[0].trim();
+        const sc = subCats.find(x=> normalizeText(x.name) === normalizeText(scName));
+        if(!sc) return;
+        channels.forEach((pm,i2)=>{
           if(!store[pm.id][li.id]) store[pm.id][li.id] = {};
-          const n = cleanNum(parts[i2+2]);
-          if(n !== null) store[pm.id][li.id][combo.key] = n;
+          const n = cleanNum(parts[i2+1]);
+          if(n !== null) store[pm.id][li.id][sc.id] = n;
         });
       });
       markDirty();
-      renderCodbOtherFees(container);
+      renderCodbRateCardScreen(container);
     });
-    if(clearBtn) clearBtn.addEventListener('click', ()=>{ box.querySelector('#pasteArea').value=''; });
+    if(clearPasteBtn) clearPasteBtn.addEventListener('click', ()=>{ box.querySelector('#pasteArea').value=''; });
   });
 }
 
-
-function renderCodbProductWiseFees(container){
-  const subCats = DATA.productSubCategories;
-  const pwLineItems = DATA.codbLineItems.filter(li=> li.structure === 'Product wise');
-
-  if(!pwLineItems.length){ container.innerHTML = `<div class="footnote">No "Product wise"-structure CODB Line Items defined yet — set a Line Item's Structure to "Product wise" in CODB Deduction Mapping.</div>`; return; }
-  if(!subCats.length){ container.innerHTML = `<div class="footnote">No Product Sub Categories defined yet — add some in "Pareto Master" first.</div>`; return; }
-
-  const store = getCycleObj('codbRateCardByCycle');
-  if(!store.__productWise) store.__productWise = {};
-  const pwStore = store.__productWise; // {liId: {subCatId: value}}
-  pwLineItems.forEach(li=>{ if(!pwStore[li.id]) pwStore[li.id] = {}; });
-
-  let html = `<div class="footnote" style="margin-bottom:14px;">Every Product Sub Category as a row, one column per Product-wise Fee Type. Add a new "Product wise" CODB Line Item in CODB Deduction Mapping to get another column here.</div>`;
-  html += pasteBoxHtml('Pdt Sub Cat | ' + pwLineItems.map(li=>li.name).join(' | '));
-
-  const pwHasData = pwLineItems.some(li=> Object.values(pwStore[li.id]).some(v=> v!==undefined && v!==''));
-  if(pwHasData) html += `<button class="btn-sm danger" id="clearPwBtn" style="margin-bottom:14px;">🗑 Delete all Product wise data</button>`;
-
-  html += `<div class="panel" style="display:inline-block;"><div class="scrollbox" style="max-height:75vh;"><table class="ledger compact"><colgroup><col style="width:420px;">${pwLineItems.map(()=>'<col style="width:150px;">').join('')}</colgroup><thead><tr><th style="text-align:left;">Pdt Sub Cat</th>`;
-  pwLineItems.forEach(li=> html += `<th>${li.name}</th>`);
-  html += `</tr></thead><tbody>`;
-  subCats.forEach(sc=>{
-    html += `<tr><td>${sc.name}</td>`;
-    pwLineItems.forEach(li=>{
-      const v = pwStore[li.id][sc.id];
-      html += `<td><input type="number" step="any" class="codbpwcell" data-li="${li.id}" data-sc="${sc.id}" value="${v!==undefined && v!==''? v : ''}"></td>`;
-    });
-    html += `</tr>`;
-  });
-  html += `</tbody></table></div></div>`;
-
-  container.innerHTML = html;
-
-  const clearPwBtn = container.querySelector('#clearPwBtn');
-  if(clearPwBtn) clearPwBtn.addEventListener('click', ()=>{
-    if(!confirm('Delete all Product wise data? This cannot be undone.')) return;
-    pwLineItems.forEach(li=>{ pwStore[li.id] = {}; });
-    markDirty();
-    renderCodbProductWiseFees(container);
-  });
-
-  container.querySelectorAll('.codbpwcell').forEach(inp=>{
-    inp.addEventListener('change', ()=>{
-      const n = cleanNum(inp.value);
-      pwStore[inp.dataset.li][inp.dataset.sc] = n===null ? '' : n;
-      markDirty();
-      renderCodbProductWiseFees(container);
-    });
-  });
-
-  wirePasteBox(container, (rows)=>{
-    rows.forEach(parts=>{
-      if(parts.length < 2) return;
-      const scName = parts[0].trim();
-      const sc = subCats.find(s=> normalizeText(s.name) === normalizeText(scName));
-      if(!sc) return;
-      pwLineItems.forEach((li,i)=>{
-        const n = cleanNum(parts[i+1]);
-        if(n !== null) pwStore[li.id][sc.id] = n;
-      });
-    });
-    markDirty();
-    renderCodbProductWiseFees(container);
-  });
-}
 
 function renderMiscInputsScreen(container){
   const excludedNames = ['CAC','CODB','COGS'].map(normalizeText);
@@ -2227,7 +2042,7 @@ const TABS = {
     render: renderDiscMarginGst
   },
   codbRateCard:{
-    title:'CODB Rate Card', desc:'Marketplace fee types: Partner-Model × Fee Type × Pdt Cat, rate per ASP Band. Other fee types: simpler Partner-Model × Month grid. Set each CODB Line Item Structure field (Marketplace / Other) in CODB Deduction Mapping.',
+    title:'CODB Rate Card', desc:'One block per Fee Type, Product Sub Category as rows, Partner-Model as columns (or a single "All Channels" column when All Channel is ticked). One flat rate per fee — no ASP Band tiering. CAC is entered separately in its own "CAC %" tab.',
     render: renderCodbRateCardScreen
   },
   miscInputs:{
