@@ -384,7 +384,7 @@
 
     <div class="sidebarsave">
       <button class="btn primary" id="sidebarSaveBtn" style="width:100%;">💾 Save</button>
-      <div class="sidebarsave-status" id="sidebarSaveStatus">Everything you enter auto-saves in this browser</div>
+      <div class="sidebarsave-status" id="sidebarSaveStatus">Click Save to store your changes</div>
     </div>
   </nav>
 
@@ -517,8 +517,6 @@ const SEED = {
 
 function uid(prefix){ return prefix + "_" + Math.random().toString(36).slice(2,8); }
 
-const LOCAL_STORAGE_KEY = 'finfables_data_v1';
-
 async function loadData(){
   let fromFile = null;
   try{
@@ -526,23 +524,10 @@ async function loadData(){
     if(res.ok) fromFile = await res.json();
   }catch(e){ /* ignore — file may not be reachable (e.g. file:// or first deploy) */ }
 
-  let fromLocal = null;
-  try{
-    const raw = localStorage.getItem(LOCAL_STORAGE_KEY);
-    if(raw) fromLocal = JSON.parse(raw);
-  }catch(e){ /* ignore corrupt localStorage */ }
-
-  // Prefer whichever copy was saved more recently. Auto-save writes to
-  // localStorage on every change, so it is usually the freshest source —
-  // but if this browser has never auto-saved, fall back to the committed
-  // data.json, and finally to the built-in seed.
-  if(fromLocal && fromFile){
-    const localTime = fromLocal.meta?.savedAt ? new Date(fromLocal.meta.savedAt).getTime() : 0;
-    const fileTime = fromFile.meta?.savedAt ? new Date(fromFile.meta.savedAt).getTime() : 0;
-    DATA = localTime >= fileTime ? fromLocal : fromFile;
-  } else {
-    DATA = fromLocal || fromFile || JSON.parse(JSON.stringify(SEED));
-  }
+  // data.json (saved via the Save button to GitHub/Vercel) is the single
+  // source of truth, so every user always sees the same data. No local
+  // browser copy is compared or preferred anymore.
+  DATA = fromFile || JSON.parse(JSON.stringify(SEED));
   // Migration: backfill any fields/arrays introduced after this data.json was last saved,
   // so older saved files keep working without losing existing rows.
   ['codbLineItems','marketplaceDeductionMapping','productGroups','productCategories'].forEach(k=>{ if(!DATA[k]) DATA[k]=[]; });
@@ -740,19 +725,11 @@ function renderEditableTable(container, arr, cols, opts){
 let autosaveTimer = null;
 function markDirty(){
   if(autosaveTimer) clearTimeout(autosaveTimer);
-  autosaveTimer = setTimeout(doAutosave, 400);
+  autosaveTimer = setTimeout(markUnsavedStatus, 400);
 }
-function doAutosave(){
-  try{
-    DATA.meta = DATA.meta || {};
-    DATA.meta.savedAt = new Date().toISOString();
-    localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(DATA));
-    const el = document.getElementById('sidebarSaveStatus');
-    if(el) el.textContent = 'Autosaved ' + new Date().toLocaleTimeString();
-  }catch(e){
-    const el = document.getElementById('sidebarSaveStatus');
-    if(el) el.textContent = 'Autosave failed — storage may be full or blocked';
-  }
+function markUnsavedStatus(){
+  const el = document.getElementById('sidebarSaveStatus');
+  if(el) el.textContent = 'Unsaved changes — click Save';
 }
 
 /* ---------------------------------------------------------------
@@ -1539,7 +1516,7 @@ function renderParetoInputScreen(container){
   subCats.forEach(sc=>{
     const cell = store[sc.id];
     const gstDisplay = (cell.gstPct!==undefined && cell.gstPct!=='') ? Number(cell.gstPct).toFixed(2) : '';
-    html += `<tr><td>${sc.skuCode||''}</td><td>${sc.name}</td>`;
+    html += `<tr><td style="text-align:left;">${sc.skuCode||''}</td><td style="text-align:left;">${sc.name}</td>`;
     html += `<td><input type="number" step="any" class="paretoinputcell" data-sc="${sc.id}" data-field="amrp" value="${cell.amrp!==undefined && cell.amrp!==''? cell.amrp : ''}"></td>`;
     html += `<td><input type="number" step="any" class="paretoinputcell" data-sc="${sc.id}" data-field="acogs" value="${cell.acogs!==undefined && cell.acogs!==''? cell.acogs : ''}"></td>`;
     html += `<td><input type="number" step="0.01" class="paretoinputcell" data-sc="${sc.id}" data-field="gstPct" value="${gstDisplay}"></td>`;
@@ -2701,7 +2678,6 @@ document.querySelectorAll('.navitem').forEach(btn=>{
 });
 
 document.getElementById('sidebarSaveBtn').addEventListener('click', async ()=>{
-  doAutosave(); // fast local safety-net in case the network call below fails
   const el = document.getElementById('sidebarSaveStatus');
   const btn = document.getElementById('sidebarSaveBtn');
   if(el) el.textContent = 'Saving to GitHub…';
@@ -2718,7 +2694,7 @@ document.getElementById('sidebarSaveBtn').addEventListener('click', async ()=>{
     if(!resp.ok) throw new Error(result.error || 'Save failed');
     if(el) el.textContent = 'Saved to GitHub ' + new Date().toLocaleTimeString();
   }catch(e){
-    if(el) el.textContent = 'Could not save to GitHub (' + e.message + ') — kept in this browser only';
+    if(el) el.textContent = 'Could not save to GitHub (' + e.message + ') — try again';
   }finally{
     if(btn) btn.disabled = false;
   }
