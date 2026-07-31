@@ -15,7 +15,7 @@
       "Feb",
       "Mar"
     ],
-    "savedAt": "2026-07-31T05:52:33.922Z",
+    "savedAt": "2026-07-31T05:57:06.681Z",
     "activeCycleId": "CYC_p9c3kh"
   },
   "channels": [
@@ -82,6 +82,12 @@
       "model": "B2C",
       "partnerGroup": "MAN",
       "id": "PM_2wvypf"
+    },
+    {
+      "id": "PM_ncdw5a",
+      "partner": "Instamart",
+      "model": "B2C",
+      "partnerGroup": "QCK"
     }
   ],
   "brandPartnerMapping": [
@@ -428,126 +434,150 @@
       "name": "PGW Costs",
       "expenseLineItemId": "EL_vpsayp",
       "structure": "Other",
-      "rateBasis": "% NSV"
+      "rateBasis": "% NSV",
+      "mappedPartnerModels": [
+        "PM_w4g7wl"
+      ]
     },
     {
       "id": "CLI_js18tx",
       "name": "Packing Cost",
       "expenseLineItemId": "EL_vpsayp",
       "structure": "Product wise",
-      "rateBasis": "Rs Per Gross Qty"
+      "rateBasis": "Rs Per Gross Qty",
+      "mappedPartnerModels": [
+        "PM_lkql7m",
+        "PM_8mdlod",
+        "PM_zha4pk"
+      ]
     },
     {
       "id": "CLI_ny357m",
       "name": "Shipping Fee - Forward",
       "expenseLineItemId": "EL_vpsayp",
       "structure": "Other",
-      "rateBasis": "Rs Per Gross Qty"
+      "rateBasis": "Rs Per Gross Qty",
+      "mappedPartnerModels": []
     },
     {
       "id": "CLI_9ftoyg",
       "name": "COD Charges",
       "expenseLineItemId": "EL_vpsayp",
       "structure": "Other",
-      "rateBasis": "Rs Per COD Qty"
+      "rateBasis": "Rs Per COD Qty",
+      "mappedPartnerModels": []
     },
     {
       "id": "CLI_qilzq1",
       "name": "Shipping Fee - Mfg to WH",
       "expenseLineItemId": "EL_vpsayp",
       "structure": "Product wise",
-      "rateBasis": "Rs Per Gross Qty"
+      "rateBasis": "Rs Per Gross Qty",
+      "mappedPartnerModels": []
     },
     {
       "id": "CLI_cgf218",
       "name": "Shipping Fee - WH to MP/Consumer",
       "expenseLineItemId": "EL_vpsayp",
       "structure": "Product wise",
-      "rateBasis": "Rs Per Gross Qty"
+      "rateBasis": "Rs Per Gross Qty",
+      "mappedPartnerModels": []
     },
     {
       "id": "CLI_u9nlrh",
       "name": "Shipping Fee - MP",
       "expenseLineItemId": "EL_vpsayp",
       "structure": "Marketplace",
-      "rateBasis": "Rs Per Gross Qty"
+      "rateBasis": "Rs Per Gross Qty",
+      "mappedPartnerModels": []
     },
     {
       "id": "CLI_c5qu8y",
       "name": "Shipping Fee - Return",
       "expenseLineItemId": "EL_vpsayp",
       "structure": "Marketplace",
-      "rateBasis": "Rs Per Returns Qty"
+      "rateBasis": "Rs Per Returns Qty",
+      "mappedPartnerModels": []
     },
     {
       "id": "CLI_e8xfgb",
       "name": "Closing Fee",
       "expenseLineItemId": "EL_vpsayp",
       "structure": "Marketplace",
-      "rateBasis": "Rs Per Gross Qty"
+      "rateBasis": "Rs Per Gross Qty",
+      "mappedPartnerModels": []
     },
     {
       "id": "CLI_yusbdc",
       "name": "Fixed Fee",
       "expenseLineItemId": "EL_vpsayp",
       "structure": "Marketplace",
-      "rateBasis": "Rs Per Gross Qty"
+      "rateBasis": "Rs Per Gross Qty",
+      "mappedPartnerModels": []
     },
     {
       "id": "CLI_zr5pow",
       "name": "Technology Fee",
       "expenseLineItemId": "EL_vpsayp",
       "structure": "Marketplace",
-      "rateBasis": "Rs Per Gross Qty"
+      "rateBasis": "Rs Per Gross Qty",
+      "mappedPartnerModels": []
     },
     {
       "id": "CLI_yumaqg",
       "name": "Pick and Pack",
       "expenseLineItemId": "EL_vpsayp",
       "structure": "Marketplace",
-      "rateBasis": "Rs Per Gross Qty"
+      "rateBasis": "Rs Per Gross Qty",
+      "mappedPartnerModels": []
     },
     {
       "id": "CLI_wckj3j",
       "name": "Storage Fees",
       "expenseLineItemId": "EL_vpsayp",
       "structure": "Marketplace",
-      "rateBasis": "Rs Per Gross Qty"
+      "rateBasis": "Rs Per Gross Qty",
+      "mappedPartnerModels": []
     },
     {
       "id": "CLI_0tteo6",
       "name": "Other FUL",
       "expenseLineItemId": "EL_vpsayp",
       "structure": "Other",
-      "rateBasis": "% NSV"
+      "rateBasis": "% NSV",
+      "mappedPartnerModels": []
     },
     {
       "id": "CLI_6qsvs6",
       "name": "Comm Cost",
       "expenseLineItemId": "EL_vpsayp",
       "structure": "Other",
-      "rateBasis": "% NSV"
+      "rateBasis": "% NSV",
+      "mappedPartnerModels": []
     },
     {
       "id": "CLI_lpq9o5",
       "name": "Fixed Costs - Offline",
       "expenseLineItemId": "EL_vpsayp",
       "structure": "Other",
-      "rateBasis": "Amt per mth"
+      "rateBasis": "Amt per mth",
+      "mappedPartnerModels": []
     },
     {
       "id": "CLI_zw5eze",
       "name": "Variable Costs - Offline",
       "expenseLineItemId": "EL_vpsayp",
       "structure": "Other",
-      "rateBasis": "% NSV"
+      "rateBasis": "% NSV",
+      "mappedPartnerModels": []
     },
     {
       "id": "CLI_1699xf",
       "name": "CAC",
       "expenseLineItemId": "EL_1tskzd",
       "rateBasis": "% NSV",
-      "structure": "MP Mapping only"
+      "structure": "MP Mapping only",
+      "mappedPartnerModels": []
     }
   ],
   "marketplaceDeductionMapping": [
@@ -789,6 +819,206 @@
     {
       "brandId": "BR1",
       "partnerModelId": "PM_2gw084",
+      "codbLineItemId": "CLI_6qsvs6"
+    },
+    {
+      "brandId": "BR1",
+      "partnerModelId": "PM_lkql7m",
+      "codbLineItemId": "CLI_u9nlrh"
+    },
+    {
+      "brandId": "BR1",
+      "partnerModelId": "PM_8mdlod",
+      "codbLineItemId": "CLI_u9nlrh"
+    },
+    {
+      "brandId": "BR1",
+      "partnerModelId": "PM_zha4pk",
+      "codbLineItemId": "CLI_u9nlrh"
+    },
+    {
+      "brandId": "BR1",
+      "partnerModelId": "PM_rp2j41",
+      "codbLineItemId": "CLI_u9nlrh"
+    },
+    {
+      "brandId": "BR1",
+      "partnerModelId": "PM_2wvypf",
+      "codbLineItemId": "CLI_u9nlrh"
+    },
+    {
+      "brandId": "BR1",
+      "partnerModelId": "PM_lkql7m",
+      "codbLineItemId": "CLI_c5qu8y"
+    },
+    {
+      "brandId": "BR1",
+      "partnerModelId": "PM_8mdlod",
+      "codbLineItemId": "CLI_c5qu8y"
+    },
+    {
+      "brandId": "BR1",
+      "partnerModelId": "PM_zha4pk",
+      "codbLineItemId": "CLI_c5qu8y"
+    },
+    {
+      "brandId": "BR1",
+      "partnerModelId": "PM_rp2j41",
+      "codbLineItemId": "CLI_c5qu8y"
+    },
+    {
+      "brandId": "BR1",
+      "partnerModelId": "PM_2wvypf",
+      "codbLineItemId": "CLI_c5qu8y"
+    },
+    {
+      "brandId": "BR1",
+      "partnerModelId": "PM_lkql7m",
+      "codbLineItemId": "CLI_e8xfgb"
+    },
+    {
+      "brandId": "BR1",
+      "partnerModelId": "PM_8mdlod",
+      "codbLineItemId": "CLI_e8xfgb"
+    },
+    {
+      "brandId": "BR1",
+      "partnerModelId": "PM_zha4pk",
+      "codbLineItemId": "CLI_e8xfgb"
+    },
+    {
+      "brandId": "BR1",
+      "partnerModelId": "PM_rp2j41",
+      "codbLineItemId": "CLI_e8xfgb"
+    },
+    {
+      "brandId": "BR1",
+      "partnerModelId": "PM_2wvypf",
+      "codbLineItemId": "CLI_e8xfgb"
+    },
+    {
+      "brandId": "BR1",
+      "partnerModelId": "PM_lkql7m",
+      "codbLineItemId": "CLI_yusbdc"
+    },
+    {
+      "brandId": "BR1",
+      "partnerModelId": "PM_8mdlod",
+      "codbLineItemId": "CLI_yusbdc"
+    },
+    {
+      "brandId": "BR1",
+      "partnerModelId": "PM_zha4pk",
+      "codbLineItemId": "CLI_yusbdc"
+    },
+    {
+      "brandId": "BR1",
+      "partnerModelId": "PM_rp2j41",
+      "codbLineItemId": "CLI_yusbdc"
+    },
+    {
+      "brandId": "BR1",
+      "partnerModelId": "PM_2wvypf",
+      "codbLineItemId": "CLI_yusbdc"
+    },
+    {
+      "brandId": "BR1",
+      "partnerModelId": "PM_lkql7m",
+      "codbLineItemId": "CLI_zr5pow"
+    },
+    {
+      "brandId": "BR1",
+      "partnerModelId": "PM_8mdlod",
+      "codbLineItemId": "CLI_zr5pow"
+    },
+    {
+      "brandId": "BR1",
+      "partnerModelId": "PM_zha4pk",
+      "codbLineItemId": "CLI_zr5pow"
+    },
+    {
+      "brandId": "BR1",
+      "partnerModelId": "PM_rp2j41",
+      "codbLineItemId": "CLI_zr5pow"
+    },
+    {
+      "brandId": "BR1",
+      "partnerModelId": "PM_2wvypf",
+      "codbLineItemId": "CLI_zr5pow"
+    },
+    {
+      "brandId": "BR1",
+      "partnerModelId": "PM_lkql7m",
+      "codbLineItemId": "CLI_yumaqg"
+    },
+    {
+      "brandId": "BR1",
+      "partnerModelId": "PM_8mdlod",
+      "codbLineItemId": "CLI_yumaqg"
+    },
+    {
+      "brandId": "BR1",
+      "partnerModelId": "PM_zha4pk",
+      "codbLineItemId": "CLI_yumaqg"
+    },
+    {
+      "brandId": "BR1",
+      "partnerModelId": "PM_rp2j41",
+      "codbLineItemId": "CLI_yumaqg"
+    },
+    {
+      "brandId": "BR1",
+      "partnerModelId": "PM_2wvypf",
+      "codbLineItemId": "CLI_yumaqg"
+    },
+    {
+      "brandId": "BR1",
+      "partnerModelId": "PM_lkql7m",
+      "codbLineItemId": "CLI_wckj3j"
+    },
+    {
+      "brandId": "BR1",
+      "partnerModelId": "PM_8mdlod",
+      "codbLineItemId": "CLI_wckj3j"
+    },
+    {
+      "brandId": "BR1",
+      "partnerModelId": "PM_zha4pk",
+      "codbLineItemId": "CLI_wckj3j"
+    },
+    {
+      "brandId": "BR1",
+      "partnerModelId": "PM_rp2j41",
+      "codbLineItemId": "CLI_wckj3j"
+    },
+    {
+      "brandId": "BR1",
+      "partnerModelId": "PM_2wvypf",
+      "codbLineItemId": "CLI_wckj3j"
+    },
+    {
+      "brandId": "BR1",
+      "partnerModelId": "PM_lkql7m",
+      "codbLineItemId": "CLI_6qsvs6"
+    },
+    {
+      "brandId": "BR1",
+      "partnerModelId": "PM_8mdlod",
+      "codbLineItemId": "CLI_6qsvs6"
+    },
+    {
+      "brandId": "BR1",
+      "partnerModelId": "PM_zha4pk",
+      "codbLineItemId": "CLI_6qsvs6"
+    },
+    {
+      "brandId": "BR1",
+      "partnerModelId": "PM_rp2j41",
+      "codbLineItemId": "CLI_6qsvs6"
+    },
+    {
+      "brandId": "BR1",
+      "partnerModelId": "PM_2wvypf",
       "codbLineItemId": "CLI_6qsvs6"
     }
   ],
@@ -2494,6 +2724,755 @@
           "PSC_hf2t1m": 5
         },
         "CLI_qilzq1": {}
+      },
+      "PM_lkql7m": {
+        "CLI_u9nlrh": {
+          "PC_r2a5ac::": {},
+          "PC_ofapit::": {},
+          "PC_t2rz6a::": {},
+          "PC_d7uwz1::": {},
+          "PC_h01yup::": {},
+          "PC_21bqv5::": {},
+          "PC_mg39l4::": {},
+          "PC_edydxr::": {},
+          "PC_ncey5g::": {},
+          "PC_e0ut7i::": {},
+          "PC_9kyg3s::": {},
+          "PC_43yr0v::": {}
+        },
+        "CLI_c5qu8y": {
+          "PC_r2a5ac::": {},
+          "PC_ofapit::": {},
+          "PC_t2rz6a::": {},
+          "PC_d7uwz1::": {},
+          "PC_h01yup::": {},
+          "PC_21bqv5::": {},
+          "PC_mg39l4::": {},
+          "PC_edydxr::": {},
+          "PC_ncey5g::": {},
+          "PC_e0ut7i::": {},
+          "PC_9kyg3s::": {},
+          "PC_43yr0v::": {}
+        },
+        "CLI_e8xfgb": {
+          "PC_r2a5ac::": {},
+          "PC_ofapit::": {},
+          "PC_t2rz6a::": {},
+          "PC_d7uwz1::": {},
+          "PC_h01yup::": {},
+          "PC_21bqv5::": {},
+          "PC_mg39l4::": {},
+          "PC_edydxr::": {},
+          "PC_ncey5g::": {},
+          "PC_e0ut7i::": {},
+          "PC_9kyg3s::": {},
+          "PC_43yr0v::": {}
+        },
+        "CLI_yusbdc": {
+          "PC_r2a5ac::": {},
+          "PC_ofapit::": {},
+          "PC_t2rz6a::": {},
+          "PC_d7uwz1::": {},
+          "PC_h01yup::": {},
+          "PC_21bqv5::": {},
+          "PC_mg39l4::": {},
+          "PC_edydxr::": {},
+          "PC_ncey5g::": {},
+          "PC_e0ut7i::": {},
+          "PC_9kyg3s::": {},
+          "PC_43yr0v::": {}
+        },
+        "CLI_zr5pow": {
+          "PC_r2a5ac::": {},
+          "PC_ofapit::": {},
+          "PC_t2rz6a::": {},
+          "PC_d7uwz1::": {},
+          "PC_h01yup::": {},
+          "PC_21bqv5::": {},
+          "PC_mg39l4::": {},
+          "PC_edydxr::": {},
+          "PC_ncey5g::": {},
+          "PC_e0ut7i::": {},
+          "PC_9kyg3s::": {},
+          "PC_43yr0v::": {}
+        },
+        "CLI_yumaqg": {
+          "PC_r2a5ac::": {},
+          "PC_ofapit::": {},
+          "PC_t2rz6a::": {},
+          "PC_d7uwz1::": {},
+          "PC_h01yup::": {},
+          "PC_21bqv5::": {},
+          "PC_mg39l4::": {},
+          "PC_edydxr::": {},
+          "PC_ncey5g::": {},
+          "PC_e0ut7i::": {},
+          "PC_9kyg3s::": {},
+          "PC_43yr0v::": {}
+        },
+        "CLI_wckj3j": {
+          "PC_r2a5ac::": {},
+          "PC_ofapit::": {},
+          "PC_t2rz6a::": {},
+          "PC_d7uwz1::": {},
+          "PC_h01yup::": {},
+          "PC_21bqv5::": {},
+          "PC_mg39l4::": {},
+          "PC_edydxr::": {},
+          "PC_ncey5g::": {},
+          "PC_e0ut7i::": {},
+          "PC_9kyg3s::": {},
+          "PC_43yr0v::": {}
+        },
+        "CLI_we7tng": {},
+        "CLI_ny357m": {},
+        "CLI_9ftoyg": {},
+        "CLI_0tteo6": {},
+        "CLI_6qsvs6": {},
+        "CLI_lpq9o5": {},
+        "CLI_zw5eze": {}
+      },
+      "PM_8mdlod": {
+        "CLI_u9nlrh": {
+          "PC_r2a5ac::": {},
+          "PC_ofapit::": {},
+          "PC_t2rz6a::": {},
+          "PC_d7uwz1::": {},
+          "PC_h01yup::": {},
+          "PC_21bqv5::": {},
+          "PC_mg39l4::": {},
+          "PC_edydxr::": {},
+          "PC_ncey5g::": {},
+          "PC_e0ut7i::": {},
+          "PC_9kyg3s::": {},
+          "PC_43yr0v::": {}
+        },
+        "CLI_c5qu8y": {
+          "PC_r2a5ac::": {},
+          "PC_ofapit::": {},
+          "PC_t2rz6a::": {},
+          "PC_d7uwz1::": {},
+          "PC_h01yup::": {},
+          "PC_21bqv5::": {},
+          "PC_mg39l4::": {},
+          "PC_edydxr::": {},
+          "PC_ncey5g::": {},
+          "PC_e0ut7i::": {},
+          "PC_9kyg3s::": {},
+          "PC_43yr0v::": {}
+        },
+        "CLI_e8xfgb": {
+          "PC_r2a5ac::": {},
+          "PC_ofapit::": {},
+          "PC_t2rz6a::": {},
+          "PC_d7uwz1::": {},
+          "PC_h01yup::": {},
+          "PC_21bqv5::": {},
+          "PC_mg39l4::": {},
+          "PC_edydxr::": {},
+          "PC_ncey5g::": {},
+          "PC_e0ut7i::": {},
+          "PC_9kyg3s::": {},
+          "PC_43yr0v::": {}
+        },
+        "CLI_yusbdc": {
+          "PC_r2a5ac::": {},
+          "PC_ofapit::": {},
+          "PC_t2rz6a::": {},
+          "PC_d7uwz1::": {},
+          "PC_h01yup::": {},
+          "PC_21bqv5::": {},
+          "PC_mg39l4::": {},
+          "PC_edydxr::": {},
+          "PC_ncey5g::": {},
+          "PC_e0ut7i::": {},
+          "PC_9kyg3s::": {},
+          "PC_43yr0v::": {}
+        },
+        "CLI_zr5pow": {
+          "PC_r2a5ac::": {},
+          "PC_ofapit::": {},
+          "PC_t2rz6a::": {},
+          "PC_d7uwz1::": {},
+          "PC_h01yup::": {},
+          "PC_21bqv5::": {},
+          "PC_mg39l4::": {},
+          "PC_edydxr::": {},
+          "PC_ncey5g::": {},
+          "PC_e0ut7i::": {},
+          "PC_9kyg3s::": {},
+          "PC_43yr0v::": {}
+        },
+        "CLI_yumaqg": {
+          "PC_r2a5ac::": {},
+          "PC_ofapit::": {},
+          "PC_t2rz6a::": {},
+          "PC_d7uwz1::": {},
+          "PC_h01yup::": {},
+          "PC_21bqv5::": {},
+          "PC_mg39l4::": {},
+          "PC_edydxr::": {},
+          "PC_ncey5g::": {},
+          "PC_e0ut7i::": {},
+          "PC_9kyg3s::": {},
+          "PC_43yr0v::": {}
+        },
+        "CLI_wckj3j": {
+          "PC_r2a5ac::": {},
+          "PC_ofapit::": {},
+          "PC_t2rz6a::": {},
+          "PC_d7uwz1::": {},
+          "PC_h01yup::": {},
+          "PC_21bqv5::": {},
+          "PC_mg39l4::": {},
+          "PC_edydxr::": {},
+          "PC_ncey5g::": {},
+          "PC_e0ut7i::": {},
+          "PC_9kyg3s::": {},
+          "PC_43yr0v::": {}
+        },
+        "CLI_we7tng": {},
+        "CLI_ny357m": {},
+        "CLI_9ftoyg": {},
+        "CLI_0tteo6": {},
+        "CLI_6qsvs6": {},
+        "CLI_lpq9o5": {},
+        "CLI_zw5eze": {}
+      },
+      "PM_zha4pk": {
+        "CLI_u9nlrh": {
+          "PC_r2a5ac::": {},
+          "PC_ofapit::": {},
+          "PC_t2rz6a::": {},
+          "PC_d7uwz1::": {},
+          "PC_h01yup::": {},
+          "PC_21bqv5::": {},
+          "PC_mg39l4::": {},
+          "PC_edydxr::": {},
+          "PC_ncey5g::": {},
+          "PC_e0ut7i::": {},
+          "PC_9kyg3s::": {},
+          "PC_43yr0v::": {}
+        },
+        "CLI_c5qu8y": {
+          "PC_r2a5ac::": {},
+          "PC_ofapit::": {},
+          "PC_t2rz6a::": {},
+          "PC_d7uwz1::": {},
+          "PC_h01yup::": {},
+          "PC_21bqv5::": {},
+          "PC_mg39l4::": {},
+          "PC_edydxr::": {},
+          "PC_ncey5g::": {},
+          "PC_e0ut7i::": {},
+          "PC_9kyg3s::": {},
+          "PC_43yr0v::": {}
+        },
+        "CLI_e8xfgb": {
+          "PC_r2a5ac::": {},
+          "PC_ofapit::": {},
+          "PC_t2rz6a::": {},
+          "PC_d7uwz1::": {},
+          "PC_h01yup::": {},
+          "PC_21bqv5::": {},
+          "PC_mg39l4::": {},
+          "PC_edydxr::": {},
+          "PC_ncey5g::": {},
+          "PC_e0ut7i::": {},
+          "PC_9kyg3s::": {},
+          "PC_43yr0v::": {}
+        },
+        "CLI_yusbdc": {
+          "PC_r2a5ac::": {},
+          "PC_ofapit::": {},
+          "PC_t2rz6a::": {},
+          "PC_d7uwz1::": {},
+          "PC_h01yup::": {},
+          "PC_21bqv5::": {},
+          "PC_mg39l4::": {},
+          "PC_edydxr::": {},
+          "PC_ncey5g::": {},
+          "PC_e0ut7i::": {},
+          "PC_9kyg3s::": {},
+          "PC_43yr0v::": {}
+        },
+        "CLI_zr5pow": {
+          "PC_r2a5ac::": {},
+          "PC_ofapit::": {},
+          "PC_t2rz6a::": {},
+          "PC_d7uwz1::": {},
+          "PC_h01yup::": {},
+          "PC_21bqv5::": {},
+          "PC_mg39l4::": {},
+          "PC_edydxr::": {},
+          "PC_ncey5g::": {},
+          "PC_e0ut7i::": {},
+          "PC_9kyg3s::": {},
+          "PC_43yr0v::": {}
+        },
+        "CLI_yumaqg": {
+          "PC_r2a5ac::": {},
+          "PC_ofapit::": {},
+          "PC_t2rz6a::": {},
+          "PC_d7uwz1::": {},
+          "PC_h01yup::": {},
+          "PC_21bqv5::": {},
+          "PC_mg39l4::": {},
+          "PC_edydxr::": {},
+          "PC_ncey5g::": {},
+          "PC_e0ut7i::": {},
+          "PC_9kyg3s::": {},
+          "PC_43yr0v::": {}
+        },
+        "CLI_wckj3j": {
+          "PC_r2a5ac::": {},
+          "PC_ofapit::": {},
+          "PC_t2rz6a::": {},
+          "PC_d7uwz1::": {},
+          "PC_h01yup::": {},
+          "PC_21bqv5::": {},
+          "PC_mg39l4::": {},
+          "PC_edydxr::": {},
+          "PC_ncey5g::": {},
+          "PC_e0ut7i::": {},
+          "PC_9kyg3s::": {},
+          "PC_43yr0v::": {}
+        },
+        "CLI_we7tng": {},
+        "CLI_ny357m": {},
+        "CLI_9ftoyg": {},
+        "CLI_0tteo6": {},
+        "CLI_6qsvs6": {},
+        "CLI_lpq9o5": {},
+        "CLI_zw5eze": {}
+      },
+      "PM_rp2j41": {
+        "CLI_u9nlrh": {
+          "PC_r2a5ac::": {},
+          "PC_ofapit::": {},
+          "PC_t2rz6a::": {},
+          "PC_d7uwz1::": {},
+          "PC_h01yup::": {},
+          "PC_21bqv5::": {},
+          "PC_mg39l4::": {},
+          "PC_edydxr::": {},
+          "PC_ncey5g::": {},
+          "PC_e0ut7i::": {},
+          "PC_9kyg3s::": {},
+          "PC_43yr0v::": {}
+        },
+        "CLI_c5qu8y": {
+          "PC_r2a5ac::": {},
+          "PC_ofapit::": {},
+          "PC_t2rz6a::": {},
+          "PC_d7uwz1::": {},
+          "PC_h01yup::": {},
+          "PC_21bqv5::": {},
+          "PC_mg39l4::": {},
+          "PC_edydxr::": {},
+          "PC_ncey5g::": {},
+          "PC_e0ut7i::": {},
+          "PC_9kyg3s::": {},
+          "PC_43yr0v::": {}
+        },
+        "CLI_e8xfgb": {
+          "PC_r2a5ac::": {},
+          "PC_ofapit::": {},
+          "PC_t2rz6a::": {},
+          "PC_d7uwz1::": {},
+          "PC_h01yup::": {},
+          "PC_21bqv5::": {},
+          "PC_mg39l4::": {},
+          "PC_edydxr::": {},
+          "PC_ncey5g::": {},
+          "PC_e0ut7i::": {},
+          "PC_9kyg3s::": {},
+          "PC_43yr0v::": {}
+        },
+        "CLI_yusbdc": {
+          "PC_r2a5ac::": {},
+          "PC_ofapit::": {},
+          "PC_t2rz6a::": {},
+          "PC_d7uwz1::": {},
+          "PC_h01yup::": {},
+          "PC_21bqv5::": {},
+          "PC_mg39l4::": {},
+          "PC_edydxr::": {},
+          "PC_ncey5g::": {},
+          "PC_e0ut7i::": {},
+          "PC_9kyg3s::": {},
+          "PC_43yr0v::": {}
+        },
+        "CLI_zr5pow": {
+          "PC_r2a5ac::": {},
+          "PC_ofapit::": {},
+          "PC_t2rz6a::": {},
+          "PC_d7uwz1::": {},
+          "PC_h01yup::": {},
+          "PC_21bqv5::": {},
+          "PC_mg39l4::": {},
+          "PC_edydxr::": {},
+          "PC_ncey5g::": {},
+          "PC_e0ut7i::": {},
+          "PC_9kyg3s::": {},
+          "PC_43yr0v::": {}
+        },
+        "CLI_yumaqg": {
+          "PC_r2a5ac::": {},
+          "PC_ofapit::": {},
+          "PC_t2rz6a::": {},
+          "PC_d7uwz1::": {},
+          "PC_h01yup::": {},
+          "PC_21bqv5::": {},
+          "PC_mg39l4::": {},
+          "PC_edydxr::": {},
+          "PC_ncey5g::": {},
+          "PC_e0ut7i::": {},
+          "PC_9kyg3s::": {},
+          "PC_43yr0v::": {}
+        },
+        "CLI_wckj3j": {
+          "PC_r2a5ac::": {},
+          "PC_ofapit::": {},
+          "PC_t2rz6a::": {},
+          "PC_d7uwz1::": {},
+          "PC_h01yup::": {},
+          "PC_21bqv5::": {},
+          "PC_mg39l4::": {},
+          "PC_edydxr::": {},
+          "PC_ncey5g::": {},
+          "PC_e0ut7i::": {},
+          "PC_9kyg3s::": {},
+          "PC_43yr0v::": {}
+        },
+        "CLI_we7tng": {},
+        "CLI_ny357m": {},
+        "CLI_9ftoyg": {},
+        "CLI_0tteo6": {},
+        "CLI_6qsvs6": {},
+        "CLI_lpq9o5": {},
+        "CLI_zw5eze": {}
+      },
+      "PM_w4g7wl": {
+        "CLI_u9nlrh": {
+          "PC_r2a5ac::": {},
+          "PC_ofapit::": {},
+          "PC_t2rz6a::": {},
+          "PC_d7uwz1::": {},
+          "PC_h01yup::": {},
+          "PC_21bqv5::": {},
+          "PC_mg39l4::": {},
+          "PC_edydxr::": {},
+          "PC_ncey5g::": {},
+          "PC_e0ut7i::": {},
+          "PC_9kyg3s::": {},
+          "PC_43yr0v::": {}
+        },
+        "CLI_c5qu8y": {
+          "PC_r2a5ac::": {},
+          "PC_ofapit::": {},
+          "PC_t2rz6a::": {},
+          "PC_d7uwz1::": {},
+          "PC_h01yup::": {},
+          "PC_21bqv5::": {},
+          "PC_mg39l4::": {},
+          "PC_edydxr::": {},
+          "PC_ncey5g::": {},
+          "PC_e0ut7i::": {},
+          "PC_9kyg3s::": {},
+          "PC_43yr0v::": {}
+        },
+        "CLI_e8xfgb": {
+          "PC_r2a5ac::": {},
+          "PC_ofapit::": {},
+          "PC_t2rz6a::": {},
+          "PC_d7uwz1::": {},
+          "PC_h01yup::": {},
+          "PC_21bqv5::": {},
+          "PC_mg39l4::": {},
+          "PC_edydxr::": {},
+          "PC_ncey5g::": {},
+          "PC_e0ut7i::": {},
+          "PC_9kyg3s::": {},
+          "PC_43yr0v::": {}
+        },
+        "CLI_yusbdc": {
+          "PC_r2a5ac::": {},
+          "PC_ofapit::": {},
+          "PC_t2rz6a::": {},
+          "PC_d7uwz1::": {},
+          "PC_h01yup::": {},
+          "PC_21bqv5::": {},
+          "PC_mg39l4::": {},
+          "PC_edydxr::": {},
+          "PC_ncey5g::": {},
+          "PC_e0ut7i::": {},
+          "PC_9kyg3s::": {},
+          "PC_43yr0v::": {}
+        },
+        "CLI_zr5pow": {
+          "PC_r2a5ac::": {},
+          "PC_ofapit::": {},
+          "PC_t2rz6a::": {},
+          "PC_d7uwz1::": {},
+          "PC_h01yup::": {},
+          "PC_21bqv5::": {},
+          "PC_mg39l4::": {},
+          "PC_edydxr::": {},
+          "PC_ncey5g::": {},
+          "PC_e0ut7i::": {},
+          "PC_9kyg3s::": {},
+          "PC_43yr0v::": {}
+        },
+        "CLI_yumaqg": {
+          "PC_r2a5ac::": {},
+          "PC_ofapit::": {},
+          "PC_t2rz6a::": {},
+          "PC_d7uwz1::": {},
+          "PC_h01yup::": {},
+          "PC_21bqv5::": {},
+          "PC_mg39l4::": {},
+          "PC_edydxr::": {},
+          "PC_ncey5g::": {},
+          "PC_e0ut7i::": {},
+          "PC_9kyg3s::": {},
+          "PC_43yr0v::": {}
+        },
+        "CLI_wckj3j": {
+          "PC_r2a5ac::": {},
+          "PC_ofapit::": {},
+          "PC_t2rz6a::": {},
+          "PC_d7uwz1::": {},
+          "PC_h01yup::": {},
+          "PC_21bqv5::": {},
+          "PC_mg39l4::": {},
+          "PC_edydxr::": {},
+          "PC_ncey5g::": {},
+          "PC_e0ut7i::": {},
+          "PC_9kyg3s::": {},
+          "PC_43yr0v::": {}
+        },
+        "CLI_we7tng": {},
+        "CLI_ny357m": {},
+        "CLI_9ftoyg": {},
+        "CLI_0tteo6": {},
+        "CLI_6qsvs6": {},
+        "CLI_lpq9o5": {},
+        "CLI_zw5eze": {}
+      },
+      "PM_2wvypf": {
+        "CLI_u9nlrh": {
+          "PC_r2a5ac::": {},
+          "PC_ofapit::": {},
+          "PC_t2rz6a::": {},
+          "PC_d7uwz1::": {},
+          "PC_h01yup::": {},
+          "PC_21bqv5::": {},
+          "PC_mg39l4::": {},
+          "PC_edydxr::": {},
+          "PC_ncey5g::": {},
+          "PC_e0ut7i::": {},
+          "PC_9kyg3s::": {},
+          "PC_43yr0v::": {}
+        },
+        "CLI_c5qu8y": {
+          "PC_r2a5ac::": {},
+          "PC_ofapit::": {},
+          "PC_t2rz6a::": {},
+          "PC_d7uwz1::": {},
+          "PC_h01yup::": {},
+          "PC_21bqv5::": {},
+          "PC_mg39l4::": {},
+          "PC_edydxr::": {},
+          "PC_ncey5g::": {},
+          "PC_e0ut7i::": {},
+          "PC_9kyg3s::": {},
+          "PC_43yr0v::": {}
+        },
+        "CLI_e8xfgb": {
+          "PC_r2a5ac::": {},
+          "PC_ofapit::": {},
+          "PC_t2rz6a::": {},
+          "PC_d7uwz1::": {},
+          "PC_h01yup::": {},
+          "PC_21bqv5::": {},
+          "PC_mg39l4::": {},
+          "PC_edydxr::": {},
+          "PC_ncey5g::": {},
+          "PC_e0ut7i::": {},
+          "PC_9kyg3s::": {},
+          "PC_43yr0v::": {}
+        },
+        "CLI_yusbdc": {
+          "PC_r2a5ac::": {},
+          "PC_ofapit::": {},
+          "PC_t2rz6a::": {},
+          "PC_d7uwz1::": {},
+          "PC_h01yup::": {},
+          "PC_21bqv5::": {},
+          "PC_mg39l4::": {},
+          "PC_edydxr::": {},
+          "PC_ncey5g::": {},
+          "PC_e0ut7i::": {},
+          "PC_9kyg3s::": {},
+          "PC_43yr0v::": {}
+        },
+        "CLI_zr5pow": {
+          "PC_r2a5ac::": {},
+          "PC_ofapit::": {},
+          "PC_t2rz6a::": {},
+          "PC_d7uwz1::": {},
+          "PC_h01yup::": {},
+          "PC_21bqv5::": {},
+          "PC_mg39l4::": {},
+          "PC_edydxr::": {},
+          "PC_ncey5g::": {},
+          "PC_e0ut7i::": {},
+          "PC_9kyg3s::": {},
+          "PC_43yr0v::": {}
+        },
+        "CLI_yumaqg": {
+          "PC_r2a5ac::": {},
+          "PC_ofapit::": {},
+          "PC_t2rz6a::": {},
+          "PC_d7uwz1::": {},
+          "PC_h01yup::": {},
+          "PC_21bqv5::": {},
+          "PC_mg39l4::": {},
+          "PC_edydxr::": {},
+          "PC_ncey5g::": {},
+          "PC_e0ut7i::": {},
+          "PC_9kyg3s::": {},
+          "PC_43yr0v::": {}
+        },
+        "CLI_wckj3j": {
+          "PC_r2a5ac::": {},
+          "PC_ofapit::": {},
+          "PC_t2rz6a::": {},
+          "PC_d7uwz1::": {},
+          "PC_h01yup::": {},
+          "PC_21bqv5::": {},
+          "PC_mg39l4::": {},
+          "PC_edydxr::": {},
+          "PC_ncey5g::": {},
+          "PC_e0ut7i::": {},
+          "PC_9kyg3s::": {},
+          "PC_43yr0v::": {}
+        },
+        "CLI_we7tng": {},
+        "CLI_ny357m": {},
+        "CLI_9ftoyg": {},
+        "CLI_0tteo6": {},
+        "CLI_6qsvs6": {},
+        "CLI_lpq9o5": {},
+        "CLI_zw5eze": {}
+      },
+      "PM_ncdw5a": {
+        "CLI_u9nlrh": {
+          "PC_r2a5ac::": {},
+          "PC_ofapit::": {},
+          "PC_t2rz6a::": {},
+          "PC_d7uwz1::": {},
+          "PC_h01yup::": {},
+          "PC_21bqv5::": {},
+          "PC_mg39l4::": {},
+          "PC_edydxr::": {},
+          "PC_ncey5g::": {},
+          "PC_e0ut7i::": {},
+          "PC_9kyg3s::": {},
+          "PC_43yr0v::": {}
+        },
+        "CLI_c5qu8y": {
+          "PC_r2a5ac::": {},
+          "PC_ofapit::": {},
+          "PC_t2rz6a::": {},
+          "PC_d7uwz1::": {},
+          "PC_h01yup::": {},
+          "PC_21bqv5::": {},
+          "PC_mg39l4::": {},
+          "PC_edydxr::": {},
+          "PC_ncey5g::": {},
+          "PC_e0ut7i::": {},
+          "PC_9kyg3s::": {},
+          "PC_43yr0v::": {}
+        },
+        "CLI_e8xfgb": {
+          "PC_r2a5ac::": {},
+          "PC_ofapit::": {},
+          "PC_t2rz6a::": {},
+          "PC_d7uwz1::": {},
+          "PC_h01yup::": {},
+          "PC_21bqv5::": {},
+          "PC_mg39l4::": {},
+          "PC_edydxr::": {},
+          "PC_ncey5g::": {},
+          "PC_e0ut7i::": {},
+          "PC_9kyg3s::": {},
+          "PC_43yr0v::": {}
+        },
+        "CLI_yusbdc": {
+          "PC_r2a5ac::": {},
+          "PC_ofapit::": {},
+          "PC_t2rz6a::": {},
+          "PC_d7uwz1::": {},
+          "PC_h01yup::": {},
+          "PC_21bqv5::": {},
+          "PC_mg39l4::": {},
+          "PC_edydxr::": {},
+          "PC_ncey5g::": {},
+          "PC_e0ut7i::": {},
+          "PC_9kyg3s::": {},
+          "PC_43yr0v::": {}
+        },
+        "CLI_zr5pow": {
+          "PC_r2a5ac::": {},
+          "PC_ofapit::": {},
+          "PC_t2rz6a::": {},
+          "PC_d7uwz1::": {},
+          "PC_h01yup::": {},
+          "PC_21bqv5::": {},
+          "PC_mg39l4::": {},
+          "PC_edydxr::": {},
+          "PC_ncey5g::": {},
+          "PC_e0ut7i::": {},
+          "PC_9kyg3s::": {},
+          "PC_43yr0v::": {}
+        },
+        "CLI_yumaqg": {
+          "PC_r2a5ac::": {},
+          "PC_ofapit::": {},
+          "PC_t2rz6a::": {},
+          "PC_d7uwz1::": {},
+          "PC_h01yup::": {},
+          "PC_21bqv5::": {},
+          "PC_mg39l4::": {},
+          "PC_edydxr::": {},
+          "PC_ncey5g::": {},
+          "PC_e0ut7i::": {},
+          "PC_9kyg3s::": {},
+          "PC_43yr0v::": {}
+        },
+        "CLI_wckj3j": {
+          "PC_r2a5ac::": {},
+          "PC_ofapit::": {},
+          "PC_t2rz6a::": {},
+          "PC_d7uwz1::": {},
+          "PC_h01yup::": {},
+          "PC_21bqv5::": {},
+          "PC_mg39l4::": {},
+          "PC_edydxr::": {},
+          "PC_ncey5g::": {},
+          "PC_e0ut7i::": {},
+          "PC_9kyg3s::": {},
+          "PC_43yr0v::": {}
+        },
+        "CLI_we7tng": {},
+        "CLI_ny357m": {},
+        "CLI_9ftoyg": {},
+        "CLI_0tteo6": {},
+        "CLI_6qsvs6": {},
+        "CLI_lpq9o5": {},
+        "CLI_zw5eze": {}
       }
     }
   },
