@@ -15,7 +15,7 @@
       "Feb",
       "Mar"
     ],
-    "savedAt": "2026-07-31T06:02:27.009Z",
+    "savedAt": "2026-07-31T06:02:57.665Z",
     "activeCycleId": "CYC_p9c3kh"
   },
   "channels": [
@@ -82,12 +82,6 @@
       "model": "B2C",
       "partnerGroup": "MAN",
       "id": "PM_2wvypf"
-    },
-    {
-      "id": "PM_ncdw5a",
-      "partner": "Instamart",
-      "model": "B2C",
-      "partnerGroup": "QCK"
     }
   ],
   "brandPartnerMapping": [
@@ -18319,12 +18313,66 @@
           "Feb": 20,
           "Mar": 20
         },
-        "PM_lkql7m": {},
-        "PM_8mdlod": {},
-        "PM_zha4pk": {},
-        "PM_rp2j41": {},
-        "PM_w4g7wl": {},
-        "PM_2wvypf": {},
+        "PM_lkql7m": {
+          "Aug": 20,
+          "Sep": 20,
+          "Oct": 20,
+          "Nov": 20,
+          "Dec": 20,
+          "Jan": 20,
+          "Feb": 20,
+          "Mar": 20
+        },
+        "PM_8mdlod": {
+          "Aug": 20,
+          "Sep": 20,
+          "Oct": 20,
+          "Nov": 20,
+          "Dec": 20,
+          "Jan": 20,
+          "Feb": 20,
+          "Mar": 20
+        },
+        "PM_zha4pk": {
+          "Aug": 20,
+          "Sep": 20,
+          "Oct": 20,
+          "Nov": 20,
+          "Dec": 20,
+          "Jan": 20,
+          "Feb": 20,
+          "Mar": 20
+        },
+        "PM_rp2j41": {
+          "Aug": 20,
+          "Sep": 20,
+          "Oct": 20,
+          "Nov": 20,
+          "Dec": 20,
+          "Jan": 20,
+          "Feb": 20,
+          "Mar": 20
+        },
+        "PM_w4g7wl": {
+          "Aug": 20,
+          "Sep": 20,
+          "Oct": 20,
+          "Nov": 20,
+          "Dec": 20,
+          "Jan": 20,
+          "Feb": 20,
+          "Mar": 20
+        },
+        "PM_2wvypf": {
+          "Aug": 20,
+          "Sep": 20,
+          "Oct": 20,
+          "Nov": 20,
+          "Dec": 20,
+          "Jan": 20,
+          "Feb": 20,
+          "Mar": 20
+        },
         "PM_ncdw5a": {}
       },
       "margin": {
