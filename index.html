@@ -383,7 +383,6 @@
     <div class="navgroup">
       <h4>Output</h4>
       <button class="navitem" data-tab="outputPLCF"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg><span>P&amp;L &amp; Cash Flow</span></button>
-      <button class="navitem" data-tab="outputPartnerPL"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 13a5 5 0 007.54.54l3-3a5 5 0 00-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 00-7.54-.54l-3 3a5 5 0 007.07 7.07l1.71-1.71"/></svg><span>Partner-Model P&amp;L</span></button>
     </div>
 
     <div class="sidebarsave">
@@ -2137,7 +2136,6 @@ const TABS = {
     ], {prefix:'CF'})
   },
   outputPLCF:{ title:'P&L & Cash Flow', desc:'Structure matches the reviewed model — not yet linked to live inputs.', render: renderPLCF },
-  outputPartnerPL:{ title:'Partner-Model P&L', desc:'Same P&L layout, one block per Partner-Model. Structure only, not yet linked.', render: renderPartnerModelPL }
 };
 
 /* ---------------------------------------------------------------
@@ -2423,34 +2421,73 @@ function renderPLCFTable(sections, dataProvider){
   return html;
 }
 
-function renderPLCF(container){
-  let html = `<div class="footnote" style="margin-bottom:16px;">GMV through CM1 are live, computed at Pareto (Product Sub Category) level and summed to total. CODB, CAC, Opex, EBITDA, and Cash Flow are still structure-only, pending those sections.</div>`;
-  const dataProvider = (key, month)=>{
-    if(!PL_SUM_KEYS.includes(key)) return null;
-    const pms = DATA.partnerModels;
-    if(!pms.length) return null;
-    let total = 0;
-    pms.forEach(pm=>{ total += computePartnerModelPL(pm.id, month)[key]; });
-    return total;
-  };
-  html += `<div class="panel"><div class="scrollbox" style="max-height:75vh;">${renderPLCFTable(PLCF_SECTIONS, dataProvider)}</div></div>`;
-  container.innerHTML = html;
+let plFilters = {
+  partnerGroup: 'all', partnerModel: 'all',
+  productGroup: 'all', productCategory: 'all', productSubCategory: 'all'
+};
+
+function computeFilteredPL(month){
+  const pms = DATA.partnerModels.filter(pm=>
+    (plFilters.partnerGroup==='all' || pm.partnerGroup===plFilters.partnerGroup) &&
+    (plFilters.partnerModel==='all' || pm.id===plFilters.partnerModel)
+  );
+  const subCats = DATA.productSubCategories.filter(sc=>
+    (plFilters.productGroup==='all' || sc.productGroupId===plFilters.productGroup) &&
+    (plFilters.productCategory==='all' || sc.productCategoryId===plFilters.productCategory) &&
+    (plFilters.productSubCategory==='all' || sc.id===plFilters.productSubCategory)
+  );
+  const totals = {}; PL_SUM_KEYS.forEach(k=> totals[k]=0);
+  pms.forEach(pm=> subCats.forEach(sc=>{
+    const row = computeParetoLevelPL(pm.id, sc.id, month);
+    PL_SUM_KEYS.forEach(k=> totals[k] += row[k]);
+  }));
+  return totals;
 }
 
-function renderPartnerModelPL(container){
-  let html = `<div class="footnote" style="margin-bottom:16px;">GMV through CM1 are live, computed at Pareto (Product Sub Category) level and summed up for this Partner-Model. CODB, CAC, Opex, EBITDA are still structure-only.</div>`;
-  const pms = DATA.partnerModels;
-  if(!pms.length){
-    html += `<div class="footnote">No Partner-Model combos yet — add some in "3. Partner-Model master" first.</div>`;
-  } else {
-    const plOnlySections = PLCF_SECTIONS.slice(0,2); // Profit & Loss + Key Ratios only
-    pms.forEach(pm=>{
-      const dataProvider = (key, month)=> PL_SUM_KEYS.includes(key) ? computePartnerModelPL(pm.id, month)[key] : null;
-      html += `<h3 style="margin:18px 0 8px 0;">${pm.partner} — ${pm.model}</h3>`;
-      html += `<div class="panel"><div class="scrollbox" style="max-height:420px;">${renderPLCFTable(plOnlySections, dataProvider)}</div></div>`;
-    });
-  }
+function plFilterBarHtml(){
+  const pmOptionsForGroup = plFilters.partnerGroup==='all' ? DATA.partnerModels : DATA.partnerModels.filter(pm=>pm.partnerGroup===plFilters.partnerGroup);
+  const catOptionsForGroup = plFilters.productGroup==='all' ? DATA.productCategories : DATA.productCategories.filter(c=>c.productGroupId===plFilters.productGroup);
+  const scOptionsForFilters = DATA.productSubCategories.filter(sc=>
+    (plFilters.productGroup==='all' || sc.productGroupId===plFilters.productGroup) &&
+    (plFilters.productCategory==='all' || sc.productCategoryId===plFilters.productCategory)
+  );
+  const sel = (id, label, options, value)=> `
+    <div style="min-width:180px;">
+      <label style="display:block; font-size:11px; font-weight:700; color:var(--ink-soft); text-transform:uppercase; letter-spacing:0.04em; margin-bottom:4px;">${label}</label>
+      <select id="${id}" style="width:100%;">
+        <option value="all"${value==='all'?' selected':''}>All</option>
+        ${options.map(o=>`<option value="${o.id}"${value===o.id?' selected':''}>${o.label}</option>`).join('')}
+      </select>
+    </div>`;
+  return `<div class="panel" style="display:flex; gap:16px; flex-wrap:wrap; margin-bottom:16px;">
+    ${sel('plfPartnerGroup', 'Partner Grp', DATA.partnerGroups.map(g=>({id:g.id,label:g.name})), plFilters.partnerGroup)}
+    ${sel('plfPartnerModel', 'Partner-Model', pmOptionsForGroup.map(pm=>({id:pm.id,label:pmLabel(pm)})), plFilters.partnerModel)}
+    ${sel('plfProductGroup', 'Product Grp', DATA.productGroups.map(g=>({id:g.id,label:g.name})), plFilters.productGroup)}
+    ${sel('plfProductCategory', 'Product Category', catOptionsForGroup.map(c=>({id:c.id,label:c.name})), plFilters.productCategory)}
+    ${sel('plfProductSubCategory', 'Product Sub-Category', scOptionsForFilters.map(sc=>({id:sc.id,label:sc.name})), plFilters.productSubCategory)}
+  </div>`;
+}
+
+function renderPLCF(container){
+  let html = `<div class="footnote" style="margin-bottom:16px;">GMV through CM1 are live, computed at Pareto (Product Sub Category) level and summed across whatever the filters below select. CODB, CAC, Opex, EBITDA, and Cash Flow are still structure-only, pending those sections.</div>`;
+  html += plFilterBarHtml();
+  const dataProvider = (key, month)=> PL_SUM_KEYS.includes(key) ? computeFilteredPL(month)[key] : null;
+  html += `<div class="panel"><div class="scrollbox" style="max-height:75vh;">${renderPLCFTable(PLCF_SECTIONS, dataProvider)}</div></div>`;
   container.innerHTML = html;
+
+  const wire = (id, filterKey, resetChildren)=>{
+    const el = container.querySelector('#'+id);
+    if(el) el.addEventListener('change', ()=>{
+      plFilters[filterKey] = el.value;
+      (resetChildren||[]).forEach(k=> plFilters[k]='all');
+      renderPLCF(container);
+    });
+  };
+  wire('plfPartnerGroup', 'partnerGroup', ['partnerModel']);
+  wire('plfPartnerModel', 'partnerModel');
+  wire('plfProductGroup', 'productGroup', ['productCategory','productSubCategory']);
+  wire('plfProductCategory', 'productCategory', ['productSubCategory']);
+  wire('plfProductSubCategory', 'productSubCategory');
 }
 
 /* ---------------------------------------------------------------
