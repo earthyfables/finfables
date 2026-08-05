@@ -2263,6 +2263,34 @@ function getCodbRate(pmId, li, scId){
   return (store[effectivePmId] && store[effectivePmId][li.id] && +store[effectivePmId][li.id][scId]) || 0;
 }
 
+// CAC is never part of CODB - matches the exclusion already used for the CODB
+// Rate Card and CODB Rate Card screens.
+function getCodbLineItemsForPL(){
+  return DATA.codbLineItems.filter(li=>{
+    if(normalizeText(li.name) === 'cac') return false;
+    const exp = DATA.expenseLineItems.find(x=>x.id===li.expenseLineItemId);
+    if(exp && exp.type === 'CAC') return false;
+    return true;
+  });
+}
+
+// Dispatches a CODB Line Item's cost by its Rate Basis. All the per-unit bases
+// use figures already computed at this same Pareto level (NSV, Gross Qty, COD
+// Qty, Returns Qty); "Amt per mth" is a flat amount, entered directly as the
+// cost itself, so no multiplication is needed — summing it at Pareto level
+// (like everything else) naturally adds up whatever's been entered.
+function computeCodbItemCost(li, pmId, scId, ctx){
+  const rate = getCodbRate(pmId, li, scId);
+  switch(li.rateBasis){
+    case '% NSV': return ctx.NSV * rate / 100;
+    case 'Rs Per Gross Qty': return ctx.GrossQty * rate;
+    case 'Rs Per COD Qty': return ctx.CODQty * rate;
+    case 'Rs Per Returns Qty': return ctx.ReturnsQty * rate;
+    case 'Amt per mth': return rate;
+    default: return 0;
+  }
+}
+
 function computeParetoLevelPL(pmId, scId, month){
   const gmvByMonth = getCycleObj('monthlyGMVByCycle');
   const chMix = getCycleObj('channelMixByCycle');
@@ -2301,25 +2329,35 @@ function computeParetoLevelPL(pmId, scId, month){
   const COGS = NetQty * acogs;
   const CM1 = NSV - COGS;
 
-  // CODB — COD Charges only so far (rest of the CODB line items pending).
-  const codLi = getCodbLineItemByName('COD Charges');
   const CODQty = GrossQty * codPct / 100;
-  const codRate = getCodbRate(pmId, codLi, scId);
-  const CODCharges = CODQty * codRate;
-  const CODB = CODCharges;
+  const ReturnsQty = GrossQty - NetQty;
+  const ctx = {NSV, GrossQty, CODQty, ReturnsQty};
+
+  const codbLineItems = getCodbLineItemsForPL();
+  const codbByItem = {};
+  let CODB = 0;
+  codbLineItems.forEach(li=>{
+    const cost = computeCodbItemCost(li, pmId, scId, ctx);
+    codbByItem[li.id] = cost;
+    CODB += cost;
+  });
+  const CODCharges = codbByItem[(getCodbLineItemByName('COD Charges')||{}).id] || 0;
   const CM2 = CM1 - CODB;
 
-  return {GMV, Returns, Discount, Margin, GST, NSV, MRPVal, NetQty, GrossQty, COGS, CM1, CODCharges, CODB, CM2};
+  return {GMV, Returns, Discount, Margin, GST, NSV, MRPVal, NetQty, GrossQty, COGS, CM1, CODCharges, CODB, CM2, codbByItem};
 }
 
 const PL_SUM_KEYS = ['GMV','Returns','Discount','Margin','GST','NSV','MRPVal','NetQty','GrossQty','COGS','CM1','CODCharges','CODB','CM2'];
 function computePartnerModelPL(pmId, month){
   const subCats = DATA.productSubCategories;
   const totals = {}; PL_SUM_KEYS.forEach(k=> totals[k]=0);
+  const codbByItem = {};
   subCats.forEach(sc=>{
     const row = computeParetoLevelPL(pmId, sc.id, month);
     PL_SUM_KEYS.forEach(k=> totals[k] += row[k]);
+    Object.keys(row.codbByItem||{}).forEach(liId=>{ codbByItem[liId] = (codbByItem[liId]||0) + row.codbByItem[liId]; });
   });
+  totals.codbByItem = codbByItem;
   return totals;
 }
 
@@ -2341,19 +2379,7 @@ const PLCF_SECTIONS = [
     {label:'NSV', subtotal:true, key:'NSV'},
     {label:'COGS', indent:true, key:'COGS'},
     {label:'CM1', subtotal:true, key:'CM1'},
-    {label:'Shrinkage Cost', indent:true},
-    {label:'WH Cost', indent:true},
-    {label:'Packing Cost', indent:true},
-    {label:'Shipping Fee - WH to MP/Consumer', indent:true},
-    {label:'Shipping Fee - MP', indent:true},
-    {label:'Shipping Fee - Return', indent:true},
-    {label:'COD Charges', indent:true, key:'CODCharges'},
-    {label:'Closing Fee', indent:true},
-    {label:'Referal Fee', indent:true},
-    {label:'Technology Fee', indent:true},
-    {label:'Pick and Pack', indent:true},
-    {label:'Storage Fees', indent:true},
-    {label:'Comm Cost', indent:true},
+    {dynamicCodb:true},
     {label:'CODB', subtotal:true, key:'CODB'},
     {label:'CM2', subtotal:true, key:'CM2'},
     {label:'CAC', indent:true},
@@ -2492,10 +2518,13 @@ function computeFilteredPL(month){
     (plFilters.productSubCategory.length===0 || plFilters.productSubCategory.includes(sc.id))
   );
   const totals = {}; PL_SUM_KEYS.forEach(k=> totals[k]=0);
+  const codbByItem = {};
   pms.forEach(pm=> subCats.forEach(sc=>{
     const row = computeParetoLevelPL(pm.id, sc.id, month);
     PL_SUM_KEYS.forEach(k=> totals[k] += row[k]);
+    Object.keys(row.codbByItem||{}).forEach(liId=>{ codbByItem[liId] = (codbByItem[liId]||0) + row.codbByItem[liId]; });
   }));
+  totals.codbByItem = codbByItem;
   return totals;
 }
 
@@ -2530,11 +2559,39 @@ function plFilterBarHtml(){
   </div>`;
 }
 
+function buildDynamicPLCFSections(){
+  const codbLineItems = getCodbLineItemsForPL();
+  return PLCF_SECTIONS.map(sec=>{
+    if(!sec.rows.some(r=>r.dynamicCodb)) return sec;
+    const rows = [];
+    sec.rows.forEach(r=>{
+      if(r.dynamicCodb){
+        if(!codbLineItems.length){
+          rows.push({label:'(no CODB Line Items defined yet)', indent:true});
+        } else {
+          codbLineItems.forEach(li=>{
+            rows.push({label: li.name, indent:true, key: 'codbitem_'+li.id});
+          });
+        }
+      } else {
+        rows.push(r);
+      }
+    });
+    return Object.assign({}, sec, {rows});
+  });
+}
+
 function renderPLCF(container){
-  let html = `<div class="footnote" style="margin-bottom:16px;">GMV through CM1 are live, computed at Pareto (Product Sub Category) level and summed across whatever the filters below select. CODB, CAC, Opex, EBITDA, and Cash Flow are still structure-only, pending those sections.</div>`;
+  let html = `<div class="footnote" style="margin-bottom:16px;">GMV through CM2 are live, computed at Pareto (Product Sub Category) level and summed across whatever the filters below select — CODB now reflects every CODB Line Item, using its own Rate Basis. CAC, Opex, EBITDA, and Cash Flow are still structure-only.</div>`;
   html += plFilterBarHtml();
-  const dataProvider = (key, month)=> PL_SUM_KEYS.includes(key) ? computeFilteredPL(month)[key] : null;
-  html += `<div class="panel"><div class="scrollbox" style="max-height:75vh;">${renderPLCFTable(PLCF_SECTIONS, dataProvider)}</div></div>`;
+  const dataProvider = (key, month)=>{
+    if(key && key.indexOf('codbitem_')===0){
+      const liId = key.slice('codbitem_'.length);
+      return computeFilteredPL(month).codbByItem[liId] || 0;
+    }
+    return PL_SUM_KEYS.includes(key) ? computeFilteredPL(month)[key] : null;
+  };
+  html += `<div class="panel"><div class="scrollbox" style="max-height:75vh;">${renderPLCFTable(buildDynamicPLCFSections(), dataProvider)}</div></div>`;
   container.innerHTML = html;
 
   const wire = (id, filterKey, resetChildren)=>{
