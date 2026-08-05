@@ -387,7 +387,7 @@
       <button class="navitem" data-tab="salesInput"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="23 6 13.5 15.5 8.5 10.5 1 18"/><polyline points="17 6 23 6 23 12"/></svg><span>Sales Inputs</span></button>
       <button class="navitem" data-tab="paretoInput"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 3.05A9 9 0 1020.95 13H11V3.05z"/><path d="M20.49 8.51A9 9 0 0013 3.51v9h9z"/></svg><span>Pareto Input</span></button>
       <button class="navitem" data-tab="cacInput"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 3"/></svg><span>CAC %</span></button>
-      <button class="navitem" data-tab="discMarginGst"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="19" y1="5" x2="5" y2="19"/><circle cx="6.5" cy="6.5" r="2.5"/><circle cx="17.5" cy="17.5" r="2.5"/></svg><span>Discount / Margin / Returns %</span></button>
+      <button class="navitem" data-tab="discMarginGst"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="19" y1="5" x2="5" y2="19"/><circle cx="6.5" cy="6.5" r="2.5"/><circle cx="17.5" cy="17.5" r="2.5"/></svg><span>Discount / Margin / Returns / COD %</span></button>
       <button class="navitem" data-tab="codbRateCard"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="4" y1="21" x2="4" y2="14"/><line x1="4" y1="10" x2="4" y2="3"/><line x1="12" y1="21" x2="12" y2="12"/><line x1="12" y1="8" x2="12" y2="3"/><line x1="20" y1="21" x2="20" y2="16"/><line x1="20" y1="12" x2="20" y2="3"/><line x1="1" y1="14" x2="7" y2="14"/><line x1="9" y1="8" x2="15" y2="8"/><line x1="17" y1="16" x2="23" y2="16"/></svg><span>CODB Rate Card</span></button>
       <button class="navitem" data-tab="miscInputs"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="1.4"/><circle cx="19" cy="12" r="1.4"/><circle cx="5" cy="12" r="1.4"/></svg><span>Misc. Inputs</span></button>
       <button class="navitem" data-tab="cashFlowItems"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="23 4 23 10 17 10"/><polyline points="1 20 1 14 7 14"/><path d="M3.51 9a9 9 0 0114.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0020.49 15"/></svg><span>Cash Flow Adjustments</span></button>
@@ -1905,7 +1905,8 @@ function renderSalesInputsScreen(container){
 const DMG_METRICS = [
   {key:'discount', label:'Disc %'},
   {key:'margin', label:'Margin %'},
-  {key:'returns', label:'Returns %'}
+  {key:'returns', label:'Returns %'},
+  {key:'codPct', label:'COD % Sales'}
 ];
 
 function renderRateGrid(host, metric, label, pms){
@@ -2129,7 +2130,7 @@ const TABS = {
     render: renderCacInputScreen
   },
   discMarginGst:{
-    title:'Discount / Margin / Returns %', desc:'Partner-Model wise, month wise. GST% now lives in the Pareto Input tab (per Product Sub Category). Will later apply as: Discount% on MRP → Margin% on (MRP − Discount) → GST% (from Pareto Input) on (MRP − Discount − Margin)/(1+GST%)×GST%.',
+    title:'Discount / Margin / Returns / COD %', desc:'Partner-Model wise, month wise. COD % Sales = share of a channel sales that are COD, used to derive COD Qty for COD Charges.',
     render: renderDiscMarginGst
   },
   codbRateCard:{
@@ -2231,6 +2232,16 @@ function fmt(n){
   return neg ? `(${s})` : s;
 }
 
+function getCodbLineItemByName(name){
+  return DATA.codbLineItems.find(li=> normalizeText(li.name) === normalizeText(name));
+}
+function getCodbRate(pmId, li, scId){
+  if(!li) return 0;
+  const store = getCycleObj('codbRateCardByCycle');
+  const effectivePmId = li.allChannel ? ALL_CHANNEL_KEY : pmId;
+  return (store[effectivePmId] && store[effectivePmId][li.id] && +store[effectivePmId][li.id][scId]) || 0;
+}
+
 function computeParetoLevelPL(pmId, scId, month){
   const gmvByMonth = getCycleObj('monthlyGMVByCycle');
   const chMix = getCycleObj('channelMixByCycle');
@@ -2251,6 +2262,7 @@ function computeParetoLevelPL(pmId, scId, month){
   const returnsPct = (dmg.returns && dmg.returns[pmId] && +dmg.returns[pmId][month]) || 0;
   const marginPct = (dmg.margin && dmg.margin[pmId] && +dmg.margin[pmId][month]) || 0;
   const discountPct = (dmg.discount && dmg.discount[pmId] && +dmg.discount[pmId][month]) || 0;
+  const codPct = (dmg.codPct && dmg.codPct[pmId] && +dmg.codPct[pmId][month]) || 0;
   const scInput = paretoInput[scId] || {};
   const gstPct = +scInput.gstPct || 0;
   const amrp = +scInput.amrp || 0;
@@ -2268,10 +2280,18 @@ function computeParetoLevelPL(pmId, scId, month){
   const COGS = NetQty * acogs;
   const CM1 = NSV - COGS;
 
-  return {GMV, Returns, Discount, Margin, GST, NSV, MRPVal, NetQty, GrossQty, COGS, CM1};
+  // CODB — COD Charges only so far (rest of the CODB line items pending).
+  const codLi = getCodbLineItemByName('COD Charges');
+  const CODQty = GrossQty * codPct / 100;
+  const codRate = getCodbRate(pmId, codLi, scId);
+  const CODCharges = CODQty * codRate;
+  const CODB = CODCharges;
+  const CM2 = CM1 - CODB;
+
+  return {GMV, Returns, Discount, Margin, GST, NSV, MRPVal, NetQty, GrossQty, COGS, CM1, CODCharges, CODB, CM2};
 }
 
-const PL_SUM_KEYS = ['GMV','Returns','Discount','Margin','GST','NSV','MRPVal','NetQty','GrossQty','COGS','CM1'];
+const PL_SUM_KEYS = ['GMV','Returns','Discount','Margin','GST','NSV','MRPVal','NetQty','GrossQty','COGS','CM1','CODCharges','CODB','CM2'];
 function computePartnerModelPL(pmId, month){
   const subCats = DATA.productSubCategories;
   const totals = {}; PL_SUM_KEYS.forEach(k=> totals[k]=0);
@@ -2306,14 +2326,15 @@ const PLCF_SECTIONS = [
     {label:'Shipping Fee - WH to MP/Consumer', indent:true},
     {label:'Shipping Fee - MP', indent:true},
     {label:'Shipping Fee - Return', indent:true},
+    {label:'COD Charges', indent:true, key:'CODCharges'},
     {label:'Closing Fee', indent:true},
     {label:'Referal Fee', indent:true},
     {label:'Technology Fee', indent:true},
     {label:'Pick and Pack', indent:true},
     {label:'Storage Fees', indent:true},
     {label:'Comm Cost', indent:true},
-    {label:'CODB', subtotal:true},
-    {label:'CM2', subtotal:true},
+    {label:'CODB', subtotal:true, key:'CODB'},
+    {label:'CM2', subtotal:true, key:'CM2'},
     {label:'CAC', indent:true},
     {label:'CM3', subtotal:true},
     {label:'Salary', indent:true},
