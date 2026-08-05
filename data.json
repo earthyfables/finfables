@@ -15,7 +15,7 @@
       "Feb",
       "Mar"
     ],
-    "savedAt": "2026-08-05T16:12:58.054Z",
+    "savedAt": "2026-08-05T16:14:30.434Z",
     "activeCycleId": "CYC_p9c3kh"
   },
   "channels": [
@@ -600,22 +600,6 @@
       ]
     },
     {
-      "id": "CLI_lpq9o5",
-      "name": "Fixed Costs - Offline",
-      "expenseLineItemId": "EL_vpsayp",
-      "structure": "Other",
-      "rateBasis": "Amt per mth",
-      "mappedPartnerModels": []
-    },
-    {
-      "id": "CLI_zw5eze",
-      "name": "Variable Costs - Offline",
-      "expenseLineItemId": "EL_vpsayp",
-      "structure": "Other",
-      "rateBasis": "% NSV",
-      "mappedPartnerModels": []
-    },
-    {
       "id": "CLI_1699xf",
       "name": "CAC",
       "expenseLineItemId": "EL_1tskzd",
@@ -1081,11 +1065,6 @@
       "id": "MAN",
       "name": "MAN",
       "description": "Myntra, Ajio and Nykaa"
-    },
-    {
-      "id": "Stores",
-      "name": "Stores",
-      "description": "Stores"
     },
     {
       "id": "Other MP",
