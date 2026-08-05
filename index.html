@@ -2254,7 +2254,7 @@ function computeParetoLevelPL(pmId, scId, month){
   const MRPVal = NSV + GST + Margin + Discount;
   const NetQty = amrp ? MRPVal / amrp : 0;
   const GrossQty = returnsPct < 100 ? NetQty / (1 - returnsPct/100) : 0;
-  const COGS = GrossQty * acogs;
+  const COGS = NetQty * acogs;
   const CM1 = NSV - COGS;
 
   return {GMV, Returns, Discount, Margin, GST, NSV, MRPVal, NetQty, GrossQty, COGS, CM1};
