@@ -1527,7 +1527,11 @@ function isUiOnlyCell(cell){
   return false;
 }
 function cellText(td){
-  const input = td.querySelector('input,select');
+  const select = td.querySelector('select');
+  if(select) return select.options[select.selectedIndex] ? select.options[select.selectedIndex].text : '';
+  const checkbox = td.querySelector('input[type=checkbox]');
+  if(checkbox) return checkbox.checked ? 'Yes' : 'No';
+  const input = td.querySelector('input');
   if(input) return input.value;
   return td.textContent.trim();
 }
