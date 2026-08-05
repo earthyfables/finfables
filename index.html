@@ -180,7 +180,7 @@
     display:flex; align-items:center; gap:8px;
     border:1px solid var(--line); border-radius:6px; padding:4px 6px 4px 10px; margin-bottom:12px; background:#FAFBFD;
   }
-  .pastebox-label{font-size:11px; font-weight:700; color:var(--ink-soft); white-space:nowrap; flex:none;}
+  .pastebox-label{font-size:11px; font-weight:700; color:var(--ink-soft); white-space:nowrap; flex:none; max-width:280px; overflow:hidden; text-overflow:ellipsis;}
   .pastebox-row{display:contents;}
   .pastebox textarea{
     flex:1; height:28px; min-height:28px; max-height:28px; resize:none; overflow:hidden; line-height:1.3;
@@ -1196,7 +1196,7 @@ function renderCodbRateCardScreen(container){
   });
 
   let html = `<div class="footnote" style="margin-bottom:14px;">One flat table — every Product Sub Category as a row, one column per Fee Type + Channel (or a single "All Channels" column for All-Channel items). CAC is entered separately in its own "CAC %" tab.</div>`;
-  html += pasteBoxHtml('Pdt Sub Cat | ' + columns.map(c=> `${c.li.name} - ${channelLabel(c.pm)}`).join(' | '));
+  html += pasteBoxHtml('Pdt Sub Cat | values in column order (Fee Type + Channel, left to right)', columns.map(c=> `${c.li.name} - ${channelLabel(c.pm)}`).join(' | '));
 
   let hasData = false;
   columns.forEach(({li,pm})=>{
@@ -1490,8 +1490,8 @@ function pctTotalCell(total){
 
 function pmLabel(pm){ return `${pm.partner} (${pm.model})`; }
 
-function pasteBoxHtml(hint){
-  return `<div class="pastebox" title="Columns: ${hint}">
+function pasteBoxHtml(hint, fullTooltip){
+  return `<div class="pastebox" title="Columns: ${fullTooltip || hint}">
     <span class="pastebox-label">Paste (${hint}):</span>
     <textarea id="pasteArea" placeholder="Ctrl+V…"></textarea>
     <div class="pastebox-btns">
