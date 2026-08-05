@@ -2207,11 +2207,68 @@ function sumAll(linesObj){
   let t=0; Object.values(linesObj).forEach(byM=> MONTHS.forEach(m=> t += (byM[m]||0))); return t;
 }
 function lineName(id){ const li = DATA.expenseLineItems.find(x=>x.id===id); return li ? li.name : id; }
+/* ---------------------------------------------------------------
+   P&L CALCULATION ENGINE — GMV through CM1, computed at Pareto
+   (Product Sub Category) level per the exact formula chain agreed,
+   then summed up to Partner-Model level. CODB/CAC/Opex/EBITDA and
+   the cash-flow sections come later.
+   ----------------------------------------------------------------*/
 function fmt(n){
   n = Math.round(n||0);
   const neg = n<0;
   const s = Math.abs(n).toLocaleString('en-IN');
   return neg ? `(${s})` : s;
+}
+
+function computeParetoLevelPL(pmId, scId, month){
+  const gmvByMonth = getCycleObj('monthlyGMVByCycle');
+  const chMix = getCycleObj('channelMixByCycle');
+  const paretoMixAll = getCycleObj('paretoMixByCycle');
+  const mix = paretoMixAll[pmId] || {};
+  const subCats = DATA.productSubCategories;
+  const pms = DATA.partnerModels;
+  const dmg = getCycleObj('discMarginGstByCycle');
+  const paretoInput = getCycleObj('paretoInputByCycle');
+
+  // Same GMV-at-Pareto-level formula already used in the Sales Input > Pareto
+  // Mix results table: Monthly GMV x Channel Mix% x Pareto Mix%.
+  const scPct = getDifferentialPct(subCats, mix, scId, month);
+  const channelPct = getDifferentialPct(pms, chMix, pmId, month);
+  const channelMonthGMV = (+gmvByMonth[month]||0) * channelPct / 100;
+  const GMV = channelMonthGMV * scPct / 100;
+
+  const returnsPct = (dmg.returns && dmg.returns[pmId] && +dmg.returns[pmId][month]) || 0;
+  const marginPct = (dmg.margin && dmg.margin[pmId] && +dmg.margin[pmId][month]) || 0;
+  const discountPct = (dmg.discount && dmg.discount[pmId] && +dmg.discount[pmId][month]) || 0;
+  const scInput = paretoInput[scId] || {};
+  const gstPct = +scInput.gstPct || 0;
+  const amrp = +scInput.amrp || 0;
+  const acogs = +scInput.acogs || 0;
+
+  const Returns = GMV * returnsPct / 100;
+  const base = GMV - Returns;
+  const GST = base / (1 + gstPct/100) * (gstPct/100);
+  const Margin = base * marginPct / 100;
+  const NSV = base - GST - Margin;
+  const Discount = discountPct < 100 ? base / (1 - discountPct/100) * (discountPct/100) : 0;
+  const MRPVal = NSV + GST + Margin + Discount;
+  const NetQty = amrp ? MRPVal / amrp : 0;
+  const GrossQty = returnsPct < 100 ? NetQty / (1 - returnsPct/100) : 0;
+  const COGS = GrossQty * acogs;
+  const CM1 = NSV - COGS;
+
+  return {GMV, Returns, Discount, Margin, GST, NSV, MRPVal, NetQty, GrossQty, COGS, CM1};
+}
+
+const PL_SUM_KEYS = ['GMV','Returns','Discount','Margin','GST','NSV','NetQty','GrossQty','COGS','CM1'];
+function computePartnerModelPL(pmId, month){
+  const subCats = DATA.productSubCategories;
+  const totals = {}; PL_SUM_KEYS.forEach(k=> totals[k]=0);
+  subCats.forEach(sc=>{
+    const row = computeParetoLevelPL(pmId, sc.id, month);
+    PL_SUM_KEYS.forEach(k=> totals[k] += row[k]);
+  });
+  return totals;
 }
 
 /* ---------------------------------------------------------------
@@ -2221,13 +2278,16 @@ function fmt(n){
    ----------------------------------------------------------------*/
 const PLCF_SECTIONS = [
   { title:'Profit & Loss', rows:[
-    {label:'GMV'},
-    {label:'Returns', indent:true},
-    {label:'GST', indent:true},
-    {label:'Qty'},
-    {label:'NSV', subtotal:true},
-    {label:'COGS', indent:true},
-    {label:'CM1', subtotal:true},
+    {label:'GMV', key:'GMV'},
+    {label:'Returns', indent:true, key:'Returns'},
+    {label:'Discount', indent:true, key:'Discount'},
+    {label:'Margin', indent:true, key:'Margin'},
+    {label:'GST', indent:true, key:'GST'},
+    {label:'NSV', subtotal:true, key:'NSV'},
+    {label:'Net Qty', key:'NetQty'},
+    {label:'Gross Qty', key:'GrossQty'},
+    {label:'COGS', indent:true, key:'COGS'},
+    {label:'CM1', subtotal:true, key:'CM1'},
     {label:'Shrinkage Cost', indent:true},
     {label:'WH Cost', indent:true},
     {label:'Packing Cost', indent:true},
@@ -2340,7 +2400,7 @@ const PLCF_SECTIONS = [
   ]}
 ];
 
-function renderPLCFTable(sections){
+function renderPLCFTable(sections, dataProvider){
   let html = `<table class="ledger"><thead><tr><th>₹</th>`;
   MONTHS.forEach(m=> html += `<th>${m}</th>`);
   html += `<th class="total-col">FY Total</th></tr></thead><tbody>`;
@@ -2349,8 +2409,13 @@ function renderPLCFTable(sections){
     sec.rows.forEach(r=>{
       const cls = [r.subtotal?'subtotal':'', r.grand?'grand':'', r.indent?'lineitem':''].filter(Boolean).join(' ');
       html += `<tr class="${cls}"><td>${r.label}</td>`;
-      MONTHS.forEach(()=> html += `<td>—</td>`);
-      html += `<td class="total-col">—</td></tr>`;
+      let rowTotal = 0, hasReal = false;
+      MONTHS.forEach(m=>{
+        const v = (r.key && dataProvider) ? dataProvider(r.key, m) : null;
+        if(v !== null && v !== undefined){ hasReal = true; rowTotal += v; html += `<td>${fmt(v)}</td>`; }
+        else html += `<td>—</td>`;
+      });
+      html += `<td class="total-col">${hasReal ? fmt(rowTotal) : '—'}</td></tr>`;
     });
   });
   html += `</tbody></table>`;
@@ -2358,21 +2423,30 @@ function renderPLCFTable(sections){
 }
 
 function renderPLCF(container){
-  let html = `<div class="footnote" style="margin-bottom:16px;">Structure only — matches the reviewed model layout, not yet linked to Sales Input / Rate Cards / Cash Flow Adjustments. Values will populate once the input data is finalized and connected.</div>`;
-  html += `<div class="panel"><div class="scrollbox" style="max-height:75vh;">${renderPLCFTable(PLCF_SECTIONS)}</div></div>`;
+  let html = `<div class="footnote" style="margin-bottom:16px;">GMV through CM1 are live, computed at Pareto (Product Sub Category) level and summed to total. CODB, CAC, Opex, EBITDA, and Cash Flow are still structure-only, pending those sections.</div>`;
+  const dataProvider = (key, month)=>{
+    if(!PL_SUM_KEYS.includes(key)) return null;
+    const pms = DATA.partnerModels;
+    if(!pms.length) return null;
+    let total = 0;
+    pms.forEach(pm=>{ total += computePartnerModelPL(pm.id, month)[key]; });
+    return total;
+  };
+  html += `<div class="panel"><div class="scrollbox" style="max-height:75vh;">${renderPLCFTable(PLCF_SECTIONS, dataProvider)}</div></div>`;
   container.innerHTML = html;
 }
 
 function renderPartnerModelPL(container){
-  let html = `<div class="footnote" style="margin-bottom:16px;">Structure only — same P&amp;L layout as the main output, broken out per Partner-Model. Not yet linked to live data.</div>`;
+  let html = `<div class="footnote" style="margin-bottom:16px;">GMV through CM1 are live, computed at Pareto (Product Sub Category) level and summed up for this Partner-Model. CODB, CAC, Opex, EBITDA are still structure-only.</div>`;
   const pms = DATA.partnerModels;
   if(!pms.length){
     html += `<div class="footnote">No Partner-Model combos yet — add some in "3. Partner-Model master" first.</div>`;
   } else {
     const plOnlySections = PLCF_SECTIONS.slice(0,2); // Profit & Loss + Key Ratios only
     pms.forEach(pm=>{
+      const dataProvider = (key, month)=> PL_SUM_KEYS.includes(key) ? computePartnerModelPL(pm.id, month)[key] : null;
       html += `<h3 style="margin:18px 0 8px 0;">${pm.partner} — ${pm.model}</h3>`;
-      html += `<div class="panel"><div class="scrollbox" style="max-height:420px;">${renderPLCFTable(plOnlySections)}</div></div>`;
+      html += `<div class="panel"><div class="scrollbox" style="max-height:420px;">${renderPLCFTable(plOnlySections, dataProvider)}</div></div>`;
     });
   }
   container.innerHTML = html;
