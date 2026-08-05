@@ -2260,7 +2260,7 @@ function computeParetoLevelPL(pmId, scId, month){
   return {GMV, Returns, Discount, Margin, GST, NSV, MRPVal, NetQty, GrossQty, COGS, CM1};
 }
 
-const PL_SUM_KEYS = ['GMV','Returns','Discount','Margin','GST','NSV','NetQty','GrossQty','COGS','CM1'];
+const PL_SUM_KEYS = ['GMV','Returns','Discount','Margin','GST','NSV','MRPVal','NetQty','GrossQty','COGS','CM1'];
 function computePartnerModelPL(pmId, month){
   const subCats = DATA.productSubCategories;
   const totals = {}; PL_SUM_KEYS.forEach(k=> totals[k]=0);
@@ -2284,6 +2284,7 @@ const PLCF_SECTIONS = [
     {label:'Margin', indent:true, key:'Margin'},
     {label:'GST', indent:true, key:'GST'},
     {label:'NSV', subtotal:true, key:'NSV'},
+    {label:'MRP Val', key:'MRPVal'},
     {label:'Net Qty', key:'NetQty'},
     {label:'Gross Qty', key:'GrossQty'},
     {label:'COGS', indent:true, key:'COGS'},
