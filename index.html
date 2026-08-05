@@ -4,6 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>FinFables — Annual Budget Ledger</title>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
 <style>
   :root{
     --bg:#EEF1F7;
@@ -777,14 +778,7 @@ function renderMasterTable(container, arr, cols, opts){
 
   let html = '';
   if(opts.paste !== false){
-    html += `<div class="pastebox" title="Columns: ${pasteHint}">
-      <span class="pastebox-label">Paste (${pasteHint}):</span>
-      <textarea id="pasteArea" placeholder="Ctrl+V…"></textarea>
-      <div class="pastebox-btns">
-        <button class="btn-sm primary" id="importBtn">Import</button>
-        <button class="btn-sm" id="clearPasteBtn">Clear</button>
-      </div>
-    </div>`;
+    html += pasteBoxHtml(pasteHint);
   }
 
   if(opts.allowAdd !== false){
@@ -1490,13 +1484,18 @@ function pctTotalCell(total){
 
 function pmLabel(pm){ return `${pm.partner} (${pm.model})`; }
 
+function escapeAttr(s){
+  return String(s==null?'':s).replace(/&/g,'&amp;').replace(/"/g,'&quot;').replace(/</g,'&lt;');
+}
 function pasteBoxHtml(hint, fullTooltip){
+  const columns = (fullTooltip || hint);
   return `<div class="pastebox" title="Columns: ${fullTooltip || hint}">
     <span class="pastebox-label">Paste (${hint}):</span>
     <textarea id="pasteArea" placeholder="Ctrl+V…"></textarea>
     <div class="pastebox-btns">
       <button class="btn-sm primary" id="importBtn">Import</button>
       <button class="btn-sm" id="clearPasteBtn">Clear</button>
+      <button class="btn-sm downloadFormatBtn" data-columns="${escapeAttr(columns)}" title="Download an Excel template with these column headers">⬇ Format</button>
     </div>
   </div>`;
 }
@@ -1510,6 +1509,23 @@ function wirePasteBox(host, onImport){
   const clearBtn = host.querySelector('#clearPasteBtn');
   if(clearBtn) clearBtn.addEventListener('click', ()=>{ host.querySelector('#pasteArea').value=''; });
 }
+// One delegated listener handles every "Download format" button across the whole
+// app (every master and input screen already renders its paste box via
+// pasteBoxHtml), so this single handler covers all of them without each screen
+// needing its own wiring.
+document.addEventListener('click', (e)=>{
+  const btn = e.target.closest('.downloadFormatBtn');
+  if(!btn) return;
+  const columns = (btn.dataset.columns || '').split('|').map(s=>s.trim()).filter(Boolean);
+  if(!columns.length || typeof XLSX === 'undefined') return;
+  const ws = XLSX.utils.aoa_to_sheet([columns]);
+  const wb = XLSX.utils.book_new();
+  XLSX.utils.book_append_sheet(wb, ws, 'Format');
+  const label = document.getElementById('panelTitle') ? document.getElementById('panelTitle').textContent : 'FinFables';
+  const filename = label.replace(/[^a-z0-9]+/gi, '_').replace(/^_+|_+$/g, '') + '_format.xlsx';
+  XLSX.writeFile(wb, filename);
+});
+
 function cleanNum(text){
   const n = parseFloat(String(text||'').replace(/[,₹$\s]/g,''));
   return isNaN(n) ? null : n;
