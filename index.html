@@ -970,7 +970,7 @@ function renderRateStructureAndChannelTable(container){
   }
 
   let html = `<div class="footnote" style="margin-bottom:14px;">Rate Basis and which Partner-Models each CODB Line Item applies to — add new items in the "CODB Line Items" tab; this only maps what's already there. Leave a row's Partner-Model boxes fully unticked to show it for every Partner-Model (unfiltered) in the CODB Rate Card. Tick "All Channel" to take the input just once and apply it to every channel, instead of entering it per Partner-Model. Note: CAC does not appear in the CODB Rate Card — it has its own "CAC %" input tab (% of GMV, not NSV).</div>`;
-  html += `<div class="panel" style="display:inline-block;"><div class="scrollbox" style="max-height:65vh; overflow-x:auto;"><table class="mdmtable"><thead><tr><th>CODB Line Item</th><th>Rate Basis</th><th style="text-align:center;">All Channel</th>`;
+  html += `<div class="panel" style="max-width:100%;"><div class="scrollbox" style="max-height:65vh; overflow-x:auto;"><table class="mdmtable"><thead><tr><th>CODB Line Item</th><th>Rate Basis</th><th style="text-align:center;">All Channel</th>`;
   pms.forEach(pm=> html += `<th style="text-align:center;">${pmLabel(pm)}</th>`);
   html += `<th></th></tr></thead><tbody>`;
   items.forEach(li=>{
@@ -1216,7 +1216,7 @@ function renderCodbRateCardScreen(container){
     groupEndIdx.add(colCursor - 1);
   });
 
-  html += `<div class="panel" style="display:inline-block;"><div class="scrollbox" style="max-height:75vh; overflow-x:auto;"><table class="ledger compact"><colgroup><col style="width:340px;">${columns.map(()=>'<col style="width:150px;">').join('')}</colgroup><thead>`;
+  html += `<div class="panel" style="max-width:100%;"><div class="scrollbox" style="max-height:75vh; overflow-x:auto;"><table class="ledger compact"><colgroup><col style="width:340px;">${columns.map(()=>'<col style="width:150px;">').join('')}</colgroup><thead>`;
   html += `<tr><th class="stickyleftcol"></th>`;
   lineItems.forEach(li=>{
     const span = getEffectiveChannels(li, pms).length;
