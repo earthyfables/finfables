@@ -365,7 +365,6 @@
       <button class="navitem" data-tab="partnerModels"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 13a5 5 0 007.54.54l3-3a5 5 0 00-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 00-7.54-.54l-3 3a5 5 0 007.07 7.07l1.71-1.71"/></svg><span>Partner-Model Master</span></button>
       <button class="navitem" data-tab="brandPartnerMapping"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="6" y1="3" x2="6" y2="15"/><circle cx="18" cy="6" r="3"/><circle cx="6" cy="18" r="3"/><path d="M18 9a9 9 0 01-9 9"/></svg><span>Brand → Partner Mapping</span></button>
       <button class="navitem" data-tab="expenseLineItems"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 00-2 2v16l3-2 3 2 3-2 3 2V4a2 2 0 00-2-2z"/><line x1="8" y1="8" x2="14" y2="8"/><line x1="8" y1="12" x2="14" y2="12"/></svg><span>Expense Line Item Master</span></button>
-      <button class="navitem" data-tab="aspBands"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/><circle cx="3" cy="6" r="1"/><circle cx="9" cy="12" r="1"/><circle cx="15" cy="18" r="1"/></svg><span>ASP Band Master</span></button>
       <button class="navitem" data-tab="codbDeductionMapping"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="19" y1="5" x2="5" y2="19"/><circle cx="6.5" cy="6.5" r="2.5"/><circle cx="17.5" cy="17.5" r="2.5"/></svg><span>CODB Master</span></button>
       <button class="navitem" data-tab="paretoMaster"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="6" y1="20" x2="6" y2="15"/><line x1="12" y1="20" x2="12" y2="9"/><line x1="18" y1="20" x2="18" y2="4"/></svg><span>Pareto Master</span></button>
     </div>
@@ -513,7 +512,7 @@ const SEED = {
     {id:"EL8",name:"Overheads",category:"Other Expenses",gstRate:18,creditorDays:30,type:"MISC"},
     {id:"EL9",name:"Rent",category:"Other Expenses",gstRate:18,creditorDays:30,type:"MISC"}
   ],
-  codbLineItems:[], marketplaceDeductionMapping:[], aspBands:[{id:'ASP1',name:'0-150'},{id:'ASP2',name:'151-300'},{id:'ASP3',name:'301-500'},{id:'ASP4',name:'501-1000'},{id:'ASP5',name:'1001-2000'},{id:'ASP6',name:'>2000'}],
+  codbLineItems:[], marketplaceDeductionMapping:[],
   productGroups:[{id:"PG1",name:"Personal Care"}],
   productCategories:[{id:"PC1",name:"Towels",productGroupId:"PG1"}],
   productSubCategories:[{id:"PSC1",name:"Bath Towel",productGroupId:"PG1",productCategoryId:"PC1",amrp:100,acogs:40}],
@@ -536,7 +535,6 @@ async function loadData(){
   // Migration: backfill any fields/arrays introduced after this data.json was last saved,
   // so older saved files keep working without losing existing rows.
   ['codbLineItems','marketplaceDeductionMapping','productGroups','productCategories'].forEach(k=>{ if(!DATA[k]) DATA[k]=[]; });
-  if(!DATA.aspBands) DATA.aspBands = [{id:'ASP1',name:'0-150'},{id:'ASP2',name:'151-300'},{id:'ASP3',name:'301-500'},{id:'ASP4',name:'501-1000'},{id:'ASP5',name:'1001-2000'},{id:'ASP6',name:'>2000'}];
   // Migrate salesInput/codbRateCard/miscInputs/cashFlowItems from the old flat-array
   // shape into the new cycle-scoped shape ({'': [...], [cycleId]: [...]}) so that
   // pre-existing data lands in the default (no-cycle) bucket rather than being lost.
@@ -924,9 +922,8 @@ const MASTER_TABS = [
   {key:'partnerModels', num:3, label:'Partner-Model master'},
   {key:'brandPartnerMapping', num:4, label:'Brand → Partner mapping'},
   {key:'expenseLineItems', num:5, label:'Expense line item master'},
-  {key:'aspBands', num:6, label:'ASP Band master'},
-  {key:'codbDeductionMapping', num:7, label:'CODB master'},
-  {key:'paretoMaster', num:8, label:'Pareto master'}
+  {key:'codbDeductionMapping', num:6, label:'CODB master'},
+  {key:'paretoMaster', num:7, label:'Pareto master'}
 ];
 
 const MASTER_TAB_ICONS = {
@@ -935,7 +932,6 @@ const MASTER_TAB_ICONS = {
   partnerModels: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 13a5 5 0 007.54.54l3-3a5 5 0 00-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 00-7.54-.54l-3 3a5 5 0 007.07 7.07l1.71-1.71"/></svg>',
   brandPartnerMapping: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="6" y1="3" x2="6" y2="15"/><circle cx="18" cy="6" r="3"/><circle cx="6" cy="18" r="3"/><path d="M18 9a9 9 0 01-9 9"/></svg>',
   expenseLineItems: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 00-2 2v16l3-2 3 2 3-2 3 2V4a2 2 0 00-2-2z"/><line x1="8" y1="8" x2="14" y2="8"/><line x1="8" y1="12" x2="14" y2="12"/></svg>',
-  aspBands: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/><circle cx="3" cy="6" r="1"/><circle cx="9" cy="12" r="1"/><circle cx="15" cy="18" r="1"/></svg>',
   codbDeductionMapping: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="19" y1="5" x2="5" y2="19"/><circle cx="6.5" cy="6.5" r="2.5"/><circle cx="17.5" cy="17.5" r="2.5"/></svg>',
   paretoMaster: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="6" y1="20" x2="6" y2="15"/><line x1="12" y1="20" x2="12" y2="9"/><line x1="18" y1="20" x2="18" y2="4"/></svg>'
 };
@@ -2040,12 +2036,6 @@ const TABS = {
       {key:'creditorDays', label:'Creditor Days', type:'number', width:120}
     ], {prefix:'EL', addLabel:'Add', buildRow:(row)=>({type: row.type || 'MISC'})})
   },
-  aspBands:{
-    title:'ASP Band Master', desc:'ASP (Average Selling Price) bands used as the rate columns in the CODB Rate Card — add, remove, or rename bands here and the Rate Card follows.',
-    render:(el)=> renderMasterTable(el, DATA.aspBands, [
-      {key:'name', label:'ASP Band', width:220}
-    ], {prefix:'ASP', addLabel:'Add'})
-  },
   codbDeductionMapping:{
     title:'CODB Master', desc:'Define CODB line items, their Rate Basis/Structure, and Marketplace deduction mapping (including CAC). The CAC % rate itself is entered in the standalone "CAC %" input tab.',
     render: renderCodbDeductionMappingScreen
@@ -2071,7 +2061,7 @@ const TABS = {
     render: renderDiscMarginGst
   },
   codbRateCard:{
-    title:'CODB Rate Card', desc:'One block per Fee Type, Product Sub Category as rows, Partner-Model as columns (or a single "All Channels" column when All Channel is ticked). One flat rate per fee — no ASP Band tiering. CAC is entered separately in its own "CAC %" tab.',
+    title:'CODB Rate Card', desc:'One block per Fee Type, Product Sub Category as rows, Partner-Model as columns (or a single "All Channels" column when All Channel is ticked). One flat rate per fee. CAC is entered separately in its own "CAC %" tab.',
     render: renderCodbRateCardScreen
   },
   miscInputs:{
