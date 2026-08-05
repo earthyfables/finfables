@@ -1506,19 +1506,75 @@ function wirePasteBox(host, onImport){
   if(clearBtn) clearBtn.addEventListener('click', ()=>{ host.querySelector('#pasteArea').value=''; });
 }
 // One delegated listener handles every "Download format" button across the whole
-// app (every master and input screen already renders its paste box via
-// pasteBoxHtml), so this single handler covers all of them without each screen
-// needing its own wiring.
+// app. Rather than relying on a static column-name string, it reads the actual
+// rendered <table> next to this paste box — so the download includes the real
+// header structure (including multi-row/colspan headers), every row's left-side
+// label, and any values already entered, not just blank column names.
+function findTableForPasteBox(btn){
+  const pastebox = btn.closest('.pastebox');
+  if(!pastebox) return null;
+  let el = pastebox.nextElementSibling;
+  while(el){
+    const t = el.matches('table') ? el : el.querySelector('table');
+    if(t) return t;
+    el = el.nextElementSibling;
+  }
+  return null;
+}
+function isUiOnlyCell(cell){
+  if(cell.classList.contains('actionscell')) return true;
+  if(cell.querySelector('input.rowsel, input#selAll')) return true;
+  return false;
+}
+function cellText(td){
+  const input = td.querySelector('input,select');
+  if(input) return input.value;
+  return td.textContent.trim();
+}
 document.addEventListener('click', (e)=>{
   const btn = e.target.closest('.downloadFormatBtn');
   if(!btn) return;
-  const columns = (btn.dataset.columns || '').split('|').map(s=>s.trim()).filter(Boolean);
-  if(!columns.length || typeof XLSX === 'undefined') return;
-  const ws = XLSX.utils.aoa_to_sheet([columns]);
-  const wb = XLSX.utils.book_new();
-  XLSX.utils.book_append_sheet(wb, ws, 'Format');
+  if(typeof XLSX === 'undefined') return;
+
+  const table = findTableForPasteBox(btn);
   const label = document.getElementById('panelTitle') ? document.getElementById('panelTitle').textContent : 'FinFables';
   const filename = label.replace(/[^a-z0-9]+/gi, '_').replace(/^_+|_+$/g, '') + '_format.xlsx';
+  const wb = XLSX.utils.book_new();
+  const merges = [];
+  let aoa = [];
+
+  if(table){
+    const theadRows = Array.from(table.querySelectorAll('thead tr'));
+    theadRows.forEach((tr, r)=>{
+      const row = [];
+      let col = 0;
+      Array.from(tr.children).forEach(th=>{
+        if(isUiOnlyCell(th)) return;
+        const span = parseInt(th.getAttribute('colspan')||'1', 10);
+        const text = th.textContent.trim();
+        row[col] = text;
+        for(let i=1;i<span;i++) row[col+i] = '';
+        if(span > 1) merges.push({s:{r,c:col}, e:{r,c:col+span-1}});
+        col += span;
+      });
+      aoa.push(row);
+    });
+    const tbodyRows = Array.from(table.querySelectorAll('tbody tr'));
+    tbodyRows.forEach(tr=>{
+      aoa.push(Array.from(tr.children).filter(td=>!isUiOnlyCell(td)).map(cellText));
+    });
+  }
+
+  if(!aoa.length || !aoa[0].length){
+    // Fallback for any screen without a findable table — header names only.
+    const columns = (btn.dataset.columns || '').split('|').map(s=>s.trim()).filter(Boolean);
+    if(!columns.length) return;
+    aoa = [columns];
+  }
+
+  const ws = XLSX.utils.aoa_to_sheet(aoa);
+  if(merges.length) ws['!merges'] = merges;
+  XLSX.utils.book_append_sheet(wb, ws, 'Format');
   XLSX.writeFile(wb, filename);
 });
 
