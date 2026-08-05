@@ -177,6 +177,19 @@
   .pill.active{background:var(--accent); color:#fff; border-color:var(--accent-dark); box-shadow:var(--shadow-sm);}
 
   /* Paste-from-Excel bar — compact, single line */
+  .msdropdown{position:relative;}
+  .msdropdown summary::-webkit-details-marker{display:none;}
+  .msdropdown summary{list-style:none;}
+  .msdropdown summary:after{content:'▾'; float:right; color:var(--ink-soft); margin-left:8px;}
+  .msdropdown[open] summary{border-color:var(--accent) !important; box-shadow:0 0 0 2px var(--accent-soft);}
+  .msdropdown-panel{
+    position:absolute; top:calc(100% + 4px); left:0; z-index:20; min-width:220px; max-height:280px; overflow-y:auto;
+    background:#fff; border:1px solid var(--line); border-radius:8px; box-shadow:var(--shadow-md); padding:6px;
+  }
+  .msoption{display:flex; align-items:center; gap:8px; padding:5px 8px; font-size:13px; border-radius:5px; cursor:pointer; white-space:nowrap;}
+  .msoption:hover{background:var(--accent-soft);}
+  .msoption input{margin:0;}
+
   .pastebox{
     display:flex; align-items:center; gap:8px;
     border:1px solid var(--line); border-radius:6px; padding:4px 6px 4px 10px; margin-bottom:12px; background:#FAFBFD;
@@ -2422,19 +2435,19 @@ function renderPLCFTable(sections, dataProvider){
 }
 
 let plFilters = {
-  partnerGroup: 'all', partnerModel: 'all',
-  productGroup: 'all', productCategory: 'all', productSubCategory: 'all'
+  partnerGroup: [], partnerModel: [],
+  productGroup: [], productCategory: [], productSubCategory: []
 };
 
 function computeFilteredPL(month){
   const pms = DATA.partnerModels.filter(pm=>
-    (plFilters.partnerGroup==='all' || pm.partnerGroup===plFilters.partnerGroup) &&
-    (plFilters.partnerModel==='all' || pm.id===plFilters.partnerModel)
+    (plFilters.partnerGroup.length===0 || plFilters.partnerGroup.includes(pm.partnerGroup)) &&
+    (plFilters.partnerModel.length===0 || plFilters.partnerModel.includes(pm.id))
   );
   const subCats = DATA.productSubCategories.filter(sc=>
-    (plFilters.productGroup==='all' || sc.productGroupId===plFilters.productGroup) &&
-    (plFilters.productCategory==='all' || sc.productCategoryId===plFilters.productCategory) &&
-    (plFilters.productSubCategory==='all' || sc.id===plFilters.productSubCategory)
+    (plFilters.productGroup.length===0 || plFilters.productGroup.includes(sc.productGroupId)) &&
+    (plFilters.productCategory.length===0 || plFilters.productCategory.includes(sc.productCategoryId)) &&
+    (plFilters.productSubCategory.length===0 || plFilters.productSubCategory.includes(sc.id))
   );
   const totals = {}; PL_SUM_KEYS.forEach(k=> totals[k]=0);
   pms.forEach(pm=> subCats.forEach(sc=>{
@@ -2444,27 +2457,34 @@ function computeFilteredPL(month){
   return totals;
 }
 
-function plFilterBarHtml(){
-  const pmOptionsForGroup = plFilters.partnerGroup==='all' ? DATA.partnerModels : DATA.partnerModels.filter(pm=>pm.partnerGroup===plFilters.partnerGroup);
-  const catOptionsForGroup = plFilters.productGroup==='all' ? DATA.productCategories : DATA.productCategories.filter(c=>c.productGroupId===plFilters.productGroup);
-  const scOptionsForFilters = DATA.productSubCategories.filter(sc=>
-    (plFilters.productGroup==='all' || sc.productGroupId===plFilters.productGroup) &&
-    (plFilters.productCategory==='all' || sc.productCategoryId===plFilters.productCategory)
-  );
-  const sel = (id, label, options, value)=> `
-    <div style="min-width:180px;">
+function multiSelectHtml(id, label, options, selected){
+  const summary = selected.length===0 ? 'All' : (selected.length===1 ? (options.find(o=>o.id===selected[0])||{}).label||'1 selected' : `${selected.length} selected`);
+  return `
+    <div style="min-width:200px;">
       <label style="display:block; font-size:11px; font-weight:700; color:var(--ink-soft); text-transform:uppercase; letter-spacing:0.04em; margin-bottom:4px;">${label}</label>
-      <select id="${id}" style="width:100%;">
-        <option value="all"${value==='all'?' selected':''}>All</option>
-        ${options.map(o=>`<option value="${o.id}"${value===o.id?' selected':''}>${o.label}</option>`).join('')}
-      </select>
+      <details class="msdropdown" id="${id}">
+        <summary style="border:1px solid var(--line); border-radius:6px; padding:6px 10px; cursor:pointer; background:#fff; font-size:13px; list-style:none;">${escapeAttr(summary)}</summary>
+        <div class="msdropdown-panel">
+          <label class="msoption"><input type="checkbox" class="ms-all" ${selected.length===0?'checked':''}> <em>All</em></label>
+          ${options.map(o=>`<label class="msoption"><input type="checkbox" class="ms-opt" value="${o.id}" ${selected.includes(o.id)?'checked':''}> ${o.label}</label>`).join('')}
+        </div>
+      </details>
     </div>`;
-  return `<div class="panel" style="display:flex; gap:16px; flex-wrap:wrap; margin-bottom:16px;">
-    ${sel('plfPartnerGroup', 'Partner Grp', DATA.partnerGroups.map(g=>({id:g.id,label:g.name})), plFilters.partnerGroup)}
-    ${sel('plfPartnerModel', 'Partner-Model', pmOptionsForGroup.map(pm=>({id:pm.id,label:pmLabel(pm)})), plFilters.partnerModel)}
-    ${sel('plfProductGroup', 'Product Grp', DATA.productGroups.map(g=>({id:g.id,label:g.name})), plFilters.productGroup)}
-    ${sel('plfProductCategory', 'Product Category', catOptionsForGroup.map(c=>({id:c.id,label:c.name})), plFilters.productCategory)}
-    ${sel('plfProductSubCategory', 'Product Sub-Category', scOptionsForFilters.map(sc=>({id:sc.id,label:sc.name})), plFilters.productSubCategory)}
+}
+
+function plFilterBarHtml(){
+  const pmOptionsForGroup = plFilters.partnerGroup.length===0 ? DATA.partnerModels : DATA.partnerModels.filter(pm=>plFilters.partnerGroup.includes(pm.partnerGroup));
+  const catOptionsForGroup = plFilters.productGroup.length===0 ? DATA.productCategories : DATA.productCategories.filter(c=>plFilters.productGroup.includes(c.productGroupId));
+  const scOptionsForFilters = DATA.productSubCategories.filter(sc=>
+    (plFilters.productGroup.length===0 || plFilters.productGroup.includes(sc.productGroupId)) &&
+    (plFilters.productCategory.length===0 || plFilters.productCategory.includes(sc.productCategoryId))
+  );
+  return `<div class="panel" style="display:flex; gap:16px; flex-wrap:wrap; margin-bottom:16px; overflow:visible;">
+    ${multiSelectHtml('plfPartnerGroup', 'Partner Grp', DATA.partnerGroups.map(g=>({id:g.id,label:g.name})), plFilters.partnerGroup)}
+    ${multiSelectHtml('plfPartnerModel', 'Partner-Model', pmOptionsForGroup.map(pm=>({id:pm.id,label:pmLabel(pm)})), plFilters.partnerModel)}
+    ${multiSelectHtml('plfProductGroup', 'Product Grp', DATA.productGroups.map(g=>({id:g.id,label:g.name})), plFilters.productGroup)}
+    ${multiSelectHtml('plfProductCategory', 'Product Category', catOptionsForGroup.map(c=>({id:c.id,label:c.name})), plFilters.productCategory)}
+    ${multiSelectHtml('plfProductSubCategory', 'Product Sub-Category', scOptionsForFilters.map(sc=>({id:sc.id,label:sc.name})), plFilters.productSubCategory)}
   </div>`;
 }
 
@@ -2476,12 +2496,22 @@ function renderPLCF(container){
   container.innerHTML = html;
 
   const wire = (id, filterKey, resetChildren)=>{
-    const el = container.querySelector('#'+id);
-    if(el) el.addEventListener('change', ()=>{
-      plFilters[filterKey] = el.value;
-      (resetChildren||[]).forEach(k=> plFilters[k]='all');
+    const details = container.querySelector('#'+id);
+    if(!details) return;
+    const allCb = details.querySelector('.ms-all');
+    const optCbs = details.querySelectorAll('.ms-opt');
+    if(allCb) allCb.addEventListener('change', ()=>{
+      plFilters[filterKey] = [];
+      (resetChildren||[]).forEach(k=> plFilters[k]=[]);
       renderPLCF(container);
     });
+    optCbs.forEach(cb=> cb.addEventListener('change', ()=>{
+      const set = new Set(plFilters[filterKey]);
+      if(cb.checked) set.add(cb.value); else set.delete(cb.value);
+      plFilters[filterKey] = Array.from(set);
+      (resetChildren||[]).forEach(k=> plFilters[k]=[]);
+      renderPLCF(container);
+    }));
   };
   wire('plfPartnerGroup', 'partnerGroup', ['partnerModel']);
   wire('plfPartnerModel', 'partnerModel');
