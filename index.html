@@ -400,7 +400,7 @@
 
     <div class="sidebarsave">
       <button class="btn primary" id="sidebarSaveBtn" style="width:100%;">💾 Save</button>
-      <div class="sidebarsave-status" id="sidebarSaveStatus">Click Save to store your changes</div>
+      <div class="sidebarsave-status" id="sidebarSaveStatus">Changes auto-save to GitHub</div>
     </div>
   </nav>
 
@@ -740,11 +740,34 @@ function renderEditableTable(container, arr, cols, opts){
 let autosaveTimer = null;
 function markDirty(){
   if(autosaveTimer) clearTimeout(autosaveTimer);
-  autosaveTimer = setTimeout(markUnsavedStatus, 400);
+  markUnsavedStatus();
+  autosaveTimer = setTimeout(saveToGitHub, 2500);
 }
 function markUnsavedStatus(){
   const el = document.getElementById('sidebarSaveStatus');
-  if(el) el.textContent = 'Unsaved changes — click Save';
+  if(el) el.textContent = 'Unsaved changes — saving shortly…';
+}
+async function saveToGitHub(){
+  const el = document.getElementById('sidebarSaveStatus');
+  const btn = document.getElementById('sidebarSaveBtn');
+  if(el) el.textContent = 'Saving to GitHub…';
+  if(btn) btn.disabled = true;
+  try{
+    DATA.meta = DATA.meta || {};
+    DATA.meta.savedAt = new Date().toISOString();
+    const resp = await fetch('/api/save', {
+      method: 'POST',
+      headers: {'Content-Type': 'application/json'},
+      body: JSON.stringify(DATA)
+    });
+    const result = await resp.json();
+    if(!resp.ok) throw new Error(result.error || 'Save failed');
+    if(el) el.textContent = 'Saved to GitHub ' + new Date().toLocaleTimeString();
+  }catch(e){
+    if(el) el.textContent = 'Could not save to GitHub (' + e.message + ') — try again';
+  }finally{
+    if(btn) btn.disabled = false;
+  }
 }
 
 /* ---------------------------------------------------------------
@@ -2274,6 +2297,27 @@ function getCodbLineItemsForPL(){
   });
 }
 
+// Same items shown in Miscellaneous Inputs (Type=Misc, minus the CAC/CODB/COGS
+// names). These are company-wide monthly amounts, not tied to a Partner-Model
+// or Product, so they sit outside the Pareto-level P&L loop entirely and are
+// unaffected by the P&L filters above.
+function getMiscInputItemsForPL(){
+  const excludedNames = ['CAC','CODB','COGS'].map(normalizeText);
+  return DATA.expenseLineItems.filter(x=> x.type === 'MISC' && !excludedNames.includes(normalizeText(x.name)));
+}
+function computeOpexByItem(month){
+  const store = getCycleObj('miscInputsByCycle');
+  const byItem = {};
+  getMiscInputItemsForPL().forEach(li=>{
+    byItem[li.id] = +((store[li.id]||{})[month]) || 0;
+  });
+  return byItem;
+}
+function computeOpexTotal(month){
+  const byItem = computeOpexByItem(month);
+  return Object.values(byItem).reduce((a,b)=>a+b, 0);
+}
+
 // Dispatches a CODB Line Item's cost by its Rate Basis. All the per-unit bases
 // use figures already computed at this same Pareto level (NSV, Gross Qty, COD
 // Qty, Returns Qty); "Amt per mth" is a flat amount, entered directly as the
@@ -2344,10 +2388,14 @@ function computeParetoLevelPL(pmId, scId, month){
   const CODCharges = codbByItem[(getCodbLineItemByName('COD Charges')||{}).id] || 0;
   const CM2 = CM1 - CODB;
 
-  return {GMV, Returns, Discount, Margin, GST, NSV, MRPVal, NetQty, GrossQty, COGS, CM1, CODCharges, CODB, CM2, codbByItem};
+  const cacPct = (dmg.cac && dmg.cac[pmId] && +dmg.cac[pmId][month]) || 0;
+  const CAC = GMV * cacPct / 100;
+  const CM3 = CM2 - CAC;
+
+  return {GMV, Returns, Discount, Margin, GST, NSV, MRPVal, NetQty, GrossQty, COGS, CM1, CODCharges, CODB, CM2, CAC, CM3, codbByItem};
 }
 
-const PL_SUM_KEYS = ['GMV','Returns','Discount','Margin','GST','NSV','MRPVal','NetQty','GrossQty','COGS','CM1','CODCharges','CODB','CM2'];
+const PL_SUM_KEYS = ['GMV','Returns','Discount','Margin','GST','NSV','MRPVal','NetQty','GrossQty','COGS','CM1','CODCharges','CODB','CM2','CAC','CM3'];
 function computePartnerModelPL(pmId, month){
   const subCats = DATA.productSubCategories;
   const totals = {}; PL_SUM_KEYS.forEach(k=> totals[k]=0);
@@ -2382,18 +2430,10 @@ const PLCF_SECTIONS = [
     {dynamicCodb:true},
     {label:'CODB', subtotal:true, key:'CODB'},
     {label:'CM2', subtotal:true, key:'CM2'},
-    {label:'CAC', indent:true},
-    {label:'CM3', subtotal:true},
-    {label:'Salary', indent:true},
-    {label:'WH Salary', indent:true},
-    {label:'Founder Salary', indent:true},
-    {label:'Rent', indent:true},
-    {label:'Agency Marketing', indent:true},
-    {label:'CA Agency', indent:true},
-    {label:'Electricity', indent:true},
-    {label:'Internet', indent:true},
-    {label:'Misc', indent:true},
-    {label:'EBITDA', grand:true}
+    {label:'CAC', indent:true, key:'CAC'},
+    {label:'CM3', subtotal:true, key:'CM3'},
+    {dynamicOpex:true},
+    {label:'EBITDA', grand:true, key:'EBITDA'}
   ]},
   { title:'Key Ratios', rows:[
     {label:'ASP (NOT)'},
@@ -2405,7 +2445,7 @@ const PLCF_SECTIONS = [
     {label:'EBITDA%'}
   ]},
   { title:'Cash — Indirect', rows:[
-    {label:'EBITDA'},
+    {label:'EBITDA', key:'EBITDA'},
     {label:'Change in WC'},
     {label:'Change in Other CA / CL'},
     {label:'GST Credit'},
@@ -2562,8 +2602,9 @@ function plFilterBarHtml(){
 
 function buildDynamicPLCFSections(){
   const codbLineItems = getCodbLineItemsForPL();
+  const opexItems = getMiscInputItemsForPL();
   return PLCF_SECTIONS.map(sec=>{
-    if(!sec.rows.some(r=>r.dynamicCodb)) return sec;
+    if(!sec.rows.some(r=>r.dynamicCodb || r.dynamicOpex)) return sec;
     const rows = [];
     sec.rows.forEach(r=>{
       if(r.dynamicCodb){
@@ -2572,6 +2613,14 @@ function buildDynamicPLCFSections(){
         } else {
           codbLineItems.forEach(li=>{
             rows.push({label: li.name, indent:true, key: 'codbitem_'+li.id});
+          });
+        }
+      } else if(r.dynamicOpex){
+        if(!opexItems.length){
+          rows.push({label:'(no Miscellaneous Input items defined yet)', indent:true});
+        } else {
+          opexItems.forEach(li=>{
+            rows.push({label: li.name, indent:true, key: 'opexitem_'+li.id});
           });
         }
       } else {
@@ -2583,13 +2632,18 @@ function buildDynamicPLCFSections(){
 }
 
 function renderPLCF(container){
-  let html = `<div class="footnote" style="margin-bottom:16px;">GMV through CM2 are live, computed at Pareto (Product Sub Category) level and summed across whatever the filters below select — CODB now reflects every CODB Line Item, using its own Rate Basis. CAC, Opex, EBITDA, and Cash Flow are still structure-only.</div>`;
+  let html = `<div class="footnote" style="margin-bottom:16px;">GMV through EBITDA are live, computed at Pareto (Product Sub Category) level and summed across whatever the filters below select. Opex (Miscellaneous Inputs) is company-wide and not affected by the filters. Cash Flow sections are still structure-only.</div>`;
   html += plFilterBarHtml();
   const dataProvider = (key, month)=>{
     if(key && key.indexOf('codbitem_')===0){
       const liId = key.slice('codbitem_'.length);
       return computeFilteredPL(month).codbByItem[liId] || 0;
     }
+    if(key && key.indexOf('opexitem_')===0){
+      const liId = key.slice('opexitem_'.length);
+      return computeOpexByItem(month)[liId] || 0;
+    }
+    if(key === 'EBITDA') return computeFilteredPL(month).CM3 - computeOpexTotal(month);
     return PL_SUM_KEYS.includes(key) ? computeFilteredPL(month)[key] : null;
   };
   html += `<div class="panel"><div class="scrollbox" style="max-height:75vh;">${renderPLCFTable(buildDynamicPLCFSections(), dataProvider)}</div></div>`;
@@ -2852,27 +2906,9 @@ document.querySelectorAll('.navitem').forEach(btn=>{
   btn.addEventListener('click', ()=>{ setActiveTab(btn.dataset.tab); });
 });
 
-document.getElementById('sidebarSaveBtn').addEventListener('click', async ()=>{
-  const el = document.getElementById('sidebarSaveStatus');
-  const btn = document.getElementById('sidebarSaveBtn');
-  if(el) el.textContent = 'Saving to GitHub…';
-  if(btn) btn.disabled = true;
-  try{
-    DATA.meta = DATA.meta || {};
-    DATA.meta.savedAt = new Date().toISOString();
-    const resp = await fetch('/api/save', {
-      method: 'POST',
-      headers: {'Content-Type': 'application/json'},
-      body: JSON.stringify(DATA)
-    });
-    const result = await resp.json();
-    if(!resp.ok) throw new Error(result.error || 'Save failed');
-    if(el) el.textContent = 'Saved to GitHub ' + new Date().toLocaleTimeString();
-  }catch(e){
-    if(el) el.textContent = 'Could not save to GitHub (' + e.message + ') — try again';
-  }finally{
-    if(btn) btn.disabled = false;
-  }
+document.getElementById('sidebarSaveBtn').addEventListener('click', ()=>{
+  if(autosaveTimer) clearTimeout(autosaveTimer);
+  saveToGitHub();
 });
 
 loadData();
