@@ -2438,13 +2438,13 @@ const PLCF_SECTIONS = [
     {label:'EBITDA', grand:true, key:'EBITDA'}
   ]},
   { title:'Key Ratios', rows:[
-    {label:'ASP (NOT)'},
-    {label:'CM1%'},
-    {label:'CODB%'},
-    {label:'CM2%'},
-    {label:'CAC% on GMV'},
-    {label:'CM3%'},
-    {label:'EBITDA%'}
+    {label:'ASP (NOT)', key:'ASP', ratio:true},
+    {label:'CM1%', key:'CM1Pct', pct:true},
+    {label:'CODB%', key:'CODBPct', pct:true},
+    {label:'CM2%', key:'CM2Pct', pct:true},
+    {label:'CAC %', key:'CACPct', pct:true},
+    {label:'CM3%', key:'CM3Pct', pct:true},
+    {label:'EBITDA%', key:'EBITDAPct', pct:true}
   ]},
   { title:'Cash — Indirect', rows:[
     {label:'EBITDA', key:'EBITDA'},
@@ -2531,13 +2531,22 @@ function renderPLCFTable(sections, dataProvider){
     sec.rows.forEach(r=>{
       const cls = [r.subtotal?'subtotal':'', r.grand?'grand':'', r.indent?'lineitem':''].filter(Boolean).join(' ');
       html += `<tr class="${cls}"><td>${r.label}</td>`;
+      const fmtCell = v => r.pct ? (v.toFixed(1)+'%') : (r.ratio ? v.toFixed(2) : fmt(v));
       let rowTotal = 0, hasReal = false;
       MONTHS.forEach(m=>{
         const v = (r.key && dataProvider) ? dataProvider(r.key, m) : null;
-        if(v !== null && v !== undefined){ hasReal = true; rowTotal += v; html += `<td>${fmt(v)}</td>`; }
+        if(v !== null && v !== undefined){ hasReal = true; rowTotal += v; html += `<td>${fmtCell(v)}</td>`; }
         else html += `<td>—</td>`;
       });
-      html += `<td class="total-col">${hasReal ? fmt(rowTotal) : '—'}</td></tr>`;
+      // Ratio/percentage rows don't sum meaningfully across months - recompute
+      // from FY-aggregated figures instead of adding up 12 monthly percentages.
+      let fyVal = rowTotal;
+      let fyReal = hasReal;
+      if((r.pct || r.ratio) && r.key && dataProvider){
+        const fy = dataProvider(r.key, 'FY');
+        if(fy !== null && fy !== undefined){ fyVal = fy; fyReal = true; }
+      }
+      html += `<td class="total-col">${fyReal ? fmtCell(fyVal) : '—'}</td></tr>`;
     });
   });
   html += `</tbody></table>`;
@@ -2616,10 +2625,31 @@ function plFilterBarHtml(){
   </div>`;
 }
 
+function sumTotalsAcrossMonths(computeFn){
+  const totals = {}; PL_SUM_KEYS.forEach(k=> totals[k]=0);
+  MONTHS.forEach(m=>{
+    const t = computeFn(m);
+    PL_SUM_KEYS.forEach(k=> totals[k] += t[k]);
+  });
+  return totals;
+}
+const KEY_RATIO_KEYS = ['ASP','CM1Pct','CODBPct','CM2Pct','CACPct','CM3Pct'];
+function computeKeyRatios(totals){
+  const pct = (a,b)=> b ? a/b*100 : 0;
+  return {
+    ASP: totals.NetQty ? totals.NSV/totals.NetQty : 0,
+    CM1Pct: pct(totals.CM1, totals.NSV),
+    CODBPct: pct(totals.CODB, totals.NSV),
+    CM2Pct: pct(totals.CM2, totals.NSV),
+    CACPct: pct(totals.CAC, totals.NSV),
+    CM3Pct: pct(totals.CM3, totals.NSV)
+  };
+}
+
 function buildDynamicPLCFSections(uptoCM3){
   const codbLineItems = getCodbLineItemsForPL();
   const opexItems = getMiscInputItemsForPL();
-  const sections = uptoCM3 ? [PLCF_SECTIONS[0]] : PLCF_SECTIONS;
+  const sections = uptoCM3 ? [PLCF_SECTIONS[0], PLCF_SECTIONS[1]] : PLCF_SECTIONS;
   const expanded = sections.map(sec=>{
     if(!sec.rows.some(r=>r.dynamicCodb || r.dynamicOpex)) return sec;
     const rows = [];
@@ -2649,8 +2679,14 @@ function buildDynamicPLCFSections(uptoCM3){
   if(!uptoCM3) return expanded;
   // Keep the P&L section's rows only through CM3 - drop dynamicOpex/EBITDA.
   const cm3Idx = expanded[0].rows.findIndex(r=> r.key === 'CM3');
-  const truncatedRows = cm3Idx >= 0 ? expanded[0].rows.slice(0, cm3Idx+1) : expanded[0].rows;
-  return [Object.assign({}, expanded[0], {rows: truncatedRows})];
+  const truncatedPL = cm3Idx >= 0 ? expanded[0].rows.slice(0, cm3Idx+1) : expanded[0].rows;
+  // Key Ratios only through CM3% - drop EBITDA%.
+  const cm3PctIdx = expanded[1].rows.findIndex(r=> r.key === 'CM3Pct');
+  const truncatedRatios = cm3PctIdx >= 0 ? expanded[1].rows.slice(0, cm3PctIdx+1) : expanded[1].rows;
+  return [
+    Object.assign({}, expanded[0], {rows: truncatedPL}),
+    Object.assign({}, expanded[1], {rows: truncatedRatios})
+  ];
 }
 
 function renderPLCF(container){
@@ -2665,6 +2701,15 @@ function renderPLCF(container){
       return computeOpexByItem(month)[liId] || 0;
     }
     if(key === 'EBITDA') return computeTotalPL(month).CM3 - computeOpexTotal(month);
+    if(KEY_RATIO_KEYS.includes(key)){
+      const totals = month==='FY' ? sumTotalsAcrossMonths(computeTotalPL) : computeTotalPL(month);
+      return computeKeyRatios(totals)[key];
+    }
+    if(key === 'EBITDAPct'){
+      const totals = month==='FY' ? sumTotalsAcrossMonths(computeTotalPL) : computeTotalPL(month);
+      const opex = month==='FY' ? MONTHS.reduce((a,m)=>a+computeOpexTotal(m),0) : computeOpexTotal(month);
+      return totals.NSV ? (totals.CM3 - opex) / totals.NSV * 100 : 0;
+    }
     return PL_SUM_KEYS.includes(key) ? computeTotalPL(month)[key] : null;
   };
   html += `<div class="panel"><div class="scrollbox" style="max-height:75vh;">${renderPLCFTable(buildDynamicPLCFSections(false), dataProvider)}</div></div>`;
@@ -2678,6 +2723,10 @@ function renderPartnerProductPL(container){
     if(key && key.indexOf('codbitem_')===0){
       const liId = key.slice('codbitem_'.length);
       return computeFilteredPL(month).codbByItem[liId] || 0;
+    }
+    if(KEY_RATIO_KEYS.includes(key)){
+      const totals = month==='FY' ? sumTotalsAcrossMonths(computeFilteredPL) : computeFilteredPL(month);
+      return computeKeyRatios(totals)[key];
     }
     return PL_SUM_KEYS.includes(key) ? computeFilteredPL(month)[key] : null;
   };
