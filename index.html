@@ -2506,6 +2506,7 @@ let plFilters = {
   partnerGroup: [], partnerModel: [],
   productGroup: [], productCategory: [], productSubCategory: []
 };
+let plOpenDropdownId = null; // preserves which filter dropdown stays open across re-renders
 
 function computeFilteredPL(month){
   const pms = DATA.partnerModels.filter(pm=>
@@ -2533,7 +2534,7 @@ function multiSelectHtml(id, label, options, selected){
   return `
     <div style="min-width:200px;">
       <label style="display:block; font-size:11px; font-weight:700; color:var(--ink-soft); text-transform:uppercase; letter-spacing:0.04em; margin-bottom:4px;">${label}</label>
-      <details class="msdropdown" id="${id}">
+      <details class="msdropdown" id="${id}"${plOpenDropdownId===id?' open':''}>
         <summary style="border:1px solid var(--line); border-radius:6px; padding:6px 10px; cursor:pointer; background:#fff; font-size:13px; list-style:none;">${escapeAttr(summary)}</summary>
         <div class="msdropdown-panel">
           <label class="msoption"><input type="checkbox" class="ms-all" ${selected.length===0?'checked':''}> <em>All</em></label>
@@ -2597,14 +2598,21 @@ function renderPLCF(container){
   const wire = (id, filterKey, resetChildren)=>{
     const details = container.querySelector('#'+id);
     if(!details) return;
+    // Manual open/close via the summary itself (not a checkbox tick) still
+    // needs to be remembered so the next re-render doesn't fight the user.
+    details.addEventListener('toggle', ()=>{
+      plOpenDropdownId = details.open ? id : (plOpenDropdownId===id ? null : plOpenDropdownId);
+    });
     const allCb = details.querySelector('.ms-all');
     const optCbs = details.querySelectorAll('.ms-opt');
     if(allCb) allCb.addEventListener('change', ()=>{
+      plOpenDropdownId = id;
       plFilters[filterKey] = [];
       (resetChildren||[]).forEach(k=> plFilters[k]=[]);
       renderPLCF(container);
     });
     optCbs.forEach(cb=> cb.addEventListener('change', ()=>{
+      plOpenDropdownId = id;
       const set = new Set(plFilters[filterKey]);
       if(cb.checked) set.add(cb.value); else set.delete(cb.value);
       plFilters[filterKey] = Array.from(set);
