@@ -15,7 +15,7 @@
       "Feb",
       "Mar"
     ],
-    "savedAt": "2026-08-06T13:46:36.508Z",
+    "savedAt": "2026-08-06T13:54:39.588Z",
     "activeCycleId": "CYC_p9c3kh"
   },
   "channels": [
@@ -5682,7 +5682,14 @@
       "PM_2gw084": {},
       "PM_lkql7m": {},
       "PM_8mdlod": {
-        "Aug": 50
+        "Aug": 100,
+        "Sep": 100,
+        "Oct": 100,
+        "Nov": 100,
+        "Dec": 100,
+        "Jan": 50,
+        "Feb": 50,
+        "Mar": 50
       },
       "PM_zha4pk": {},
       "PM_rp2j41": {},
