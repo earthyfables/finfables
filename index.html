@@ -2775,10 +2775,16 @@ try{
   if(storedTab && TABS[storedTab]) activeTab = storedTab;
 }catch(e){ /* ignore — localStorage may be unavailable */ }
 
+let tabScrollPositions = {};
 function setActiveTab(key){
+  tabScrollPositions[activeTab] = window.scrollY;
   activeTab = key;
   try{ localStorage.setItem(ACTIVE_TAB_KEY, key); }catch(e){ /* ignore */ }
   render();
+  const scheduleScroll = window.requestAnimationFrame || (fn=>setTimeout(fn, 0));
+  scheduleScroll(()=>{
+    window.scrollTo(0, tabScrollPositions[key] || 0);
+  });
 }
 
 let cycleFormOpen = false;
