@@ -396,6 +396,7 @@
     <div class="navgroup">
       <h4>Output</h4>
       <button class="navitem" data-tab="outputPLCF"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg><span>P&amp;L &amp; Cash Flow</span></button>
+      <button class="navitem" data-tab="outputPartnerProductPL"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/></svg><span>Partner and Product wise</span></button>
     </div>
 
     <div class="sidebarsave">
@@ -2193,7 +2194,8 @@ const TABS = {
       {key:'amount', label:'Amount', type:'number'}
     ], {prefix:'CF'})
   },
-  outputPLCF:{ title:'P&L & Cash Flow', desc:'Structure matches the reviewed model — not yet linked to live inputs.', render: renderPLCF },
+  outputPLCF:{ title:'P&L & Cash Flow', desc:'Full company total, no filters. Structure matches the reviewed model.', render: renderPLCF },
+  outputPartnerProductPL:{ title:'Partner and Product wise', desc:'Same P&L, filterable by Partner Group, Partner-Model, Product Group, Product Category, and Product Sub-Category. Runs through CM3 only.', render: renderPartnerProductPL },
 };
 
 /* ---------------------------------------------------------------
@@ -2548,6 +2550,20 @@ let plFilters = {
 };
 let plOpenDropdownId = null; // preserves which filter dropdown stays open across re-renders
 
+function computeTotalPL(month){
+  const pms = DATA.partnerModels;
+  const subCats = DATA.productSubCategories;
+  const totals = {}; PL_SUM_KEYS.forEach(k=> totals[k]=0);
+  const codbByItem = {};
+  pms.forEach(pm=> subCats.forEach(sc=>{
+    const row = computeParetoLevelPL(pm.id, sc.id, month);
+    PL_SUM_KEYS.forEach(k=> totals[k] += row[k]);
+    Object.keys(row.codbByItem||{}).forEach(liId=>{ codbByItem[liId] = (codbByItem[liId]||0) + row.codbByItem[liId]; });
+  }));
+  totals.codbByItem = codbByItem;
+  return totals;
+}
+
 function computeFilteredPL(month){
   const pms = DATA.partnerModels.filter(pm=>
     (plFilters.partnerGroup.length===0 || plFilters.partnerGroup.includes(pm.partnerGroup)) &&
@@ -2600,10 +2616,11 @@ function plFilterBarHtml(){
   </div>`;
 }
 
-function buildDynamicPLCFSections(){
+function buildDynamicPLCFSections(uptoCM3){
   const codbLineItems = getCodbLineItemsForPL();
   const opexItems = getMiscInputItemsForPL();
-  return PLCF_SECTIONS.map(sec=>{
+  const sections = uptoCM3 ? [PLCF_SECTIONS[0]] : PLCF_SECTIONS;
+  const expanded = sections.map(sec=>{
     if(!sec.rows.some(r=>r.dynamicCodb || r.dynamicOpex)) return sec;
     const rows = [];
     sec.rows.forEach(r=>{
@@ -2629,24 +2646,42 @@ function buildDynamicPLCFSections(){
     });
     return Object.assign({}, sec, {rows});
   });
+  if(!uptoCM3) return expanded;
+  // Keep the P&L section's rows only through CM3 - drop dynamicOpex/EBITDA.
+  const cm3Idx = expanded[0].rows.findIndex(r=> r.key === 'CM3');
+  const truncatedRows = cm3Idx >= 0 ? expanded[0].rows.slice(0, cm3Idx+1) : expanded[0].rows;
+  return [Object.assign({}, expanded[0], {rows: truncatedRows})];
 }
 
 function renderPLCF(container){
-  let html = `<div class="footnote" style="margin-bottom:16px;">GMV through EBITDA are live, computed at Pareto (Product Sub Category) level and summed across whatever the filters below select. Opex (Miscellaneous Inputs) is company-wide and not affected by the filters. Cash Flow sections are still structure-only.</div>`;
+  let html = `<div class="footnote" style="margin-bottom:16px;">GMV through EBITDA are live, computed at Pareto (Product Sub Category) level and summed to the full company total. Cash Flow sections are still structure-only. For a Partner-Model / Product breakdown with filters, see "Partner and Product wise".</div>`;
+  const dataProvider = (key, month)=>{
+    if(key && key.indexOf('codbitem_')===0){
+      const liId = key.slice('codbitem_'.length);
+      return computeTotalPL(month).codbByItem[liId] || 0;
+    }
+    if(key && key.indexOf('opexitem_')===0){
+      const liId = key.slice('opexitem_'.length);
+      return computeOpexByItem(month)[liId] || 0;
+    }
+    if(key === 'EBITDA') return computeTotalPL(month).CM3 - computeOpexTotal(month);
+    return PL_SUM_KEYS.includes(key) ? computeTotalPL(month)[key] : null;
+  };
+  html += `<div class="panel"><div class="scrollbox" style="max-height:75vh;">${renderPLCFTable(buildDynamicPLCFSections(false), dataProvider)}</div></div>`;
+  container.innerHTML = html;
+}
+
+function renderPartnerProductPL(container){
+  let html = `<div class="footnote" style="margin-bottom:16px;">GMV through CM3, computed at Pareto (Product Sub Category) level and summed across whatever the filters below select.</div>`;
   html += plFilterBarHtml();
   const dataProvider = (key, month)=>{
     if(key && key.indexOf('codbitem_')===0){
       const liId = key.slice('codbitem_'.length);
       return computeFilteredPL(month).codbByItem[liId] || 0;
     }
-    if(key && key.indexOf('opexitem_')===0){
-      const liId = key.slice('opexitem_'.length);
-      return computeOpexByItem(month)[liId] || 0;
-    }
-    if(key === 'EBITDA') return computeFilteredPL(month).CM3 - computeOpexTotal(month);
     return PL_SUM_KEYS.includes(key) ? computeFilteredPL(month)[key] : null;
   };
-  html += `<div class="panel"><div class="scrollbox" style="max-height:75vh;">${renderPLCFTable(buildDynamicPLCFSections(), dataProvider)}</div></div>`;
+  html += `<div class="panel"><div class="scrollbox" style="max-height:75vh;">${renderPLCFTable(buildDynamicPLCFSections(true), dataProvider)}</div></div>`;
   container.innerHTML = html;
 
   const wire = (id, filterKey, resetChildren)=>{
@@ -2663,7 +2698,7 @@ function renderPLCF(container){
       plOpenDropdownId = id;
       plFilters[filterKey] = [];
       (resetChildren||[]).forEach(k=> plFilters[k]=[]);
-      renderPLCF(container);
+      renderPartnerProductPL(container);
     });
     optCbs.forEach(cb=> cb.addEventListener('change', ()=>{
       plOpenDropdownId = id;
@@ -2671,7 +2706,7 @@ function renderPLCF(container){
       if(cb.checked) set.add(cb.value); else set.delete(cb.value);
       plFilters[filterKey] = Array.from(set);
       (resetChildren||[]).forEach(k=> plFilters[k]=[]);
-      renderPLCF(container);
+      renderPartnerProductPL(container);
     }));
   };
   wire('plfPartnerGroup', 'partnerGroup', ['partnerModel']);
