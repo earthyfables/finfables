@@ -3376,7 +3376,7 @@ function computeCreditorMovementByLine(){
       op = cl;
     });
 
-    return {label:g.label, key:g.key, vendorCount:vendors.length, opening, additions, pmtsOpBal, pmtsNew, pmtOverride, totalPayments, closing};
+    return {label:g.label, key:g.key, vendorCount:vendors.length, creditorDays:g.creditorDays, opening, additions, pmtsOpBal, pmtsNew, pmtOverride, totalPayments, closing};
   });
   return result.filter(g=> g.vendorCount>0 || g.additions.some(v=>v>0.005));
 }
@@ -3464,7 +3464,7 @@ function renderCreditorMovementScreen(container){
   html += `<th class="total-col">Total</th></tr></thead><tbody>`;
 
   groups.forEach(g=>{
-    html += `<tr class="section"><td class="stickyleftcol" style="text-align:left; font-weight:700;">${g.label} <span class="footnote" style="margin:0;">(${g.vendorCount} vendor${g.vendorCount===1?'':'s'})</span></td>${MONTHS.map(()=>'<td></td>').join('')}<td class="total-col"></td></tr>`;
+    html += `<tr class="section"><td class="stickyleftcol" style="text-align:left; font-weight:700;">${g.label} <span class="footnote" style="margin:0;">(${g.creditorDays}d credit terms)</span></td>${MONTHS.map(()=>'<td></td>').join('')}<td class="total-col"></td></tr>`;
     rowsMeta.forEach(rm=>{
       const cls = rm.subtotal ? 'subtotal' : 'lineitem';
       html += `<tr class="${cls}"><td class="stickyleftcol" style="text-align:left;">${rm.prefix(g.label)}</td>`;
