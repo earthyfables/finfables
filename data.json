@@ -15,7 +15,7 @@
       "Feb",
       "Mar"
     ],
-    "savedAt": "2026-08-07T05:31:29.791Z",
+    "savedAt": "2026-08-07T05:31:34.059Z",
     "activeCycleId": "CYC_p9c3kh"
   },
   "channels": [
@@ -1612,7 +1612,7 @@
       "fy": "FY27",
       "startMonth": "Aug",
       "version": "AOP",
-      "published": false
+      "published": true
     }
   ],
   "salesInputByCycle": {
