@@ -15,7 +15,7 @@
       "Feb",
       "Mar"
     ],
-    "savedAt": "2026-08-07T05:41:34.720Z",
+    "savedAt": "2026-08-07T13:36:32.257Z",
     "activeCycleId": "CYC_p9c3kh"
   },
   "channels": [
@@ -1048,6 +1048,11 @@
       "brandId": "BR1",
       "partnerModelId": "PM_2wvypf",
       "codbLineItemId": "CLI_6qsvs6"
+    },
+    {
+      "brandId": "BR1",
+      "partnerModelId": "PM_lkql7m",
+      "codbLineItemId": "CLI_1699xf"
     }
   ],
   "partnerGroups": [
