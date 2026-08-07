@@ -3464,6 +3464,7 @@ function renderGstMovementScreen(container){
   rows.push({label:'ITC Utilised', rate:'', values: gstSched.itcUsed, indent:true, muted:true});
   rows.push({label:'= Closing ITC Credit', rate:'', values: gstSched.clITC, subtotal:true});
   rows.push({label:'Net GST Cash Outflow', rate:'', values: gstSched.cashOutflow.map(v=> v>0 ? v : null), grand:true, negClass:true});
+  rows.push({label:'GST Opening less Closing', rate:'', values: gstSched.opITC.map((v,i)=> v - gstSched.clITC[i]), subtotal:true, endval:true});
 
   rows.forEach(r=>{
     const cls = [r.subtotal?'subtotal':'', r.grand?'grand':'', r.indent?'lineitem':''].filter(Boolean).join(' ');
