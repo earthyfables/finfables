@@ -351,7 +351,8 @@
   .ledger tr.lineitem td:first-child{color:var(--ink-soft); padding-left:22px;}
   .ledger tr.neg td{color:var(--neg);}
   .ledger td.total-col{border-left:2px solid var(--accent); font-weight:700; background:#FCF6EB;}
-  .ledger tr.grand td.total-col, .ledger tr.subtotal td.total-col{background:inherit;}
+  .ledger tr.grand td.total-col{background:var(--accent-dark); border-left:2px solid var(--accent);}
+  .ledger tr.subtotal td.total-col{background:#EBEEF6; border-left:2px solid var(--accent);}
   .pct{color:var(--ink-soft); font-size:11.5px;}
 
   .tag{font-size:10.5px; padding:2px 9px; border-radius:99px; font-weight:700; letter-spacing:0.03em;}
@@ -3432,14 +3433,16 @@ function renderInventoryMovementScreen(container, onUpdate){
     html += `<tr class="${cls}"><td class="stickyleftcol" style="text-align:left; ${opts.neg?'color:var(--danger, #b3392c);':''}">${label}</td>`;
     let total = 0;
     values.forEach(v=>{ total += v; html += `<td style="${opts.neg?'color:var(--danger, #b3392c);':''}">${fmt(v)}</td>`; });
-    const fyVal = opts.endval ? values[values.length-1] : total;
+    const fyVal = opts.firstval ? values[0] : (opts.endval ? values[values.length-1] : total);
     html += `<td class="total-col">${fmt(fyVal)}</td></tr>`;
   };
 
-  simpleRow('Opening Inventory — Good', sched.opGood);
-  simpleRow('Opening Inventory — MUDA', sched.opMuda);
+  // Opening balances are a point-in-time snapshot at the start of the cycle -
+  // the Total column shows the opening month's value, not a sum across months.
+  simpleRow('Opening Inventory — Good', sched.opGood, {firstval:true});
+  simpleRow('Opening Inventory — MUDA', sched.opMuda, {firstval:true});
   const totalOpening = sched.opGood.map((v,i)=> v + sched.opMuda[i]);
-  simpleRow('= Total Opening Inventory', totalOpening, {grand:true, endval:true});
+  simpleRow('= Total Opening Inventory', totalOpening, {grand:true, firstval:true});
 
   // + Inwards - editable
   html += `<tr><td class="stickyleftcol" style="text-align:left;">+ Inwards</td>`;
@@ -3464,8 +3467,10 @@ function renderInventoryMovementScreen(container, onUpdate){
   const totalOutward = sched.cogs.map((v,i)=> v + sched.mudaOut[i]);
   simpleRow('= Total Outward', totalOutward, {subtotal:true});
 
-  simpleRow('= Closing Stock — Good', sched.clGood);
-  simpleRow('= Closing Stock — MUDA', sched.clMuda);
+  // Closing stock is also a point-in-time balance - Total column shows the
+  // last month's value (same as any individual monthly cell would), not a sum.
+  simpleRow('= Closing Stock — Good', sched.clGood, {endval:true});
+  simpleRow('= Closing Stock — MUDA', sched.clMuda, {endval:true});
   const totalClosing = sched.clGood.map((v,i)=> v + sched.clMuda[i]);
   simpleRow('= Total Closing Stock', totalClosing, {grand:true, endval:true});
 
