@@ -3299,7 +3299,7 @@ function getCreditorMovementGroups(){
   const invSchedRef = computeInventorySchedule();
   const groups = [];
   groups.push({
-    key:'__CODB__', label:'CODB', creditorDays:30,
+    key:'__CODB__', label:'CODB', creditorDays:30, gstRateLabel:'18%',
     additionFn:(m)=>{
       const totals = computeTotalPL(m);
       let add = 0;
@@ -3312,15 +3312,15 @@ function getCreditorMovementGroups(){
       return add;
     }
   });
-  groups.push({key:'__CAC__', label:'CAC', creditorDays:30, additionFn:(m)=> computeTotalPL(m).CAC * 1.18});
+  groups.push({key:'__CAC__', label:'CAC', creditorDays:30, gstRateLabel:'18%', additionFn:(m)=> computeTotalPL(m).CAC * 1.18});
   getMiscInputItemsForPL().forEach(li=>{
     groups.push({
-      key: li.id, label: li.name, creditorDays: +li.creditorDays||30,
+      key: li.id, label: li.name, creditorDays: +li.creditorDays||30, gstRateLabel: (+li.gstRate||0)+'%',
       additionFn: (m)=> (computeOpexByItem(m)[li.id]||0) * (1+(+li.gstRate||0)/100)
     });
   });
   groups.push({
-    key:'__COGS__', label:'COGS (Material)', creditorDays:30,
+    key:'__COGS__', label:'COGS (Material)', creditorDays:30, gstRateLabel:'3%',
     additionFn:(m)=> invSchedRef.inwards[MONTHS.indexOf(m)] * 1.03
   });
   return groups;
@@ -3376,7 +3376,7 @@ function computeCreditorMovementByLine(){
       op = cl;
     });
 
-    return {label:g.label, key:g.key, vendorCount:vendors.length, creditorDays:g.creditorDays, opening, additions, pmtsOpBal, pmtsNew, pmtOverride, totalPayments, closing};
+    return {label:g.label, key:g.key, vendorCount:vendors.length, creditorDays:g.creditorDays, gstRateLabel:g.gstRateLabel, opening, additions, pmtsOpBal, pmtsNew, pmtOverride, totalPayments, closing};
   });
   return result.filter(g=> g.vendorCount>0 || g.additions.some(v=>v>0.005));
 }
@@ -3464,7 +3464,7 @@ function renderCreditorMovementScreen(container){
   html += `<th class="total-col">Total</th></tr></thead><tbody>`;
 
   groups.forEach(g=>{
-    html += `<tr class="section"><td class="stickyleftcol" style="text-align:left; font-weight:700;">${g.label} <span class="footnote" style="margin:0;">(${g.creditorDays}d credit terms)</span></td>${MONTHS.map(()=>'<td></td>').join('')}<td class="total-col"></td></tr>`;
+    html += `<tr class="section"><td class="stickyleftcol" style="text-align:left; font-weight:700;">${g.label} <span class="footnote" style="margin:0;">(${g.creditorDays}d credit terms, ${g.gstRateLabel} GST)</span></td>${MONTHS.map(()=>'<td></td>').join('')}<td class="total-col"></td></tr>`;
     rowsMeta.forEach(rm=>{
       const cls = rm.subtotal ? 'subtotal' : 'lineitem';
       html += `<tr class="${cls}"><td class="stickyleftcol" style="text-align:left;">${rm.prefix(g.label)}</td>`;
