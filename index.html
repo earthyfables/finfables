@@ -2828,71 +2828,71 @@ const PLCF_SECTIONS = [
   ]},
   { title:'Cash — Indirect', rows:[
     {label:'EBITDA', key:'EBITDA'},
-    {label:'Change in WC'},
-    {label:'Change in Other CA / CL'},
-    {label:'GST Credit'},
-    {label:'OCF', subtotal:true}
+    {label:'Change in WC', key:'cfChangeInWC'},
+    {label:'Change in Other CA / CL', key:'cfChangeOtherCACL'},
+    {label:'GST Credit', key:'cfGstCreditCash'},
+    {label:'OCF', subtotal:true, key:'cfOCF'}
   ]},
   { title:'Cash — Direct', rows:[
-    {label:'Collections'},
-    {label:'Payments - Material', indent:true},
-    {label:'Payments - Others', indent:true},
-    {label:'GST Payments', indent:true},
-    {label:'Net Cash', subtotal:true},
-    {label:'Check'}
+    {label:'Collections', key:'cfCollections'},
+    {label:'Payments - Material', indent:true, key:'cfPmtMaterial'},
+    {label:'Payments - Others', indent:true, key:'cfPmtOthers'},
+    {label:'GST Payments', indent:true, key:'cfGstPayments'},
+    {label:'Net Cash', subtotal:true, key:'cfNetCash'},
+    {label:'Check', key:'cfCheck'}
   ]},
   { title:'Closing Working Capital', rows:[
-    {label:'Inventory'},
-    {label:'Debtors'},
-    {label:'Creditors - Material'},
-    {label:'Creditors - Others'},
-    {label:'NWC', subtotal:true},
-    {label:'Change in WC'}
+    {label:'Inventory', key:'wcInventory', endval:true},
+    {label:'Debtors', key:'wcDebtors', endval:true},
+    {label:'Creditors - Material', key:'wcCredMaterial', endval:true},
+    {label:'Creditors - Others', key:'wcCredOthers', endval:true},
+    {label:'NWC', subtotal:true, key:'wcNWC', endval:true},
+    {label:'Change in WC', key:'wcChange'}
   ]},
   { title:'Inventory Schedule', rows:[
-    {label:'Op Inventory'},
-    {label:'Inwards', indent:true},
-    {label:'Outwards', indent:true},
-    {label:'Cl Inventory', subtotal:true}
+    {label:'Op Inventory', key:'invOpTotal', endval:true},
+    {label:'Inwards', indent:true, key:'invInwards'},
+    {label:'Outwards', indent:true, key:'invOutwards'},
+    {label:'Cl Inventory', subtotal:true, key:'invClTotal', endval:true}
   ]},
   { title:'Debtors Schedule', rows:[
-    {label:'Op Debtors Tot'},
-    {label:'Sales +GST', indent:true},
-    {label:'Dedn', indent:true},
-    {label:'Collections', indent:true},
-    {label:'Cl Debtors', subtotal:true}
+    {label:'Op Debtors Tot', key:'debOpening', endval:true},
+    {label:'Sales +GST', indent:true, key:'debSalesGst'},
+    {label:'Dedn', indent:true, key:'debDedn'},
+    {label:'Collections', indent:true, key:'debCollections'},
+    {label:'Cl Debtors', subtotal:true, key:'debClosing', endval:true}
   ]},
   { title:'Collections & Deductions Detail', rows:[
-    {label:'Sales + GST'},
+    {label:'Sales + GST', key:'cddSalesGst'},
     {label:'TDS + TCS Deductions', indent:true},
-    {label:'Gross Collectables', subtotal:true},
-    {label:'Deductions', indent:true},
+    {label:'Gross Collectables', subtotal:true, key:'cddGrossCollectable'},
+    {label:'Deductions', indent:true, key:'cddDeductions'},
     {label:'GST on Deductions', indent:true},
-    {label:'Net Deductions', subtotal:true}
+    {label:'Net Deductions', subtotal:true, key:'cddNetDeductions'}
   ]},
   { title:'Creditors — COGS Schedule', rows:[
-    {label:'Op Creditors - COGS'},
-    {label:'Purchases', indent:true},
-    {label:'Payments', indent:true},
-    {label:'Cl Creditors - COGS', subtotal:true}
+    {label:'Op Creditors - COGS', key:'credCogsOpening', endval:true},
+    {label:'Purchases', indent:true, key:'credCogsPurchases'},
+    {label:'Payments', indent:true, key:'credCogsPayments'},
+    {label:'Cl Creditors - COGS', subtotal:true, key:'credCogsClosing', endval:true}
   ]},
   { title:'Creditors — Others Schedule', rows:[
-    {label:'Op Creditors - Others'},
-    {label:'Expenses', indent:true},
-    {label:'Payments', indent:true},
-    {label:'Cl Creditors - Others', subtotal:true}
+    {label:'Op Creditors - Others', key:'credOthOpening', endval:true},
+    {label:'Expenses', indent:true, key:'credOthExpenses'},
+    {label:'Payments', indent:true, key:'credOthPayments'},
+    {label:'Cl Creditors - Others', subtotal:true, key:'credOthClosing', endval:true}
   ]},
   { title:'Input Credit Calculation', rows:[
-    {label:'Op GST'},
-    {label:'Material', indent:true},
-    {label:'Expenses', indent:true},
-    {label:'Total Input Credit', subtotal:true},
-    {label:'Utilised', indent:true},
-    {label:'Cl Credit', subtotal:true}
+    {label:'Op GST', key:'icOpening', endval:true},
+    {label:'Material', indent:true, key:'icMaterial'},
+    {label:'Expenses', indent:true, key:'icExpenses'},
+    {label:'Total Input Credit', subtotal:true, key:'icTotalCredit', endval:true},
+    {label:'Utilised', indent:true, key:'icUtilised'},
+    {label:'Cl Credit', subtotal:true, key:'icClosing', endval:true}
   ]},
   { title:'GST — Cash Impact', rows:[
-    {label:'Output GST'},
-    {label:'GST Payments', indent:true}
+    {label:'Output GST', key:'gstOutput'},
+    {label:'GST Payments', indent:true, key:'gstPayments'}
   ]},
   { title:'Other CA / CL', rows:[
     {label:'Op CA / CL'},
@@ -2920,11 +2920,19 @@ function renderPLCFTable(sections, dataProvider){
       });
       // Ratio/percentage rows don't sum meaningfully across months - recompute
       // from FY-aggregated figures instead of adding up 12 monthly percentages.
+      // Balance rows (opening/closing stock, debtors, creditors, GST credit,
+      // NWC) shouldn't sum across months either - FY Total shows the last
+      // month's value, since it's a point-in-time balance, not a flow.
       let fyVal = rowTotal;
       let fyReal = hasReal;
       if((r.pct || r.ratio) && r.key && dataProvider){
         const fy = dataProvider(r.key, 'FY');
         if(fy !== null && fy !== undefined){ fyVal = fy; fyReal = true; }
+      } else if(r.endval && r.key && dataProvider){
+        for(let mi=MONTHS.length-1; mi>=0; mi--){
+          const v = dataProvider(r.key, MONTHS[mi]);
+          if(v !== null && v !== undefined){ fyVal = v; fyReal = true; break; }
+        }
       }
       html += `<td class="total-col">${fyReal ? fmtCell(fyVal) : '—'}</td></tr>`;
     });
@@ -3069,8 +3077,221 @@ function buildDynamicPLCFSections(uptoCM3){
   ];
 }
 
+const DAYS_IN_MONTH = {Jan:31,Feb:28,Mar:31,Apr:30,May:31,Jun:30,Jul:31,Aug:31,Sep:30,Oct:31,Nov:30,Dec:31};
+
+// ---- Inventory Schedule: sequential month-by-month, company-wide (not PM-specific) ----
+function computeInventorySchedule(){
+  const inv = getCycleObj('inventoryByCycle');
+  const opGood=[], opMuda=[], inwards=[], cogsArr=[], mudaOut=[], clGood=[], clMuda=[];
+  MONTHS.forEach((m,i)=>{
+    const og = i===0 ? (+inv.openingGood||0) : clGood[i-1];
+    const om = i===0 ? (+inv.openingMuda||0) : clMuda[i-1];
+    const inw = +((inv.inwards||{})[m])||0;
+    const cogs = computeTotalPL(m).COGS;
+    const mo = +((inv.mudaOutward||{})[m])||0;
+    opGood.push(og); opMuda.push(om); inwards.push(inw); cogsArr.push(cogs); mudaOut.push(mo);
+    clGood.push(og + inw - cogs);
+    clMuda.push(om - mo);
+  });
+  return {opGood, opMuda, inwards, cogs:cogsArr, mudaOut, clGood, clMuda};
+}
+
+// ---- GST Input Tax Credit: sequential, nets Input GST against Output GST ----
+function computeGstItcSchedule(inventorySched){
+  const inv = getCycleObj('inventoryByCycle');
+  const openingCredit = +inv.openingGstCredit||0;
+  const codbGst=[], cacGst=[], opexGst=[], inwardsGst=[], totalInputGst=[], outputGst=[], opITC=[], totalCredit=[], itcUsed=[], cashOutflow=[], clITC=[];
+  MONTHS.forEach((m,i)=>{
+    const totals = computeTotalPL(m);
+    let cGst = 0;
+    getCodbLineItemsForPL().forEach(li=>{
+      const val = totals.codbByItem[li.id] || 0;
+      const exp = li.expenseLineItemId ? DATA.expenseLineItems.find(x=>x.id===li.expenseLineItemId) : null;
+      const rate = exp ? (+exp.gstRate||0) : 18;
+      cGst += val * rate/100;
+    });
+    codbGst.push(cGst);
+    cacGst.push(totals.CAC * 0.18);
+    let oGst = 0;
+    getMiscInputItemsForPL().forEach(li=>{
+      const val = computeOpexByItem(m)[li.id] || 0;
+      oGst += val * (+li.gstRate||0)/100;
+    });
+    opexGst.push(oGst);
+    inwardsGst.push(inventorySched.inwards[i] * 0.03);
+    totalInputGst.push(cGst + totals.CAC*0.18 + oGst + inventorySched.inwards[i]*0.03);
+    outputGst.push(totals.GST);
+    const op = i===0 ? openingCredit : clITC[i-1];
+    opITC.push(op);
+    const tc = op + totalInputGst[i];
+    totalCredit.push(tc);
+    const used = Math.min(tc, outputGst[i]);
+    itcUsed.push(used);
+    cashOutflow.push(Math.max(0, outputGst[i] - used));
+    clITC.push(tc - used);
+  });
+  return {codbGst, cacGst, opexGst, inwardsGst, totalInputGst, outputGst, opITC, totalCredit, itcUsed, cashOutflow, clITC};
+}
+
+// ---- Debtors & Collections: per Partner-Model, then summed to company total ----
+function computeDebtorsSchedule(){
+  const pms = DATA.partnerModels;
+  const debtorsStore = getCycleObj('debtorsByCycle');
+  const cycle = DATA.aopCycles.find(c=>c.id===DATA.meta.activeCycleId);
+  const brandId = cycle ? cycle.brandId : null;
+  const N = MONTHS.length;
+  const zeros = ()=> new Array(N).fill(0);
+  const tot = {opening:zeros(), closing:zeros(), collectible:zeros(), dedn:zeros(), collOpBal:zeros(), collCurrent:zeros(), salesPlusGst:zeros()};
+
+  pms.forEach(pm=>{
+    const d = debtorsStore[pm.id] || {};
+    const bpm = DATA.brandPartnerMapping.find(b=> b.brandId===brandId && normalizeText(b.partner)===normalizeText(pm.partner) && normalizeText(b.model)===normalizeText(pm.model));
+    const creditDays = bpm ? (+bpm.creditDays||0) : 0;
+    const dedItemIds = DATA.marketplaceDeductionMapping.filter(m=> m.brandId===brandId && m.partnerModelId===pm.id).map(m=>m.codbLineItemId);
+
+    const collectible = [];
+    MONTHS.forEach((m,i)=>{
+      const pmTotals = computePartnerModelPL(pm.id, m);
+      const rev = pmTotals.NSV + pmTotals.GST;
+      let ded = 0;
+      dedItemIds.forEach(liId=>{
+        const li = DATA.codbLineItems.find(x=>x.id===liId);
+        if(!li) return;
+        if(normalizeText(li.name)==='cac'){
+          ded += pmTotals.CAC * 1.18;
+        } else {
+          const val = pmTotals.codbByItem[liId] || 0;
+          const exp = li.expenseLineItemId ? DATA.expenseLineItems.find(x=>x.id===li.expenseLineItemId) : null;
+          const rate = exp ? (+exp.gstRate||0)/100 : 0;
+          ded += val * (1+rate);
+        }
+      });
+      collectible.push(Math.max(0, rev - ded));
+      tot.dedn[i] += ded;
+      tot.salesPlusGst[i] += rev;
+    });
+
+    const collOpBal = zeros();
+    if(N>0) collOpBal[0] += (+d.b030||0);
+    if(N>1) collOpBal[1] += (+d.b3160||0);
+    MONTHS.forEach((m,i)=>{
+      const daysElapsed = 30 + MONTHS.slice(0,i).reduce((a,mm)=>a+DAYS_IN_MONTH[mm],0);
+      const dLow = daysElapsed - creditDays;
+      const dHigh = daysElapsed + DAYS_IN_MONTH[m] - creditDays;
+      const overlap = Math.max(0, Math.min(30,dHigh) - Math.max(0,dLow));
+      collOpBal[i] += (+d.notdue||0) * (overlap/30);
+    });
+
+    const collCurrent = zeros();
+    for(let j=0;j<N;j++){
+      const dimJ = DAYS_IN_MONTH[MONTHS[j]];
+      for(let i=j;i<N;i++){
+        const daysElapsed = MONTHS.slice(j,i).reduce((a,mm)=>a+DAYS_IN_MONTH[mm],0);
+        const dLow = daysElapsed - creditDays;
+        const dHigh = daysElapsed + DAYS_IN_MONTH[MONTHS[i]] - creditDays;
+        const overlap = Math.max(0, Math.min(dimJ,dHigh) - Math.max(0,dLow));
+        collCurrent[i] += collectible[j] * (overlap/dimJ);
+      }
+    }
+
+    let opening = DEBTOR_BUCKETS.reduce((a,b)=>a+(+d[b.key]||0),0);
+    MONTHS.forEach((m,i)=>{
+      tot.opening[i] += opening;
+      tot.collectible[i] += collectible[i];
+      tot.collOpBal[i] += collOpBal[i];
+      tot.collCurrent[i] += collCurrent[i];
+      const closing = opening + collectible[i] - collOpBal[i] - collCurrent[i];
+      tot.closing[i] += closing;
+      opening = closing;
+    });
+  });
+  return tot;
+}
+
+// ---- Creditors & Payments: per vendor entry, auto-payment schedule from ageing + Credit Days, split COGS vs Others ----
+function computeCreditorsSchedule(){
+  const entries = getCycleData('creditorsByCycle');
+  const N = MONTHS.length;
+  const zeros = ()=> new Array(N).fill(0);
+  const slotMap = {b180p:0, b121180:1, b91120:2, b6190:3, b3160:4, b030:5};
+  const paymentsByVendor = zeros();
+
+  const cogs = {opening:zeros(), closing:zeros(), additions:zeros(), payments:zeros()};
+  const others = {opening:zeros(), closing:zeros(), additions:zeros(), payments:zeros()};
+
+  entries.forEach(e=>{
+    const exp = e.expenseLineId ? DATA.expenseLineItems.find(x=>x.id===e.expenseLineId) : null;
+    const creditorDays = exp ? (+exp.creditorDays||30) : 30;
+    const lag = Math.floor(creditorDays/30);
+    const isCogsVendor = exp && exp.type === 'COGS';
+    const bucket = isCogsVendor ? cogs : others;
+
+    const sc = zeros();
+    Object.keys(slotMap).forEach(bk=>{ const slot=slotMap[bk]; if(slot<N) sc[slot]+=(+e[bk]||0); });
+    sc[Math.min(lag, N-1)] += (+e.notdue||0);
+
+    MONTHS.forEach((m,i)=>{
+      const override = (e.payments||{})[m];
+      const pmt = (override!==undefined && override!=='') ? +override : sc[i];
+      bucket.payments[i] += pmt;
+    });
+  });
+
+  // Additions come from the P&L totals for that expense category, not per-vendor
+  // (matches the working-logic doc: additions = LE cost x (1+GST%) at the group level).
+  const inv = computeInventorySchedule();
+  MONTHS.forEach((m,i)=>{
+    cogs.additions[i] = inv.inwards[i] * 1.03; // COGS creditors accrue on purchases (inwards), 3% GST
+    const totals = computeTotalPL(m);
+    let othersAdd = 0;
+    getCodbLineItemsForPL().forEach(li=>{
+      const val = totals.codbByItem[li.id] || 0;
+      const exp = li.expenseLineItemId ? DATA.expenseLineItems.find(x=>x.id===li.expenseLineItemId) : null;
+      const rate = exp ? (+exp.gstRate||0) : 18;
+      othersAdd += val * (1+rate/100);
+    });
+    othersAdd += totals.CAC * 1.18;
+    getMiscInputItemsForPL().forEach(li=>{
+      const val = computeOpexByItem(m)[li.id] || 0;
+      othersAdd += val * (1+(+li.gstRate||0)/100);
+    });
+    others.additions[i] = othersAdd;
+  });
+
+  [cogs, others].forEach(bucket=>{
+    // Recompute true opening from vendor ageing totals (company-wide, all vendors in this bucket)
+    let openingTotal0 = 0;
+    entries.forEach(e=>{
+      const exp = e.expenseLineId ? DATA.expenseLineItems.find(x=>x.id===e.expenseLineId) : null;
+      const isCogsVendor = exp && exp.type === 'COGS';
+      if((bucket===cogs) === isCogsVendor){
+        openingTotal0 += CREDITOR_BUCKETS.reduce((a,b)=>a+(+e[b.key]||0),0);
+      }
+    });
+    let opening = openingTotal0;
+    MONTHS.forEach((m,i)=>{
+      bucket.opening[i] = opening;
+      const closing = opening + bucket.additions[i] - bucket.payments[i];
+      bucket.closing[i] = closing;
+      opening = closing;
+    });
+  });
+
+  return {cogs, others};
+}
+
 function renderPLCF(container){
-  let html = `<div class="footnote" style="margin-bottom:16px;">GMV through EBITDA are live, computed at Pareto (Product Sub Category) level and summed to the full company total. Cash Flow sections are still structure-only. For a Partner-Model / Product breakdown with filters, see "Partner and Product wise".</div>`;
+  let html = `<div class="footnote" style="margin-bottom:16px;">GMV through EBITDA are live, computed at Pareto (Product Sub Category) level and summed to the full company total. Cash Flow sections (Debtors, Creditors, Inventory, GST ITC) are now live too, computed per the working-logic model. For a Partner-Model / Product breakdown with filters, see "Partner and Product wise".</div>`;
+
+  // Cash Flow schedules are sequential across months, so compute them once per
+  // render rather than recomputing from scratch for every cell.
+  const invSched = computeInventorySchedule();
+  const gstSched = computeGstItcSchedule(invSched);
+  const debSched = computeDebtorsSchedule();
+  const credSched = computeCreditorsSchedule();
+  const mi = m => MONTHS.indexOf(m);
+  const nwcAt = i => (invSched.clGood[i]+invSched.clMuda[i]) + debSched.closing[i] - credSched.cogs.closing[i] - credSched.others.closing[i];
+
   const dataProvider = (key, month)=>{
     if(key && key.indexOf('codbitem_')===0){
       const liId = key.slice('codbitem_'.length);
@@ -3090,7 +3311,79 @@ function renderPLCF(container){
       const opex = month==='FY' ? MONTHS.reduce((a,m)=>a+computeOpexTotal(m),0) : computeOpexTotal(month);
       return totals.NSV ? (totals.CM3 - opex) / totals.NSV * 100 : 0;
     }
-    return PL_SUM_KEYS.includes(key) ? computeTotalPL(month)[key] : null;
+    if(PL_SUM_KEYS.includes(key)) return computeTotalPL(month)[key];
+
+    if(month === 'FY') return null; // Cash Flow rows don't have a meaningful FY sum via this path (handled per-row below by renderPLCFTable's own re-sum for non-pct rows)
+    const i = mi(month);
+    if(i < 0) return null;
+
+    switch(key){
+      case 'invOpTotal': return invSched.opGood[i] + invSched.opMuda[i];
+      case 'invInwards': return invSched.inwards[i];
+      case 'invOutwards': return -(invSched.cogs[i] + invSched.mudaOut[i]);
+      case 'invClTotal': return invSched.clGood[i] + invSched.clMuda[i];
+
+      case 'debOpening': return debSched.opening[i];
+      case 'debSalesGst': return debSched.salesPlusGst[i];
+      case 'debDedn': return -debSched.dedn[i];
+      case 'debCollections': return -(debSched.collOpBal[i] + debSched.collCurrent[i]);
+      case 'debClosing': return debSched.closing[i];
+
+      case 'cddSalesGst': return debSched.salesPlusGst[i];
+      case 'cddGrossCollectable': return debSched.salesPlusGst[i];
+      case 'cddDeductions': return -debSched.dedn[i];
+      case 'cddNetDeductions': return -debSched.dedn[i];
+
+      case 'credCogsOpening': return credSched.cogs.opening[i];
+      case 'credCogsPurchases': return credSched.cogs.additions[i];
+      case 'credCogsPayments': return -credSched.cogs.payments[i];
+      case 'credCogsClosing': return credSched.cogs.closing[i];
+
+      case 'credOthOpening': return credSched.others.opening[i];
+      case 'credOthExpenses': return credSched.others.additions[i];
+      case 'credOthPayments': return -credSched.others.payments[i];
+      case 'credOthClosing': return credSched.others.closing[i];
+
+      case 'icOpening': return gstSched.opITC[i];
+      case 'icMaterial': return gstSched.inwardsGst[i];
+      case 'icExpenses': return gstSched.codbGst[i] + gstSched.cacGst[i] + gstSched.opexGst[i];
+      case 'icTotalCredit': return gstSched.totalCredit[i];
+      case 'icUtilised': return -gstSched.itcUsed[i];
+      case 'icClosing': return gstSched.clITC[i];
+
+      case 'gstOutput': return gstSched.outputGst[i];
+      case 'gstPayments': return -gstSched.cashOutflow[i];
+
+      case 'wcInventory': return invSched.clGood[i] + invSched.clMuda[i];
+      case 'wcDebtors': return debSched.closing[i];
+      case 'wcCredMaterial': return -credSched.cogs.closing[i];
+      case 'wcCredOthers': return -credSched.others.closing[i];
+      case 'wcNWC': return nwcAt(i);
+      case 'wcChange': { const prevNwc = i===0 ? nwcAt(0) : nwcAt(i-1); return nwcAt(i) - prevNwc; }
+
+      case 'cfChangeInWC': { const prevNwc = i===0 ? nwcAt(0) : nwcAt(i-1); return -(nwcAt(i) - prevNwc); }
+      case 'cfChangeOtherCACL': return 0;
+      case 'cfGstCreditCash': return -gstSched.cashOutflow[i];
+      case 'cfOCF': {
+        const ebitda = computeTotalPL(month).CM3 - computeOpexTotal(month);
+        const prevNwc = i===0 ? nwcAt(0) : nwcAt(i-1);
+        return ebitda - (nwcAt(i) - prevNwc) - gstSched.cashOutflow[i];
+      }
+
+      case 'cfCollections': return debSched.collOpBal[i] + debSched.collCurrent[i];
+      case 'cfPmtMaterial': return -credSched.cogs.payments[i];
+      case 'cfPmtOthers': return -credSched.others.payments[i];
+      case 'cfGstPayments': return -gstSched.cashOutflow[i];
+      case 'cfNetCash': return (debSched.collOpBal[i]+debSched.collCurrent[i]) - credSched.cogs.payments[i] - credSched.others.payments[i] - gstSched.cashOutflow[i];
+      case 'cfCheck': {
+        const netCash = (debSched.collOpBal[i]+debSched.collCurrent[i]) - credSched.cogs.payments[i] - credSched.others.payments[i] - gstSched.cashOutflow[i];
+        const ebitda = computeTotalPL(month).CM3 - computeOpexTotal(month);
+        const prevNwc = i===0 ? nwcAt(0) : nwcAt(i-1);
+        const ocf = ebitda - (nwcAt(i) - prevNwc) - gstSched.cashOutflow[i];
+        return netCash - ocf;
+      }
+    }
+    return null;
   };
   html += `<div class="panel"><div class="scrollbox" style="max-height:75vh;">${renderPLCFTable(buildDynamicPLCFSections(false), dataProvider)}</div></div>`;
   container.innerHTML = html;
