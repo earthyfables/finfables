@@ -335,14 +335,14 @@
   .ledger th:first-child{text-align:left;}
   .ledger td{padding:6px 11px; text-align:right; border-bottom:1px solid var(--line); white-space:nowrap; font-variant-numeric:tabular-nums;}
   .ledger tbody tr:not(.section):not(.subtotal):not(.grand):nth-of-type(even) td{background:#FBFAF6;}
-  .ledger td input[type=number], .ledger td input.gmvcell, .ledger td input.misccell{
+  .ledger td input[type=number], .ledger td input.gmvcell, .ledger td input.misccell, .ledger td input.invmovecell{
     width:90px; border:1px solid var(--line) !important; border-radius:5px; padding:5px 7px;
     background:#fff; color:var(--ink); font-size:13px;
   }
-  .ledger td input[type=number]:focus, .ledger td input.gmvcell:focus, .ledger td input.misccell:focus{
+  .ledger td input[type=number]:focus, .ledger td input.gmvcell:focus, .ledger td input.misccell:focus, .ledger td input.invmovecell:focus{
     outline:none; border-color:var(--accent) !important; box-shadow:0 0 0 2px var(--accent-soft);
   }
-  .ledger td input.gmvcell, .ledger td input.misccell{text-align:right; font-variant-numeric:tabular-nums; font-family:'Times New Roman', Times, serif;}
+  .ledger td input.gmvcell, .ledger td input.misccell, .ledger td input.invmovecell{text-align:right; font-variant-numeric:tabular-nums; font-family:'Times New Roman', Times, serif;}
   .ledger td:first-child{text-align:left; white-space:normal; font-variant-numeric:normal;}
   .ledger tr.section td{background:var(--accent-soft);}
   .ledger tr.section td:first-child{font-weight:700; color:var(--accent-dark); padding-top:10px; padding-bottom:10px; font-size:14px;}
@@ -3442,14 +3442,15 @@ function renderInventoryMovementScreen(container, onUpdate){
   simpleRow('Opening Inventory — Good', sched.opGood, {firstval:true});
   simpleRow('Opening Inventory — MUDA', sched.opMuda, {firstval:true});
   const totalOpening = sched.opGood.map((v,i)=> v + sched.opMuda[i]);
-  simpleRow('= Total Opening Inventory', totalOpening, {grand:true, firstval:true});
+  simpleRow('= Total Opening Inventory', totalOpening, {subtotal:true, firstval:true});
 
   // + Inwards - editable
   html += `<tr><td class="stickyleftcol" style="text-align:left;">+ Inwards</td>`;
   let inwardsTotal = 0;
   MONTHS.forEach((m,i)=>{
     inwardsTotal += sched.inwards[i];
-    html += `<td><input type="number" step="any" class="invmovecell" data-row="inwards" data-month="${m}" value="${sched.inwards[i]!==0? sched.inwards[i] : ''}"></td>`;
+    const dispIn = sched.inwards[i]!==0 ? Math.round(sched.inwards[i]).toLocaleString('en-IN') : '';
+    html += `<td><input type="text" inputmode="decimal" class="invmovecell" data-row="inwards" data-month="${m}" value="${dispIn}"></td>`;
   });
   html += `<td class="total-col">${fmt(inwardsTotal)}</td></tr>`;
 
@@ -3460,7 +3461,8 @@ function renderInventoryMovementScreen(container, onUpdate){
   let mudaOutTotal = 0;
   MONTHS.forEach((m,i)=>{
     mudaOutTotal += sched.mudaOut[i];
-    html += `<td><input type="number" step="any" class="invmovecell" data-row="mudaOutward" data-month="${m}" value="${sched.mudaOut[i]!==0? sched.mudaOut[i] : ''}"></td>`;
+    const dispMo = sched.mudaOut[i]!==0 ? Math.round(sched.mudaOut[i]).toLocaleString('en-IN') : '';
+    html += `<td><input type="text" inputmode="decimal" class="invmovecell" data-row="mudaOutward" data-month="${m}" value="${dispMo}"></td>`;
   });
   html += `<td class="total-col">${fmt(mudaOutTotal)}</td></tr>`;
 
@@ -3472,7 +3474,7 @@ function renderInventoryMovementScreen(container, onUpdate){
   simpleRow('= Closing Stock — Good', sched.clGood, {endval:true});
   simpleRow('= Closing Stock — MUDA', sched.clMuda, {endval:true});
   const totalClosing = sched.clGood.map((v,i)=> v + sched.clMuda[i]);
-  simpleRow('= Total Closing Stock', totalClosing, {grand:true, endval:true});
+  simpleRow('= Total Closing Stock', totalClosing, {subtotal:true, endval:true});
 
   html += `</tbody></table></div></div>`;
   container.innerHTML = html;
@@ -3511,7 +3513,7 @@ function renderGstMovementScreen(container){
   rows.push({label:'− Output GST (NSV × GST%)', rate:'—', values: gstSched.outputGst.map(v=>-v), indent:true, negClass:true});
   rows.push({label:'ITC Utilised', rate:'', values: gstSched.itcUsed, indent:true, muted:true});
   rows.push({label:'= Closing ITC Credit', rate:'', values: gstSched.clITC, subtotal:true});
-  rows.push({label:'Net GST Cash Outflow', rate:'', values: gstSched.cashOutflow.map(v=> v>0 ? v : null), grand:true, negClass:true});
+  rows.push({label:'Net GST Cash Outflow', rate:'', values: gstSched.cashOutflow.map(v=> v>0 ? v : null), subtotal:true, negClass:true});
   rows.push({label:'GST Opening less Closing', rate:'', values: gstSched.opITC.map((v,i)=> v - gstSched.clITC[i]), subtotal:true, endval:true});
 
   rows.forEach(r=>{
@@ -3520,7 +3522,8 @@ function renderGstMovementScreen(container){
     let total = 0, hasReal = false;
     r.values.forEach((v,i)=>{
       if(r.editableFirst && i===0){
-        html += `<td><input type="number" step="any" class="gstopeningcell" value="${v!==undefined && v!==''? v : ''}"></td>`;
+        const dispOpen = (v!==undefined && v!=='') ? Math.round(v).toLocaleString('en-IN') : '';
+        html += `<td><input type="text" inputmode="decimal" class="gstopeningcell invmovecell" value="${dispOpen}"></td>`;
         hasReal = true; total += (+v||0);
       } else if(v===null || v===undefined){
         html += `<td>—</td>`;
