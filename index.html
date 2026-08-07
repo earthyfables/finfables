@@ -3556,58 +3556,31 @@ function renderCollectionsWorkingScreen(container){
   });
 }
 
-let debtorsSubTab = 'input';
 function renderDebtorsTabScreen(container){
-  const pillsHtml = `<div class="pillbar">
-    <button class="pill ${debtorsSubTab==='input'?'active':''}" data-debtorstab="input">Opening Balances</button>
-    <button class="pill ${debtorsSubTab==='movement'?'active':''}" data-debtorstab="movement">Collections Working</button>
-  </div>`;
-  container.innerHTML = pillsHtml + `<div id="debtorsSubHost"></div>`;
-  container.querySelectorAll('[data-debtorstab]').forEach(btn=>{
-    btn.addEventListener('click', ()=>{
-      debtorsSubTab = btn.dataset.debtorstab;
-      renderDebtorsTabScreen(container);
-    });
-  });
-  const host = container.querySelector('#debtorsSubHost');
-  if(debtorsSubTab === 'input') renderDebtorsScreen(host);
-  else renderCollectionsWorkingScreen(host);
+  container.innerHTML = `<div id="debtorsInputHost"></div>
+    <hr style="border:none; border-top:2px solid var(--line); margin:32px 0;">
+    <div class="cyclelabel" style="font-size:16px; font-weight:700; color:var(--ink); margin-bottom:4px;">Collections Working — Rolling Forecast</div>
+    <div id="debtorsMovementHost"></div>`;
+  renderDebtorsScreen(container.querySelector('#debtorsInputHost'));
+  renderCollectionsWorkingScreen(container.querySelector('#debtorsMovementHost'));
 }
 
-let creditorsSubTab = 'input';
 function renderCreditorsTabScreen(container){
-  const pillsHtml = `<div class="pillbar">
-    <button class="pill ${creditorsSubTab==='input'?'active':''}" data-creditorstab="input">Vendor Balances</button>
-    <button class="pill ${creditorsSubTab==='movement'?'active':''}" data-creditorstab="movement">Creditor Movement</button>
-  </div>`;
-  container.innerHTML = pillsHtml + `<div id="creditorsSubHost"></div>`;
-  container.querySelectorAll('[data-creditorstab]').forEach(btn=>{
-    btn.addEventListener('click', ()=>{
-      creditorsSubTab = btn.dataset.creditorstab;
-      renderCreditorsTabScreen(container);
-    });
-  });
-  const host = container.querySelector('#creditorsSubHost');
-  if(creditorsSubTab === 'input') renderCreditorsScreen(host);
-  else renderCreditorMovementScreen(host);
+  container.innerHTML = `<div id="creditorsInputHost"></div>
+    <hr style="border:none; border-top:2px solid var(--line); margin:32px 0;">
+    <div class="cyclelabel" style="font-size:16px; font-weight:700; color:var(--ink); margin-bottom:4px;">Creditor Movement — by Expense Line</div>
+    <div id="creditorsMovementHost"></div>`;
+  renderCreditorsScreen(container.querySelector('#creditorsInputHost'));
+  renderCreditorMovementScreen(container.querySelector('#creditorsMovementHost'));
 }
 
-let inventorySubTab = 'input';
 function renderInventoryTabScreen(container){
-  const pillsHtml = `<div class="pillbar">
-    <button class="pill ${inventorySubTab==='input'?'active':''}" data-inventorytab="input">Inventory</button>
-    <button class="pill ${inventorySubTab==='gst'?'active':''}" data-inventorytab="gst">GST Movement</button>
-  </div>`;
-  container.innerHTML = pillsHtml + `<div id="inventorySubHost"></div>`;
-  container.querySelectorAll('[data-inventorytab]').forEach(btn=>{
-    btn.addEventListener('click', ()=>{
-      inventorySubTab = btn.dataset.inventorytab;
-      renderInventoryTabScreen(container);
-    });
-  });
-  const host = container.querySelector('#inventorySubHost');
-  if(inventorySubTab === 'input') renderInventoryScreen(host);
-  else renderGstMovementScreen(host);
+  container.innerHTML = `<div id="inventoryInputHost"></div>
+    <hr style="border:none; border-top:2px solid var(--line); margin:32px 0;">
+    <div class="cyclelabel" style="font-size:16px; font-weight:700; color:var(--ink); margin-bottom:4px;">GST Movement — ITC vs Output</div>
+    <div id="inventoryGstHost"></div>`;
+  renderInventoryScreen(container.querySelector('#inventoryInputHost'));
+  renderGstMovementScreen(container.querySelector('#inventoryGstHost'));
 }
 
 function renderPLCF(container){
