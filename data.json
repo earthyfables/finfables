@@ -15,8 +15,8 @@
       "Feb",
       "Mar"
     ],
-    "savedAt": "2026-08-07T14:13:05.198Z",
-    "activeCycleId": "CYC_xba629"
+    "savedAt": "2026-08-07T14:20:03.021Z",
+    "activeCycleId": "CYC_lvcj33"
   },
   "channels": [
     {
@@ -1618,6 +1618,14 @@
       "startMonth": "Apr",
       "version": "AOP",
       "published": false
+    },
+    {
+      "id": "CYC_lvcj33",
+      "brandId": "BR1",
+      "fy": "FY27",
+      "startMonth": "Apr",
+      "version": "LE1",
+      "published": false
     }
   ],
   "salesInputByCycle": {
@@ -1707,7 +1715,8 @@
         "rateValue": 5,
         "appliedOn": "Qty"
       }
-    ]
+    ],
+    "CYC_xba629": {}
   },
   "miscInputsByCycle": {
     "": {
@@ -1723,7 +1732,8 @@
       "EL9": {
         "Apr": 80000
       }
-    }
+    },
+    "CYC_xba629": {}
   },
   "cashFlowItemsByCycle": {
     "": [
@@ -1749,46 +1759,21 @@
   },
   "monthlyGMVByCycle": {
     "": {},
-    "CYC_xba629": {
-      "Apr": 3000000,
-      "May": 3000000,
-      "Jun": 3000000,
-      "Jul": 4000000,
-      "Aug": 4000000,
-      "Sep": 4800000,
-      "Oct": 5500000,
-      "Nov": 5000000,
-      "Dec": 5200000,
-      "Jan": 5500000,
-      "Feb": 5000000,
-      "Mar": 5000000
-    }
+    "CYC_xba629": {},
+    "CYC_lvcj33": {}
   },
   "channelMixByCycle": {
     "": {},
-    "CYC_xba629": {
-      "PM_lkql7m": {},
-      "PM_8mdlod": {
-        "Apr": 100,
-        "May": 100,
-        "Jun": 100,
-        "Jul": 100,
-        "Aug": 95
-      },
-      "PM_zha4pk": {},
-      "PM_rp2j41": {
-        "Aug": 3
-      },
-      "PM_w4g7wl": {},
-      "PM_2wvypf": {}
-    }
+    "CYC_xba629": {}
   },
   "categoryMixByCycle": {},
   "paretoMixByCycle": {
-    "": {}
+    "": {},
+    "CYC_xba629": {}
   },
   "discMarginGstByCycle": {
-    "": {}
+    "": {},
+    "CYC_xba629": {}
   },
   "aspBands": [
     {
@@ -2188,18 +2173,23 @@
         "acogs": 123,
         "gstPct": 5
       }
-    }
+    },
+    "CYC_xba629": {}
   },
   "debtorsByCycle": {
-    "": {}
+    "": {},
+    "CYC_xba629": {}
   },
   "debtorsOverrideByCycle": {
-    "": {}
+    "": {},
+    "CYC_xba629": {}
   },
   "creditorsByCycle": {
-    "": []
+    "": [],
+    "CYC_xba629": []
   },
   "inventoryByCycle": {
-    "": {}
+    "": {},
+    "CYC_xba629": {}
   }
 }
