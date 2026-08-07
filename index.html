@@ -1761,12 +1761,12 @@ function wireCreditorsPasteBoxes(container, entries, onUpdate){
 function renderInventoryScreen(container, onUpdate){
   const inv = getCycleObj('inventoryByCycle');
 
-  let html = `<div class="footnote" style="margin-bottom:14px;">Opening stock and GST credit are single values for the start of this cycle. Inwards (purchases) and MUDA (damaged/unsellable) write-offs are entered month wise; COGS (already computed in the P&L) drives the good-stock outflow automatically.</div>`;
+  let html = `<div class="footnote" style="margin-bottom:14px;">Opening stock and GST credit are single values for the start of this cycle. Monthly Inwards and Outward detail is in the Inventory Movement table below.</div>`;
 
   html += `<div class="panel" style="display:flex; gap:24px; flex-wrap:wrap;">`;
   [
-    {key:'openingGood', label:'Opening Good Stock (₹)'},
-    {key:'openingMuda', label:'Opening MUDA Stock (₹)'},
+    {key:'openingGood', label:'Opening Inventory (₹)'},
+    {key:'openingMuda', label:'MUDA / Dead Stock (₹)'},
     {key:'openingGstCredit', label:'Opening GST Credit (₹)'}
   ].forEach(f=>{
     html += `<div>
@@ -1776,39 +1776,12 @@ function renderInventoryScreen(container, onUpdate){
   });
   html += `</div>`;
 
-  html += `<div class="panel" style="max-width:100%; margin-top:16px;"><div class="scrollbox" style="max-height:60vh; overflow-x:auto;"><table class="ledger compact"><colgroup><col style="width:180px;">${MONTHS.map(()=>'<col style="width:100px;">').join('')}</colgroup>`;
-  html += `<thead><tr><th class="stickyleftcol" style="text-align:left;">₹</th>`;
-  MONTHS.forEach(m=> html += `<th>${m}</th>`);
-  html += `</tr></thead><tbody>`;
-  [
-    {key:'inwards', label:'Inwards (Purchases)'},
-    {key:'mudaOutward', label:'MUDA Outward (Write-off)'}
-  ].forEach(row=>{
-    if(!inv[row.key]) inv[row.key] = {};
-    html += `<tr><td class="stickyleftcol" style="text-align:left;">${row.label}</td>`;
-    MONTHS.forEach(m=>{
-      const v = inv[row.key][m];
-      html += `<td><input type="number" step="any" class="invmonthcell" data-row="${row.key}" data-month="${m}" value="${v!==undefined && v!==''? v : ''}"></td>`;
-    });
-    html += `</tr>`;
-  });
-  html += `</tbody></table></div></div>`;
-
   container.innerHTML = html;
 
   container.querySelectorAll('.invsinglecell').forEach(inp=>{
     inp.addEventListener('change', ()=>{
       const n = cleanNum(inp.value);
       inv[inp.dataset.field] = n===null ? '' : n;
-      markDirty();
-      if(onUpdate) onUpdate();
-    });
-  });
-  container.querySelectorAll('.invmonthcell').forEach(inp=>{
-    inp.addEventListener('change', ()=>{
-      const n = cleanNum(inp.value);
-      if(!inv[inp.dataset.row]) inv[inp.dataset.row] = {};
-      inv[inp.dataset.row][inp.dataset.month] = n===null ? '' : n;
       markDirty();
       if(onUpdate) onUpdate();
     });
@@ -3441,6 +3414,74 @@ function computeCreditorMovementByLine(){
   return result.filter(g=> g.vendorCount>0 || g.additions.some(v=>v>0.005));
 }
 
+function renderInventoryMovementScreen(container, onUpdate){
+  const inv = getCycleObj('inventoryByCycle');
+  const sched = computeInventorySchedule();
+
+  let html = `<div class="footnote" style="margin-bottom:16px;">Enter monthly Inwards and MUDA Outward. Outward — Good = COGS Outward − MUDA Outward (auto). COGS payments schedule from the Creditors tab.</div>`;
+  html += `<div class="panel" style="max-width:100%;"><div class="scrollbox" style="max-height:75vh; overflow-x:auto;"><table class="ledger compact"><colgroup><col style="width:230px;">${MONTHS.map(()=>'<col style="width:95px;">').join('')}<col style="width:100px;"></colgroup>`;
+  html += `<thead><tr><th class="stickyleftcol" style="text-align:left;">Line Item</th>`;
+  MONTHS.forEach(m=> html += `<th>${m}</th>`);
+  html += `<th class="total-col">Total</th></tr></thead><tbody>`;
+
+  const simpleRow = (label, values, opts)=>{
+    opts = opts || {};
+    const cls = [opts.subtotal?'subtotal':'', opts.grand?'grand':''].filter(Boolean).join(' ');
+    html += `<tr class="${cls}"><td class="stickyleftcol" style="text-align:left; ${opts.neg?'color:var(--danger, #b3392c);':''}">${label}</td>`;
+    let total = 0;
+    values.forEach(v=>{ total += v; html += `<td style="${opts.neg?'color:var(--danger, #b3392c);':''}">${fmt(v)}</td>`; });
+    const fyVal = opts.endval ? values[values.length-1] : total;
+    html += `<td class="total-col">${fmt(fyVal)}</td></tr>`;
+  };
+
+  simpleRow('Opening Inventory — Good', sched.opGood);
+  simpleRow('Opening Inventory — MUDA', sched.opMuda);
+  const totalOpening = sched.opGood.map((v,i)=> v + sched.opMuda[i]);
+  simpleRow('= Total Opening Inventory', totalOpening, {grand:true, endval:true});
+
+  // + Inwards - editable
+  html += `<tr><td class="stickyleftcol" style="text-align:left;">+ Inwards</td>`;
+  let inwardsTotal = 0;
+  MONTHS.forEach((m,i)=>{
+    inwardsTotal += sched.inwards[i];
+    html += `<td><input type="number" step="any" class="invmovecell" data-row="inwards" data-month="${m}" value="${sched.inwards[i]!==0? sched.inwards[i] : ''}"></td>`;
+  });
+  html += `<td class="total-col">${fmt(inwardsTotal)}</td></tr>`;
+
+  simpleRow('− Outward — Good', sched.cogs, {neg:true});
+
+  // − Outward — MUDA - editable
+  html += `<tr><td class="stickyleftcol" style="text-align:left; color:var(--danger, #b3392c);">− Outward — MUDA</td>`;
+  let mudaOutTotal = 0;
+  MONTHS.forEach((m,i)=>{
+    mudaOutTotal += sched.mudaOut[i];
+    html += `<td><input type="number" step="any" class="invmovecell" data-row="mudaOutward" data-month="${m}" value="${sched.mudaOut[i]!==0? sched.mudaOut[i] : ''}"></td>`;
+  });
+  html += `<td class="total-col">${fmt(mudaOutTotal)}</td></tr>`;
+
+  const totalOutward = sched.cogs.map((v,i)=> v + sched.mudaOut[i]);
+  simpleRow('= Total Outward', totalOutward, {subtotal:true});
+
+  simpleRow('= Closing Stock — Good', sched.clGood);
+  simpleRow('= Closing Stock — MUDA', sched.clMuda);
+  const totalClosing = sched.clGood.map((v,i)=> v + sched.clMuda[i]);
+  simpleRow('= Total Closing Stock', totalClosing, {grand:true, endval:true});
+
+  html += `</tbody></table></div></div>`;
+  container.innerHTML = html;
+
+  container.querySelectorAll('.invmovecell').forEach(cell=>{
+    cell.addEventListener('change', ()=>{
+      const n = cleanNum(cell.value);
+      if(!inv[cell.dataset.row]) inv[cell.dataset.row] = {};
+      inv[cell.dataset.row][cell.dataset.month] = n===null ? '' : n;
+      markDirty();
+      renderInventoryMovementScreen(container, onUpdate);
+      if(onUpdate) onUpdate();
+    });
+  });
+}
+
 function renderGstMovementScreen(container){
   const invSched = computeInventorySchedule();
   const gstSched = computeGstItcSchedule(invSched);
@@ -3702,10 +3743,16 @@ function renderCreditorsTabScreen(container){
 function renderInventoryTabScreen(container){
   container.innerHTML = `<div id="inventoryInputHost"></div>
     <hr style="border:none; border-top:2px solid var(--line); margin:32px 0;">
+    <div class="cyclelabel" style="font-size:16px; font-weight:700; color:var(--ink); margin-bottom:4px;">Inventory Movement</div>
+    <div id="inventoryMoveHost"></div>
+    <hr style="border:none; border-top:2px solid var(--line); margin:32px 0;">
     <div class="cyclelabel" style="font-size:16px; font-weight:700; color:var(--ink); margin-bottom:4px;">GST Movement — ITC vs Output</div>
     <div id="inventoryGstHost"></div>`;
+  const moveHost = container.querySelector('#inventoryMoveHost');
   const gstHost = container.querySelector('#inventoryGstHost');
-  renderInventoryScreen(container.querySelector('#inventoryInputHost'), ()=> renderGstMovementScreen(gstHost));
+  const refreshDownstream = ()=>{ renderInventoryMovementScreen(moveHost, ()=> renderGstMovementScreen(gstHost)); renderGstMovementScreen(gstHost); };
+  renderInventoryScreen(container.querySelector('#inventoryInputHost'), refreshDownstream);
+  renderInventoryMovementScreen(moveHost, ()=> renderGstMovementScreen(gstHost));
   renderGstMovementScreen(gstHost);
 }
 
