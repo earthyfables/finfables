@@ -15,7 +15,7 @@
       "Feb",
       "Mar"
     ],
-    "savedAt": "2026-08-07T16:29:29.318Z",
+    "savedAt": "2026-08-07T16:29:34.849Z",
     "activeCycleId": "CYC_czj5yj"
   },
   "channels": [
@@ -21642,7 +21642,8 @@
     "CYC_czj5yj": {
       "inwards": {
         "Aug": 5000000,
-        "Sep": 6000000
+        "Sep": 6000000,
+        "Oct": 7000000
       },
       "mudaOutward": {}
     }
