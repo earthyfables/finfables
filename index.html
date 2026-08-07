@@ -391,6 +391,9 @@
       <button class="navitem" data-tab="codbRateCard"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="4" y1="21" x2="4" y2="14"/><line x1="4" y1="10" x2="4" y2="3"/><line x1="12" y1="21" x2="12" y2="12"/><line x1="12" y1="8" x2="12" y2="3"/><line x1="20" y1="21" x2="20" y2="16"/><line x1="20" y1="12" x2="20" y2="3"/><line x1="1" y1="14" x2="7" y2="14"/><line x1="9" y1="8" x2="15" y2="8"/><line x1="17" y1="16" x2="23" y2="16"/></svg><span>CODB Rate Card</span></button>
       <button class="navitem" data-tab="miscInputs"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="1.4"/><circle cx="19" cy="12" r="1.4"/><circle cx="5" cy="12" r="1.4"/></svg><span>Misc. Inputs</span></button>
       <button class="navitem" data-tab="cashFlowItems"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="23 4 23 10 17 10"/><polyline points="1 20 1 14 7 14"/><path d="M3.51 9a9 9 0 0114.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0020.49 15"/></svg><span>Cash Flow Adjustments</span></button>
+      <button class="navitem" data-tab="debtors"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="1" y="4" width="22" height="16" rx="2"/><line x1="1" y1="10" x2="23" y2="10"/></svg><span>Debtors</span></button>
+      <button class="navitem" data-tab="creditors"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 7h-9M14 17H5"/><circle cx="17" cy="17" r="3"/><circle cx="7" cy="7" r="3"/></svg><span>Creditors</span></button>
+      <button class="navitem" data-tab="inventory"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 16V8a2 2 0 00-1-1.73l-7-4a2 2 0 00-2 0l-7 4A2 2 0 003 8v8a2 2 0 001 1.73l7 4a2 2 0 002 0l7-4A2 2 0 0021 16z"/><polyline points="3.27 6.96 12 12.01 20.73 6.96"/><line x1="12" y1="22.08" x2="12" y2="12"/></svg><span>Inventory &amp; GST ITC</span></button>
     </div>
 
     <div class="navgroup">
@@ -529,7 +532,8 @@ const SEED = {
   productGroups:[{id:"PG1",name:"Personal Care"}],
   productCategories:[{id:"PC1",name:"Towels",productGroupId:"PG1"}],
   productSubCategories:[{id:"PSC1",name:"Bath Towel",productGroupId:"PG1",productCategoryId:"PC1",amrp:100,acogs:40}],
-  salesInputByCycle:{'':[]}, codbRateCardByCycle:{'':{}}, miscInputsByCycle:{'':{}}, cashFlowItemsByCycle:{'':[]}, discMarginGstByCycle:{'':{}}, paretoInputByCycle:{'':{}}
+  salesInputByCycle:{'':[]}, codbRateCardByCycle:{'':{}}, miscInputsByCycle:{'':{}}, cashFlowItemsByCycle:{'':[]}, discMarginGstByCycle:{'':{}}, paretoInputByCycle:{'':{}},
+  debtorsByCycle:{'':{}}, creditorsByCycle:{'':[]}, inventoryByCycle:{'':{}}
 };
 
 function uid(prefix){ return prefix + "_" + Math.random().toString(36).slice(2,8); }
@@ -598,6 +602,9 @@ async function loadData(){
   // into both the default ('') cycle and the currently active cycle, so nothing
   // that was already entered goes missing, then strip the fields off the master.
   if(!DATA.paretoInputByCycle) DATA.paretoInputByCycle = {'':{}};
+  if(!DATA.debtorsByCycle) DATA.debtorsByCycle = {'':{}};
+  if(!DATA.creditorsByCycle) DATA.creditorsByCycle = {'':[]};
+  if(!DATA.inventoryByCycle) DATA.inventoryByCycle = {'':{}};
   if(!DATA.paretoInputByCycle['']) DATA.paretoInputByCycle[''] = {};
   {
     const pscMigrateTargets = [''];
@@ -1432,6 +1439,367 @@ function renderParetoInputScreen(container){
   });
 }
 
+const DEBTOR_BUCKETS = [
+  {key:'notdue', label:'Not Due'},
+  {key:'sor', label:'SOR'},
+  {key:'b030', label:'0–30'},
+  {key:'b3160', label:'31–60'},
+  {key:'b6190', label:'61–90'},
+  {key:'b91120', label:'91–120'},
+  {key:'b120p', label:'>120'},
+  {key:'muda', label:'MUDA'}
+];
+function renderDebtorsScreen(container){
+  const pms = DATA.partnerModels;
+  if(!pms.length){
+    container.innerHTML = `<div class="footnote">No Partner-Models defined yet — add some in "Partner-Model Master" first.</div>`;
+    return;
+  }
+  const store = getCycleObj('debtorsByCycle'); // {pmId: {notdue, sor, b030, b3160, b6190, b91120, b120p, muda}}
+  pms.forEach(pm=>{ if(!store[pm.id]) store[pm.id] = {}; });
+
+  let html = `<div class="footnote" style="margin-bottom:14px;">MUDA and SOR are always excluded from collections. Ageing buckets drive collection timing per credit period.</div>`;
+  html += pasteBoxHtml('Partner | Model | ' + DEBTOR_BUCKETS.map(b=>b.label).join(' | '));
+
+  const hasData = pms.some(pm=> DEBTOR_BUCKETS.some(b=> store[pm.id][b.key]));
+  if(hasData) html += `<button class="btn-sm danger" id="clearDebtorsBtn" style="margin-bottom:14px;">🗑 Clear All Opening Balances</button>`;
+
+  html += `<div class="panel" style="max-width:100%;"><div class="scrollbox" style="max-height:70vh; overflow-x:auto;"><table class="ledger compact"><colgroup><col style="width:150px;"><col style="width:100px;">${DEBTOR_BUCKETS.map(()=>'<col style="width:100px;">').join('')}<col style="width:110px;"><col style="width:100px;"><col style="width:50px;"></colgroup>`;
+  html += `<thead><tr><th class="stickyleftcol" style="text-align:left;">Partner</th><th style="text-align:left;">Model</th>`;
+  DEBTOR_BUCKETS.forEach(b=> html += `<th>${b.label}</th>`);
+  html += `<th>Collectible</th><th>Total</th><th></th></tr></thead><tbody>`;
+  pms.forEach(pm=>{
+    const cell = store[pm.id];
+    let collectible = 0, total = 0;
+    DEBTOR_BUCKETS.forEach(b=>{
+      const v = +cell[b.key] || 0;
+      total += v;
+      if(b.key !== 'sor' && b.key !== 'muda') collectible += v;
+    });
+    html += `<tr><td class="stickyleftcol" style="text-align:left;">${pm.partner}</td><td style="text-align:left;">${pm.model}</td>`;
+    DEBTOR_BUCKETS.forEach(b=>{
+      const v = cell[b.key];
+      html += `<td><input type="number" step="any" class="debtorcell" data-pm="${pm.id}" data-bucket="${b.key}" value="${v!==undefined && v!==''? v : ''}"></td>`;
+    });
+    html += `<td class="readonlycell" style="text-align:right;">${collectible.toLocaleString('en-IN')}</td>`;
+    html += `<td class="readonlycell" style="text-align:right;">${total.toLocaleString('en-IN')}</td>`;
+    html += `<td><button class="btn-sm" data-clearrow="${pm.id}" title="Clear this row">✕</button></td></tr>`;
+  });
+  html += `</tbody></table></div></div>`;
+
+  container.innerHTML = html;
+
+  const clearBtn = container.querySelector('#clearDebtorsBtn');
+  if(clearBtn) clearBtn.addEventListener('click', ()=>{
+    if(!confirm('Clear all Opening Debtors data? This cannot be undone.')) return;
+    pms.forEach(pm=>{ store[pm.id] = {}; });
+    markDirty();
+    renderDebtorsScreen(container);
+  });
+
+  container.querySelectorAll('[data-clearrow]').forEach(btn=>{
+    btn.addEventListener('click', ()=>{
+      store[btn.dataset.clearrow] = {};
+      markDirty();
+      renderDebtorsScreen(container);
+    });
+  });
+
+  container.querySelectorAll('.debtorcell').forEach(inp=>{
+    inp.addEventListener('change', ()=>{
+      const n = cleanNum(inp.value);
+      store[inp.dataset.pm][inp.dataset.bucket] = n===null ? '' : n;
+      markDirty();
+      renderDebtorsScreen(container);
+    });
+  });
+
+  wirePasteBox(container, (rows)=>{
+    rows.forEach(parts=>{
+      if(parts.length < 3) return;
+      const partnerName = parts[0].trim();
+      const modelName = parts[1].trim();
+      const pm = pms.find(x=> normalizeText(x.partner)===normalizeText(partnerName) && normalizeText(x.model)===normalizeText(modelName));
+      if(!pm) return;
+      const cell = store[pm.id];
+      DEBTOR_BUCKETS.forEach((b,i)=>{
+        const n = cleanNum(parts[i+2]);
+        if(n !== null) cell[b.key] = n;
+      });
+    });
+    markDirty();
+    renderDebtorsScreen(container);
+  });
+}
+
+const CREDITOR_BUCKETS = [
+  {key:'notdue', label:'Not Due'},
+  {key:'b030', label:'0–30'},
+  {key:'b3160', label:'31–60'},
+  {key:'b6190', label:'61–90'},
+  {key:'b91120', label:'91–120'},
+  {key:'b121180', label:'121–180'},
+  {key:'b180p', label:'>180'}
+];
+function findExpenseLineByName(name){
+  return DATA.expenseLineItems.find(x=> normalizeText(x.name) === normalizeText(name));
+}
+function renderCreditorsScreen(container){
+  const entries = getCycleData('creditorsByCycle'); // [{id, vendorName, expenseLineId, notdue..b180p, payments:{month:val}}]
+
+  let html = `<div class="footnote" style="margin-bottom:14px;">No separate vendor master — paste vendor balances and/or payment overrides below and they're grouped by Expense Line automatically. Payment schedule will auto-derive from ageing once the calculation engine is built; paste here to override per vendor per month in the meantime.</div>`;
+
+  html += `<div style="display:flex; gap:16px; flex-wrap:wrap; margin-bottom:14px;">`;
+  html += `<div style="flex:1; min-width:320px;">` + pasteBoxHtml('Vendor | Expense Line | ' + CREDITOR_BUCKETS.map(b=>b.label).join(' | ')) + `</div>`;
+  html += `<div style="flex:1; min-width:320px;">` + pasteBoxHtml('Vendor | Expense Line | ' + MONTHS.join(' | ')) + `</div>`;
+  html += `</div>`;
+
+  html += `<div style="display:flex; gap:10px; align-items:center; margin-bottom:14px;">`;
+  if(entries.length) html += `<button class="btn-sm danger" id="clearCreditorsBtn">🗑 Clear All</button>`;
+  html += `<button class="btn-sm" id="expandAllBtn">Expand All</button><button class="btn-sm" id="collapseAllBtn">Collapse All</button>`;
+  html += `<span class="footnote" style="margin:0;">Values as entered (incl. GST)</span>`;
+  html += `</div>`;
+
+  if(!entries.length){
+    html += `<div class="footnote">No creditor data yet — paste vendor balances above to get started.</div>`;
+    container.innerHTML = html;
+    wireCreditorsPasteBoxes(container, entries);
+    return;
+  }
+
+  // Group entries by Expense Line (unmatched expense line names still get their own group, labelled by whatever text was pasted).
+  const groups = {}; // expenseLineId-or-raw-name -> {label, entries:[]}
+  entries.forEach(e=>{
+    const exp = e.expenseLineId ? DATA.expenseLineItems.find(x=>x.id===e.expenseLineId) : null;
+    const gKey = exp ? exp.id : ('__unmatched__'+normalizeText(e.expenseLineName||''));
+    if(!groups[gKey]) groups[gKey] = {label: exp ? exp.name : (e.expenseLineName || '(no expense line)'), entries:[]};
+    groups[gKey].entries.push(e);
+  });
+
+  html += `<div class="panel" style="max-width:100%;"><div class="scrollbox" style="max-height:70vh; overflow-x:auto;">`;
+  html += `<table class="ledger compact"><colgroup><col style="width:260px;">${CREDITOR_BUCKETS.map(()=>'<col style="width:95px;">').join('')}<col style="width:100px;">${MONTHS.map(()=>'<col style="width:85px;">').join('')}</colgroup>`;
+  html += `<thead><tr><th class="stickyleftcol" style="text-align:left;">Vendor / Expense Line</th>`;
+  CREDITOR_BUCKETS.forEach(b=> html += `<th>${b.label}</th>`);
+  html += `<th class="feegroupend">Op Total</th>`;
+  MONTHS.forEach(m=> html += `<th>${m}</th>`);
+  html += `</tr></thead><tbody>`;
+
+  Object.keys(groups).forEach(gKey=>{
+    const g = groups[gKey];
+    const groupTotals = {}; CREDITOR_BUCKETS.forEach(b=> groupTotals[b.key]=0);
+    const groupMonthTotals = {}; MONTHS.forEach(m=> groupMonthTotals[m]=0);
+    let groupOpTotal = 0;
+    g.entries.forEach(e=>{
+      CREDITOR_BUCKETS.forEach(b=>{ const v = +e[b.key]||0; groupTotals[b.key]+=v; groupOpTotal+=v; });
+      MONTHS.forEach(m=>{ groupMonthTotals[m] += +((e.payments||{})[m])||0; });
+    });
+    html += `<tr class="section grouprow" data-group="${gKey}" style="cursor:pointer;"><td class="stickyleftcol" style="text-align:left; font-weight:700;"><span class="grouptoggle">▶</span> ${g.label} <span class="footnote" style="margin:0;">(${g.entries.length} vendor${g.entries.length===1?'':'s'})</span></td>`;
+    CREDITOR_BUCKETS.forEach(b=> html += `<td style="text-align:right;">${groupTotals[b.key].toLocaleString('en-IN')}</td>`);
+    html += `<td class="feegroupend" style="text-align:right; font-weight:700;">${groupOpTotal.toLocaleString('en-IN')}</td>`;
+    MONTHS.forEach(m=> html += `<td style="text-align:right;">${groupMonthTotals[m].toLocaleString('en-IN')}</td>`);
+    html += `</tr>`;
+
+    g.entries.forEach(e=>{
+      let opTotal = 0;
+      html += `<tr class="grouprow-item" data-group="${gKey}" style="display:none;"><td class="stickyleftcol" style="text-align:left; padding-left:28px;">${e.vendorName}</td>`;
+      CREDITOR_BUCKETS.forEach(b=>{
+        const v = +e[b.key]||0; opTotal += v;
+        html += `<td><input type="number" step="any" class="creditorcell" data-id="${e.id}" data-bucket="${b.key}" value="${e[b.key]!==undefined && e[b.key]!==''? e[b.key] : ''}"></td>`;
+      });
+      html += `<td class="feegroupend" style="text-align:right;">${opTotal.toLocaleString('en-IN')}</td>`;
+      MONTHS.forEach(m=>{
+        const v = (e.payments||{})[m];
+        html += `<td><input type="number" step="any" class="creditorpmtcell" data-id="${e.id}" data-month="${m}" value="${v!==undefined && v!==''? v : ''}"></td>`;
+      });
+      html += `</tr>`;
+    });
+  });
+
+  html += `<tr class="subtotal"><td class="stickyleftcol" style="text-align:left;">TOTAL</td>`;
+  CREDITOR_BUCKETS.forEach(b=>{
+    const total = entries.reduce((a,e)=> a + (+e[b.key]||0), 0);
+    html += `<td style="text-align:right;">${total.toLocaleString('en-IN')}</td>`;
+  });
+  const grandOpTotal = entries.reduce((a,e)=> a + CREDITOR_BUCKETS.reduce((s,b)=> s+(+e[b.key]||0), 0), 0);
+  html += `<td class="feegroupend" style="text-align:right;">${grandOpTotal.toLocaleString('en-IN')}</td>`;
+  MONTHS.forEach(m=>{
+    const total = entries.reduce((a,e)=> a + (+((e.payments||{})[m])||0), 0);
+    html += `<td style="text-align:right;">${total.toLocaleString('en-IN')}</td>`;
+  });
+  html += `</tr>`;
+
+  html += `</tbody></table></div></div>`;
+
+  container.innerHTML = html;
+
+  const clearBtn = container.querySelector('#clearCreditorsBtn');
+  if(clearBtn) clearBtn.addEventListener('click', ()=>{
+    if(!confirm('Clear all Creditor data? This cannot be undone.')) return;
+    entries.length = 0;
+    markDirty();
+    renderCreditorsScreen(container);
+  });
+
+  container.querySelectorAll('.grouprow').forEach(row=>{
+    row.addEventListener('click', ()=>{
+      const gKey = row.dataset.group;
+      const isOpen = row.querySelector('.grouptoggle').textContent === '▼';
+      row.querySelector('.grouptoggle').textContent = isOpen ? '▶' : '▼';
+      container.querySelectorAll(`.grouprow-item[data-group="${CSS.escape(gKey)}"]`).forEach(r=>{
+        r.style.display = isOpen ? 'none' : '';
+      });
+    });
+  });
+  const expandAllBtn = container.querySelector('#expandAllBtn');
+  if(expandAllBtn) expandAllBtn.addEventListener('click', ()=>{
+    container.querySelectorAll('.grouptoggle').forEach(t=> t.textContent='▼');
+    container.querySelectorAll('.grouprow-item').forEach(r=> r.style.display='');
+  });
+  const collapseAllBtn = container.querySelector('#collapseAllBtn');
+  if(collapseAllBtn) collapseAllBtn.addEventListener('click', ()=>{
+    container.querySelectorAll('.grouptoggle').forEach(t=> t.textContent='▶');
+    container.querySelectorAll('.grouprow-item').forEach(r=> r.style.display='none');
+  });
+
+  container.querySelectorAll('.creditorcell').forEach(inp=>{
+    inp.addEventListener('change', ()=>{
+      const e = entries.find(x=>x.id===inp.dataset.id);
+      if(!e) return;
+      const n = cleanNum(inp.value);
+      e[inp.dataset.bucket] = n===null ? '' : n;
+      markDirty();
+      renderCreditorsScreen(container);
+    });
+  });
+  container.querySelectorAll('.creditorpmtcell').forEach(inp=>{
+    inp.addEventListener('change', ()=>{
+      const e = entries.find(x=>x.id===inp.dataset.id);
+      if(!e) return;
+      if(!e.payments) e.payments = {};
+      const n = cleanNum(inp.value);
+      e.payments[inp.dataset.month] = n===null ? '' : n;
+      markDirty();
+      renderCreditorsScreen(container);
+    });
+  });
+
+  wireCreditorsPasteBoxes(container, entries);
+}
+
+function findOrCreateCreditorEntry(entries, vendorName, expenseLineName){
+  const exp = findExpenseLineByName(expenseLineName);
+  let e = entries.find(x=> normalizeText(x.vendorName)===normalizeText(vendorName) &&
+    (exp ? x.expenseLineId===exp.id : normalizeText(x.expenseLineName||'')===normalizeText(expenseLineName)));
+  if(!e){
+    e = {id: uid('VEN'), vendorName};
+    if(exp) e.expenseLineId = exp.id; else e.expenseLineName = expenseLineName;
+    entries.push(e);
+  }
+  return e;
+}
+function wireCreditorsPasteBoxes(container, entries){
+  const pasteBoxes = container.querySelectorAll('.pastebox');
+  const balBox = pasteBoxes[0];
+  const pmtBox = pasteBoxes[1];
+  if(balBox){
+    const importBtn = balBox.querySelector('#importBtn');
+    const clearBtn = balBox.querySelector('#clearPasteBtn');
+    if(importBtn) importBtn.addEventListener('click', ()=>{
+      const text = balBox.querySelector('#pasteArea').value;
+      const lines = text.split(/\r?\n/).map(l=>l.trim()).filter(Boolean);
+      lines.forEach(line=>{
+        const parts = line.split('\t');
+        if(parts.length < 3) return;
+        const e = findOrCreateCreditorEntry(entries, parts[0].trim(), parts[1].trim());
+        CREDITOR_BUCKETS.forEach((b,i)=>{
+          const n = cleanNum(parts[i+2]);
+          if(n !== null) e[b.key] = n;
+        });
+      });
+      markDirty();
+      renderCreditorsScreen(container);
+    });
+    if(clearBtn) clearBtn.addEventListener('click', ()=>{ balBox.querySelector('#pasteArea').value=''; });
+  }
+  if(pmtBox){
+    const importBtn = pmtBox.querySelector('#importBtn');
+    const clearBtn = pmtBox.querySelector('#clearPasteBtn');
+    if(importBtn) importBtn.addEventListener('click', ()=>{
+      const text = pmtBox.querySelector('#pasteArea').value;
+      const lines = text.split(/\r?\n/).map(l=>l.trim()).filter(Boolean);
+      lines.forEach(line=>{
+        const parts = line.split('\t');
+        if(parts.length < 3) return;
+        const e = findOrCreateCreditorEntry(entries, parts[0].trim(), parts[1].trim());
+        if(!e.payments) e.payments = {};
+        MONTHS.forEach((m,i)=>{
+          const n = cleanNum(parts[i+2]);
+          if(n !== null) e.payments[m] = n;
+        });
+      });
+      markDirty();
+      renderCreditorsScreen(container);
+    });
+    if(clearBtn) clearBtn.addEventListener('click', ()=>{ pmtBox.querySelector('#pasteArea').value=''; });
+  }
+}
+
+function renderInventoryScreen(container){
+  const inv = getCycleObj('inventoryByCycle');
+
+  let html = `<div class="footnote" style="margin-bottom:14px;">Opening stock and GST credit are single values for the start of this cycle. Inwards (purchases) and MUDA (damaged/unsellable) write-offs are entered month wise; COGS (already computed in the P&L) drives the good-stock outflow automatically.</div>`;
+
+  html += `<div class="panel" style="display:flex; gap:24px; flex-wrap:wrap;">`;
+  [
+    {key:'openingGood', label:'Opening Good Stock (₹)'},
+    {key:'openingMuda', label:'Opening MUDA Stock (₹)'},
+    {key:'openingGstCredit', label:'Opening GST Credit (₹)'}
+  ].forEach(f=>{
+    html += `<div>
+      <label style="display:block; font-size:11px; font-weight:700; color:var(--ink-soft); text-transform:uppercase; letter-spacing:0.04em; margin-bottom:4px;">${f.label}</label>
+      <input type="number" step="any" class="invsinglecell" data-field="${f.key}" value="${inv[f.key]!==undefined && inv[f.key]!==''? inv[f.key] : ''}" style="width:200px;">
+    </div>`;
+  });
+  html += `</div>`;
+
+  html += `<div class="panel" style="max-width:100%; margin-top:16px;"><div class="scrollbox" style="max-height:60vh; overflow-x:auto;"><table class="ledger compact"><colgroup><col style="width:180px;">${MONTHS.map(()=>'<col style="width:100px;">').join('')}</colgroup>`;
+  html += `<thead><tr><th class="stickyleftcol" style="text-align:left;">₹</th>`;
+  MONTHS.forEach(m=> html += `<th>${m}</th>`);
+  html += `</tr></thead><tbody>`;
+  [
+    {key:'inwards', label:'Inwards (Purchases)'},
+    {key:'mudaOutward', label:'MUDA Outward (Write-off)'}
+  ].forEach(row=>{
+    if(!inv[row.key]) inv[row.key] = {};
+    html += `<tr><td class="stickyleftcol" style="text-align:left;">${row.label}</td>`;
+    MONTHS.forEach(m=>{
+      const v = inv[row.key][m];
+      html += `<td><input type="number" step="any" class="invmonthcell" data-row="${row.key}" data-month="${m}" value="${v!==undefined && v!==''? v : ''}"></td>`;
+    });
+    html += `</tr>`;
+  });
+  html += `</tbody></table></div></div>`;
+
+  container.innerHTML = html;
+
+  container.querySelectorAll('.invsinglecell').forEach(inp=>{
+    inp.addEventListener('change', ()=>{
+      const n = cleanNum(inp.value);
+      inv[inp.dataset.field] = n===null ? '' : n;
+      markDirty();
+    });
+  });
+  container.querySelectorAll('.invmonthcell').forEach(inp=>{
+    inp.addEventListener('change', ()=>{
+      const n = cleanNum(inp.value);
+      if(!inv[inp.dataset.row]) inv[inp.dataset.row] = {};
+      inv[inp.dataset.row][inp.dataset.month] = n===null ? '' : n;
+      markDirty();
+    });
+  });
+}
+
+
 const PARETO_SUB_TABS = [
   {key:'productGroups', label:'Product Group'},
   {key:'productCategories', label:'Product Category'},
@@ -2194,6 +2562,18 @@ const TABS = {
       {key:'amount', label:'Amount', type:'number'}
     ], {prefix:'CF'})
   },
+  debtors:{
+    title:'Debtors', desc:'Opening ageing buckets per Partner-Model — drives collection timing per Credit Period in the Cash Flow output.',
+    render: renderDebtorsScreen
+  },
+  creditors:{
+    title:'Creditors', desc:'Vendor balances and payment overrides, grouped automatically by Expense Line — no separate vendor master, just paste and go.',
+    render: renderCreditorsScreen
+  },
+  inventory:{
+    title:'Inventory & GST ITC', desc:'Opening stock, opening GST credit, and monthly Inwards/MUDA write-offs — feeds the Inventory and GST ITC Cash Flow schedules.',
+    render: renderInventoryScreen
+  },
   outputPLCF:{ title:'P&L & Cash Flow', desc:'Full company total, no filters. Structure matches the reviewed model.', render: renderPLCF },
   outputPartnerProductPL:{ title:'Partner and Product wise', desc:'Same P&L, filterable by Partner Group, Partner-Model, Product Group, Product Category, and Product Sub-Category. Runs through CM3 only.', render: renderPartnerProductPL },
 };
@@ -2877,7 +3257,7 @@ function renderCyclePanel(){
     if(!ok) return;
     const idx = DATA.aopCycles.findIndex(c=>c.id===active.id);
     if(idx > -1) DATA.aopCycles.splice(idx,1);
-    ['salesInputByCycle','codbRateCardByCycle','miscInputsByCycle','cashFlowItemsByCycle','monthlyGMVByCycle','channelMixByCycle','categoryMixByCycle','paretoMixByCycle','discMarginGstByCycle','paretoInputByCycle'].forEach(k=>{
+    ['salesInputByCycle','codbRateCardByCycle','miscInputsByCycle','cashFlowItemsByCycle','monthlyGMVByCycle','channelMixByCycle','categoryMixByCycle','paretoMixByCycle','discMarginGstByCycle','paretoInputByCycle','debtorsByCycle','creditorsByCycle','inventoryByCycle'].forEach(k=>{
       if(DATA[k]) delete DATA[k][active.id];
     });
     if(DATA.meta.activeCycleId === active.id) DATA.meta.activeCycleId = '';
@@ -2907,7 +3287,7 @@ function copyCycleInputData(destCycleId, srcCycleId){
     // Deep-copy with fresh row ids so edits in the new cycle never collide with the source.
     DATA[k][destCycleId] = srcRows.map(r=> ({...r, id: uid('COPY')}));
   });
-  ['monthlyGMVByCycle','channelMixByCycle','categoryMixByCycle','paretoMixByCycle','discMarginGstByCycle','codbRateCardByCycle','miscInputsByCycle','paretoInputByCycle'].forEach(k=>{
+  ['monthlyGMVByCycle','channelMixByCycle','categoryMixByCycle','paretoMixByCycle','discMarginGstByCycle','codbRateCardByCycle','miscInputsByCycle','paretoInputByCycle','debtorsByCycle','creditorsByCycle','inventoryByCycle'].forEach(k=>{
     const srcObj = (DATA[k] && DATA[k][srcCycleId]) || {};
     DATA[k] = DATA[k] || {};
     DATA[k][destCycleId] = JSON.parse(JSON.stringify(srcObj));
