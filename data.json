@@ -15,7 +15,7 @@
       "Feb",
       "Mar"
     ],
-    "savedAt": "2026-08-07T13:36:32.257Z",
+    "savedAt": "2026-08-07T13:38:55.878Z",
     "activeCycleId": "CYC_p9c3kh"
   },
   "channels": [
@@ -21610,7 +21610,11 @@
   },
   "debtorsOverrideByCycle": {
     "": {},
-    "CYC_p9c3kh": {}
+    "CYC_p9c3kh": {
+      "PM_lkql7m": {
+        "Jan": 10000
+      }
+    }
   },
   "creditorsByCycle": {
     "": [],
