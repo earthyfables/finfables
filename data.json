@@ -15,7 +15,7 @@
       "Feb",
       "Mar"
     ],
-    "savedAt": "2026-08-07T13:39:00.596Z",
+    "savedAt": "2026-08-07T13:39:03.550Z",
     "activeCycleId": "CYC_p9c3kh"
   },
   "channels": [
@@ -21612,7 +21612,7 @@
     "": {},
     "CYC_p9c3kh": {
       "PM_lkql7m": {
-        "Jan": ""
+        "Jan": -10000
       }
     }
   },
