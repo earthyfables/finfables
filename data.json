@@ -15,7 +15,7 @@
       "Feb",
       "Mar"
     ],
-    "savedAt": "2026-08-07T14:08:48.849Z",
+    "savedAt": "2026-08-07T14:11:31.625Z",
     "activeCycleId": "CYC_xba629"
   },
   "channels": [
@@ -1749,7 +1749,20 @@
   },
   "monthlyGMVByCycle": {
     "": {},
-    "CYC_xba629": {}
+    "CYC_xba629": {
+      "Apr": 3000000,
+      "May": 3000000,
+      "Jun": 3000000,
+      "Jul": 4000000,
+      "Aug": 4000000,
+      "Sep": 4800000,
+      "Oct": 5500000,
+      "Nov": 5000000,
+      "Dec": 5200000,
+      "Jan": 5500000,
+      "Feb": 5000000,
+      "Mar": 5000000
+    }
   },
   "channelMixByCycle": {
     "": {}
