@@ -3295,24 +3295,64 @@ function computeCreditorsSchedule(){
 }
 
 // ---- Creditor Movement detail: per Expense Line (CODB, CAC, each Misc item, COGS) ----
-function getCreditorMovementGroups(){
-  const invSchedRef = computeInventorySchedule();
-  const groups = [];
-  groups.push({
-    key:'__CODB__', label:'CODB', creditorDays:30, gstRateLabel:'18%',
-    additionFn:(m)=>{
-      const totals = computeTotalPL(m);
-      let add = 0;
-      getCodbLineItemsForPL().forEach(li=>{
-        const val = totals.codbByItem[li.id] || 0;
+// Whichever portion of a Partner-Model's CODB/CAC is netted off before the
+// marketplace remits payment (per Marketplace Deduction Mapping) never becomes
+// a creditor payable - the company simply receives less, already reflected as
+// a deduction in the Debtors schedule. Only the non-deducted portion is owed
+// to an actual vendor, so only that portion (and its GST) counts as an addition.
+function computeCodbCreditorAdditions(month){
+  const cycle = DATA.aopCycles.find(c=>c.id===DATA.meta.activeCycleId);
+  const brandId = cycle ? cycle.brandId : null;
+  const codbItems = getCodbLineItemsForPL();
+  let total = 0;
+  DATA.partnerModels.forEach(pm=>{
+    const dedItemIds = new Set(DATA.marketplaceDeductionMapping.filter(m=> m.brandId===brandId && m.partnerModelId===pm.id).map(m=>m.codbLineItemId));
+    DATA.productSubCategories.forEach(sc=>{
+      const row = computeParetoLevelPL(pm.id, sc.id, month);
+      codbItems.forEach(li=>{
+        if(dedItemIds.has(li.id)) return;
+        const val = row.codbByItem[li.id] || 0;
         const exp = li.expenseLineItemId ? DATA.expenseLineItems.find(x=>x.id===li.expenseLineItemId) : null;
         const rate = exp ? (+exp.gstRate||0) : 18;
-        add += val * (1+rate/100);
+        total += val * (1+rate/100);
       });
-      return add;
-    }
+    });
   });
-  groups.push({key:'__CAC__', label:'CAC', creditorDays:30, gstRateLabel:'18%', additionFn:(m)=> computeTotalPL(m).CAC * 1.18});
+  return total;
+}
+function computeCacCreditorAdditions(month){
+  const cycle = DATA.aopCycles.find(c=>c.id===DATA.meta.activeCycleId);
+  const brandId = cycle ? cycle.brandId : null;
+  const cacLi = getCodbLineItemByName('CAC');
+  let total = 0;
+  DATA.partnerModels.forEach(pm=>{
+    const isCacDeducted = cacLi && DATA.marketplaceDeductionMapping.some(m=> m.brandId===brandId && m.partnerModelId===pm.id && m.codbLineItemId===cacLi.id);
+    if(isCacDeducted) return;
+    DATA.productSubCategories.forEach(sc=>{
+      total += computeParetoLevelPL(pm.id, sc.id, month).CAC || 0;
+    });
+  });
+  return total * 1.18;
+}
+
+function getCreditorMovementGroups(){
+  const invSchedRef = computeInventorySchedule();
+  const codbLine = DATA.expenseLineItems.find(x=>x.type==='CODB');
+  const cacLine = DATA.expenseLineItems.find(x=>x.type==='CAC');
+  const cogsLine = DATA.expenseLineItems.find(x=>x.type==='COGS');
+  const groups = [];
+  groups.push({
+    key:'__CODB__', label:'CODB',
+    creditorDays: codbLine ? (+codbLine.creditorDays||0) : 30,
+    gstRateLabel: (codbLine ? (+codbLine.gstRate||0) : 18)+'%',
+    additionFn: computeCodbCreditorAdditions
+  });
+  groups.push({
+    key:'__CAC__', label:'CAC',
+    creditorDays: cacLine ? (+cacLine.creditorDays||0) : 30,
+    gstRateLabel: (cacLine ? (+cacLine.gstRate||0) : 18)+'%',
+    additionFn: computeCacCreditorAdditions
+  });
   getMiscInputItemsForPL().forEach(li=>{
     groups.push({
       key: li.id, label: li.name, creditorDays: +li.creditorDays||30, gstRateLabel: (+li.gstRate||0)+'%',
@@ -3320,8 +3360,10 @@ function getCreditorMovementGroups(){
     });
   });
   groups.push({
-    key:'__COGS__', label:'COGS (Material)', creditorDays:30, gstRateLabel:'3%',
-    additionFn:(m)=> invSchedRef.inwards[MONTHS.indexOf(m)] * 1.03
+    key:'__COGS__', label:'COGS (Material)',
+    creditorDays: cogsLine ? (+cogsLine.creditorDays||0) : 30,
+    gstRateLabel: (cogsLine ? (+cogsLine.gstRate||0) : 3)+'%',
+    additionFn:(m)=> invSchedRef.inwards[MONTHS.indexOf(m)] * (1 + (cogsLine ? (+cogsLine.gstRate||0) : 3)/100)
   });
   return groups;
 }
