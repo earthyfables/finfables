@@ -15,8 +15,8 @@
       "Feb",
       "Mar"
     ],
-    "savedAt": "2026-08-07T14:20:15.495Z",
-    "activeCycleId": "CYC_lvcj33"
+    "savedAt": "2026-08-07T14:20:20.243Z",
+    "activeCycleId": "CYC_xba629"
   },
   "channels": [
     {
@@ -1618,14 +1618,6 @@
       "startMonth": "Apr",
       "version": "AOP",
       "published": false
-    },
-    {
-      "id": "CYC_lvcj33",
-      "brandId": "BR1",
-      "fy": "FY27",
-      "startMonth": "Apr",
-      "version": "LE1",
-      "published": false
     }
   ],
   "salesInputByCycle": {
@@ -1759,8 +1751,7 @@
   },
   "monthlyGMVByCycle": {
     "": {},
-    "CYC_xba629": {},
-    "CYC_lvcj33": {}
+    "CYC_xba629": {}
   },
   "channelMixByCycle": {
     "": {},
