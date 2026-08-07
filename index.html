@@ -2002,6 +2002,13 @@ document.addEventListener('click', (e)=>{
   XLSX.writeFile(wb, filename);
 });
 
+// Unlike `val || fallback`, this correctly keeps an explicit 0 (e.g. "0 days
+// credit terms", paid same month) instead of treating it as unset and falling
+// through to the default - `0 || 30` would wrongly evaluate to 30 in JS.
+function numOr(val, fallback){
+  return (val !== undefined && val !== null && val !== '') ? +val : fallback;
+}
+
 function cleanNum(text){
   const n = parseFloat(String(text||'').replace(/[,₹$\s]/g,''));
   return isNaN(n) ? null : n;
@@ -3246,7 +3253,7 @@ function computeCreditorsSchedule(){
 
   entries.forEach(e=>{
     const exp = e.expenseLineId ? DATA.expenseLineItems.find(x=>x.id===e.expenseLineId) : null;
-    const creditorDays = exp ? (+exp.creditorDays||30) : 30;
+    const creditorDays = exp ? numOr(exp.creditorDays, 30) : 30;
     const lag = Math.floor(creditorDays/30);
     const isCogsVendor = exp && exp.type === 'COGS';
     const bucket = isCogsVendor ? cogs : others;
@@ -3354,25 +3361,25 @@ function getCreditorMovementGroups(){
   const groups = [];
   groups.push({
     key:'__CODB__', label:'CODB',
-    creditorDays: codbLine ? (+codbLine.creditorDays||0) : 30,
+    creditorDays: codbLine ? numOr(codbLine.creditorDays, 30) : 30,
     gstRateLabel: (codbLine ? (+codbLine.gstRate||0) : 18)+'%',
     additionFn: computeCodbCreditorAdditions
   });
   groups.push({
     key:'__CAC__', label:'CAC',
-    creditorDays: cacLine ? (+cacLine.creditorDays||0) : 30,
+    creditorDays: cacLine ? numOr(cacLine.creditorDays, 30) : 30,
     gstRateLabel: (cacLine ? (+cacLine.gstRate||0) : 18)+'%',
     additionFn: computeCacCreditorAdditions
   });
   getMiscInputItemsForPL().forEach(li=>{
     groups.push({
-      key: li.id, label: li.name, creditorDays: +li.creditorDays||30, gstRateLabel: (+li.gstRate||0)+'%',
+      key: li.id, label: li.name, creditorDays: numOr(li.creditorDays, 30), gstRateLabel: (+li.gstRate||0)+'%',
       additionFn: (m)=> (computeOpexByItem(m)[li.id]||0) * (1+(+li.gstRate||0)/100)
     });
   });
   groups.push({
     key:'__COGS__', label:'COGS (Material)',
-    creditorDays: cogsLine ? (+cogsLine.creditorDays||0) : 30,
+    creditorDays: cogsLine ? numOr(cogsLine.creditorDays, 30) : 30,
     gstRateLabel: (cogsLine ? (+cogsLine.gstRate||0) : 3)+'%',
     additionFn:(m)=> invSchedRef.inwards[MONTHS.indexOf(m)] * (1 + (cogsLine ? (+cogsLine.gstRate||0) : 3)/100)
   });
