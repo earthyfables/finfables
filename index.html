@@ -3502,7 +3502,7 @@ function renderGstMovementScreen(container){
   html += `<th class="total-col">Total</th></tr></thead><tbody>`;
 
   const rows = [];
-  rows.push({label:'Opening ITC Credit', rate:'—', values: gstSched.opITC, editableFirst:true, indent:false});
+  rows.push({label:'Opening ITC Credit', rate:'—', values: gstSched.opITC, editableFirst:true, indent:false, firstval:true});
   rows.push({label:'+ CODB × 18%', rate:'18%', values: gstSched.codbGst, indent:true});
   rows.push({label:'+ CAC × 18%', rate:'18%', values: gstSched.cacGst, indent:true});
   gstSched.opexItems.forEach(li=>{
@@ -3512,7 +3512,7 @@ function renderGstMovementScreen(container){
   rows.push({label:'= Total Input GST', rate:'', values: gstSched.totalInputGst, subtotal:true});
   rows.push({label:'− Output GST (NSV × GST%)', rate:'—', values: gstSched.outputGst.map(v=>-v), indent:true, negClass:true});
   rows.push({label:'ITC Utilised', rate:'', values: gstSched.itcUsed, indent:true, muted:true});
-  rows.push({label:'= Closing ITC Credit', rate:'', values: gstSched.clITC, subtotal:true});
+  rows.push({label:'= Closing ITC Credit', rate:'', values: gstSched.clITC, subtotal:true, endval:true});
   rows.push({label:'Net GST Cash Outflow', rate:'', values: gstSched.cashOutflow.map(v=> v>0 ? v : null), subtotal:true, negClass:true});
   rows.push({label:'GST Opening less Closing', rate:'', values: gstSched.opITC.map((v,i)=> v - gstSched.clITC[i]), subtotal:true, endval:true});
 
@@ -3532,8 +3532,14 @@ function renderGstMovementScreen(container){
         html += `<td style="${r.negClass?'color:var(--danger, #b3392c);':''}">${fmt(v)}</td>`;
       }
     });
-    const showTotal = r.subtotal || r.grand || !r.editableFirst;
-    html += `<td class="total-col">${hasReal && showTotal && !r.editableFirst ? fmt(total) : (r.editableFirst ? '—' : (hasReal?fmt(total):'—'))}</td></tr>`;
+    // Point-in-time balances (Opening/Closing) show the opening or closing
+    // month's value in the Total column, not a sum - matching the pattern
+    // already proven correct in Debtors/Creditors/Inventory movement.
+    let fyVal;
+    if(r.firstval) fyVal = r.values[0];
+    else if(r.endval) fyVal = r.values[r.values.length-1];
+    else fyVal = total;
+    html += `<td class="total-col">${hasReal ? fmt(fyVal) : '—'}</td></tr>`;
   });
 
   html += `</tbody></table></div></div>`;
