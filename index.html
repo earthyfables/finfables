@@ -1454,7 +1454,7 @@ const DEBTOR_BUCKETS = [
   {key:'b120p', label:'>120'},
   {key:'muda', label:'MUDA'}
 ];
-function renderDebtorsScreen(container){
+function renderDebtorsScreen(container, onUpdate){
   const pms = DATA.partnerModels;
   if(!pms.length){
     container.innerHTML = `<div class="footnote">No Partner-Models defined yet — add some in "Partner-Model Master" first.</div>`;
@@ -1499,14 +1499,16 @@ function renderDebtorsScreen(container){
     if(!confirm('Clear all Opening Debtors data? This cannot be undone.')) return;
     pms.forEach(pm=>{ store[pm.id] = {}; });
     markDirty();
-    renderDebtorsScreen(container);
+    renderDebtorsScreen(container, onUpdate);
+    if(onUpdate) onUpdate();
   });
 
   container.querySelectorAll('[data-clearrow]').forEach(btn=>{
     btn.addEventListener('click', ()=>{
       store[btn.dataset.clearrow] = {};
       markDirty();
-      renderDebtorsScreen(container);
+      renderDebtorsScreen(container, onUpdate);
+      if(onUpdate) onUpdate();
     });
   });
 
@@ -1515,7 +1517,8 @@ function renderDebtorsScreen(container){
       const n = cleanNum(inp.value);
       store[inp.dataset.pm][inp.dataset.bucket] = n===null ? '' : n;
       markDirty();
-      renderDebtorsScreen(container);
+      renderDebtorsScreen(container, onUpdate);
+      if(onUpdate) onUpdate();
     });
   });
 
@@ -1533,7 +1536,8 @@ function renderDebtorsScreen(container){
       });
     });
     markDirty();
-    renderDebtorsScreen(container);
+    renderDebtorsScreen(container, onUpdate);
+    if(onUpdate) onUpdate();
   });
 }
 
@@ -1549,7 +1553,7 @@ const CREDITOR_BUCKETS = [
 function findExpenseLineByName(name){
   return DATA.expenseLineItems.find(x=> normalizeText(x.name) === normalizeText(name));
 }
-function renderCreditorsScreen(container){
+function renderCreditorsScreen(container, onUpdate){
   const entries = getCycleData('creditorsByCycle'); // [{id, vendorName, expenseLineId, notdue..b180p, payments:{month:val}}]
 
   let html = `<div class="footnote" style="margin-bottom:14px;">No separate vendor master — paste vendor balances and/or payment overrides below and they're grouped by Expense Line automatically. Payment schedule will auto-derive from ageing once the calculation engine is built; paste here to override per vendor per month in the meantime.</div>`;
@@ -1568,7 +1572,7 @@ function renderCreditorsScreen(container){
   if(!entries.length){
     html += `<div class="footnote">No creditor data yet — paste vendor balances above to get started.</div>`;
     container.innerHTML = html;
-    wireCreditorsPasteBoxes(container, entries);
+    wireCreditorsPasteBoxes(container, entries, onUpdate);
     return;
   }
 
@@ -1642,7 +1646,8 @@ function renderCreditorsScreen(container){
     if(!confirm('Clear all Creditor data? This cannot be undone.')) return;
     entries.length = 0;
     markDirty();
-    renderCreditorsScreen(container);
+    renderCreditorsScreen(container, onUpdate);
+    if(onUpdate) onUpdate();
   });
 
   container.querySelectorAll('.grouprow').forEach(row=>{
@@ -1673,7 +1678,8 @@ function renderCreditorsScreen(container){
       const n = cleanNum(inp.value);
       e[inp.dataset.bucket] = n===null ? '' : n;
       markDirty();
-      renderCreditorsScreen(container);
+      renderCreditorsScreen(container, onUpdate);
+      if(onUpdate) onUpdate();
     });
   });
   container.querySelectorAll('.creditorpmtcell').forEach(inp=>{
@@ -1684,11 +1690,12 @@ function renderCreditorsScreen(container){
       const n = cleanNum(inp.value);
       e.payments[inp.dataset.month] = n===null ? '' : n;
       markDirty();
-      renderCreditorsScreen(container);
+      renderCreditorsScreen(container, onUpdate);
+      if(onUpdate) onUpdate();
     });
   });
 
-  wireCreditorsPasteBoxes(container, entries);
+  wireCreditorsPasteBoxes(container, entries, onUpdate);
 }
 
 function findOrCreateCreditorEntry(entries, vendorName, expenseLineName){
@@ -1702,7 +1709,7 @@ function findOrCreateCreditorEntry(entries, vendorName, expenseLineName){
   }
   return e;
 }
-function wireCreditorsPasteBoxes(container, entries){
+function wireCreditorsPasteBoxes(container, entries, onUpdate){
   const pasteBoxes = container.querySelectorAll('.pastebox');
   const balBox = pasteBoxes[0];
   const pmtBox = pasteBoxes[1];
@@ -1722,7 +1729,8 @@ function wireCreditorsPasteBoxes(container, entries){
         });
       });
       markDirty();
-      renderCreditorsScreen(container);
+      renderCreditorsScreen(container, onUpdate);
+      if(onUpdate) onUpdate();
     });
     if(clearBtn) clearBtn.addEventListener('click', ()=>{ balBox.querySelector('#pasteArea').value=''; });
   }
@@ -1743,13 +1751,14 @@ function wireCreditorsPasteBoxes(container, entries){
         });
       });
       markDirty();
-      renderCreditorsScreen(container);
+      renderCreditorsScreen(container, onUpdate);
+      if(onUpdate) onUpdate();
     });
     if(clearBtn) clearBtn.addEventListener('click', ()=>{ pmtBox.querySelector('#pasteArea').value=''; });
   }
 }
 
-function renderInventoryScreen(container){
+function renderInventoryScreen(container, onUpdate){
   const inv = getCycleObj('inventoryByCycle');
 
   let html = `<div class="footnote" style="margin-bottom:14px;">Opening stock and GST credit are single values for the start of this cycle. Inwards (purchases) and MUDA (damaged/unsellable) write-offs are entered month wise; COGS (already computed in the P&L) drives the good-stock outflow automatically.</div>`;
@@ -1792,6 +1801,7 @@ function renderInventoryScreen(container){
       const n = cleanNum(inp.value);
       inv[inp.dataset.field] = n===null ? '' : n;
       markDirty();
+      if(onUpdate) onUpdate();
     });
   });
   container.querySelectorAll('.invmonthcell').forEach(inp=>{
@@ -1800,6 +1810,7 @@ function renderInventoryScreen(container){
       if(!inv[inp.dataset.row]) inv[inp.dataset.row] = {};
       inv[inp.dataset.row][inp.dataset.month] = n===null ? '' : n;
       markDirty();
+      if(onUpdate) onUpdate();
     });
   });
 }
@@ -3522,6 +3533,29 @@ function renderCreditorMovementScreen(container){
     });
   });
 
+  // TOTAL — every group summed together, month by month.
+  const N = MONTHS.length;
+  const sumAcrossGroups = key => {
+    const arr = new Array(N).fill(0);
+    groups.forEach(g=> g[key].forEach((v,i)=> arr[i]+=v));
+    return arr;
+  };
+  html += `<tr class="grand"><td class="stickyleftcol" style="text-align:left; font-weight:700;">TOTAL — All Expense Lines</td>${MONTHS.map(()=>'<td></td>').join('')}<td class="total-col"></td></tr>`;
+  rowsMeta.forEach(rm=>{
+    const cls = rm.subtotal ? 'subtotal' : 'lineitem';
+    const totals = sumAcrossGroups(rm.key);
+    html += `<tr class="${cls}"><td class="stickyleftcol" style="text-align:left;">${rm.prefix('All')}</td>`;
+    let total = 0;
+    const isBalance = (rm.key==='opening' || rm.key==='closing');
+    totals.forEach(v=>{
+      const shown = rm.sign===-1 ? -v : v;
+      total += shown;
+      html += `<td>${fmt(shown)}</td>`;
+    });
+    const fyDisplay = isBalance ? (rm.key==='opening' ? totals[0] : totals[N-1]) : total;
+    html += `<td class="total-col">${fmt(fyDisplay)}</td></tr>`;
+  });
+
   html += `</tbody></table></div></div>`;
   container.innerHTML = html;
 }
@@ -3579,6 +3613,49 @@ function renderCollectionsWorkingScreen(container){
     simpleRow('= Closing Debtors', pmRow.closing, {subtotal:true, endval:true});
   });
 
+  // TOTAL — every Partner-Model summed together, month by month.
+  const N = MONTHS.length;
+  const sumAcrossPm = key => {
+    const arr = new Array(N).fill(0);
+    debSched.byPm.forEach(p=> p[key].forEach((v,i)=> arr[i]+=v));
+    return arr;
+  };
+  const totalNsv = new Array(N).fill(0), totalGst = new Array(N).fill(0);
+  debSched.byPm.forEach(pmRow=>{
+    MONTHS.forEach((m,i)=>{
+      const t = computePartnerModelPL(pmRow.pm.id, m);
+      totalNsv[i] += t.NSV; totalGst[i] += t.GST;
+    });
+  });
+  const totalOpening = sumAcrossPm('opening');
+  const totalDedn = sumAcrossPm('dedn');
+  const totalCollectible = sumAcrossPm('collectible');
+  const totalCollOpBal = sumAcrossPm('collOpBal');
+  const totalCollCurrent = sumAcrossPm('collCurrent');
+  const totalAdjOverride = sumAcrossPm('adjOverride');
+  const totalClosing = sumAcrossPm('closing');
+  const totalTotalCollections = totalCollOpBal.map((v,i)=> v + totalCollCurrent[i] + totalAdjOverride[i]);
+
+  html += `<tr class="grand"><td class="stickyleftcol" style="text-align:left; font-weight:700;">TOTAL — All Partner-Models</td>${MONTHS.map(()=>'<td></td>').join('')}<td class="total-col"></td></tr>`;
+  const simpleRowTotal = (label, values, opts)=>{
+    opts = opts || {};
+    html += `<tr class="${opts.subtotal?'subtotal':'lineitem'}"><td class="stickyleftcol" style="text-align:left;">${label}</td>`;
+    let total = 0;
+    values.forEach(v=>{ total += v; html += `<td>${fmt(v)}</td>`; });
+    const fyVal = opts.endval ? values[values.length-1] : total;
+    html += `<td class="total-col">${fmt(fyVal)}</td></tr>`;
+  };
+  simpleRowTotal('Opening Debtors', totalOpening, {endval:true});
+  simpleRowTotal('+ Revenue (NSV)', totalNsv);
+  simpleRowTotal('+ GST on Revenue', totalGst);
+  simpleRowTotal('− Deductions (Mkt)', totalDedn);
+  simpleRowTotal('= Collectible (NSV+GST−Ded)', totalCollectible, {subtotal:true});
+  simpleRowTotal('− Collections (Op Bal)', totalCollOpBal);
+  simpleRowTotal('− Collections (Current)', totalCollCurrent);
+  simpleRowTotal('± Adj Override', totalAdjOverride);
+  simpleRowTotal('= Total Collections', totalTotalCollections, {subtotal:true});
+  simpleRowTotal('= Closing Debtors', totalClosing, {subtotal:true, endval:true});
+
   html += `</tbody></table></div></div>`;
   container.innerHTML = html;
 
@@ -3599,8 +3676,9 @@ function renderDebtorsTabScreen(container){
     <hr style="border:none; border-top:2px solid var(--line); margin:32px 0;">
     <div class="cyclelabel" style="font-size:16px; font-weight:700; color:var(--ink); margin-bottom:4px;">Collections Working — Rolling Forecast</div>
     <div id="debtorsMovementHost"></div>`;
-  renderDebtorsScreen(container.querySelector('#debtorsInputHost'));
-  renderCollectionsWorkingScreen(container.querySelector('#debtorsMovementHost'));
+  const movementHost = container.querySelector('#debtorsMovementHost');
+  renderDebtorsScreen(container.querySelector('#debtorsInputHost'), ()=> renderCollectionsWorkingScreen(movementHost));
+  renderCollectionsWorkingScreen(movementHost);
 }
 
 function renderCreditorsTabScreen(container){
@@ -3608,8 +3686,9 @@ function renderCreditorsTabScreen(container){
     <hr style="border:none; border-top:2px solid var(--line); margin:32px 0;">
     <div class="cyclelabel" style="font-size:16px; font-weight:700; color:var(--ink); margin-bottom:4px;">Creditor Movement — by Expense Line</div>
     <div id="creditorsMovementHost"></div>`;
-  renderCreditorsScreen(container.querySelector('#creditorsInputHost'));
-  renderCreditorMovementScreen(container.querySelector('#creditorsMovementHost'));
+  const movementHost = container.querySelector('#creditorsMovementHost');
+  renderCreditorsScreen(container.querySelector('#creditorsInputHost'), ()=> renderCreditorMovementScreen(movementHost));
+  renderCreditorMovementScreen(movementHost);
 }
 
 function renderInventoryTabScreen(container){
@@ -3617,8 +3696,9 @@ function renderInventoryTabScreen(container){
     <hr style="border:none; border-top:2px solid var(--line); margin:32px 0;">
     <div class="cyclelabel" style="font-size:16px; font-weight:700; color:var(--ink); margin-bottom:4px;">GST Movement — ITC vs Output</div>
     <div id="inventoryGstHost"></div>`;
-  renderInventoryScreen(container.querySelector('#inventoryInputHost'));
-  renderGstMovementScreen(container.querySelector('#inventoryGstHost'));
+  const gstHost = container.querySelector('#inventoryGstHost');
+  renderInventoryScreen(container.querySelector('#inventoryInputHost'), ()=> renderGstMovementScreen(gstHost));
+  renderGstMovementScreen(gstHost);
 }
 
 function renderPLCF(container){
