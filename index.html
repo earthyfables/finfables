@@ -394,6 +394,9 @@
       <button class="navitem" data-tab="debtors"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="1" y="4" width="22" height="16" rx="2"/><line x1="1" y1="10" x2="23" y2="10"/></svg><span>Debtors</span></button>
       <button class="navitem" data-tab="creditors"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 7h-9M14 17H5"/><circle cx="17" cy="17" r="3"/><circle cx="7" cy="7" r="3"/></svg><span>Creditors</span></button>
       <button class="navitem" data-tab="inventory"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 16V8a2 2 0 00-1-1.73l-7-4a2 2 0 00-2 0l-7 4A2 2 0 003 8v8a2 2 0 001 1.73l7 4a2 2 0 002 0l7-4A2 2 0 0021 16z"/><polyline points="3.27 6.96 12 12.01 20.73 6.96"/><line x1="12" y1="22.08" x2="12" y2="12"/></svg><span>Inventory &amp; GST ITC</span></button>
+      <button class="navitem" data-tab="gstMovement"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 1v22M17 5H9.5a3.5 3.5 0 000 7h5a3.5 3.5 0 010 7H6"/></svg><span>GST Movement</span></button>
+      <button class="navitem" data-tab="collectionsWorking"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 9V7a5 5 0 00-10 0v2"/><rect x="3" y="9" width="18" height="12" rx="2"/></svg><span>Collections Working</span></button>
+      <button class="navitem" data-tab="creditorMovement"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2l9 4.5v9L12 20l-9-4.5v-9L12 2z"/><path d="M12 22V12M21 6.5L12 12 3 6.5"/></svg><span>Creditor Movement</span></button>
     </div>
 
     <div class="navgroup">
@@ -533,7 +536,7 @@ const SEED = {
   productCategories:[{id:"PC1",name:"Towels",productGroupId:"PG1"}],
   productSubCategories:[{id:"PSC1",name:"Bath Towel",productGroupId:"PG1",productCategoryId:"PC1",amrp:100,acogs:40}],
   salesInputByCycle:{'':[]}, codbRateCardByCycle:{'':{}}, miscInputsByCycle:{'':{}}, cashFlowItemsByCycle:{'':[]}, discMarginGstByCycle:{'':{}}, paretoInputByCycle:{'':{}},
-  debtorsByCycle:{'':{}}, creditorsByCycle:{'':[]}, inventoryByCycle:{'':{}}
+  debtorsByCycle:{'':{}}, debtorsOverrideByCycle:{'':{}}, creditorsByCycle:{'':[]}, inventoryByCycle:{'':{}}
 };
 
 function uid(prefix){ return prefix + "_" + Math.random().toString(36).slice(2,8); }
@@ -603,6 +606,7 @@ async function loadData(){
   // that was already entered goes missing, then strip the fields off the master.
   if(!DATA.paretoInputByCycle) DATA.paretoInputByCycle = {'':{}};
   if(!DATA.debtorsByCycle) DATA.debtorsByCycle = {'':{}};
+  if(!DATA.debtorsOverrideByCycle) DATA.debtorsOverrideByCycle = {'':{}};
   if(!DATA.creditorsByCycle) DATA.creditorsByCycle = {'':[]};
   if(!DATA.inventoryByCycle) DATA.inventoryByCycle = {'':{}};
   if(!DATA.paretoInputByCycle['']) DATA.paretoInputByCycle[''] = {};
@@ -2574,6 +2578,18 @@ const TABS = {
     title:'Inventory & GST ITC', desc:'Opening stock, opening GST credit, and monthly Inwards/MUDA write-offs — feeds the Inventory and GST ITC Cash Flow schedules.',
     render: renderInventoryScreen
   },
+  gstMovement:{
+    title:'GST Movement — ITC vs Output', desc:'Line-by-line Input GST detail (CODB, CAC, each Misc Input item, COGS Inwards) netted against Output GST, month by month.',
+    render: renderGstMovementScreen
+  },
+  collectionsWorking:{
+    title:'Collections Working — Rolling Forecast', desc:'Per Partner-Model: revenue, deductions, collectible, and collections detail, with an editable Adj Override row for manual-only ageing buckets (SOR, MUDA, 61+ days).',
+    render: renderCollectionsWorkingScreen
+  },
+  creditorMovement:{
+    title:'Creditor Movement — by Expense Line', desc:'Per Expense Line: opening balance, new spend accrued, payments against opening balance vs new spend, and closing balance.',
+    render: renderCreditorMovementScreen
+  },
   outputPLCF:{ title:'P&L & Cash Flow', desc:'Full company total, no filters. Structure matches the reviewed model.', render: renderPLCF },
   outputPartnerProductPL:{ title:'Partner and Product wise', desc:'Same P&L, filterable by Partner Group, Partner-Model, Product Group, Product Category, and Product Sub-Category. Runs through CM3 only.', render: renderPartnerProductPL },
 };
@@ -3101,6 +3117,8 @@ function computeGstItcSchedule(inventorySched){
   const inv = getCycleObj('inventoryByCycle');
   const openingCredit = +inv.openingGstCredit||0;
   const codbGst=[], cacGst=[], opexGst=[], inwardsGst=[], totalInputGst=[], outputGst=[], opITC=[], totalCredit=[], itcUsed=[], cashOutflow=[], clITC=[];
+  const opexItems = getMiscInputItemsForPL();
+  const opexGstByItem = {}; opexItems.forEach(li=> opexGstByItem[li.id] = []);
   MONTHS.forEach((m,i)=>{
     const totals = computeTotalPL(m);
     let cGst = 0;
@@ -3113,9 +3131,11 @@ function computeGstItcSchedule(inventorySched){
     codbGst.push(cGst);
     cacGst.push(totals.CAC * 0.18);
     let oGst = 0;
-    getMiscInputItemsForPL().forEach(li=>{
+    opexItems.forEach(li=>{
       const val = computeOpexByItem(m)[li.id] || 0;
-      oGst += val * (+li.gstRate||0)/100;
+      const g = val * (+li.gstRate||0)/100;
+      opexGstByItem[li.id].push(g);
+      oGst += g;
     });
     opexGst.push(oGst);
     inwardsGst.push(inventorySched.inwards[i] * 0.03);
@@ -3130,26 +3150,29 @@ function computeGstItcSchedule(inventorySched){
     cashOutflow.push(Math.max(0, outputGst[i] - used));
     clITC.push(tc - used);
   });
-  return {codbGst, cacGst, opexGst, inwardsGst, totalInputGst, outputGst, opITC, totalCredit, itcUsed, cashOutflow, clITC};
+  return {codbGst, cacGst, opexGst, inwardsGst, totalInputGst, outputGst, opITC, totalCredit, itcUsed, cashOutflow, clITC, opexItems, opexGstByItem};
 }
 
 // ---- Debtors & Collections: per Partner-Model, then summed to company total ----
 function computeDebtorsSchedule(){
   const pms = DATA.partnerModels;
   const debtorsStore = getCycleObj('debtorsByCycle');
+  const overrideStore = getCycleObj('debtorsOverrideByCycle');
   const cycle = DATA.aopCycles.find(c=>c.id===DATA.meta.activeCycleId);
   const brandId = cycle ? cycle.brandId : null;
   const N = MONTHS.length;
   const zeros = ()=> new Array(N).fill(0);
-  const tot = {opening:zeros(), closing:zeros(), collectible:zeros(), dedn:zeros(), collOpBal:zeros(), collCurrent:zeros(), salesPlusGst:zeros()};
+  const tot = {opening:zeros(), closing:zeros(), collectible:zeros(), dedn:zeros(), collOpBal:zeros(), collCurrent:zeros(), salesPlusGst:zeros(), adjOverride:zeros()};
+  const byPm = [];
 
   pms.forEach(pm=>{
     const d = debtorsStore[pm.id] || {};
+    const ov = overrideStore[pm.id] || {};
     const bpm = DATA.brandPartnerMapping.find(b=> b.brandId===brandId && normalizeText(b.partner)===normalizeText(pm.partner) && normalizeText(b.model)===normalizeText(pm.model));
     const creditDays = bpm ? (+bpm.creditDays||0) : 0;
     const dedItemIds = DATA.marketplaceDeductionMapping.filter(m=> m.brandId===brandId && m.partnerModelId===pm.id).map(m=>m.codbLineItemId);
 
-    const collectible = [];
+    const collectible = [], dedn = [], salesPlusGst = [];
     MONTHS.forEach((m,i)=>{
       const pmTotals = computePartnerModelPL(pm.id, m);
       const rev = pmTotals.NSV + pmTotals.GST;
@@ -3167,6 +3190,8 @@ function computeDebtorsSchedule(){
         }
       });
       collectible.push(Math.max(0, rev - ded));
+      dedn.push(ded);
+      salesPlusGst.push(rev);
       tot.dedn[i] += ded;
       tot.salesPlusGst[i] += rev;
     });
@@ -3194,17 +3219,25 @@ function computeDebtorsSchedule(){
       }
     }
 
-    let opening = DEBTOR_BUCKETS.reduce((a,b)=>a+(+d[b.key]||0),0);
+    const adjOverride = MONTHS.map(m=> +((ov||{})[m])||0);
+    const opening = zeros(), closing = zeros();
+    let op = DEBTOR_BUCKETS.reduce((a,b)=>a+(+d[b.key]||0),0);
     MONTHS.forEach((m,i)=>{
-      tot.opening[i] += opening;
+      opening[i] = op;
+      tot.opening[i] += op;
       tot.collectible[i] += collectible[i];
       tot.collOpBal[i] += collOpBal[i];
       tot.collCurrent[i] += collCurrent[i];
-      const closing = opening + collectible[i] - collOpBal[i] - collCurrent[i];
-      tot.closing[i] += closing;
-      opening = closing;
+      tot.adjOverride[i] += adjOverride[i];
+      const cl = op + collectible[i] - collOpBal[i] - collCurrent[i] - adjOverride[i];
+      closing[i] = cl;
+      tot.closing[i] += cl;
+      op = cl;
     });
+
+    byPm.push({pm, creditDays, opening, collectible, dedn, salesPlusGst, collOpBal, collCurrent, adjOverride, closing});
   });
+  tot.byPm = byPm;
   return tot;
 }
 
@@ -3278,6 +3311,264 @@ function computeCreditorsSchedule(){
   });
 
   return {cogs, others};
+}
+
+// ---- Creditor Movement detail: per Expense Line (CODB, CAC, each Misc item, COGS) ----
+function getCreditorMovementGroups(){
+  const invSchedRef = computeInventorySchedule();
+  const groups = [];
+  groups.push({
+    key:'__CODB__', label:'CODB', creditorDays:30,
+    additionFn:(m)=>{
+      const totals = computeTotalPL(m);
+      let add = 0;
+      getCodbLineItemsForPL().forEach(li=>{
+        const val = totals.codbByItem[li.id] || 0;
+        const exp = li.expenseLineItemId ? DATA.expenseLineItems.find(x=>x.id===li.expenseLineItemId) : null;
+        const rate = exp ? (+exp.gstRate||0) : 18;
+        add += val * (1+rate/100);
+      });
+      return add;
+    }
+  });
+  groups.push({key:'__CAC__', label:'CAC', creditorDays:30, additionFn:(m)=> computeTotalPL(m).CAC * 1.18});
+  getMiscInputItemsForPL().forEach(li=>{
+    groups.push({
+      key: li.id, label: li.name, creditorDays: +li.creditorDays||30,
+      additionFn: (m)=> (computeOpexByItem(m)[li.id]||0) * (1+(+li.gstRate||0)/100)
+    });
+  });
+  groups.push({
+    key:'__COGS__', label:'COGS (Material)', creditorDays:30,
+    additionFn:(m)=> invSchedRef.inwards[MONTHS.indexOf(m)] * 1.03
+  });
+  return groups;
+}
+function vendorGroupKey(e){
+  const exp = e.expenseLineId ? DATA.expenseLineItems.find(x=>x.id===e.expenseLineId) : null;
+  if(!exp) return null;
+  if(exp.type === 'CODB') return '__CODB__';
+  if(exp.type === 'CAC') return '__CAC__';
+  if(exp.type === 'COGS') return '__COGS__';
+  if(exp.type === 'MISC') return exp.id;
+  return null;
+}
+function computeCreditorMovementByLine(){
+  const entries = getCycleData('creditorsByCycle');
+  const N = MONTHS.length;
+  const zeros = ()=> new Array(N).fill(0);
+  const slotMap = {b180p:0, b121180:1, b91120:2, b6190:3, b3160:4, b030:5};
+  const groups = getCreditorMovementGroups();
+
+  const result = groups.map(g=>{
+    const vendors = entries.filter(e=> vendorGroupKey(e) === g.key);
+    const lag = Math.floor(g.creditorDays/30);
+    const pmtsOpBal = zeros(), pmtOverride = zeros();
+    let openingTotal = 0;
+    vendors.forEach(e=>{
+      openingTotal += CREDITOR_BUCKETS.reduce((a,b)=>a+(+e[b.key]||0),0);
+      const sc = zeros();
+      Object.keys(slotMap).forEach(bk=>{ const slot=slotMap[bk]; if(slot<N) sc[slot]+=(+e[bk]||0); });
+      sc[Math.min(lag, N-1)] += (+e.notdue||0);
+      MONTHS.forEach((m,i)=>{
+        pmtsOpBal[i] += sc[i];
+        const override = (e.payments||{})[m];
+        if(override!==undefined && override!==''){
+          pmtOverride[i] += (+override - sc[i]);
+        }
+      });
+    });
+
+    const additions = MONTHS.map(g.additionFn);
+    const pmtsNew = zeros();
+    MONTHS.forEach((m,i)=>{ if(i>=lag) pmtsNew[i] = additions[i-lag]; });
+
+    const totalPayments = zeros();
+    MONTHS.forEach((m,i)=>{ totalPayments[i] = pmtsOpBal[i] + pmtsNew[i] + pmtOverride[i]; });
+
+    const opening = zeros(), closing = zeros();
+    let op = openingTotal;
+    MONTHS.forEach((m,i)=>{
+      opening[i] = op;
+      const cl = op + additions[i] - totalPayments[i];
+      closing[i] = cl;
+      op = cl;
+    });
+
+    return {label:g.label, key:g.key, vendorCount:vendors.length, opening, additions, pmtsOpBal, pmtsNew, pmtOverride, totalPayments, closing};
+  });
+  return result.filter(g=> g.vendorCount>0 || g.additions.some(v=>v>0.005));
+}
+
+function renderGstMovementScreen(container){
+  const invSched = computeInventorySchedule();
+  const gstSched = computeGstItcSchedule(invSched);
+
+  let html = `<div class="footnote" style="margin-bottom:16px;">Input tax credit accumulates monthly. Output GST from LE NSV. Net cash impact = ITC utilised − Output GST paid.</div>`;
+  html += `<div class="panel" style="max-width:100%;"><div class="scrollbox" style="max-height:75vh; overflow-x:auto;"><table class="ledger compact"><colgroup><col style="width:220px;"><col style="width:70px;">${MONTHS.map(()=>'<col style="width:90px;">').join('')}<col style="width:100px;"></colgroup>`;
+  html += `<thead><tr><th class="stickyleftcol" style="text-align:left;">Line Item</th><th>GST%</th>`;
+  MONTHS.forEach(m=> html += `<th>${m}</th>`);
+  html += `<th class="total-col">Total</th></tr></thead><tbody>`;
+
+  const rows = [];
+  rows.push({label:'Opening ITC Credit', rate:'—', values: gstSched.opITC, editableFirst:true, indent:false});
+  rows.push({label:'+ CODB × 18%', rate:'18%', values: gstSched.codbGst, indent:true});
+  rows.push({label:'+ CAC × 18%', rate:'18%', values: gstSched.cacGst, indent:true});
+  gstSched.opexItems.forEach(li=>{
+    rows.push({label:`+ ${li.name} × ${(+li.gstRate||0)}%`, rate:(+li.gstRate||0)+'%', values: gstSched.opexGstByItem[li.id], indent:true});
+  });
+  rows.push({label:'+ COGS (Inwards) × 3%', rate:'3%', values: gstSched.inwardsGst, indent:true});
+  rows.push({label:'= Total Input GST', rate:'', values: gstSched.totalInputGst, subtotal:true});
+  rows.push({label:'− Output GST (NSV × GST%)', rate:'—', values: gstSched.outputGst.map(v=>-v), indent:true, negClass:true});
+  rows.push({label:'ITC Utilised', rate:'', values: gstSched.itcUsed, indent:true, muted:true});
+  rows.push({label:'= Closing ITC Credit', rate:'', values: gstSched.clITC, subtotal:true});
+  rows.push({label:'Net GST Cash Outflow', rate:'', values: gstSched.cashOutflow.map(v=> v>0 ? v : null), grand:true, negClass:true});
+
+  rows.forEach(r=>{
+    const cls = [r.subtotal?'subtotal':'', r.grand?'grand':'', r.indent?'lineitem':''].filter(Boolean).join(' ');
+    html += `<tr class="${cls}"><td class="stickyleftcol" style="text-align:left; ${r.negClass?'color:var(--danger, #b3392c);':''} ${r.muted?'color:var(--ink-soft);':''}">${r.label}</td><td>${r.rate}</td>`;
+    let total = 0, hasReal = false;
+    r.values.forEach((v,i)=>{
+      if(r.editableFirst && i===0){
+        html += `<td><input type="number" step="any" class="gstopeningcell" value="${v!==undefined && v!==''? v : ''}"></td>`;
+        hasReal = true; total += (+v||0);
+      } else if(v===null || v===undefined){
+        html += `<td>—</td>`;
+      } else {
+        hasReal = true; total += v;
+        html += `<td style="${r.negClass?'color:var(--danger, #b3392c);':''}">${fmt(v)}</td>`;
+      }
+    });
+    const showTotal = r.subtotal || r.grand || !r.editableFirst;
+    html += `<td class="total-col">${hasReal && showTotal && !r.editableFirst ? fmt(total) : (r.editableFirst ? '—' : (hasReal?fmt(total):'—'))}</td></tr>`;
+  });
+
+  html += `</tbody></table></div></div>`;
+  container.innerHTML = html;
+
+  const openingCell = container.querySelector('.gstopeningcell');
+  if(openingCell) openingCell.addEventListener('change', ()=>{
+    const inv = getCycleObj('inventoryByCycle');
+    const n = cleanNum(openingCell.value);
+    inv.openingGstCredit = n===null ? '' : n;
+    markDirty();
+    renderGstMovementScreen(container);
+  });
+}
+
+function renderCreditorMovementScreen(container){
+  const groups = computeCreditorMovementByLine();
+
+  let html = `<div class="footnote" style="margin-bottom:16px;">Auto-calculated from Creditors ageing + Creditor Days per Expense Line. "Pmt Override" reflects vendor-level payment overrides entered in the Creditors tab (aggregated per Expense Line) — edit those there, not here.</div>`;
+
+  if(!groups.length){
+    html += `<div class="footnote">No creditor spend yet — enter Creditors ageing balances and/or build up CODB/CAC/Misc/COGS costs in the inputs first.</div>`;
+    container.innerHTML = html;
+    return;
+  }
+
+  const rowsMeta = [
+    {label:'Opening', key:'opening', endval:false, prefix:l=>`Opening (${l})`},
+    {label:'Additions (LE×GST)', key:'additions', sign:1, prefix:()=>'+ Additions (LE×GST)'},
+    {label:'Pmts (Op Bal)', key:'pmtsOpBal', sign:-1, prefix:()=>'− Pmts (Op Bal)'},
+    {label:'Pmts (New)', key:'pmtsNew', sign:-1, prefix:()=>'− Pmts (New)'},
+    {label:'Pmt Override', key:'pmtOverride', sign:-1, prefix:()=>'± Pmt Override'},
+    {label:'Total Payments', key:'totalPayments', sign:-1, subtotal:true, prefix:()=>'= Total Payments'},
+    {label:'Closing', key:'closing', subtotal:true, prefix:l=>`= Closing`}
+  ];
+
+  html += `<div class="panel" style="max-width:100%;"><div class="scrollbox" style="max-height:75vh; overflow-x:auto;"><table class="ledger compact"><colgroup><col style="width:230px;">${MONTHS.map(()=>'<col style="width:95px;">').join('')}<col style="width:100px;"></colgroup>`;
+  html += `<thead><tr><th class="stickyleftcol" style="text-align:left;">Expense Line</th>`;
+  MONTHS.forEach(m=> html += `<th>${m}</th>`);
+  html += `<th class="total-col">Total</th></tr></thead><tbody>`;
+
+  groups.forEach(g=>{
+    html += `<tr class="section"><td class="stickyleftcol" style="text-align:left; font-weight:700;">${g.label} <span class="footnote" style="margin:0;">(${g.vendorCount} vendor${g.vendorCount===1?'':'s'})</span></td>${MONTHS.map(()=>'<td></td>').join('')}<td class="total-col"></td></tr>`;
+    rowsMeta.forEach(rm=>{
+      const cls = rm.subtotal ? 'subtotal' : 'lineitem';
+      html += `<tr class="${cls}"><td class="stickyleftcol" style="text-align:left;">${rm.prefix(g.label)}</td>`;
+      let total = 0;
+      const isBalance = (rm.key==='opening' || rm.key==='closing');
+      g[rm.key].forEach(v=>{
+        const shown = rm.sign===-1 ? -v : v;
+        total += shown;
+        html += `<td>${fmt(shown)}</td>`;
+      });
+      const fyDisplay = isBalance ? (rm.key==='opening' ? g.opening[0] : g.closing[g.closing.length-1]) : total;
+      html += `<td class="total-col">${fmt(fyDisplay)}</td></tr>`;
+    });
+  });
+
+  html += `</tbody></table></div></div>`;
+  container.innerHTML = html;
+}
+
+function renderCollectionsWorkingScreen(container){
+  const debSched = computeDebtorsSchedule();
+
+  let html = `<div class="footnote" style="margin-bottom:16px;">Auto-calculated. Use the adjustment row to override collections per Partner-Model per month (e.g. for SOR, MUDA, or aged balances that only move manually).</div>`;
+
+  if(!debSched.byPm.length){
+    html += `<div class="footnote">No Partner-Models defined yet.</div>`;
+    container.innerHTML = html;
+    return;
+  }
+
+  html += `<div class="panel" style="max-width:100%;"><div class="scrollbox" style="max-height:75vh; overflow-x:auto;"><table class="ledger compact"><colgroup><col style="width:230px;">${MONTHS.map(()=>'<col style="width:95px;">').join('')}<col style="width:100px;"></colgroup>`;
+  html += `<thead><tr><th class="stickyleftcol" style="text-align:left;">Partner — Model</th>`;
+  MONTHS.forEach(m=> html += `<th>${m}</th>`);
+  html += `<th class="total-col">Total</th></tr></thead><tbody>`;
+
+  debSched.byPm.forEach(pmRow=>{
+    const totalCollections = pmRow.collOpBal.map((v,i)=> v + pmRow.collCurrent[i] + pmRow.adjOverride[i]);
+
+    html += `<tr class="section"><td class="stickyleftcol" style="text-align:left; font-weight:700;">${pmRow.pm.partner} — ${pmRow.pm.model} <span class="footnote" style="margin:0;">(${pmRow.creditDays}d credit)</span></td>${MONTHS.map(()=>'<td></td>').join('')}<td class="total-col"></td></tr>`;
+
+    const simpleRow = (label, values, opts)=>{
+      opts = opts || {};
+      html += `<tr class="${opts.subtotal?'subtotal':'lineitem'}"><td class="stickyleftcol" style="text-align:left;">${label}</td>`;
+      let total = 0;
+      values.forEach(v=>{ total += v; html += `<td>${fmt(v)}</td>`; });
+      const fyVal = opts.endval ? values[values.length-1] : total;
+      html += `<td class="total-col">${fmt(fyVal)}</td></tr>`;
+    };
+
+    simpleRow('Opening Debtors', pmRow.opening, {endval:true});
+    const nsvByMonth = MONTHS.map(m=> computePartnerModelPL(pmRow.pm.id, m).NSV);
+    const gstByMonth = MONTHS.map(m=> computePartnerModelPL(pmRow.pm.id, m).GST);
+    simpleRow('+ Revenue (NSV)', nsvByMonth);
+    simpleRow('+ GST on Revenue', gstByMonth);
+    simpleRow('− Deductions (Mkt)', pmRow.dedn);
+    simpleRow('= Collectible (NSV+GST−Ded)', pmRow.collectible, {subtotal:true});
+    simpleRow('− Collections (Op Bal)', pmRow.collOpBal);
+    simpleRow('− Collections (Current)', pmRow.collCurrent);
+
+    // Adj Override row - editable
+    html += `<tr class="lineitem"><td class="stickyleftcol" style="text-align:left;">± Adj Override</td>`;
+    let ovTotal = 0;
+    MONTHS.forEach((m,i)=>{
+      ovTotal += pmRow.adjOverride[i];
+      html += `<td><input type="number" step="any" class="debtoradjcell" data-pm="${pmRow.pm.id}" data-month="${m}" value="${pmRow.adjOverride[i]!==0? pmRow.adjOverride[i] : ''}"></td>`;
+    });
+    html += `<td class="total-col">${fmt(ovTotal)}</td></tr>`;
+
+    simpleRow('= Total Collections', totalCollections, {subtotal:true});
+    simpleRow('= Closing Debtors', pmRow.closing, {subtotal:true, endval:true});
+  });
+
+  html += `</tbody></table></div></div>`;
+  container.innerHTML = html;
+
+  container.querySelectorAll('.debtoradjcell').forEach(inp=>{
+    inp.addEventListener('change', ()=>{
+      const store = getCycleObj('debtorsOverrideByCycle');
+      if(!store[inp.dataset.pm]) store[inp.dataset.pm] = {};
+      const n = cleanNum(inp.value);
+      store[inp.dataset.pm][inp.dataset.month] = n===null ? '' : n;
+      markDirty();
+      renderCollectionsWorkingScreen(container);
+    });
+  });
 }
 
 function renderPLCF(container){
@@ -3550,7 +3841,7 @@ function renderCyclePanel(){
     if(!ok) return;
     const idx = DATA.aopCycles.findIndex(c=>c.id===active.id);
     if(idx > -1) DATA.aopCycles.splice(idx,1);
-    ['salesInputByCycle','codbRateCardByCycle','miscInputsByCycle','cashFlowItemsByCycle','monthlyGMVByCycle','channelMixByCycle','categoryMixByCycle','paretoMixByCycle','discMarginGstByCycle','paretoInputByCycle','debtorsByCycle','creditorsByCycle','inventoryByCycle'].forEach(k=>{
+    ['salesInputByCycle','codbRateCardByCycle','miscInputsByCycle','cashFlowItemsByCycle','monthlyGMVByCycle','channelMixByCycle','categoryMixByCycle','paretoMixByCycle','discMarginGstByCycle','paretoInputByCycle','debtorsByCycle','debtorsOverrideByCycle','creditorsByCycle','inventoryByCycle'].forEach(k=>{
       if(DATA[k]) delete DATA[k][active.id];
     });
     if(DATA.meta.activeCycleId === active.id) DATA.meta.activeCycleId = '';
@@ -3580,7 +3871,7 @@ function copyCycleInputData(destCycleId, srcCycleId){
     // Deep-copy with fresh row ids so edits in the new cycle never collide with the source.
     DATA[k][destCycleId] = srcRows.map(r=> ({...r, id: uid('COPY')}));
   });
-  ['monthlyGMVByCycle','channelMixByCycle','categoryMixByCycle','paretoMixByCycle','discMarginGstByCycle','codbRateCardByCycle','miscInputsByCycle','paretoInputByCycle','debtorsByCycle','creditorsByCycle','inventoryByCycle'].forEach(k=>{
+  ['monthlyGMVByCycle','channelMixByCycle','categoryMixByCycle','paretoMixByCycle','discMarginGstByCycle','codbRateCardByCycle','miscInputsByCycle','paretoInputByCycle','debtorsByCycle','debtorsOverrideByCycle','creditorsByCycle','inventoryByCycle'].forEach(k=>{
     const srcObj = (DATA[k] && DATA[k][srcCycleId]) || {};
     DATA[k] = DATA[k] || {};
     DATA[k][destCycleId] = JSON.parse(JSON.stringify(srcObj));
