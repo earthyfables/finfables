@@ -15,8 +15,8 @@
       "Feb",
       "Mar"
     ],
-    "savedAt": "2026-08-17T08:01:19.379Z",
-    "activeCycleId": "CYC_xba629"
+    "savedAt": "2026-08-19T08:53:44.889Z",
+    "activeCycleId": "CYC_czj5yj"
   },
   "channels": [
     {
@@ -20321,7 +20321,35 @@
   },
   "discMarginGstByCycle": {
     "": {},
-    "CYC_xba629": {},
+    "CYC_xba629": {
+      "discount": {
+        "PM_lkql7m": {},
+        "PM_8mdlod": {},
+        "PM_zha4pk": {},
+        "PM_rp2j41": {},
+        "PM_w4g7wl": {},
+        "PM_2wvypf": {}
+      },
+      "margin": {
+        "PM_lkql7m": {},
+        "PM_8mdlod": {},
+        "PM_zha4pk": {},
+        "PM_rp2j41": {},
+        "PM_w4g7wl": {},
+        "PM_2wvypf": {}
+      },
+      "returns": {
+        "PM_lkql7m": {},
+        "PM_8mdlod": {},
+        "PM_zha4pk": {},
+        "PM_rp2j41": {},
+        "PM_w4g7wl": {},
+        "PM_2wvypf": {}
+      },
+      "codPct": {
+        "PM_w4g7wl": {}
+      }
+    },
     "CYC_czj5yj": {
       "discount": {
         "PM_2nak1i": {
