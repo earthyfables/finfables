@@ -3206,7 +3206,7 @@ function computeCreditorsSchedule(){
     const exp = e.expenseLineId ? DATA.expenseLineItems.find(x=>x.id===e.expenseLineId) : null;
     const creditorDays = exp ? numOr(exp.creditorDays, 30) : 30;
     const lag = Math.floor(creditorDays/30);
-    const isCogsVendor = exp && exp.type === 'COGS';
+    const isCogsVendor = !!(exp && exp.type === 'COGS');
     const bucket = isCogsVendor ? cogs : others;
 
     const sc = zeros();
@@ -3241,7 +3241,7 @@ function computeCreditorsSchedule(){
     let openingTotal0 = 0;
     entries.forEach(e=>{
       const exp = e.expenseLineId ? DATA.expenseLineItems.find(x=>x.id===e.expenseLineId) : null;
-      const isCogsVendor = exp && exp.type === 'COGS';
+      const isCogsVendor = !!(exp && exp.type === 'COGS');
       if((bucket===cogs) === isCogsVendor){
         openingTotal0 += CREDITOR_BUCKETS.reduce((a,b)=>a+(+e[b.key]||0),0);
       }
@@ -3329,16 +3329,24 @@ function getCreditorMovementGroups(){
     gstRateLabel: (cogsLine ? (+cogsLine.gstRate||0) : 3)+'%',
     additionFn:(m)=> invSchedRef.inwards[MONTHS.indexOf(m)] * (1 + (cogsLine ? (+cogsLine.gstRate||0) : 3)/100)
   });
+  // Catch-all so a vendor pasted against an Expense Line that no longer
+  // exists (renamed/deleted) still shows up and still counts toward the
+  // total, instead of silently vanishing from this view while still being
+  // counted in the Working Capital section's company-wide totals.
+  groups.push({
+    key:'__UNMATCHED__', label:'Unmatched / No Expense Line', creditorDays:30, gstRateLabel:'—',
+    additionFn: ()=>0
+  });
   return groups;
 }
 function vendorGroupKey(e){
   const exp = e.expenseLineId ? DATA.expenseLineItems.find(x=>x.id===e.expenseLineId) : null;
-  if(!exp) return null;
+  if(!exp) return '__UNMATCHED__';
   if(exp.type === 'CODB') return '__CODB__';
   if(exp.type === 'CAC') return '__CAC__';
   if(exp.type === 'COGS') return '__COGS__';
   if(exp.type === 'MISC') return exp.id;
-  return null;
+  return '__UNMATCHED__';
 }
 function computeCreditorMovementByLine(){
   const entries = getCycleData('creditorsByCycle');
