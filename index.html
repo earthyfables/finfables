@@ -3222,18 +3222,13 @@ function computeCreditorsSchedule(){
 
   // Additions come from the P&L totals for that expense category, not per-vendor
   // (matches the working-logic doc: additions = LE cost x (1+GST%) at the group level).
+  // CODB/CAC use the marketplace-deduction-excluded figures (whatever's already
+  // netted off in Debtors never becomes a creditor payable) - same logic the
+  // Creditors tab's Movement view uses, so the two screens stay reconciled.
   const inv = computeInventorySchedule();
   MONTHS.forEach((m,i)=>{
     cogs.additions[i] = inv.inwards[i] * 1.03; // COGS creditors accrue on purchases (inwards), 3% GST
-    const totals = computeTotalPL(m);
-    let othersAdd = 0;
-    getCodbLineItemsForPL().forEach(li=>{
-      const val = totals.codbByItem[li.id] || 0;
-      const exp = li.expenseLineItemId ? DATA.expenseLineItems.find(x=>x.id===li.expenseLineItemId) : null;
-      const rate = exp ? (+exp.gstRate||0) : 18;
-      othersAdd += val * (1+rate/100);
-    });
-    othersAdd += totals.CAC * 1.18;
+    let othersAdd = computeCodbCreditorAdditions(m) + computeCacCreditorAdditions(m);
     getMiscInputItemsForPL().forEach(li=>{
       const val = computeOpexByItem(m)[li.id] || 0;
       othersAdd += val * (1+(+li.gstRate||0)/100);
