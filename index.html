@@ -345,6 +345,7 @@
   .ledger td input.gmvcell, .ledger td input.misccell, .ledger td input.invmovecell{text-align:right; font-variant-numeric:tabular-nums; font-family:'Times New Roman', Times, serif;}
   .ledger td:first-child{text-align:left; white-space:normal; font-variant-numeric:normal;}
   .ledger tr.section td{background:var(--accent-soft);}
+  .ledger tr.section2 td{background:var(--accent-dark); color:var(--accent); font-weight:700; text-transform:uppercase; letter-spacing:0.05em; font-size:12px; padding-top:8px; padding-bottom:8px;}
   .ledger tr.section td:first-child{font-weight:700; color:var(--accent-dark); padding-top:10px; padding-bottom:10px; font-size:14px;}
   .ledger tr.subtotal td{font-weight:700; border-top:1px solid var(--accent-dark); border-bottom:1px double var(--accent-dark); background:#EBEEF6; color:var(--accent-dark);}
   .ledger tr.grand td{font-weight:700; border-top:2px solid var(--accent); color:#fff; font-size:14.5px; background:var(--accent-dark);}
@@ -2832,58 +2833,23 @@ const PLCF_SECTIONS = [
     {label:'Net Cash', subtotal:true, key:'cfNetCash'},
     {label:'Check', key:'cfCheck'}
   ]},
-  { title:'Closing Working Capital', rows:[
-    {label:'Inventory', key:'wcInventory', endval:true},
-    {label:'Debtors', key:'wcDebtors', endval:true},
-    {label:'Creditors - Material', key:'wcCredMaterial', endval:true},
-    {label:'Creditors - Others', key:'wcCredOthers', endval:true},
-    {label:'NWC', subtotal:true, key:'wcNWC', endval:true},
-    {label:'Change in WC', key:'wcChange'}
+  { title:'Working Capital', rows:[
+    {label:'OPENING', section2:true},
+    {label:'Inventory', indent:true, key:'wcOpInventory', firstval:true},
+    {label:'Debtors', indent:true, key:'wcOpDebtors', firstval:true},
+    {label:'Creditors', indent:true, key:'wcOpCreditors', firstval:true},
+    {label:'= Opening NWC', subtotal:true, key:'wcOpeningNWC', firstval:true},
+    {label:'CLOSING', section2:true},
+    {label:'Inventory', indent:true, key:'wcClInventory', endval:true},
+    {label:'Debtors', indent:true, key:'wcClDebtors', endval:true},
+    {label:'Creditors', indent:true, key:'wcClCreditors', endval:true},
+    {label:'= Closing NWC', grand:true, key:'wcClosingNWC', endval:true},
+    {label:'Change in NWC (Opening − Closing)', key:'wcChangeNWC'}
   ]},
-  { title:'Inventory Schedule', rows:[
-    {label:'Op Inventory', key:'invOpTotal', endval:true},
-    {label:'Inwards', indent:true, key:'invInwards'},
-    {label:'Outwards', indent:true, key:'invOutwards'},
-    {label:'Cl Inventory', subtotal:true, key:'invClTotal', endval:true}
-  ]},
-  { title:'Debtors Schedule', rows:[
-    {label:'Op Debtors Tot', key:'debOpening', endval:true},
-    {label:'Sales +GST', indent:true, key:'debSalesGst'},
-    {label:'Dedn', indent:true, key:'debDedn'},
-    {label:'Collections', indent:true, key:'debCollections'},
-    {label:'Cl Debtors', subtotal:true, key:'debClosing', endval:true}
-  ]},
-  { title:'Collections & Deductions Detail', rows:[
-    {label:'Sales + GST', key:'cddSalesGst'},
-    {label:'TDS + TCS Deductions', indent:true},
-    {label:'Gross Collectables', subtotal:true, key:'cddGrossCollectable'},
-    {label:'Deductions', indent:true, key:'cddDeductions'},
-    {label:'GST on Deductions', indent:true},
-    {label:'Net Deductions', subtotal:true, key:'cddNetDeductions'}
-  ]},
-  { title:'Creditors — COGS Schedule', rows:[
-    {label:'Op Creditors - COGS', key:'credCogsOpening', endval:true},
-    {label:'Purchases', indent:true, key:'credCogsPurchases'},
-    {label:'Payments', indent:true, key:'credCogsPayments'},
-    {label:'Cl Creditors - COGS', subtotal:true, key:'credCogsClosing', endval:true}
-  ]},
-  { title:'Creditors — Others Schedule', rows:[
-    {label:'Op Creditors - Others', key:'credOthOpening', endval:true},
-    {label:'Expenses', indent:true, key:'credOthExpenses'},
-    {label:'Payments', indent:true, key:'credOthPayments'},
-    {label:'Cl Creditors - Others', subtotal:true, key:'credOthClosing', endval:true}
-  ]},
-  { title:'Input Credit Calculation', rows:[
-    {label:'Op GST', key:'icOpening', endval:true},
-    {label:'Material', indent:true, key:'icMaterial'},
-    {label:'Expenses', indent:true, key:'icExpenses'},
-    {label:'Total Input Credit', subtotal:true, key:'icTotalCredit', endval:true},
-    {label:'Utilised', indent:true, key:'icUtilised'},
-    {label:'Cl Credit', subtotal:true, key:'icClosing', endval:true}
-  ]},
-  { title:'GST — Cash Impact', rows:[
-    {label:'Output GST', key:'gstOutput'},
-    {label:'GST Payments', indent:true, key:'gstPayments'}
+  { title:'GST / ITC Movement', rows:[
+    {label:'Opening ITC Credit', key:'itcOpening', firstval:true},
+    {label:'Closing ITC Credit', key:'itcClosing', endval:true},
+    {label:'Change in ITC (Opening − Closing)', key:'itcChange'}
   ]},
   { title:'Other CA / CL', rows:[
     {label:'Op CA / CL'},
@@ -2900,6 +2866,10 @@ function renderPLCFTable(sections, dataProvider){
   sections.forEach(sec=>{
     html += `<tr class="section"><td>${sec.title}</td>${MONTHS.map(()=>'<td></td>').join('')}<td class="total-col"></td></tr>`;
     sec.rows.forEach(r=>{
+      if(r.section2){
+        html += `<tr class="section2"><td>${r.label}</td>${MONTHS.map(()=>'<td></td>').join('')}<td class="total-col"></td></tr>`;
+        return;
+      }
       const cls = [r.subtotal?'subtotal':'', r.grand?'grand':'', r.indent?'lineitem':''].filter(Boolean).join(' ');
       html += `<tr class="${cls}"><td>${r.label}</td>`;
       const fmtCell = v => r.pct ? (v.toFixed(1)+'%') : (r.ratio ? v.toFixed(2) : fmt(v));
@@ -2912,13 +2882,18 @@ function renderPLCFTable(sections, dataProvider){
       // Ratio/percentage rows don't sum meaningfully across months - recompute
       // from FY-aggregated figures instead of adding up 12 monthly percentages.
       // Balance rows (opening/closing stock, debtors, creditors, GST credit,
-      // NWC) shouldn't sum across months either - FY Total shows the last
-      // month's value, since it's a point-in-time balance, not a flow.
+      // NWC) shouldn't sum across months either - FY Total shows the opening
+      // or closing month's value, since it's a point-in-time balance, not a flow.
       let fyVal = rowTotal;
       let fyReal = hasReal;
       if((r.pct || r.ratio) && r.key && dataProvider){
         const fy = dataProvider(r.key, 'FY');
         if(fy !== null && fy !== undefined){ fyVal = fy; fyReal = true; }
+      } else if(r.firstval && r.key && dataProvider){
+        for(let mi=0; mi<MONTHS.length; mi++){
+          const v = dataProvider(r.key, MONTHS[mi]);
+          if(v !== null && v !== undefined){ fyVal = v; fyReal = true; break; }
+        }
       } else if(r.endval && r.key && dataProvider){
         for(let mi=MONTHS.length-1; mi>=0; mi--){
           const v = dataProvider(r.key, MONTHS[mi]);
@@ -3782,7 +3757,8 @@ function renderPLCF(container){
   const debSched = computeDebtorsSchedule();
   const credSched = computeCreditorsSchedule();
   const mi = m => MONTHS.indexOf(m);
-  const nwcAt = i => (invSched.clGood[i]+invSched.clMuda[i]) + debSched.closing[i] - credSched.cogs.closing[i] - credSched.others.closing[i];
+  const nwcAt = i => (invSched.clGood[i]+invSched.clMuda[i]) + debSched.closing[i] - (credSched.cogs.closing[i]+credSched.others.closing[i]);
+  const openingNwcAt = i => (invSched.opGood[i]+invSched.opMuda[i]) + debSched.opening[i] - (credSched.cogs.opening[i]+credSched.others.opening[i]);
 
   const dataProvider = (key, month)=>{
     if(key && key.indexOf('codbitem_')===0){
@@ -3810,48 +3786,20 @@ function renderPLCF(container){
     if(i < 0) return null;
 
     switch(key){
-      case 'invOpTotal': return invSched.opGood[i] + invSched.opMuda[i];
-      case 'invInwards': return invSched.inwards[i];
-      case 'invOutwards': return -(invSched.cogs[i] + invSched.mudaOut[i]);
-      case 'invClTotal': return invSched.clGood[i] + invSched.clMuda[i];
+      case 'wcOpInventory': return invSched.opGood[i] + invSched.opMuda[i];
+      case 'wcOpDebtors': return debSched.opening[i];
+      case 'wcOpCreditors': return credSched.cogs.opening[i] + credSched.others.opening[i];
+      case 'wcOpeningNWC': return openingNwcAt(i);
 
-      case 'debOpening': return debSched.opening[i];
-      case 'debSalesGst': return debSched.salesPlusGst[i];
-      case 'debDedn': return -debSched.dedn[i];
-      case 'debCollections': return -(debSched.collOpBal[i] + debSched.collCurrent[i]);
-      case 'debClosing': return debSched.closing[i];
+      case 'wcClInventory': return invSched.clGood[i] + invSched.clMuda[i];
+      case 'wcClDebtors': return debSched.closing[i];
+      case 'wcClCreditors': return credSched.cogs.closing[i] + credSched.others.closing[i];
+      case 'wcClosingNWC': return nwcAt(i);
+      case 'wcChangeNWC': return openingNwcAt(i) - nwcAt(i);
 
-      case 'cddSalesGst': return debSched.salesPlusGst[i];
-      case 'cddGrossCollectable': return debSched.salesPlusGst[i];
-      case 'cddDeductions': return -debSched.dedn[i];
-      case 'cddNetDeductions': return -debSched.dedn[i];
-
-      case 'credCogsOpening': return credSched.cogs.opening[i];
-      case 'credCogsPurchases': return credSched.cogs.additions[i];
-      case 'credCogsPayments': return -credSched.cogs.payments[i];
-      case 'credCogsClosing': return credSched.cogs.closing[i];
-
-      case 'credOthOpening': return credSched.others.opening[i];
-      case 'credOthExpenses': return credSched.others.additions[i];
-      case 'credOthPayments': return -credSched.others.payments[i];
-      case 'credOthClosing': return credSched.others.closing[i];
-
-      case 'icOpening': return gstSched.opITC[i];
-      case 'icMaterial': return gstSched.inwardsGst[i];
-      case 'icExpenses': return gstSched.codbGst[i] + gstSched.cacGst[i] + gstSched.opexGst[i];
-      case 'icTotalCredit': return gstSched.totalCredit[i];
-      case 'icUtilised': return -gstSched.itcUsed[i];
-      case 'icClosing': return gstSched.clITC[i];
-
-      case 'gstOutput': return gstSched.outputGst[i];
-      case 'gstPayments': return -gstSched.cashOutflow[i];
-
-      case 'wcInventory': return invSched.clGood[i] + invSched.clMuda[i];
-      case 'wcDebtors': return debSched.closing[i];
-      case 'wcCredMaterial': return -credSched.cogs.closing[i];
-      case 'wcCredOthers': return -credSched.others.closing[i];
-      case 'wcNWC': return nwcAt(i);
-      case 'wcChange': { const prevNwc = i===0 ? nwcAt(0) : nwcAt(i-1); return nwcAt(i) - prevNwc; }
+      case 'itcOpening': return gstSched.opITC[i];
+      case 'itcClosing': return gstSched.clITC[i];
+      case 'itcChange': return gstSched.opITC[i] - gstSched.clITC[i];
 
       case 'cfChangeInWC': { const prevNwc = i===0 ? nwcAt(0) : nwcAt(i-1); return -(nwcAt(i) - prevNwc); }
       case 'cfChangeOtherCACL': return 0;
