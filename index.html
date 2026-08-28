@@ -3067,7 +3067,13 @@ function computeInventorySchedule(){
 
     const mos = mosArr[i];
     let targetClosing = 0;
-    for(let k=1; k<=mos && i+k<N; k++) targetClosing += outwardGood[i+k];
+    for(let k=1; k<=mos; k++){
+      const idx = i+k;
+      // Beyond the cycle's last actual month, assume a flat continuation at
+      // the last known month's Outward-Good rather than letting cover
+      // artificially taper to zero just because the cycle happens to end.
+      targetClosing += idx < N ? outwardGood[idx] : outwardGood[N-1];
+    }
     const inw = Math.max(0, targetClosing - og + outwardGood[i]);
     inwards.push(inw);
 
