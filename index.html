@@ -3061,6 +3061,10 @@ function computeInventorySchedule(){
 function computeGstItcSchedule(inventorySched){
   const inv = getCycleObj('inventoryByCycle');
   const openingCredit = +inv.openingGstCredit||0;
+  const cogsLine = DATA.expenseLineItems.find(x=>x.type==='COGS');
+  const cacLine = DATA.expenseLineItems.find(x=>x.type==='CAC');
+  const cogsGstRate = cogsLine ? (+cogsLine.gstRate||0) : 3;
+  const cacGstRate = cacLine ? (+cacLine.gstRate||0) : 18;
   const codbGst=[], cacGst=[], opexGst=[], inwardsGst=[], totalInputGst=[], outputGst=[], opITC=[], totalCredit=[], itcUsed=[], cashOutflow=[], clITC=[];
   const opexItems = getMiscInputItemsForPL();
   const opexGstByItem = {}; opexItems.forEach(li=> opexGstByItem[li.id] = []);
@@ -3074,7 +3078,7 @@ function computeGstItcSchedule(inventorySched){
       cGst += val * rate/100;
     });
     codbGst.push(cGst);
-    cacGst.push(totals.CAC * 0.18);
+    cacGst.push(totals.CAC * cacGstRate/100);
     let oGst = 0;
     opexItems.forEach(li=>{
       const val = computeOpexByItem(m)[li.id] || 0;
@@ -3083,8 +3087,8 @@ function computeGstItcSchedule(inventorySched){
       oGst += g;
     });
     opexGst.push(oGst);
-    inwardsGst.push(inventorySched.inwards[i] * 0.03);
-    totalInputGst.push(cGst + totals.CAC*0.18 + oGst + inventorySched.inwards[i]*0.03);
+    inwardsGst.push(inventorySched.inwards[i] * cogsGstRate/100);
+    totalInputGst.push(cGst + totals.CAC*cacGstRate/100 + oGst + inventorySched.inwards[i]*cogsGstRate/100);
     outputGst.push(totals.GST);
     const op = i===0 ? openingCredit : clITC[i-1];
     opITC.push(op);
@@ -3095,7 +3099,7 @@ function computeGstItcSchedule(inventorySched){
     cashOutflow.push(Math.max(0, outputGst[i] - used));
     clITC.push(tc - used);
   });
-  return {codbGst, cacGst, opexGst, inwardsGst, totalInputGst, outputGst, opITC, totalCredit, itcUsed, cashOutflow, clITC, opexItems, opexGstByItem};
+  return {codbGst, cacGst, opexGst, inwardsGst, totalInputGst, outputGst, opITC, totalCredit, itcUsed, cashOutflow, clITC, opexItems, opexGstByItem, cogsGstRate, cacGstRate};
 }
 
 // ---- Debtors & Collections: per Partner-Model, then summed to company total ----
@@ -3126,7 +3130,9 @@ function computeDebtorsSchedule(){
         const li = DATA.codbLineItems.find(x=>x.id===liId);
         if(!li) return;
         if(normalizeText(li.name)==='cac'){
-          ded += pmTotals.CAC * 1.18;
+          const cacExpLine = DATA.expenseLineItems.find(x=>x.type==='CAC');
+          const cacRate = cacExpLine ? (+cacExpLine.gstRate||0) : 18;
+          ded += pmTotals.CAC * (1+cacRate/100);
         } else {
           const val = pmTotals.codbByItem[liId] || 0;
           const exp = li.expenseLineItemId ? DATA.expenseLineItems.find(x=>x.id===li.expenseLineItemId) : null;
@@ -3242,6 +3248,8 @@ function computeCacCreditorAdditions(month){
   const cycle = DATA.aopCycles.find(c=>c.id===DATA.meta.activeCycleId);
   const brandId = cycle ? cycle.brandId : null;
   const cacLi = getCodbLineItemByName('CAC');
+  const cacExpLine = DATA.expenseLineItems.find(x=>x.type==='CAC');
+  const cacRate = cacExpLine ? (+cacExpLine.gstRate||0) : 18;
   let total = 0;
   DATA.partnerModels.forEach(pm=>{
     const isCacDeducted = cacLi && DATA.marketplaceDeductionMapping.some(m=> m.brandId===brandId && m.partnerModelId===pm.id && m.codbLineItemId===cacLi.id);
@@ -3250,7 +3258,7 @@ function computeCacCreditorAdditions(month){
       total += computeParetoLevelPL(pm.id, sc.id, month).CAC || 0;
     });
   });
-  return total * 1.18;
+  return total * (1+cacRate/100);
 }
 
 function getCreditorMovementGroups(){
@@ -3459,11 +3467,11 @@ function renderGstMovementScreen(container){
   const rows = [];
   rows.push({label:'Opening ITC Credit', rate:'—', values: gstSched.opITC, editableFirst:true, indent:false, firstval:true});
   rows.push({label:'+ CODB × 18%', rate:'18%', values: gstSched.codbGst, indent:true});
-  rows.push({label:'+ CAC × 18%', rate:'18%', values: gstSched.cacGst, indent:true});
+  rows.push({label:`+ CAC × ${gstSched.cacGstRate}%`, rate:gstSched.cacGstRate+'%', values: gstSched.cacGst, indent:true});
   gstSched.opexItems.forEach(li=>{
     rows.push({label:`+ ${li.name} × ${(+li.gstRate||0)}%`, rate:(+li.gstRate||0)+'%', values: gstSched.opexGstByItem[li.id], indent:true});
   });
-  rows.push({label:'+ COGS (Inwards) × 3%', rate:'3%', values: gstSched.inwardsGst, indent:true});
+  rows.push({label:`+ COGS (Inwards) × ${gstSched.cogsGstRate}%`, rate:gstSched.cogsGstRate+'%', values: gstSched.inwardsGst, indent:true});
   rows.push({label:'= Total Input GST', rate:'', values: gstSched.totalInputGst, subtotal:true});
   rows.push({label:'− Output GST (NSV × GST%)', rate:'—', values: gstSched.outputGst.map(v=>-v), indent:true, negClass:true});
   rows.push({label:'ITC Utilised', rate:'', values: gstSched.itcUsed, indent:true, muted:true});
