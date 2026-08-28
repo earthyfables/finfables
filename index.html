@@ -3193,65 +3193,24 @@ function computeDebtorsSchedule(){
 
 // ---- Creditors & Payments: per vendor entry, auto-payment schedule from ageing + Credit Days, split COGS vs Others ----
 function computeCreditorsSchedule(){
-  const entries = getCycleData('creditorsByCycle');
+  // Reuses computeCreditorMovementByLine()'s per-Expense-Line groups (which
+  // correctly include the vendor-independent "new spend" auto-payment - money
+  // still gets paid down on schedule even before any vendor ageing is entered)
+  // rather than maintaining a second, parallel calculation that can drift out
+  // of sync with the Creditors tab's Movement view, as happened before.
   const N = MONTHS.length;
   const zeros = ()=> new Array(N).fill(0);
-  const slotMap = {b180p:0, b121180:1, b91120:2, b6190:3, b3160:4, b030:5};
-  const paymentsByVendor = zeros();
-
   const cogs = {opening:zeros(), closing:zeros(), additions:zeros(), payments:zeros()};
   const others = {opening:zeros(), closing:zeros(), additions:zeros(), payments:zeros()};
 
-  entries.forEach(e=>{
-    const exp = e.expenseLineId ? DATA.expenseLineItems.find(x=>x.id===e.expenseLineId) : null;
-    const creditorDays = exp ? numOr(exp.creditorDays, 30) : 30;
-    const lag = Math.floor(creditorDays/30);
-    const isCogsVendor = !!(exp && exp.type === 'COGS');
-    const bucket = isCogsVendor ? cogs : others;
-
-    const sc = zeros();
-    Object.keys(slotMap).forEach(bk=>{ const slot=slotMap[bk]; if(slot<N) sc[slot]+=(+e[bk]||0); });
-    sc[Math.min(lag, N-1)] += (+e.notdue||0);
-
+  const groups = computeCreditorMovementByLine();
+  groups.forEach(g=>{
+    const bucket = g.key === '__COGS__' ? cogs : others;
     MONTHS.forEach((m,i)=>{
-      const override = (e.payments||{})[m];
-      const pmt = (override!==undefined && override!=='') ? +override : sc[i];
-      bucket.payments[i] += pmt;
-    });
-  });
-
-  // Additions come from the P&L totals for that expense category, not per-vendor
-  // (matches the working-logic doc: additions = LE cost x (1+GST%) at the group level).
-  // CODB/CAC use the marketplace-deduction-excluded figures (whatever's already
-  // netted off in Debtors never becomes a creditor payable) - same logic the
-  // Creditors tab's Movement view uses, so the two screens stay reconciled.
-  const inv = computeInventorySchedule();
-  MONTHS.forEach((m,i)=>{
-    cogs.additions[i] = inv.inwards[i] * 1.03; // COGS creditors accrue on purchases (inwards), 3% GST
-    let othersAdd = computeCodbCreditorAdditions(m) + computeCacCreditorAdditions(m);
-    getMiscInputItemsForPL().forEach(li=>{
-      const val = computeOpexByItem(m)[li.id] || 0;
-      othersAdd += val * (1+(+li.gstRate||0)/100);
-    });
-    others.additions[i] = othersAdd;
-  });
-
-  [cogs, others].forEach(bucket=>{
-    // Recompute true opening from vendor ageing totals (company-wide, all vendors in this bucket)
-    let openingTotal0 = 0;
-    entries.forEach(e=>{
-      const exp = e.expenseLineId ? DATA.expenseLineItems.find(x=>x.id===e.expenseLineId) : null;
-      const isCogsVendor = !!(exp && exp.type === 'COGS');
-      if((bucket===cogs) === isCogsVendor){
-        openingTotal0 += CREDITOR_BUCKETS.reduce((a,b)=>a+(+e[b.key]||0),0);
-      }
-    });
-    let opening = openingTotal0;
-    MONTHS.forEach((m,i)=>{
-      bucket.opening[i] = opening;
-      const closing = opening + bucket.additions[i] - bucket.payments[i];
-      bucket.closing[i] = closing;
-      opening = closing;
+      bucket.opening[i] += g.opening[i];
+      bucket.closing[i] += g.closing[i];
+      bucket.additions[i] += g.additions[i];
+      bucket.payments[i] += g.totalPayments[i];
     });
   });
 
