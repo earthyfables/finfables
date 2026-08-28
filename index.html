@@ -3043,21 +3043,38 @@ const DAYS_IN_MONTH = {Jan:31,Feb:28,Mar:31,Apr:30,May:31,Jun:30,Jul:31,Aug:31,S
 // ---- Inventory Schedule: sequential month-by-month, company-wide (not PM-specific) ----
 function computeInventorySchedule(){
   const inv = getCycleObj('inventoryByCycle');
-  const opGood=[], opMuda=[], inwards=[], cogsArr=[], mudaOut=[], clGood=[], clMuda=[];
+  const N = MONTHS.length;
+  // Pass 1: Outward - Good doesn't depend on inventory state (COGS comes
+  // from Sales/Pareto data, MUDA Outward is a direct monthly input), so
+  // every month's value can be computed upfront - needed since Inwards now
+  // looks FORWARD at future months' Outward - Good to hit the MOS cover target.
+  const cogsArr = [], mudaOut = [], outwardGood = [];
+  MONTHS.forEach((m)=>{
+    const cogs = computeTotalPL(m).COGS;
+    const mo = +((inv.mudaOutward||{})[m])||0;
+    cogsArr.push(cogs); mudaOut.push(mo);
+    outwardGood.push(cogs - mo);
+  });
+
+  // Pass 2: walk forward sequentially. Inwards[i] is whatever's needed so
+  // that Closing Good covers the next MOS[i] months of Outward - Good.
+  const mosArr = MONTHS.map(m=> +((inv.mos||{})[m])||0);
+  const opGood=[], opMuda=[], inwards=[], clGood=[], clMuda=[];
   MONTHS.forEach((m,i)=>{
     const og = i===0 ? (+inv.openingGood||0) : clGood[i-1];
     const om = i===0 ? (+inv.openingMuda||0) : clMuda[i-1];
-    const inw = +((inv.inwards||{})[m])||0;
-    const cogs = computeTotalPL(m).COGS;
-    const mo = +((inv.mudaOutward||{})[m])||0;
-    opGood.push(og); opMuda.push(om); inwards.push(inw); cogsArr.push(cogs); mudaOut.push(mo);
-    // COGS is the total inventory reduction (Good + MUDA combined); MUDA
-    // Outward is the portion of that reduction that's damaged/written-off,
-    // so Good's own reduction is only the remainder - not COGS again in full.
-    clGood.push(og + inw - (cogs - mo));
-    clMuda.push(om - mo);
+    opGood.push(og); opMuda.push(om);
+
+    const mos = mosArr[i];
+    let targetClosing = 0;
+    for(let k=1; k<=mos && i+k<N; k++) targetClosing += outwardGood[i+k];
+    const inw = Math.max(0, targetClosing - og + outwardGood[i]);
+    inwards.push(inw);
+
+    clGood.push(og + inw - outwardGood[i]);
+    clMuda.push(om - mudaOut[i]);
   });
-  return {opGood, opMuda, inwards, cogs:cogsArr, mudaOut, clGood, clMuda};
+  return {opGood, opMuda, inwards, cogs:cogsArr, mudaOut, clGood, clMuda, mos:mosArr};
 }
 
 // ---- GST Input Tax Credit: sequential, nets Input GST against Output GST ----
@@ -3395,7 +3412,7 @@ function renderInventoryMovementScreen(container, onUpdate){
   const inv = getCycleObj('inventoryByCycle');
   const sched = computeInventorySchedule();
 
-  let html = `<div class="footnote" style="margin-bottom:16px;">Enter monthly Inwards and MUDA Outward. Outward — Good = COGS Outward − MUDA Outward (auto). COGS payments schedule from the Creditors tab.</div>`;
+  let html = `<div class="footnote" style="margin-bottom:16px;">Enter MOS (Months of Supply — how many months of future Outward-Good the closing stock should cover) and MUDA Outward. Inwards is auto-calculated from MOS. Outward — Good = COGS Outward − MUDA Outward (auto). COGS payments schedule from the Creditors tab.</div>`;
   html += `<div class="panel" style="max-width:100%;"><div class="scrollbox" style="max-height:75vh; overflow-x:auto;"><table class="ledger compact"><colgroup><col style="width:230px;">${MONTHS.map(()=>'<col style="width:95px;">').join('')}<col style="width:100px;"></colgroup>`;
   html += `<thead><tr><th class="stickyleftcol" style="text-align:left;">Line Item</th>`;
   MONTHS.forEach(m=> html += `<th>${m}</th>`);
@@ -3418,13 +3435,19 @@ function renderInventoryMovementScreen(container, onUpdate){
   const totalOpening = sched.opGood.map((v,i)=> v + sched.opMuda[i]);
   simpleRow('= Total Opening Inventory', totalOpening, {subtotal:true, firstval:true});
 
-  // + Inwards - editable
-  html += `<tr><td class="stickyleftcol" style="text-align:left;">+ Inwards</td>`;
+  // MOS - editable, drives Inwards automatically
+  html += `<tr><td class="stickyleftcol" style="text-align:left;">MOS (months)</td>`;
+  MONTHS.forEach((m,i)=>{
+    html += `<td><input type="number" step="1" min="0" class="invmoscell" data-month="${m}" value="${sched.mos[i]!==0? sched.mos[i] : ''}"></td>`;
+  });
+  html += `<td class="total-col">—</td></tr>`;
+
+  // + Inwards - computed, read-only
+  html += `<tr><td class="stickyleftcol" style="text-align:left;">+ Inwards (auto)</td>`;
   let inwardsTotal = 0;
   MONTHS.forEach((m,i)=>{
     inwardsTotal += sched.inwards[i];
-    const dispIn = sched.inwards[i]!==0 ? Math.round(sched.inwards[i]).toLocaleString('en-IN') : '';
-    html += `<td><input type="text" inputmode="decimal" class="invmovecell" data-row="inwards" data-month="${m}" value="${dispIn}"></td>`;
+    html += `<td>${fmt(sched.inwards[i])}</td>`;
   });
   html += `<td class="total-col">${fmt(inwardsTotal)}</td></tr>`;
 
@@ -3461,6 +3484,16 @@ function renderInventoryMovementScreen(container, onUpdate){
       const n = cleanNum(cell.value);
       if(!inv[cell.dataset.row]) inv[cell.dataset.row] = {};
       inv[cell.dataset.row][cell.dataset.month] = n===null ? '' : n;
+      markDirty();
+      renderInventoryMovementScreen(container, onUpdate);
+      if(onUpdate) onUpdate();
+    });
+  });
+  container.querySelectorAll('.invmoscell').forEach(cell=>{
+    cell.addEventListener('change', ()=>{
+      const n = cleanNum(cell.value);
+      if(!inv.mos) inv.mos = {};
+      inv.mos[cell.dataset.month] = n===null ? '' : n;
       markDirty();
       renderInventoryMovementScreen(container, onUpdate);
       if(onUpdate) onUpdate();
