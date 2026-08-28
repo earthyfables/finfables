@@ -3824,12 +3824,12 @@ function renderPLCF(container){
       case 'itcClosing': return gstSched.clITC[i];
       case 'itcChange': return gstSched.opITC[i] - gstSched.clITC[i];
 
-      case 'cfChangeInWC': { const prevNwc = i===0 ? nwcAt(0) : nwcAt(i-1); return -(nwcAt(i) - prevNwc); }
+      case 'cfChangeInWC': { const prevNwc = i===0 ? openingNwcAt(0) : nwcAt(i-1); return -(nwcAt(i) - prevNwc); }
       case 'cfChangeOtherCACL': return 0;
       case 'cfGstCreditCash': return -gstSched.cashOutflow[i];
       case 'cfOCF': {
         const ebitda = computeTotalPL(month).CM3 - computeOpexTotal(month);
-        const prevNwc = i===0 ? nwcAt(0) : nwcAt(i-1);
+        const prevNwc = i===0 ? openingNwcAt(0) : nwcAt(i-1);
         return ebitda - (nwcAt(i) - prevNwc) - gstSched.cashOutflow[i];
       }
 
@@ -3841,7 +3841,7 @@ function renderPLCF(container){
       case 'cfCheck': {
         const netCash = (debSched.collOpBal[i]+debSched.collCurrent[i]) - credSched.cogs.payments[i] - credSched.others.payments[i] - gstSched.cashOutflow[i];
         const ebitda = computeTotalPL(month).CM3 - computeOpexTotal(month);
-        const prevNwc = i===0 ? nwcAt(0) : nwcAt(i-1);
+        const prevNwc = i===0 ? openingNwcAt(0) : nwcAt(i-1);
         const ocf = ebitda - (nwcAt(i) - prevNwc) - gstSched.cashOutflow[i];
         return netCash - ocf;
       }
