@@ -3826,11 +3826,18 @@ function renderPLCF(container){
 
       case 'cfChangeInWC': { const prevNwc = i===0 ? openingNwcAt(0) : nwcAt(i-1); return -(nwcAt(i) - prevNwc); }
       case 'cfChangeOtherCACL': return 0;
-      case 'cfGstCreditCash': return -gstSched.cashOutflow[i];
+      // Debtors track NSV+GST and Creditors track cost+GST, so ΔNWC above already
+      // carries a "phantom" GST swing that EBITDA (ex-GST) never had. This line
+      // removes that swing (Output GST accrued minus Input GST accrued) and adds
+      // back the actual cash GST paid to government, so OCF reconciles to the
+      // direct method exactly.
+      case 'cfGstCreditCash': return (gstSched.outputGst[i] - gstSched.totalInputGst[i]) - gstSched.cashOutflow[i];
       case 'cfOCF': {
         const ebitda = computeTotalPL(month).CM3 - computeOpexTotal(month);
         const prevNwc = i===0 ? openingNwcAt(0) : nwcAt(i-1);
-        return ebitda - (nwcAt(i) - prevNwc) - gstSched.cashOutflow[i];
+        const changeInWC = -(nwcAt(i) - prevNwc);
+        const gstCredit = (gstSched.outputGst[i] - gstSched.totalInputGst[i]) - gstSched.cashOutflow[i];
+        return ebitda + changeInWC + gstCredit;
       }
 
       case 'cfCollections': return debSched.collOpBal[i] + debSched.collCurrent[i];
@@ -3842,7 +3849,9 @@ function renderPLCF(container){
         const netCash = (debSched.collOpBal[i]+debSched.collCurrent[i]) - credSched.cogs.payments[i] - credSched.others.payments[i] - gstSched.cashOutflow[i];
         const ebitda = computeTotalPL(month).CM3 - computeOpexTotal(month);
         const prevNwc = i===0 ? openingNwcAt(0) : nwcAt(i-1);
-        const ocf = ebitda - (nwcAt(i) - prevNwc) - gstSched.cashOutflow[i];
+        const changeInWC = -(nwcAt(i) - prevNwc);
+        const gstCredit = (gstSched.outputGst[i] - gstSched.totalInputGst[i]) - gstSched.cashOutflow[i];
+        const ocf = ebitda + changeInWC + gstCredit;
         return netCash - ocf;
       }
     }
