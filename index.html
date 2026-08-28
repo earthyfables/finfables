@@ -1561,7 +1561,7 @@ function findExpenseLineByName(name){
 function renderCreditorsScreen(container, onUpdate){
   const entries = getCycleData('creditorsByCycle'); // [{id, vendorName, expenseLineId, notdue..b180p, payments:{month:val}}]
 
-  let html = `<div class="footnote" style="margin-bottom:14px;">No separate vendor master — paste vendor ageing balances and/or month-wise payment overrides below and they're grouped by Expense Line automatically in Creditor Movement below. Op Bal payment auto-derives from this ageing + Creditor Days, and can be overridden per vendor per month via the Payment Overrides box. "Pmt Override" in Creditor Movement is a further manual adjustment at the group level, on top of this.</div>`;
+  let html = `<div class="footnote" style="margin-bottom:10px;">No separate vendor master — paste ageing balances and/or payment overrides below; they auto-group by Expense Line in Creditor Movement below.</div>`;
 
   html += `<div style="display:flex; gap:16px; flex-wrap:wrap; margin-bottom:14px;">`;
   html += `<div style="flex:1; min-width:320px;">` + pasteBoxHtml('Vendor | Expense Line | ' + CREDITOR_BUCKETS.map(b=>b.label).join(' | ')) + `</div>`;
@@ -3503,7 +3503,7 @@ function renderCreditorMovementScreen(container, onUpdate){
   const groups = computeCreditorMovementByLine();
   const pmtOverrideStore = getCycleObj('creditorPmtOverrideByCycle');
 
-  let html = `<div class="footnote" style="margin-bottom:16px;">"Pmts (Op Bal)" auto-calculates from the vendor-wise ageing details above (Creditors ageing + Creditor Days) — edit or upload per-vendor payment overrides there, in the Payment Overrides box. "Pmt Override" below is a further manual adjustment at the group level, independent of any individual vendor.</div>`;
+  let html = `<div class="footnote" style="margin-bottom:10px;">Pmts (Op Bal) is derived from the ageing above. Pmt Override adjusts further at the group level.</div>`;
 
   if(!groups.length){
     html += `<div class="footnote">No creditor spend yet — enter Creditors ageing balances and/or build up CODB/CAC/Misc/COGS costs in the inputs first.</div>`;
@@ -3718,7 +3718,7 @@ function renderCollectionsWorkingScreen(container){
 
 function renderDebtorsTabScreen(container){
   container.innerHTML = `<div id="debtorsInputHost"></div>
-    <hr style="border:none; border-top:2px solid var(--line); margin:32px 0;">
+    <hr style="border:none; border-top:2px solid var(--line); margin:20px 0;">
     <div class="cyclelabel" style="font-size:16px; font-weight:700; color:var(--ink); margin-bottom:4px;">Collections Working — Rolling Forecast</div>
     <div id="debtorsMovementHost"></div>`;
   const movementHost = container.querySelector('#debtorsMovementHost');
@@ -3728,7 +3728,7 @@ function renderDebtorsTabScreen(container){
 
 function renderCreditorsTabScreen(container){
   container.innerHTML = `<div id="creditorsInputHost"></div>
-    <hr style="border:none; border-top:2px solid var(--line); margin:32px 0;">
+    <hr style="border:none; border-top:2px solid var(--line); margin:20px 0;">
     <div class="cyclelabel" style="font-size:16px; font-weight:700; color:var(--ink); margin-bottom:4px;">Creditor Movement — by Expense Line</div>
     <div id="creditorsMovementHost"></div>`;
   const movementHost = container.querySelector('#creditorsMovementHost');
@@ -3738,10 +3738,10 @@ function renderCreditorsTabScreen(container){
 
 function renderInventoryTabScreen(container){
   container.innerHTML = `<div id="inventoryInputHost"></div>
-    <hr style="border:none; border-top:2px solid var(--line); margin:32px 0;">
+    <hr style="border:none; border-top:2px solid var(--line); margin:20px 0;">
     <div class="cyclelabel" style="font-size:16px; font-weight:700; color:var(--ink); margin-bottom:4px;">Inventory Movement</div>
     <div id="inventoryMoveHost"></div>
-    <hr style="border:none; border-top:2px solid var(--line); margin:32px 0;">
+    <hr style="border:none; border-top:2px solid var(--line); margin:20px 0;">
     <div class="cyclelabel" style="font-size:16px; font-weight:700; color:var(--ink); margin-bottom:4px;">GST Movement — ITC vs Output</div>
     <div id="inventoryGstHost"></div>`;
   const moveHost = container.querySelector('#inventoryMoveHost');
