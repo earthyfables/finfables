@@ -382,13 +382,7 @@
 
     <div class="navgroup">
       <h4>Masters</h4>
-      <button class="navitem" data-tab="brands"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20.59 13.41L13.41 20.6a2 2 0 01-2.83 0L3 13V3h10l7.59 7.59a2 2 0 010 2.82z"/><circle cx="7.5" cy="7.5" r="1.2"/></svg><span>Brand Master</span></button>
-      <button class="navitem" data-tab="partnerGroups"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 00-4-4H7a4 4 0 00-4 4v2"/><circle cx="10" cy="7" r="4"/><path d="M23 21v-2a4 4 0 00-3-3.87"/><path d="M16 3.13a4 4 0 010 7.75"/></svg><span>Partner Group Master</span></button>
-      <button class="navitem" data-tab="partnerModels"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 13a5 5 0 007.54.54l3-3a5 5 0 00-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 00-7.54-.54l-3 3a5 5 0 007.07 7.07l1.71-1.71"/></svg><span>Partner-Model Master</span></button>
-      <button class="navitem" data-tab="brandPartnerMapping"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="6" y1="3" x2="6" y2="15"/><circle cx="18" cy="6" r="3"/><circle cx="6" cy="18" r="3"/><path d="M18 9a9 9 0 01-9 9"/></svg><span>Brand → Partner Mapping</span></button>
-      <button class="navitem" data-tab="expenseLineItems"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 00-2 2v16l3-2 3 2 3-2 3 2V4a2 2 0 00-2-2z"/><line x1="8" y1="8" x2="14" y2="8"/><line x1="8" y1="12" x2="14" y2="12"/></svg><span>Expense Line Item Master</span></button>
-      <button class="navitem" data-tab="codbDeductionMapping"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="19" y1="5" x2="5" y2="19"/><circle cx="6.5" cy="6.5" r="2.5"/><circle cx="17.5" cy="17.5" r="2.5"/></svg><span>CODB Master</span></button>
-      <button class="navitem" data-tab="paretoMaster"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="6" y1="20" x2="6" y2="15"/><line x1="12" y1="20" x2="12" y2="9"/><line x1="18" y1="20" x2="18" y2="4"/></svg><span>Pareto Master</span></button>
+      <button class="navitem" data-tab="mastersConfig"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20.59 13.41L13.41 20.6a2 2 0 01-2.83 0L3 13V3h10l7.59 7.59a2 2 0 010 2.82z"/><circle cx="7.5" cy="7.5" r="1.2"/></svg><span>Masters &amp; Config</span></button>
     </div>
 
     <div class="navgroup">
@@ -4173,7 +4167,10 @@ const copyFromSel = panel.querySelector('#cycleCopyFrom');
 const MASTER_TAB_KEYS = MASTER_TABS.map(t=>t.key);
 function render(){
   renderCyclePanel();
-  document.querySelectorAll('.navitem').forEach(b=> b.classList.toggle('active', b.dataset.tab===activeTab));
+  document.querySelectorAll('.navitem').forEach(b=>{
+    const isActive = b.dataset.tab==='mastersConfig' ? MASTER_TAB_KEYS.includes(activeTab) : b.dataset.tab===activeTab;
+    b.classList.toggle('active', isActive);
+  });
   const tab = TABS[activeTab];
   document.getElementById('panelTitle').textContent = tab.title;
   document.getElementById('panelSub').textContent = tab.desc;
@@ -4191,7 +4188,10 @@ function render(){
 }
 
 document.querySelectorAll('.navitem').forEach(btn=>{
-  btn.addEventListener('click', ()=>{ setActiveTab(btn.dataset.tab); });
+  btn.addEventListener('click', ()=>{
+    const key = btn.dataset.tab === 'mastersConfig' ? MASTER_TAB_KEYS[0] : btn.dataset.tab;
+    setActiveTab(key);
+  });
 });
 
 document.getElementById('sidebarSaveBtn').addEventListener('click', ()=>{
