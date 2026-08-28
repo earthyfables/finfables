@@ -3153,13 +3153,21 @@ function computeDebtorsSchedule(){
     const collOpBal = zeros();
     if(N>0) collOpBal[0] += (+d.b030||0);
     if(N>1) collOpBal[1] += (+d.b3160||0);
-    MONTHS.forEach((m,i)=>{
-      const daysElapsed = 30 + MONTHS.slice(0,i).reduce((a,mm)=>a+DAYS_IN_MONTH[mm],0);
-      const dLow = daysElapsed - creditDays;
-      const dHigh = daysElapsed + DAYS_IN_MONTH[m] - creditDays;
-      const overlap = Math.max(0, Math.min(30,dHigh) - Math.max(0,dLow));
-      collOpBal[i] += (+d.notdue||0) * (overlap/30);
-    });
+    // The opening Not Due balance is treated as due uniformly across the
+    // credit period itself, starting from cycle start - e.g. 7d credit
+    // collects fully in month 1; 45d credit splits across month 1 and 2
+    // in proportion to how many of those 45 days fall in each month.
+    if(creditDays <= 0){
+      if(N>0) collOpBal[0] += (+d.notdue||0);
+    } else {
+      let elapsed = 0;
+      for(let i=0; i<N && elapsed < creditDays; i++){
+        const dim = DAYS_IN_MONTH[MONTHS[i]];
+        const overlap = Math.max(0, Math.min(elapsed+dim, creditDays) - Math.max(elapsed, 0));
+        collOpBal[i] += (+d.notdue||0) * (overlap/creditDays);
+        elapsed += dim;
+      }
+    }
 
     const collCurrent = zeros();
     for(let j=0;j<N;j++){
