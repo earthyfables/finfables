@@ -3495,7 +3495,7 @@ function renderGstMovementScreen(container){
 function renderCreditorMovementScreen(container){
   const groups = computeCreditorMovementByLine();
 
-  let html = `<div class="footnote" style="margin-bottom:16px;">Auto-calculated from Creditors ageing + Creditor Days per Expense Line. "Pmt Override" reflects vendor-level payment overrides entered in the Creditors tab (aggregated per Expense Line) — edit those there, not here.</div>`;
+  let html = `<div class="footnote" style="margin-bottom:16px;">Auto-calculated from Creditors ageing + Creditor Days per Expense Line. "Pmt Override" reflects vendor-level payment overrides entered in the Payment Overrides paste box above (aggregated per Expense Line) — edit those there, not here.</div>`;
 
   if(!groups.length){
     html += `<div class="footnote">No creditor spend yet — enter Creditors ageing balances and/or build up CODB/CAC/Misc/COGS costs in the inputs first.</div>`;
