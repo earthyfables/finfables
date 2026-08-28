@@ -15,7 +15,7 @@
       "Feb",
       "Mar"
     ],
-    "savedAt": "2026-08-28T08:15:56.338Z",
+    "savedAt": "2026-08-28T08:27:43.629Z",
     "activeCycleId": "CYC_czj5yj"
   },
   "channels": [
@@ -21725,7 +21725,9 @@
         "Feb": 3500000,
         "Mar": 3500000
       },
-      "mudaOutward": {}
+      "mudaOutward": {
+        "Aug": 100000
+      }
     }
   },
   "creditorPmtOverrideByCycle": {
