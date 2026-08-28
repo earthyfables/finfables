@@ -388,7 +388,6 @@
     <div class="navgroup">
       <h4>Inputs</h4>
       <button class="navitem" data-tab="salesInput"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="23 6 13.5 15.5 8.5 10.5 1 18"/><polyline points="17 6 23 6 23 12"/></svg><span>Sales Inputs</span></button>
-      <button class="navitem" data-tab="paretoInput"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 3.05A9 9 0 1020.95 13H11V3.05z"/><path d="M20.49 8.51A9 9 0 0013 3.51v9h9z"/></svg><span>Pareto Input</span></button>
       <button class="navitem" data-tab="cacInput"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 3"/></svg><span>CAC %</span></button>
       <button class="navitem" data-tab="discMarginGst"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="19" y1="5" x2="5" y2="19"/><circle cx="6.5" cy="6.5" r="2.5"/><circle cx="17.5" cy="17.5" r="2.5"/></svg><span>Discount / Margin / Returns / COD %</span></button>
       <button class="navitem" data-tab="codbRateCard"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="4" y1="21" x2="4" y2="14"/><line x1="4" y1="10" x2="4" y2="3"/><line x1="12" y1="21" x2="12" y2="12"/><line x1="12" y1="8" x2="12" y2="3"/><line x1="20" y1="21" x2="20" y2="16"/><line x1="20" y1="12" x2="20" y2="3"/><line x1="1" y1="14" x2="7" y2="14"/><line x1="9" y1="8" x2="15" y2="8"/><line x1="17" y1="16" x2="23" y2="16"/></svg><span>CODB Rate Card</span></button>
@@ -1792,7 +1791,8 @@ function renderInventoryScreen(container, onUpdate){
 const PARETO_SUB_TABS = [
   {key:'productGroups', label:'Product Group'},
   {key:'productCategories', label:'Product Category'},
-  {key:'productSubCategories', label:'Product Sub Category'}
+  {key:'productSubCategories', label:'Product Sub Category'},
+  {key:'paretoInput', label:'Pareto Input'}
 ];
 let paretoSubTab = 'productGroups';
 
@@ -1806,7 +1806,7 @@ function renderParetoSubTable(host, key){
       {key:'name', label:'Pdt Cat', width:220},
       {key:'productGroupId', label:'Pdt Grp', type:'select', options:()=>optList(DATA.productGroups,g=>g.name), width:200}
     ], {prefix:'PC', addLabel:'Add'});
-  } else {
+  } else if(key === 'productSubCategories'){
     renderMasterTable(host, DATA.productSubCategories, [
       {key:'skuCode', label:'SKU Code', width:140},
       {key:'name', label:'Pdt Sub Cat', width:220},
@@ -1814,6 +1814,8 @@ function renderParetoSubTable(host, key){
       {key:'productGroupId', label:'Pdt Grp', type:'select', options:()=>optList(DATA.productGroups,g=>g.name), width:170},
       {key:'productCategoryId', label:'Pdt Cat', type:'select', options:()=>optList(DATA.productCategories,c=>c.name), width:170}
     ], {prefix:'PSC', addLabel:'Add'});
+  } else {
+    renderParetoInputScreen(host);
   }
 }
 
@@ -2529,10 +2531,6 @@ const TABS = {
   salesInput:{
     title:'Sales Inputs', desc:'Month wise GMV, split by Partner-Model (Channel Mix %), then by Product Sub Category (Pareto Mix %).',
     render: renderSalesInputsScreen
-  },
-  paretoInput:{
-    title:'Pareto Input', desc:'AMRP, ACOGS, and GST% per Product Sub Category — auto-populated from Pareto Master, cycle-scoped so different AOP versions can carry different assumptions.',
-    render: renderParetoInputScreen
   },
   cacInput:{
     title:'CAC %', desc:'CAC as % of GMV, Partner-Model wise, Month wise.',
