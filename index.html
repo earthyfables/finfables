@@ -541,7 +541,7 @@ const SEED = {
   productCategories:[{id:"PC1",name:"Towels",productGroupId:"PG1"}],
   productSubCategories:[{id:"PSC1",name:"Bath Towel",productGroupId:"PG1",productCategoryId:"PC1",amrp:100,acogs:40}],
   salesInputByCycle:{'':[]}, codbRateCardByCycle:{'':{}}, miscInputsByCycle:{'':{}}, discMarginGstByCycle:{'':{}}, paretoInputByCycle:{'':{}},
-  debtorsByCycle:{'':{}}, debtorsOverrideByCycle:{'':{}}, creditorsByCycle:{'':[]}, inventoryByCycle:{'':{}}, creditorOpBalOverrideByCycle:{'':{}}, creditorPmtOverrideByCycle:{'':{}}
+  debtorsByCycle:{'':{}}, debtorsOverrideByCycle:{'':{}}, creditorsByCycle:{'':[]}, inventoryByCycle:{'':{}}, creditorPmtOverrideByCycle:{'':{}}
 };
 
 function uid(prefix){ return prefix + "_" + Math.random().toString(36).slice(2,8); }
@@ -613,7 +613,6 @@ async function loadData(){
   if(!DATA.debtorsByCycle) DATA.debtorsByCycle = {'':{}};
   if(!DATA.debtorsOverrideByCycle) DATA.debtorsOverrideByCycle = {'':{}};
   if(!DATA.creditorsByCycle) DATA.creditorsByCycle = {'':[]};
-  if(!DATA.creditorOpBalOverrideByCycle) DATA.creditorOpBalOverrideByCycle = {'':{}};
   if(!DATA.creditorPmtOverrideByCycle) DATA.creditorPmtOverrideByCycle = {'':{}};
   if(!DATA.inventoryByCycle) DATA.inventoryByCycle = {'':{}};
   if(!DATA.paretoInputByCycle['']) DATA.paretoInputByCycle[''] = {};
@@ -1562,9 +1561,12 @@ function findExpenseLineByName(name){
 function renderCreditorsScreen(container, onUpdate){
   const entries = getCycleData('creditorsByCycle'); // [{id, vendorName, expenseLineId, notdue..b180p, payments:{month:val}}]
 
-  let html = `<div class="footnote" style="margin-bottom:14px;">No separate vendor master — paste vendor ageing balances below and they're grouped by Expense Line automatically in Creditor Movement below. Payment schedule auto-derives from ageing + Creditor Days; both the auto-calculated Op Bal payment and any further manual override can be edited directly in that table.</div>`;
+  let html = `<div class="footnote" style="margin-bottom:14px;">No separate vendor master — paste vendor ageing balances and/or month-wise payment overrides below and they're grouped by Expense Line automatically in Creditor Movement below. Op Bal payment auto-derives from this ageing + Creditor Days, and can be overridden per vendor per month via the Payment Overrides box. "Pmt Override" in Creditor Movement is a further manual adjustment at the group level, on top of this.</div>`;
 
-  html += `<div style="margin-bottom:14px; max-width:640px;">` + pasteBoxHtml('Vendor | Expense Line | ' + CREDITOR_BUCKETS.map(b=>b.label).join(' | ')) + `</div>`;
+  html += `<div style="display:flex; gap:16px; flex-wrap:wrap; margin-bottom:14px;">`;
+  html += `<div style="flex:1; min-width:320px;">` + pasteBoxHtml('Vendor | Expense Line | ' + CREDITOR_BUCKETS.map(b=>b.label).join(' | ')) + `</div>`;
+  html += `<div style="flex:1; min-width:320px;">` + pasteBoxHtml('Vendor | Expense Line | ' + MONTHS.join(' | ')) + `</div>`;
+  html += `</div>`;
 
   html += `<div style="display:flex; gap:10px; align-items:center; margin-bottom:14px;">`;
   if(entries.length) html += `<button class="btn-sm danger" id="clearCreditorsBtn">🗑 Clear All</button>`;
@@ -1715,6 +1717,7 @@ function findOrCreateCreditorEntry(entries, vendorName, expenseLineName){
 function wireCreditorsPasteBoxes(container, entries, onUpdate){
   const pasteBoxes = container.querySelectorAll('.pastebox');
   const balBox = pasteBoxes[0];
+  const pmtBox = pasteBoxes[1];
   if(balBox){
     const importBtn = balBox.querySelector('#importBtn');
     const clearBtn = balBox.querySelector('#clearPasteBtn');
@@ -1735,6 +1738,28 @@ function wireCreditorsPasteBoxes(container, entries, onUpdate){
       if(onUpdate) onUpdate();
     });
     if(clearBtn) clearBtn.addEventListener('click', ()=>{ balBox.querySelector('#pasteArea').value=''; });
+  }
+  if(pmtBox){
+    const importBtn = pmtBox.querySelector('#importBtn');
+    const clearBtn = pmtBox.querySelector('#clearPasteBtn');
+    if(importBtn) importBtn.addEventListener('click', ()=>{
+      const text = pmtBox.querySelector('#pasteArea').value;
+      const lines = text.split(/\r?\n/).map(l=>l.trim()).filter(Boolean);
+      lines.forEach(line=>{
+        const parts = line.split('\t');
+        if(parts.length < 3) return;
+        const e = findOrCreateCreditorEntry(entries, parts[0].trim(), parts[1].trim());
+        if(!e.payments) e.payments = {};
+        MONTHS.forEach((m,i)=>{
+          const n = cleanNum(parts[i+2]);
+          if(n !== null) e.payments[m] = n;
+        });
+      });
+      markDirty();
+      renderCreditorsScreen(container, onUpdate);
+      if(onUpdate) onUpdate();
+    });
+    if(clearBtn) clearBtn.addEventListener('click', ()=>{ pmtBox.querySelector('#pasteArea').value=''; });
   }
 }
 
@@ -3285,7 +3310,6 @@ function vendorGroupKey(e){
 }
 function computeCreditorMovementByLine(){
   const entries = getCycleData('creditorsByCycle');
-  const opBalOverrideStore = getCycleObj('creditorOpBalOverrideByCycle');
   const pmtOverrideStore = getCycleObj('creditorPmtOverrideByCycle');
   const N = MONTHS.length;
   const zeros = ()=> new Array(N).fill(0);
@@ -3295,23 +3319,20 @@ function computeCreditorMovementByLine(){
   const result = groups.map(g=>{
     const vendors = entries.filter(e=> vendorGroupKey(e) === g.key);
     const lag = Math.floor(g.creditorDays/30);
-    const pmtsOpBalAuto = zeros();
+    const pmtsOpBal = zeros();
     let openingTotal = 0;
     vendors.forEach(e=>{
       openingTotal += CREDITOR_BUCKETS.reduce((a,b)=>a+(+e[b.key]||0),0);
       const sc = zeros();
       Object.keys(slotMap).forEach(bk=>{ const slot=slotMap[bk]; if(slot<N) sc[slot]+=(+e[bk]||0); });
       sc[Math.min(lag, N-1)] += (+e.notdue||0);
-      MONTHS.forEach((m,i)=>{ pmtsOpBalAuto[i] += sc[i]; });
-    });
-
-    // Pmts (Op Bal) is auto-calculated from ageing + Creditor Days, but the
-    // user can directly override it (edited or uploaded) per group per month
-    // right in this table - matching how Debtors' Adj Override works.
-    const opBalOv = opBalOverrideStore[g.key] || {};
-    const pmtsOpBal = MONTHS.map((m,i)=>{
-      const ov = opBalOv[m];
-      return (ov!==undefined && ov!=='') ? +ov : pmtsOpBalAuto[i];
+      // Op Bal payment is auto-calculated from this vendor's ageing + Creditor
+      // Days, but can be edited/uploaded per vendor per month via the Payment
+      // Overrides paste box above.
+      MONTHS.forEach((m,i)=>{
+        const override = (e.payments||{})[m];
+        pmtsOpBal[i] += (override!==undefined && override!=='') ? +override : sc[i];
+      });
     });
 
     const additions = MONTHS.map(g.additionFn);
@@ -3335,7 +3356,7 @@ function computeCreditorMovementByLine(){
       op = cl;
     });
 
-    return {label:g.label, key:g.key, vendorCount:vendors.length, creditorDays:g.creditorDays, gstRateLabel:g.gstRateLabel, opening, additions, pmtsOpBal, pmtsOpBalAuto, pmtsNew, pmtOverride, totalPayments, closing};
+    return {label:g.label, key:g.key, vendorCount:vendors.length, creditorDays:g.creditorDays, gstRateLabel:g.gstRateLabel, opening, additions, pmtsOpBal, pmtsNew, pmtOverride, totalPayments, closing};
   });
   return result.filter(g=> g.vendorCount>0 || g.additions.some(v=>v>0.005));
 }
@@ -3480,10 +3501,9 @@ function renderGstMovementScreen(container){
 
 function renderCreditorMovementScreen(container, onUpdate){
   const groups = computeCreditorMovementByLine();
-  const opBalOverrideStore = getCycleObj('creditorOpBalOverrideByCycle');
   const pmtOverrideStore = getCycleObj('creditorPmtOverrideByCycle');
 
-  let html = `<div class="footnote" style="margin-bottom:16px;">"Pmts (Op Bal)" auto-calculates from Creditors ageing + Creditor Days, and can be directly edited or uploaded per group per month right here. "Pmt Override" is a further manual adjustment at the group level, independent of any individual vendor.</div>`;
+  let html = `<div class="footnote" style="margin-bottom:16px;">"Pmts (Op Bal)" auto-calculates from the vendor-wise ageing details above (Creditors ageing + Creditor Days) — edit or upload per-vendor payment overrides there, in the Payment Overrides box. "Pmt Override" below is a further manual adjustment at the group level, independent of any individual vendor.</div>`;
 
   if(!groups.length){
     html += `<div class="footnote">No creditor spend yet — enter Creditors ageing balances and/or build up CODB/CAC/Misc/COGS costs in the inputs first.</div>`;
@@ -3494,6 +3514,7 @@ function renderCreditorMovementScreen(container, onUpdate){
   const rowsMeta = [
     {label:'Opening', key:'opening', endval:false, prefix:l=>`Opening (${l})`},
     {label:'Additions (LE×GST)', key:'additions', sign:1, prefix:()=>'+ Additions (LE×GST)'},
+    {label:'Pmts (Op Bal)', key:'pmtsOpBal', sign:-1, prefix:()=>'− Pmts (Op Bal)'},
     {label:'Pmts (New)', key:'pmtsNew', sign:-1, prefix:()=>'− Pmts (New)'},
     {label:'Total Payments', key:'totalPayments', sign:-1, subtotal:true, prefix:()=>'= Total Payments'},
     {label:'Closing', key:'closing', subtotal:true, prefix:l=>`= Closing`}
@@ -3523,19 +3544,10 @@ function renderCreditorMovementScreen(container, onUpdate){
 
     renderStaticRow(rowsMeta[0], g); // Opening
     renderStaticRow(rowsMeta[1], g); // Additions
+    renderStaticRow(rowsMeta[2], g); // Pmts (Op Bal) - read only, derived from vendor-wise data above
+    renderStaticRow(rowsMeta[3], g); // Pmts (New)
 
-    // Pmts (Op Bal) - editable, per group per month
-    html += `<tr class="lineitem"><td class="stickyleftcol" style="text-align:left;">− Pmts (Op Bal)</td>`;
-    let opBalTotal = 0;
-    MONTHS.forEach((m,i)=>{
-      opBalTotal += g.pmtsOpBal[i];
-      html += `<td><input type="text" inputmode="decimal" class="credopbalcell" data-group="${g.key}" data-month="${m}" value="${g.pmtsOpBal[i]!==0 ? Math.round(g.pmtsOpBal[i]).toLocaleString('en-IN') : ''}"></td>`;
-    });
-    html += `<td class="total-col">${fmt(opBalTotal)}</td></tr>`;
-
-    renderStaticRow(rowsMeta[2], g); // Pmts (New)
-
-    // Pmt Override - editable, per group per month
+    // Pmt Override - editable, per group per month (the only group-level manual field)
     html += `<tr class="lineitem"><td class="stickyleftcol" style="text-align:left;">± Pmt Override</td>`;
     let ovTotal = 0;
     MONTHS.forEach((m,i)=>{
@@ -3544,8 +3556,8 @@ function renderCreditorMovementScreen(container, onUpdate){
     });
     html += `<td class="total-col">${fmt(ovTotal)}</td></tr>`;
 
-    renderStaticRow(rowsMeta[3], g); // Total Payments
-    renderStaticRow(rowsMeta[4], g); // Closing
+    renderStaticRow(rowsMeta[4], g); // Total Payments
+    renderStaticRow(rowsMeta[5], g); // Closing
   });
 
   // TOTAL — every group summed together, month by month.
@@ -3581,16 +3593,6 @@ function renderCreditorMovementScreen(container, onUpdate){
   html += `</tbody></table></div></div>`;
   container.innerHTML = html;
 
-  container.querySelectorAll('.credopbalcell').forEach(cell=>{
-    cell.addEventListener('change', ()=>{
-      const n = cleanNum(cell.value);
-      if(!opBalOverrideStore[cell.dataset.group]) opBalOverrideStore[cell.dataset.group] = {};
-      opBalOverrideStore[cell.dataset.group][cell.dataset.month] = n===null ? '' : n;
-      markDirty();
-      renderCreditorMovementScreen(container, onUpdate);
-      if(onUpdate) onUpdate();
-    });
-  });
   container.querySelectorAll('.credpmtovcell').forEach(cell=>{
     cell.addEventListener('change', ()=>{
       const n = cleanNum(cell.value);
@@ -3993,7 +3995,7 @@ function renderCyclePanel(){
     if(!ok) return;
     const idx = DATA.aopCycles.findIndex(c=>c.id===active.id);
     if(idx > -1) DATA.aopCycles.splice(idx,1);
-    ['salesInputByCycle','codbRateCardByCycle','miscInputsByCycle','monthlyGMVByCycle','channelMixByCycle','categoryMixByCycle','paretoMixByCycle','discMarginGstByCycle','paretoInputByCycle','debtorsByCycle','debtorsOverrideByCycle','creditorsByCycle','creditorOpBalOverrideByCycle','creditorPmtOverrideByCycle','inventoryByCycle'].forEach(k=>{
+    ['salesInputByCycle','codbRateCardByCycle','miscInputsByCycle','monthlyGMVByCycle','channelMixByCycle','categoryMixByCycle','paretoMixByCycle','discMarginGstByCycle','paretoInputByCycle','debtorsByCycle','debtorsOverrideByCycle','creditorsByCycle','creditorPmtOverrideByCycle','inventoryByCycle'].forEach(k=>{
       if(DATA[k]) delete DATA[k][active.id];
     });
     if(DATA.meta.activeCycleId === active.id) DATA.meta.activeCycleId = '';
@@ -4023,7 +4025,7 @@ function copyCycleInputData(destCycleId, srcCycleId){
     // Deep-copy with fresh row ids so edits in the new cycle never collide with the source.
     DATA[k][destCycleId] = srcRows.map(r=> ({...r, id: uid('COPY')}));
   });
-  ['monthlyGMVByCycle','channelMixByCycle','categoryMixByCycle','paretoMixByCycle','discMarginGstByCycle','codbRateCardByCycle','miscInputsByCycle','paretoInputByCycle','debtorsByCycle','debtorsOverrideByCycle','creditorsByCycle','creditorOpBalOverrideByCycle','creditorPmtOverrideByCycle','inventoryByCycle'].forEach(k=>{
+  ['monthlyGMVByCycle','channelMixByCycle','categoryMixByCycle','paretoMixByCycle','discMarginGstByCycle','codbRateCardByCycle','miscInputsByCycle','paretoInputByCycle','debtorsByCycle','debtorsOverrideByCycle','creditorsByCycle','creditorPmtOverrideByCycle','inventoryByCycle'].forEach(k=>{
     const srcObj = (DATA[k] && DATA[k][srcCycleId]) || {};
     DATA[k] = DATA[k] || {};
     DATA[k][destCycleId] = JSON.parse(JSON.stringify(srcObj));
