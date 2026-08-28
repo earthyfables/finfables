@@ -2823,7 +2823,6 @@ const PLCF_SECTIONS = [
   { title:'Cash — Indirect', rows:[
     {label:'EBITDA', key:'EBITDA'},
     {label:'Change in WC', key:'cfChangeInWC'},
-    {label:'Change in Other CA / CL', key:'cfChangeOtherCACL'},
     {label:'GST Credit', key:'cfGstCreditCash'},
     {label:'OCF', subtotal:true, key:'cfOCF'}
   ]},
@@ -2852,12 +2851,6 @@ const PLCF_SECTIONS = [
     {label:'Opening ITC Credit', key:'itcOpening', firstval:true},
     {label:'Closing ITC Credit', key:'itcClosing', endval:true},
     {label:'Change in ITC (Opening − Closing)', key:'itcChange'}
-  ]},
-  { title:'Other CA / CL', rows:[
-    {label:'Op CA / CL'},
-    {label:'During the year', indent:true},
-    {label:'Expended', indent:true},
-    {label:'Cl CA / CL', subtotal:true}
   ]}
 ];
 
@@ -3825,7 +3818,6 @@ function renderPLCF(container){
       case 'itcChange': return gstSched.opITC[i] - gstSched.clITC[i];
 
       case 'cfChangeInWC': { const prevNwc = i===0 ? openingNwcAt(0) : nwcAt(i-1); return -(nwcAt(i) - prevNwc); }
-      case 'cfChangeOtherCACL': return 0;
       // Debtors track NSV+GST and Creditors track cost+GST, so ΔNWC above already
       // carries a "phantom" GST swing that EBITDA (ex-GST) never had. This line
       // removes that swing (Output GST accrued minus Input GST accrued) and adds
