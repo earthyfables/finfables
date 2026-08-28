@@ -15,7 +15,7 @@
       "Feb",
       "Mar"
     ],
-    "savedAt": "2026-08-28T09:20:05.015Z",
+    "savedAt": "2026-08-28T09:20:10.846Z",
     "activeCycleId": "CYC_czj5yj"
   },
   "channels": [
@@ -21732,7 +21732,7 @@
         "Mar": ""
       },
       "mos": {
-        "Aug": 2
+        "Aug": 1.5
       }
     }
   },
