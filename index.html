@@ -3139,7 +3139,7 @@ function computeDebtorsSchedule(){
         } else {
           const val = pmTotals.codbByItem[liId] || 0;
           const exp = li.expenseLineItemId ? DATA.expenseLineItems.find(x=>x.id===li.expenseLineItemId) : null;
-          const rate = exp ? (+exp.gstRate||0)/100 : 0;
+          const rate = exp ? (+exp.gstRate||0)/100 : 0.18;
           ded += val * (1+rate);
         }
       });
