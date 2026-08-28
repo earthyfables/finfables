@@ -15,7 +15,7 @@
       "Feb",
       "Mar"
     ],
-    "savedAt": "2026-08-28T08:40:05.575Z",
+    "savedAt": "2026-08-28T08:40:08.643Z",
     "activeCycleId": "CYC_czj5yj"
   },
   "channels": [
@@ -21727,7 +21727,7 @@
       },
       "mudaOutward": {
         "Aug": "",
-        "Mar": 250000
+        "Mar": ""
       }
     }
   },
