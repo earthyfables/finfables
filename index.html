@@ -1604,8 +1604,9 @@ function renderCreditorsScreen(container, onUpdate){
     const groupMonthTotals = {}; MONTHS.forEach(m=> groupMonthTotals[m]=0);
     let groupOpTotal = 0;
     g.entries.forEach(e=>{
+      const eff = vendorEffectivePayments(e);
       CREDITOR_BUCKETS.forEach(b=>{ const v = +e[b.key]||0; groupTotals[b.key]+=v; groupOpTotal+=v; });
-      MONTHS.forEach(m=>{ groupMonthTotals[m] += +((e.payments||{})[m])||0; });
+      MONTHS.forEach((m,i)=>{ groupMonthTotals[m] += eff[i]; });
     });
     html += `<tr class="section grouprow" data-group="${gKey}" style="cursor:pointer;"><td class="stickyleftcol" style="text-align:left; font-weight:700;"><span class="grouptoggle">▶</span> ${g.label} <span class="footnote" style="margin:0;">(${g.entries.length} vendor${g.entries.length===1?'':'s'})</span></td>`;
     CREDITOR_BUCKETS.forEach(b=> html += `<td style="text-align:right;">${groupTotals[b.key].toLocaleString('en-IN')}</td>`);
@@ -1615,15 +1616,15 @@ function renderCreditorsScreen(container, onUpdate){
 
     g.entries.forEach(e=>{
       let opTotal = 0;
+      const eff = vendorEffectivePayments(e);
       html += `<tr class="grouprow-item" data-group="${gKey}" style="display:none;"><td class="stickyleftcol" style="text-align:left; padding-left:28px;">${e.vendorName}</td>`;
       CREDITOR_BUCKETS.forEach(b=>{
         const v = +e[b.key]||0; opTotal += v;
         html += `<td><input type="number" step="any" class="creditorcell" data-id="${e.id}" data-bucket="${b.key}" value="${e[b.key]!==undefined && e[b.key]!==''? e[b.key] : ''}"></td>`;
       });
       html += `<td class="feegroupend" style="text-align:right;">${opTotal.toLocaleString('en-IN')}</td>`;
-      MONTHS.forEach(m=>{
-        const v = (e.payments||{})[m];
-        html += `<td><input type="number" step="any" class="creditorpmtcell" data-id="${e.id}" data-month="${m}" value="${v!==undefined && v!==''? v : ''}"></td>`;
+      MONTHS.forEach((m,i)=>{
+        html += `<td><input type="number" step="any" class="creditorpmtcell" data-id="${e.id}" data-month="${m}" value="${eff[i]!==0? eff[i] : ''}"></td>`;
       });
       html += `</tr>`;
     });
@@ -1636,8 +1637,8 @@ function renderCreditorsScreen(container, onUpdate){
   });
   const grandOpTotal = entries.reduce((a,e)=> a + CREDITOR_BUCKETS.reduce((s,b)=> s+(+e[b.key]||0), 0), 0);
   html += `<td class="feegroupend" style="text-align:right;">${grandOpTotal.toLocaleString('en-IN')}</td>`;
-  MONTHS.forEach(m=>{
-    const total = entries.reduce((a,e)=> a + (+((e.payments||{})[m])||0), 0);
+  MONTHS.forEach((m,i)=>{
+    const total = entries.reduce((a,e)=> a + vendorEffectivePayments(e)[i], 0);
     html += `<td style="text-align:right;">${total.toLocaleString('en-IN')}</td>`;
   });
   html += `</tr>`;
@@ -3308,12 +3309,35 @@ function vendorGroupKey(e){
   if(exp.type === 'MISC') return exp.id;
   return '__UNMATCHED__';
 }
+const CREDITOR_SLOT_MAP = {b180p:0, b121180:1, b91120:2, b6190:3, b3160:4, b030:5};
+function vendorCreditorDays(e){
+  const exp = e.expenseLineId ? DATA.expenseLineItems.find(x=>x.id===e.expenseLineId) : null;
+  return exp ? numOr(exp.creditorDays, 30) : 30;
+}
+// Auto-calculated payment schedule from this vendor's own ageing buckets +
+// Creditor Days (the slot-based rule: 0-30 pays month 1, 31-60 pays month 2,
+// etc., Not Due pays at the Creditor Days lag).
+function vendorAutoPaymentSchedule(e){
+  const N = MONTHS.length;
+  const lag = Math.floor(vendorCreditorDays(e)/30);
+  const sc = new Array(N).fill(0);
+  Object.keys(CREDITOR_SLOT_MAP).forEach(bk=>{ const slot=CREDITOR_SLOT_MAP[bk]; if(slot<N) sc[slot]+=(+e[bk]||0); });
+  sc[Math.min(lag, N-1)] += (+e.notdue||0);
+  return sc;
+}
+// The actual payment used: an explicit override if set, else the auto schedule.
+function vendorEffectivePayments(e){
+  const sc = vendorAutoPaymentSchedule(e);
+  return MONTHS.map((m,i)=>{
+    const override = (e.payments||{})[m];
+    return (override!==undefined && override!=='') ? +override : sc[i];
+  });
+}
 function computeCreditorMovementByLine(){
   const entries = getCycleData('creditorsByCycle');
   const pmtOverrideStore = getCycleObj('creditorPmtOverrideByCycle');
   const N = MONTHS.length;
   const zeros = ()=> new Array(N).fill(0);
-  const slotMap = {b180p:0, b121180:1, b91120:2, b6190:3, b3160:4, b030:5};
   const groups = getCreditorMovementGroups();
 
   const result = groups.map(g=>{
@@ -3323,16 +3347,10 @@ function computeCreditorMovementByLine(){
     let openingTotal = 0;
     vendors.forEach(e=>{
       openingTotal += CREDITOR_BUCKETS.reduce((a,b)=>a+(+e[b.key]||0),0);
-      const sc = zeros();
-      Object.keys(slotMap).forEach(bk=>{ const slot=slotMap[bk]; if(slot<N) sc[slot]+=(+e[bk]||0); });
-      sc[Math.min(lag, N-1)] += (+e.notdue||0);
       // Op Bal payment is auto-calculated from this vendor's ageing + Creditor
       // Days, but can be edited/uploaded per vendor per month via the Payment
       // Overrides paste box above.
-      MONTHS.forEach((m,i)=>{
-        const override = (e.payments||{})[m];
-        pmtsOpBal[i] += (override!==undefined && override!=='') ? +override : sc[i];
-      });
+      vendorEffectivePayments(e).forEach((v,i)=>{ pmtsOpBal[i] += v; });
     });
 
     const additions = MONTHS.map(g.additionFn);
