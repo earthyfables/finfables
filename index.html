@@ -3513,7 +3513,12 @@ function renderGstMovementScreen(container){
 
   const rows = [];
   rows.push({label:'Opening ITC Credit', rate:'—', values: gstSched.opITC, editableFirst:true, indent:false, firstval:true});
-  rows.push({label:'+ CODB × 18%', rate:'18%', values: gstSched.codbGst, indent:true});
+  const codbRates = new Set(getCodbLineItemsForPL().map(li=>{
+    const exp = li.expenseLineItemId ? DATA.expenseLineItems.find(x=>x.id===li.expenseLineItemId) : null;
+    return exp ? (+exp.gstRate||0) : 18;
+  }));
+  const codbRateLabel = codbRates.size <= 1 ? `${[...codbRates][0] ?? 18}%` : '(mixed rates)';
+  rows.push({label:`+ CODB × ${codbRateLabel}`, rate:codbRateLabel, values: gstSched.codbGst, indent:true});
   rows.push({label:`+ CAC × ${gstSched.cacGstRate}%`, rate:gstSched.cacGstRate+'%', values: gstSched.cacGst, indent:true});
   gstSched.opexItems.forEach(li=>{
     rows.push({label:`+ ${li.name} × ${(+li.gstRate||0)}%`, rate:(+li.gstRate||0)+'%', values: gstSched.opexGstByItem[li.id], indent:true});
