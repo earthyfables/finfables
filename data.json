@@ -15,7 +15,7 @@
       "Feb",
       "Mar"
     ],
-    "savedAt": "2026-08-28T09:00:28.489Z",
+    "savedAt": "2026-08-28T09:00:47.119Z",
     "activeCycleId": "CYC_czj5yj"
   },
   "channels": [
@@ -97,7 +97,7 @@
       "brandId": "BR1",
       "partner": "Amazon",
       "model": "B2C",
-      "creditDays": 75
+      "creditDays": 15
     },
     {
       "id": "BPM_6c9gqo",
