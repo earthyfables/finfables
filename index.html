@@ -3051,7 +3051,10 @@ function computeInventorySchedule(){
     const cogs = computeTotalPL(m).COGS;
     const mo = +((inv.mudaOutward||{})[m])||0;
     opGood.push(og); opMuda.push(om); inwards.push(inw); cogsArr.push(cogs); mudaOut.push(mo);
-    clGood.push(og + inw - cogs);
+    // COGS is the total inventory reduction (Good + MUDA combined); MUDA
+    // Outward is the portion of that reduction that's damaged/written-off,
+    // so Good's own reduction is only the remainder - not COGS again in full.
+    clGood.push(og + inw - (cogs - mo));
     clMuda.push(om - mo);
   });
   return {opGood, opMuda, inwards, cogs:cogsArr, mudaOut, clGood, clMuda};
@@ -3417,7 +3420,8 @@ function renderInventoryMovementScreen(container, onUpdate){
   });
   html += `<td class="total-col">${fmt(inwardsTotal)}</td></tr>`;
 
-  simpleRow('− Outward — Good', sched.cogs, {neg:true});
+  const outwardGood = sched.cogs.map((v,i)=> v - sched.mudaOut[i]);
+  simpleRow('− Outward — Good', outwardGood, {neg:true});
 
   // − Outward — MUDA - editable
   html += `<tr><td class="stickyleftcol" style="text-align:left; color:var(--danger, #b3392c);">− Outward — MUDA</td>`;
@@ -3429,7 +3433,9 @@ function renderInventoryMovementScreen(container, onUpdate){
   });
   html += `<td class="total-col">${fmt(mudaOutTotal)}</td></tr>`;
 
-  const totalOutward = sched.cogs.map((v,i)=> v + sched.mudaOut[i]);
+  // Total Outward = Outward Good + Outward MUDA, which by construction is
+  // just COGS (the total inventory reduction) - shown explicitly for clarity.
+  const totalOutward = sched.cogs.slice();
   simpleRow('= Total Outward', totalOutward, {subtotal:true});
 
   // Closing stock is also a point-in-time balance - Total column shows the
