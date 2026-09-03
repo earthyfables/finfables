@@ -2480,8 +2480,9 @@ const TABS = {
     ], {prefix:'BR', addLabel:'Add brand'})
   },
   partnerModels:{
-    title:'Partner-Model Master', desc:'Partner is the channel (e.g. Myntra). Model is the commercial arrangement (e.g. B2C/B2B). Partner Group comes from the Partner Group Master.',
+    title:'Partner-Model Master', desc:'Partner Code is a short identifier. Partner is the channel (e.g. Myntra). Model is the commercial arrangement (e.g. B2C/B2B). Partner Group comes from the Partner Group Master.',
     render:(el)=> renderMasterTable(el, DATA.partnerModels, [
+      {key:'partnerCode', label:'Partner Code', width:120},
       {key:'partner', label:'Partner', width:260},
       {key:'model', label:'Model', type:'select', options:()=>MODEL_OPTIONS.map(v=>({id:v,label:v})), width:120},
       {key:'partnerGroup', label:'Partner group', type:'select', options:()=>optList(DATA.partnerGroups, g=>g.name), width:160}
