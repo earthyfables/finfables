@@ -15,7 +15,7 @@
       "Feb",
       "Mar"
     ],
-    "savedAt": "2026-09-03T12:49:37.094Z",
+    "savedAt": "2026-09-03T12:51:32.592Z",
     "activeCycleId": "CYC_czj5yj"
   },
   "channels": [
@@ -1233,24 +1233,6 @@
     }
   ],
   "productSubCategories": [
-    {
-      "id": "PSC_iupr9z",
-      "name": "Bath Mats Cotton reversible  - 50X80",
-      "productGroupId": "PG_zhux4k",
-      "productCategoryId": "PC_r2a5ac"
-    },
-    {
-      "id": "PSC_ud8148",
-      "name": "Bath Mats Microfiber  - 60X40",
-      "productGroupId": "PG_zhux4k",
-      "productCategoryId": "PC_r2a5ac"
-    },
-    {
-      "id": "PSC_659x70",
-      "name": "Bath Towels Combed 600 GSM Set of 1  - 75x150",
-      "productGroupId": "PG_zhux4k",
-      "productCategoryId": "PC_ofapit"
-    },
     {
       "id": "PSC_vfhh8o",
       "name": "Bath Towels Combed 600 GSM set of 2 - 75x150",
