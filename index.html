@@ -922,17 +922,31 @@ function renderMasterTable(container, arr, cols, opts){
   if(importBtn) importBtn.addEventListener('click', ()=>{
     const text = container.querySelector('#pasteArea').value;
     const lines = text.split(/\r?\n/).map(l=>l.trim()).filter(Boolean);
-    const keyCol = cols[0].key;
-    let added = 0, updated = 0;
+    const matchCols = opts.matchColumns ? cols.filter(c=> opts.matchColumns.includes(c.key)) : [cols[0]];
+    let added = 0, updated = 0, skipped = 0;
     lines.forEach(line=>{
       const parts = line.split('\t');
       const row = {};
       cols.forEach((c,i)=>{ row[c.key] = resolveValueForCol(c, parts[i]); });
-      const keyVal = row[keyCol];
-      const existing = (keyVal!=='' && keyVal!=null)
-        ? arr.find(r=> normalizeText(r[keyCol]) === normalizeText(keyVal))
-        : null;
+
+      const existing = arr.find(r=> rowMatches(r, row, matchCols));
       if(existing){
+        if(opts.matchColumns){
+          // Multiple columns form the unique identity (e.g. Brand + Partner +
+          // Model) - update only the remaining "value" columns (e.g. Credit
+          // Days), same rule as below: a blank pasted cell leaves the
+          // existing value alone.
+          const valueCols = cols.filter(c=> !opts.matchColumns.includes(c.key));
+          if(valueCols.length === 0){
+            skipped++;
+            return;
+          }
+          valueCols.forEach(c=>{
+            if(row[c.key] !== '' && row[c.key] != null) existing[c.key] = row[c.key];
+          });
+          updated++;
+          return;
+        }
         // Same key (e.g. same name) already in the table — update its other
         // fields with the newly pasted values instead of adding a duplicate row.
         // A blank pasted cell leaves the existing value alone rather than wiping it.
@@ -950,6 +964,8 @@ function renderMasterTable(container, arr, cols, opts){
     rerender();
     if(updated > 0){
       alert(`Imported ${added} new row(s), updated ${updated} existing row(s) with the new values.`);
+    } else if(skipped > 0){
+      alert(`Imported ${added} new row(s). Skipped ${skipped} row(s) already present.`);
     }
   });
 
@@ -1824,7 +1840,7 @@ function renderParetoSubTable(host, key){
     renderMasterTable(host, DATA.brandCategoryMapping, [
       {key:'brandId', label:'Brand', type:'select', options:()=>optList(DATA.brands,b=>b.name), width:200},
       {key:'productCategoryId', label:'Pdt Cat', type:'select', options:()=>optList(DATA.productCategories,c=>c.name), width:200}
-    ], {prefix:'BCM', addLabel:'Add mapping'});
+    ], {prefix:'BCM', addLabel:'Add mapping', matchColumns:['brandId','productCategoryId']});
   } else {
     renderParetoInputScreen(host);
   }
@@ -2555,7 +2571,7 @@ const TABS = {
       }, width:170},
       {key:'model', label:'Model', type:'select', options:()=>MODEL_OPTIONS.map(v=>({id:v,label:v})), width:110},
       {key:'creditDays', label:'Credit period (days)', type:'number', width:150}
-    ], {prefix:'BPM', addLabel:'Add mapping'})
+    ], {prefix:'BPM', addLabel:'Add mapping', matchColumns:['brandId','partner','model']})
   },
   expenseLineItems:{
     title:'Expense Line Item Master', desc:'Expense name and category are free-text. GST rate is a number. Type routes the item: Misc auto-populates Miscellaneous Inputs; CODB/CAC are selectable in the CODB Master tab; COGS is not yet wired up.',
