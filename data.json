@@ -15,7 +15,7 @@
       "Feb",
       "Mar"
     ],
-    "savedAt": "2026-09-03T12:13:06.862Z",
+    "savedAt": "2026-09-03T12:13:12.395Z",
     "activeCycleId": "CYC_czj5yj"
   },
   "channels": [
@@ -65,7 +65,8 @@
       "partner": "Amazon USA",
       "model": "B2C",
       "partnerGroup": "PG_ofzjnk",
-      "id": "PM_zha4pk"
+      "id": "PM_zha4pk",
+      "partnerCode": "AZUS"
     },
     {
       "partner": "Blinkit",
