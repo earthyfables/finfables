@@ -1883,8 +1883,15 @@ function renderParetoMasterScreen(container){
   container.innerHTML = pillsHtml + `<div id="paretoSubHost"></div>`;
   container.querySelectorAll('[data-paretotab]').forEach(btn=>{
     btn.addEventListener('click', ()=>{
+      // Give the browser a paint first (pill highlight, instant) before the
+      // potentially large table build - some of these lists run into the
+      // hundreds of rows, and building all of that synchronously inside the
+      // click handler is what makes the click itself look slow/unresponsive.
+      container.querySelectorAll('[data-paretotab]').forEach(b=> b.classList.toggle('active', b===btn));
       paretoSubTab = btn.dataset.paretotab;
-      renderParetoMasterScreen(container);
+      const host = container.querySelector('#paretoSubHost');
+      host.innerHTML = `<div class="footnote">Loading…</div>`;
+      requestAnimationFrame(()=> renderParetoSubTable(host, paretoSubTab));
     });
   });
   renderParetoSubTable(container.querySelector('#paretoSubHost'), paretoSubTab);
