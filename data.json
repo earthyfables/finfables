@@ -15,7 +15,7 @@
       "Feb",
       "Mar"
     ],
-    "savedAt": "2026-09-03T14:00:48.416Z",
+    "savedAt": "2026-09-03T14:00:58.460Z",
     "activeCycleId": "CYC_czj5yj"
   },
   "channels": [
@@ -1242,51 +1242,6 @@
   ],
   "productSubCategories": [
     {
-      "skuCode": "26",
-      "name": "Stainless Steel Hammerred Frying Pan  - 22",
-      "weight": "",
-      "productGroupId": "PG_vf9yhj",
-      "productCategoryId": "PC_d7uwz1",
-      "brandId": "BR1",
-      "id": "PSC_2208ep"
-    },
-    {
-      "skuCode": "27",
-      "name": "Stainless Steel Hammerred Frying Pan  - 24",
-      "weight": "",
-      "productGroupId": "PG_vf9yhj",
-      "productCategoryId": "PC_d7uwz1",
-      "brandId": "BR1",
-      "id": "PSC_3n7nv2"
-    },
-    {
-      "skuCode": "28",
-      "name": "Hand Towels Combed 600 GSM set of2  - 60X40",
-      "weight": "",
-      "productGroupId": "PG_zhux4k",
-      "productCategoryId": "PC_h01yup",
-      "brandId": "BR1",
-      "id": "PSC_7cbtve"
-    },
-    {
-      "skuCode": "29",
-      "name": "Hand Towels Combed 600 GSM Set of 4 - 60X40",
-      "weight": "",
-      "productGroupId": "PG_zhux4k",
-      "productCategoryId": "PC_h01yup",
-      "brandId": "BR1",
-      "id": "PSC_fgw6da"
-    },
-    {
-      "skuCode": "30",
-      "name": "Hand Towels Bamboo set of 2   - 60X40",
-      "weight": "",
-      "productGroupId": "PG_zhux4k",
-      "productCategoryId": "PC_h01yup",
-      "brandId": "BR1",
-      "id": "PSC_p6gvy4"
-    },
-    {
       "skuCode": "31",
       "name": "Hand Towels Bamboo set of 4  - 60X40",
       "weight": "",
@@ -1294,15 +1249,6 @@
       "productCategoryId": "PC_h01yup",
       "brandId": "BR1",
       "id": "PSC_h032lt"
-    },
-    {
-      "skuCode": "32",
-      "name": "Hand Towels Combed 400 GSM set of 2  - 60X40",
-      "weight": "",
-      "productGroupId": "PG_zhux4k",
-      "productCategoryId": "PC_h01yup",
-      "brandId": "BR1",
-      "id": "PSC_772yhe"
     },
     {
       "eanCode": "8904505401060",
