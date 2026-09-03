@@ -15,7 +15,7 @@
       "Feb",
       "Mar"
     ],
-    "savedAt": "2026-09-03T13:21:04.940Z",
+    "savedAt": "2026-09-03T13:21:45.131Z",
     "activeCycleId": "CYC_czj5yj"
   },
   "channels": [
@@ -1232,7 +1232,341 @@
       "productGroupId": "PG_zhux4k"
     }
   ],
-  "productSubCategories": [],
+  "productSubCategories": [
+    {
+      "skuCode": "Bath Mats Cotton reversible",
+      "name": "",
+      "weight": "",
+      "productGroupId": "PG_zhux4k",
+      "productCategoryId": "PC_r2a5ac",
+      "brandId": "BR1",
+      "id": "PSC_epw8le"
+    },
+    {
+      "skuCode": "Bath Mats Microfiber",
+      "name": "",
+      "weight": "",
+      "productGroupId": "PG_zhux4k",
+      "productCategoryId": "PC_r2a5ac",
+      "brandId": "BR1",
+      "id": "PSC_laa88e"
+    },
+    {
+      "skuCode": "Bath Towels Combed 600 GSM Set of 1",
+      "name": "",
+      "weight": "",
+      "productGroupId": "PG_zhux4k",
+      "productCategoryId": "PC_r2a5ac",
+      "brandId": "BR1",
+      "id": "PSC_37465y"
+    },
+    {
+      "skuCode": "Bath Towels Combed 600 GSM set of 2",
+      "name": "",
+      "weight": "",
+      "productGroupId": "PG_zhux4k",
+      "productCategoryId": "PC_r2a5ac",
+      "brandId": "BR1",
+      "id": "PSC_vvcbt1"
+    },
+    {
+      "skuCode": "Bath Towels Combed 600 GSM Set of 1 Small Size",
+      "name": "",
+      "weight": "",
+      "productGroupId": "PG_zhux4k",
+      "productCategoryId": "PC_r2a5ac",
+      "brandId": "BR1",
+      "id": "PSC_ar2qr0"
+    },
+    {
+      "skuCode": "Bath Towels Combed Combo 600 GSM set of 1 Bath , 2 Hand",
+      "name": "",
+      "weight": "",
+      "productGroupId": "PG_zhux4k",
+      "productCategoryId": "PC_r2a5ac",
+      "brandId": "BR1",
+      "id": "PSC_zvhuqq"
+    },
+    {
+      "skuCode": "Bath Towels Combed Combo 600 GSM set of 2 Bath , 2 Hand 2 Face",
+      "name": "",
+      "weight": "",
+      "productGroupId": "PG_zhux4k",
+      "productCategoryId": "PC_r2a5ac",
+      "brandId": "BR1",
+      "id": "PSC_y4ycbs"
+    },
+    {
+      "skuCode": "Bath Towels Combed 500 GSM set of 1",
+      "name": "",
+      "weight": "",
+      "productGroupId": "PG_zhux4k",
+      "productCategoryId": "PC_r2a5ac",
+      "brandId": "BR1",
+      "id": "PSC_l1vbs4"
+    },
+    {
+      "skuCode": "Bath Towels Combed 500 GSM set of 2",
+      "name": "",
+      "weight": "",
+      "productGroupId": "PG_zhux4k",
+      "productCategoryId": "PC_r2a5ac",
+      "brandId": "BR1",
+      "id": "PSC_3nisgc"
+    },
+    {
+      "skuCode": "Towels Bamboo Bath Set of 1",
+      "name": "",
+      "weight": "",
+      "productGroupId": "PG_zhux4k",
+      "productCategoryId": "PC_r2a5ac",
+      "brandId": "BR1",
+      "id": "PSC_od0zon"
+    },
+    {
+      "skuCode": "Towels Bamboo Set of 2",
+      "name": "",
+      "weight": "",
+      "productGroupId": "PG_zhux4k",
+      "productCategoryId": "PC_r2a5ac",
+      "brandId": "BR1",
+      "id": "PSC_ljrn9g"
+    },
+    {
+      "skuCode": "Bath Towels Combed 400 GSM",
+      "name": "",
+      "weight": "",
+      "productGroupId": "PG_zhux4k",
+      "productCategoryId": "PC_r2a5ac",
+      "brandId": "BR1",
+      "id": "PSC_fojeu6"
+    },
+    {
+      "skuCode": "Bath Towels Combed 400 GSM Set of 2",
+      "name": "",
+      "weight": "",
+      "productGroupId": "PG_zhux4k",
+      "productCategoryId": "PC_r2a5ac",
+      "brandId": "BR1",
+      "id": "PSC_bynlyb"
+    },
+    {
+      "skuCode": "Face Towels 600 GSM set of 3",
+      "name": "",
+      "weight": "",
+      "productGroupId": "PG_zhux4k",
+      "productCategoryId": "PC_r2a5ac",
+      "brandId": "BR1",
+      "id": "PSC_34j1yi"
+    },
+    {
+      "skuCode": "Face Towels 600 GSM set of 4",
+      "name": "",
+      "weight": "",
+      "productGroupId": "PG_zhux4k",
+      "productCategoryId": "PC_r2a5ac",
+      "brandId": "BR1",
+      "id": "PSC_ihfuen"
+    },
+    {
+      "skuCode": "Triply Frying Pan",
+      "name": "",
+      "weight": "",
+      "productGroupId": "PG_zhux4k",
+      "productCategoryId": "PC_r2a5ac",
+      "brandId": "BR1",
+      "id": "PSC_1qw4i0"
+    },
+    {
+      "skuCode": "Triply Sauce Pan",
+      "name": "",
+      "weight": "",
+      "productGroupId": "PG_zhux4k",
+      "productCategoryId": "PC_r2a5ac",
+      "brandId": "BR1",
+      "id": "PSC_xmj64j"
+    },
+    {
+      "skuCode": "Stainless Steel Frying Pan",
+      "name": "",
+      "weight": "",
+      "productGroupId": "PG_zhux4k",
+      "productCategoryId": "PC_r2a5ac",
+      "brandId": "BR1",
+      "id": "PSC_sgo2o2"
+    },
+    {
+      "skuCode": "Stainless Steel Hammerred Frying Pan",
+      "name": "",
+      "weight": "",
+      "productGroupId": "PG_zhux4k",
+      "productCategoryId": "PC_r2a5ac",
+      "brandId": "BR1",
+      "id": "PSC_ig2b0z"
+    },
+    {
+      "skuCode": "Hand Towels Combed 600 GSM set of2",
+      "name": "",
+      "weight": "",
+      "productGroupId": "PG_zhux4k",
+      "productCategoryId": "PC_r2a5ac",
+      "brandId": "BR1",
+      "id": "PSC_behmur"
+    },
+    {
+      "skuCode": "Hand Towels Combed 600 GSM Set of 4",
+      "name": "",
+      "weight": "",
+      "productGroupId": "PG_zhux4k",
+      "productCategoryId": "PC_r2a5ac",
+      "brandId": "BR1",
+      "id": "PSC_lpf54r"
+    },
+    {
+      "skuCode": "Hand Towels Bamboo set of 2",
+      "name": "",
+      "weight": "",
+      "productGroupId": "PG_zhux4k",
+      "productCategoryId": "PC_r2a5ac",
+      "brandId": "BR1",
+      "id": "PSC_6eprxh"
+    },
+    {
+      "skuCode": "Hand Towels Bamboo set of 4",
+      "name": "",
+      "weight": "",
+      "productGroupId": "PG_zhux4k",
+      "productCategoryId": "PC_r2a5ac",
+      "brandId": "BR1",
+      "id": "PSC_5c8s93"
+    },
+    {
+      "skuCode": "Hand Towels Combed 400 GSM set of 2",
+      "name": "",
+      "weight": "",
+      "productGroupId": "PG_zhux4k",
+      "productCategoryId": "PC_r2a5ac",
+      "brandId": "BR1",
+      "id": "PSC_we45ar"
+    },
+    {
+      "skuCode": "Hand Towels Combed 400 GSM set of 4",
+      "name": "",
+      "weight": "",
+      "productGroupId": "PG_zhux4k",
+      "productCategoryId": "PC_r2a5ac",
+      "brandId": "BR1",
+      "id": "PSC_yubp7i"
+    },
+    {
+      "skuCode": "Triply Kadhai",
+      "name": "",
+      "weight": "",
+      "productGroupId": "PG_zhux4k",
+      "productCategoryId": "PC_r2a5ac",
+      "brandId": "BR1",
+      "id": "PSC_896e4b"
+    },
+    {
+      "skuCode": "Gol Kadhai",
+      "name": "",
+      "weight": "",
+      "productGroupId": "PG_zhux4k",
+      "productCategoryId": "PC_r2a5ac",
+      "brandId": "BR1",
+      "id": "PSC_40qy7k"
+    },
+    {
+      "skuCode": "Stainless Steel Sauce pan",
+      "name": "",
+      "weight": "",
+      "productGroupId": "PG_zhux4k",
+      "productCategoryId": "PC_r2a5ac",
+      "brandId": "BR1",
+      "id": "PSC_1903ba"
+    },
+    {
+      "skuCode": "Stainless Steel Hammerred Sauce Pan",
+      "name": "",
+      "weight": "",
+      "productGroupId": "PG_zhux4k",
+      "productCategoryId": "PC_r2a5ac",
+      "brandId": "BR1",
+      "id": "PSC_sl3k7d"
+    },
+    {
+      "skuCode": "Tope Encapsulated",
+      "name": "",
+      "weight": "",
+      "productGroupId": "PG_zhux4k",
+      "productCategoryId": "PC_r2a5ac",
+      "brandId": "BR1",
+      "id": "PSC_o3vd2f"
+    },
+    {
+      "skuCode": "Tope Hammerred",
+      "name": "",
+      "weight": "",
+      "productGroupId": "PG_zhux4k",
+      "productCategoryId": "PC_r2a5ac",
+      "brandId": "BR1",
+      "id": "PSC_8m9kw7"
+    },
+    {
+      "skuCode": "Stainless Steel Tope",
+      "name": "",
+      "weight": "",
+      "productGroupId": "PG_zhux4k",
+      "productCategoryId": "PC_r2a5ac",
+      "brandId": "BR1",
+      "id": "PSC_g63ds4"
+    },
+    {
+      "skuCode": "Stainless Steel Tope Combo",
+      "name": "",
+      "weight": "",
+      "productGroupId": "PG_zhux4k",
+      "productCategoryId": "PC_r2a5ac",
+      "brandId": "BR1",
+      "id": "PSC_4ahiml"
+    },
+    {
+      "skuCode": "Towels Bamboo 2 Bath & 2 Hand",
+      "name": "",
+      "weight": "",
+      "productGroupId": "PG_zhux4k",
+      "productCategoryId": "PC_r2a5ac",
+      "brandId": "BR1",
+      "id": "PSC_bk4tth"
+    },
+    {
+      "skuCode": "Triply WOK",
+      "name": "",
+      "weight": "",
+      "productGroupId": "PG_zhux4k",
+      "productCategoryId": "PC_r2a5ac",
+      "brandId": "BR1",
+      "id": "PSC_94120o"
+    },
+    {
+      "skuCode": "Head Towel",
+      "name": "",
+      "weight": "",
+      "productGroupId": "PG_zhux4k",
+      "productCategoryId": "PC_r2a5ac",
+      "brandId": "BR1",
+      "id": "PSC_psauaj"
+    },
+    {
+      "skuCode": "Gym Towel",
+      "name": "",
+      "weight": "",
+      "productGroupId": "PG_zhux4k",
+      "productCategoryId": "PC_r2a5ac",
+      "brandId": "BR1",
+      "id": "PSC_644ozy"
+    }
+  ],
   "aopCycles": [
     {
       "id": "CYC_xba629",
