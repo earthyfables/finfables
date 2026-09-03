@@ -15,7 +15,7 @@
       "Feb",
       "Mar"
     ],
-    "savedAt": "2026-09-03T12:13:12.395Z",
+    "savedAt": "2026-09-03T12:13:14.992Z",
     "activeCycleId": "CYC_czj5yj"
   },
   "channels": [
@@ -72,7 +72,8 @@
       "partner": "Blinkit",
       "model": "B2C",
       "partnerGroup": "QCK",
-      "id": "PM_rp2j41"
+      "id": "PM_rp2j41",
+      "partnerCode": "BK"
     },
     {
       "partner": "Website",
