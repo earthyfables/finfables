@@ -15,7 +15,7 @@
       "Feb",
       "Mar"
     ],
-    "savedAt": "2026-09-03T14:00:58.460Z",
+    "savedAt": "2026-09-03T14:01:03.319Z",
     "activeCycleId": "CYC_czj5yj"
   },
   "channels": [
@@ -1241,15 +1241,6 @@
     }
   ],
   "productSubCategories": [
-    {
-      "skuCode": "31",
-      "name": "Hand Towels Bamboo set of 4  - 60X40",
-      "weight": "",
-      "productGroupId": "PG_zhux4k",
-      "productCategoryId": "PC_h01yup",
-      "brandId": "BR1",
-      "id": "PSC_h032lt"
-    },
     {
       "eanCode": "8904505401060",
       "skuCode": "EFHC01FT001-BE",
