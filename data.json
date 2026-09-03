@@ -15,7 +15,7 @@
       "Feb",
       "Mar"
     ],
-    "savedAt": "2026-09-03T12:13:18.406Z",
+    "savedAt": "2026-09-03T12:13:23.728Z",
     "activeCycleId": "CYC_czj5yj"
   },
   "channels": [
@@ -86,13 +86,15 @@
       "partner": "Myntra",
       "model": "B2C",
       "partnerGroup": "MAN",
-      "id": "PM_2wvypf"
+      "id": "PM_2wvypf",
+      "partnerCode": "MY"
     },
     {
       "id": "PM_yln11y",
       "partner": "Instamart",
       "model": "B2C",
-      "partnerGroup": "QCK"
+      "partnerGroup": "QCK",
+      "partnerCode": "IN"
     },
     {
       "id": "PM_znvmp9",
