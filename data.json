@@ -15,7 +15,7 @@
       "Feb",
       "Mar"
     ],
-    "savedAt": "2026-09-03T11:41:00.790Z",
+    "savedAt": "2026-09-03T11:41:27.180Z",
     "activeCycleId": "CYC_czj5yj"
   },
   "channels": [
@@ -130,6 +130,13 @@
       "id": "BPM_ng4s39",
       "brandId": "BR1",
       "partner": "Myntra",
+      "model": "B2C",
+      "creditDays": 15
+    },
+    {
+      "id": "BPM_tmpgnx",
+      "brandId": "BR1",
+      "partner": "Instamart",
       "model": "B2C",
       "creditDays": 15
     }
