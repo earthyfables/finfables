@@ -15,7 +15,7 @@
       "Feb",
       "Mar"
     ],
-    "savedAt": "2026-09-03T13:31:57.165Z",
+    "savedAt": "2026-09-03T13:32:15.333Z",
     "activeCycleId": "CYC_czj5yj"
   },
   "channels": [
@@ -22448,7 +22448,377 @@
       "PSC_wfsasf": {},
       "PSC_75ygvt": {},
       "PSC_adpfx5": {},
-      "PSC_6wq6tc": {}
+      "PSC_6wq6tc": {},
+      "PSC_o4iro1": {
+        "amrp": 951,
+        "acogs": 210,
+        "gstPct": 5
+      },
+      "PSC_97wllz": {
+        "amrp": 475,
+        "acogs": 113,
+        "gstPct": 5
+      },
+      "PSC_gqg123": {
+        "amrp": 951,
+        "acogs": 270,
+        "gstPct": 5
+      },
+      "PSC_fmkmly": {
+        "amrp": 1902,
+        "acogs": 540,
+        "gstPct": 5
+      },
+      "PSC_8q3c72": {
+        "amrp": 899,
+        "acogs": 250,
+        "gstPct": 5
+      },
+      "PSC_f20pq6": {
+        "amrp": 1332,
+        "acogs": 388,
+        "gstPct": 5
+      },
+      "PSC_1ldq43": {
+        "amrp": 2570,
+        "acogs": 704,
+        "gstPct": 5
+      },
+      "PSC_ga7c12": {
+        "amrp": 665,
+        "acogs": 186,
+        "gstPct": 5
+      },
+      "PSC_cdob65": {
+        "amrp": 1330,
+        "acogs": 186,
+        "gstPct": 5
+      },
+      "PSC_3h4pu7": {
+        "amrp": 1237,
+        "acogs": 331,
+        "gstPct": 5
+      },
+      "PSC_cuwk75": {
+        "amrp": 1274,
+        "acogs": 662,
+        "gstPct": 5
+      },
+      "PSC_jetkkg": {
+        "amrp": 475,
+        "acogs": 145,
+        "gstPct": 5
+      },
+      "PSC_7ym14s": {
+        "amrp": 899,
+        "acogs": 290,
+        "gstPct": 5
+      },
+      "PSC_7m08r4": {
+        "amrp": 380,
+        "acogs": 72,
+        "gstPct": 5
+      },
+      "PSC_1uy1w1": {
+        "amrp": 475,
+        "acogs": 96,
+        "gstPct": 5
+      },
+      "PSC_ok699m": {
+        "amrp": 1456,
+        "acogs": 362,
+        "gstPct": 5
+      },
+      "PSC_pki2ss": {
+        "amrp": 1627,
+        "acogs": 437,
+        "gstPct": 5
+      },
+      "PSC_d1qhdy": {
+        "amrp": 1799,
+        "acogs": 514,
+        "gstPct": 5
+      },
+      "PSC_0krh2u": {
+        "amrp": 1370,
+        "acogs": 370,
+        "gstPct": 5
+      },
+      "PSC_ueepcc": {
+        "amrp": 1541,
+        "acogs": 432,
+        "gstPct": 5
+      },
+      "PSC_hyoo32": {
+        "amrp": 1713,
+        "acogs": 528,
+        "gstPct": 5
+      },
+      "PSC_h83l4i": {
+        "amrp": 771,
+        "acogs": 163,
+        "gstPct": 5
+      },
+      "PSC_0fv0p0": {
+        "amrp": 813,
+        "acogs": 203,
+        "gstPct": 5
+      },
+      "PSC_39h9u7": {
+        "amrp": 856,
+        "acogs": 229,
+        "gstPct": 5
+      },
+      "PSC_lgjc40": {
+        "amrp": 813,
+        "acogs": 174,
+        "gstPct": 5
+      },
+      "PSC_2208ep": {
+        "amrp": 856,
+        "acogs": 218,
+        "gstPct": 5
+      },
+      "PSC_3n7nv2": {
+        "amrp": 1028,
+        "acogs": 245,
+        "gstPct": 5
+      },
+      "PSC_7cbtve": {
+        "amrp": 475,
+        "acogs": 118,
+        "gstPct": 5
+      },
+      "PSC_fgw6da": {
+        "amrp": 856,
+        "acogs": 236,
+        "gstPct": 5
+      },
+      "PSC_p6gvy4": {
+        "amrp": 570,
+        "acogs": 146,
+        "gstPct": 5
+      },
+      "PSC_h032lt": {
+        "amrp": 951,
+        "acogs": 292,
+        "gstPct": 5
+      },
+      "PSC_772yhe": {
+        "amrp": 284,
+        "acogs": 76,
+        "gstPct": 5
+      },
+      "PSC_8b34sq": {
+        "amrp": 499,
+        "acogs": 152,
+        "gstPct": 5
+      },
+      "PSC_n73kqx": {
+        "amrp": 1713,
+        "acogs": 505,
+        "gstPct": 5
+      },
+      "PSC_cuoy3n": {
+        "amrp": 1970,
+        "acogs": 583,
+        "gstPct": 5
+      },
+      "PSC_g2uxdv": {
+        "amrp": 2142,
+        "acogs": 669,
+        "gstPct": 5
+      },
+      "PSC_7x3cng": {
+        "amrp": 2313,
+        "acogs": 759,
+        "gstPct": 5
+      },
+      "PSC_0xkau7": {
+        "amrp": 2484,
+        "acogs": 842,
+        "gstPct": 5
+      },
+      "PSC_76yl12": {
+        "amrp": 2741,
+        "acogs": 940,
+        "gstPct": 5
+      },
+      "PSC_4e8dq0": {
+        "amrp": 1627,
+        "acogs": 448,
+        "gstPct": 5
+      },
+      "PSC_f5094q": {
+        "amrp": 1713,
+        "acogs": 523,
+        "gstPct": 5
+      },
+      "PSC_6kkbp7": {
+        "amrp": 1884,
+        "acogs": 598,
+        "gstPct": 5
+      },
+      "PSC_d5nr3y": {
+        "amrp": 2056,
+        "acogs": 655,
+        "gstPct": 5
+      },
+      "PSC_nkc00l": {
+        "amrp": 771,
+        "acogs": 170,
+        "gstPct": 5
+      },
+      "PSC_jj47nf": {
+        "amrp": 813,
+        "acogs": 199,
+        "gstPct": 5
+      },
+      "PSC_2276h5": {
+        "amrp": 856,
+        "acogs": 232,
+        "gstPct": 5
+      },
+      "PSC_7vp3po": {
+        "amrp": 1113,
+        "acogs": 300,
+        "gstPct": 5
+      },
+      "PSC_rkv86f": {
+        "amrp": 1285,
+        "acogs": 364,
+        "gstPct": 5
+      },
+      "PSC_xa2o1f": {
+        "amrp": 1371,
+        "acogs": 431,
+        "gstPct": 5
+      },
+      "PSC_s8q8os": {
+        "amrp": 684,
+        "acogs": 170,
+        "gstPct": 5
+      },
+      "PSC_rh0jac": {
+        "amrp": 770,
+        "acogs": 199,
+        "gstPct": 5
+      },
+      "PSC_j2vxk9": {
+        "amrp": 856,
+        "acogs": 241,
+        "gstPct": 5
+      },
+      "PSC_v39n0j": {
+        "amrp": 1027,
+        "acogs": 290,
+        "gstPct": 5
+      },
+      "PSC_xvqp0m": {
+        "amrp": 1199,
+        "acogs": 367,
+        "gstPct": 5
+      },
+      "PSC_tw09qy": {
+        "amrp": 1370,
+        "acogs": 437,
+        "gstPct": 5
+      },
+      "PSC_ksics2": {
+        "amrp": 1027,
+        "acogs": 281,
+        "gstPct": 5
+      },
+      "PSC_cgkeu8": {
+        "amrp": 1113,
+        "acogs": 302,
+        "gstPct": 5
+      },
+      "PSC_2mcmap": {
+        "amrp": 1242,
+        "acogs": 351,
+        "gstPct": 5
+      },
+      "PSC_2hrjm7": {
+        "amrp": 1327,
+        "acogs": 404,
+        "gstPct": 5
+      },
+      "PSC_7n0336": {
+        "amrp": 1456,
+        "acogs": 469,
+        "gstPct": 5
+      },
+      "PSC_5vonvh": {
+        "amrp": 1713,
+        "acogs": 534,
+        "gstPct": 5
+      },
+      "PSC_iddwbc": {
+        "amrp": 856,
+        "acogs": 258,
+        "gstPct": 5
+      },
+      "PSC_3elbgu": {
+        "amrp": 1028,
+        "acogs": 276,
+        "gstPct": 5
+      },
+      "PSC_s2ba2b": {
+        "amrp": 1113,
+        "acogs": 322,
+        "gstPct": 5
+      },
+      "PSC_0v3i7m": {
+        "amrp": 1199,
+        "acogs": 370,
+        "gstPct": 5
+      },
+      "PSC_2vyeo7": {
+        "amrp": 1285,
+        "acogs": 430,
+        "gstPct": 5
+      },
+      "PSC_9vgst4": {
+        "amrp": 1456,
+        "acogs": 489,
+        "gstPct": 5
+      },
+      "PSC_laom71": {
+        "amrp": 3684,
+        "acogs": 1407,
+        "gstPct": 5
+      },
+      "PSC_b3f3a8": {
+        "amrp": 3044,
+        "acogs": 808,
+        "gstPct": 5
+      },
+      "PSC_9wxr69": {
+        "amrp": 1713,
+        "acogs": 432,
+        "gstPct": 5
+      },
+      "PSC_r7yv4h": {
+        "amrp": 1799,
+        "acogs": 504,
+        "gstPct": 5
+      },
+      "PSC_dd8smi": {
+        "amrp": 1970,
+        "acogs": 600,
+        "gstPct": 5
+      },
+      "PSC_gsdnjv": {
+        "amrp": 499,
+        "acogs": 90,
+        "gstPct": 5
+      },
+      "PSC_775ilg": {
+        "amrp": 499,
+        "acogs": 123,
+        "gstPct": 5
+      }
     }
   },
   "debtorsByCycle": {
