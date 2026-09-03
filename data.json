@@ -15,7 +15,7 @@
       "Feb",
       "Mar"
     ],
-    "savedAt": "2026-09-03T13:31:46.935Z",
+    "savedAt": "2026-09-03T13:31:57.165Z",
     "activeCycleId": "CYC_czj5yj"
   },
   "channels": [
@@ -1232,7 +1232,674 @@
       "productGroupId": "PG_zhux4k"
     }
   ],
-  "productSubCategories": [],
+  "productSubCategories": [
+    {
+      "skuCode": "1",
+      "name": "Bath Mats Cotton reversible  - 50X80",
+      "weight": "",
+      "productGroupId": "PG_zhux4k",
+      "productCategoryId": "PC_r2a5ac",
+      "brandId": "BR1",
+      "id": "PSC_o4iro1"
+    },
+    {
+      "skuCode": "2",
+      "name": "Bath Mats Microfiber  - 60X40",
+      "weight": "",
+      "productGroupId": "PG_zhux4k",
+      "productCategoryId": "PC_r2a5ac",
+      "brandId": "BR1",
+      "id": "PSC_97wllz"
+    },
+    {
+      "skuCode": "3",
+      "name": "Bath Towels Combed 600 GSM Set of 1  - 75x150",
+      "weight": "",
+      "productGroupId": "PG_zhux4k",
+      "productCategoryId": "PC_ofapit",
+      "brandId": "BR1",
+      "id": "PSC_gqg123"
+    },
+    {
+      "skuCode": "4",
+      "name": "Bath Towels Combed 600 GSM set of 2 - 75x150",
+      "weight": "",
+      "productGroupId": "PG_zhux4k",
+      "productCategoryId": "PC_ofapit",
+      "brandId": "BR1",
+      "id": "PSC_fmkmly"
+    },
+    {
+      "skuCode": "5",
+      "name": "Bath Towels Combed 600 GSM Set of 1 Small Size - 70X140",
+      "weight": "",
+      "productGroupId": "PG_zhux4k",
+      "productCategoryId": "PC_ofapit",
+      "brandId": "BR1",
+      "id": "PSC_8q3c72"
+    },
+    {
+      "skuCode": "6",
+      "name": "Bath Towels Combed Combo 600 GSM set of 1 Bath , 2 Hand   - 75x150",
+      "weight": "",
+      "productGroupId": "PG_zhux4k",
+      "productCategoryId": "PC_ofapit",
+      "brandId": "BR1",
+      "id": "PSC_f20pq6"
+    },
+    {
+      "skuCode": "7",
+      "name": "Bath Towels Combed Combo 600 GSM set of 2 Bath , 2 Hand 2 Face  - 75x150",
+      "weight": "",
+      "productGroupId": "PG_zhux4k",
+      "productCategoryId": "PC_ofapit",
+      "brandId": "BR1",
+      "id": "PSC_1ldq43"
+    },
+    {
+      "skuCode": "8",
+      "name": "Bath Towels Combed 500 GSM set of 1  - 140X70",
+      "weight": "",
+      "productGroupId": "PG_zhux4k",
+      "productCategoryId": "PC_ofapit",
+      "brandId": "BR1",
+      "id": "PSC_ga7c12"
+    },
+    {
+      "skuCode": "9",
+      "name": "Bath Towels Combed 500 GSM set of 2 - 140X70",
+      "weight": "",
+      "productGroupId": "PG_zhux4k",
+      "productCategoryId": "PC_ofapit",
+      "brandId": "BR1",
+      "id": "PSC_cdob65"
+    },
+    {
+      "skuCode": "10",
+      "name": "Towels Bamboo Bath Set of 1 - 73X150",
+      "weight": "",
+      "productGroupId": "PG_zhux4k",
+      "productCategoryId": "PC_ofapit",
+      "brandId": "BR1",
+      "id": "PSC_3h4pu7"
+    },
+    {
+      "skuCode": "11",
+      "name": "Towels Bamboo Set of 2 - 73X150",
+      "weight": "",
+      "productGroupId": "PG_zhux4k",
+      "productCategoryId": "PC_ofapit",
+      "brandId": "BR1",
+      "id": "PSC_cuwk75"
+    },
+    {
+      "skuCode": "12",
+      "name": "Bath Towels Combed 400 GSM - 70X140",
+      "weight": "",
+      "productGroupId": "PG_zhux4k",
+      "productCategoryId": "PC_ofapit",
+      "brandId": "BR1",
+      "id": "PSC_jetkkg"
+    },
+    {
+      "skuCode": "13",
+      "name": "Bath Towels Combed 400 GSM Set of 2  - 70X140",
+      "weight": "",
+      "productGroupId": "PG_zhux4k",
+      "productCategoryId": "PC_ofapit",
+      "brandId": "BR1",
+      "id": "PSC_7ym14s"
+    },
+    {
+      "skuCode": "14",
+      "name": "Face Towels 600 GSM set of 3 - 30X30",
+      "weight": "",
+      "productGroupId": "PG_zhux4k",
+      "productCategoryId": "PC_t2rz6a",
+      "brandId": "BR1",
+      "id": "PSC_7m08r4"
+    },
+    {
+      "skuCode": "15",
+      "name": "Face Towels 600 GSM set of 4 - 30X30",
+      "weight": "",
+      "productGroupId": "PG_zhux4k",
+      "productCategoryId": "PC_t2rz6a",
+      "brandId": "BR1",
+      "id": "PSC_1uy1w1"
+    },
+    {
+      "skuCode": "16",
+      "name": "Triply Frying Pan  - 20",
+      "weight": "",
+      "productGroupId": "PG_vf9yhj",
+      "productCategoryId": "PC_d7uwz1",
+      "brandId": "BR1",
+      "id": "PSC_ok699m"
+    },
+    {
+      "skuCode": "17",
+      "name": "Triply Frying Pan  - 22",
+      "weight": "",
+      "productGroupId": "PG_vf9yhj",
+      "productCategoryId": "PC_d7uwz1",
+      "brandId": "BR1",
+      "id": "PSC_pki2ss"
+    },
+    {
+      "skuCode": "18",
+      "name": "Triply Frying Pan  - 24",
+      "weight": "",
+      "productGroupId": "PG_vf9yhj",
+      "productCategoryId": "PC_d7uwz1",
+      "brandId": "BR1",
+      "id": "PSC_d1qhdy"
+    },
+    {
+      "skuCode": "19",
+      "name": "Triply Sauce Pan  - 14",
+      "weight": "",
+      "productGroupId": "PG_vf9yhj",
+      "productCategoryId": "PC_d7uwz1",
+      "brandId": "BR1",
+      "id": "PSC_0krh2u"
+    },
+    {
+      "skuCode": "20",
+      "name": "Triply Sauce Pan  - 16",
+      "weight": "",
+      "productGroupId": "PG_vf9yhj",
+      "productCategoryId": "PC_d7uwz1",
+      "brandId": "BR1",
+      "id": "PSC_ueepcc"
+    },
+    {
+      "skuCode": "21",
+      "name": "Triply Sauce Pan  - 18",
+      "weight": "",
+      "productGroupId": "PG_vf9yhj",
+      "productCategoryId": "PC_d7uwz1",
+      "brandId": "BR1",
+      "id": "PSC_hyoo32"
+    },
+    {
+      "skuCode": "22",
+      "name": "Stainless Steel Frying Pan  - 20",
+      "weight": "",
+      "productGroupId": "PG_vf9yhj",
+      "productCategoryId": "PC_d7uwz1",
+      "brandId": "BR1",
+      "id": "PSC_h83l4i"
+    },
+    {
+      "skuCode": "23",
+      "name": "Stainless Steel Frying Pan  - 22",
+      "weight": "",
+      "productGroupId": "PG_vf9yhj",
+      "productCategoryId": "PC_d7uwz1",
+      "brandId": "BR1",
+      "id": "PSC_0fv0p0"
+    },
+    {
+      "skuCode": "24",
+      "name": "Stainless Steel Frying Pan  - 24",
+      "weight": "",
+      "productGroupId": "PG_vf9yhj",
+      "productCategoryId": "PC_d7uwz1",
+      "brandId": "BR1",
+      "id": "PSC_39h9u7"
+    },
+    {
+      "skuCode": "25",
+      "name": "Stainless Steel Hammerred Frying Pan  - 20",
+      "weight": "",
+      "productGroupId": "PG_vf9yhj",
+      "productCategoryId": "PC_d7uwz1",
+      "brandId": "BR1",
+      "id": "PSC_lgjc40"
+    },
+    {
+      "skuCode": "26",
+      "name": "Stainless Steel Hammerred Frying Pan  - 22",
+      "weight": "",
+      "productGroupId": "PG_vf9yhj",
+      "productCategoryId": "PC_d7uwz1",
+      "brandId": "BR1",
+      "id": "PSC_2208ep"
+    },
+    {
+      "skuCode": "27",
+      "name": "Stainless Steel Hammerred Frying Pan  - 24",
+      "weight": "",
+      "productGroupId": "PG_vf9yhj",
+      "productCategoryId": "PC_d7uwz1",
+      "brandId": "BR1",
+      "id": "PSC_3n7nv2"
+    },
+    {
+      "skuCode": "28",
+      "name": "Hand Towels Combed 600 GSM set of2  - 60X40",
+      "weight": "",
+      "productGroupId": "PG_zhux4k",
+      "productCategoryId": "PC_h01yup",
+      "brandId": "BR1",
+      "id": "PSC_7cbtve"
+    },
+    {
+      "skuCode": "29",
+      "name": "Hand Towels Combed 600 GSM Set of 4 - 60X40",
+      "weight": "",
+      "productGroupId": "PG_zhux4k",
+      "productCategoryId": "PC_h01yup",
+      "brandId": "BR1",
+      "id": "PSC_fgw6da"
+    },
+    {
+      "skuCode": "30",
+      "name": "Hand Towels Bamboo set of 2   - 60X40",
+      "weight": "",
+      "productGroupId": "PG_zhux4k",
+      "productCategoryId": "PC_h01yup",
+      "brandId": "BR1",
+      "id": "PSC_p6gvy4"
+    },
+    {
+      "skuCode": "31",
+      "name": "Hand Towels Bamboo set of 4  - 60X40",
+      "weight": "",
+      "productGroupId": "PG_zhux4k",
+      "productCategoryId": "PC_h01yup",
+      "brandId": "BR1",
+      "id": "PSC_h032lt"
+    },
+    {
+      "skuCode": "32",
+      "name": "Hand Towels Combed 400 GSM set of 2  - 60X40",
+      "weight": "",
+      "productGroupId": "PG_zhux4k",
+      "productCategoryId": "PC_h01yup",
+      "brandId": "BR1",
+      "id": "PSC_772yhe"
+    },
+    {
+      "skuCode": "33",
+      "name": "Hand Towels Combed 400 GSM set of 4 - 60X40",
+      "weight": "",
+      "productGroupId": "PG_zhux4k",
+      "productCategoryId": "PC_h01yup",
+      "brandId": "BR1",
+      "id": "PSC_8b34sq"
+    },
+    {
+      "skuCode": "34",
+      "name": "Triply Kadhai  - 20",
+      "weight": "",
+      "productGroupId": "PG_vf9yhj",
+      "productCategoryId": "PC_21bqv5",
+      "brandId": "BR1",
+      "id": "PSC_n73kqx"
+    },
+    {
+      "skuCode": "35",
+      "name": "Triply Kadhai  - 22",
+      "weight": "",
+      "productGroupId": "PG_vf9yhj",
+      "productCategoryId": "PC_21bqv5",
+      "brandId": "BR1",
+      "id": "PSC_cuoy3n"
+    },
+    {
+      "skuCode": "36",
+      "name": "Triply Kadhai  - 24",
+      "weight": "",
+      "productGroupId": "PG_vf9yhj",
+      "productCategoryId": "PC_21bqv5",
+      "brandId": "BR1",
+      "id": "PSC_g2uxdv"
+    },
+    {
+      "skuCode": "37",
+      "name": "Triply Kadhai  - 26",
+      "weight": "",
+      "productGroupId": "PG_vf9yhj",
+      "productCategoryId": "PC_21bqv5",
+      "brandId": "BR1",
+      "id": "PSC_7x3cng"
+    },
+    {
+      "skuCode": "38",
+      "name": "Triply Kadhai  - 28",
+      "weight": "",
+      "productGroupId": "PG_vf9yhj",
+      "productCategoryId": "PC_21bqv5",
+      "brandId": "BR1",
+      "id": "PSC_0xkau7"
+    },
+    {
+      "skuCode": "39",
+      "name": "Triply Kadhai  - 30",
+      "weight": "",
+      "productGroupId": "PG_vf9yhj",
+      "productCategoryId": "PC_21bqv5",
+      "brandId": "BR1",
+      "id": "PSC_76yl12"
+    },
+    {
+      "skuCode": "40",
+      "name": "Gol Kadhai  - 22",
+      "weight": "",
+      "productGroupId": "PG_vf9yhj",
+      "productCategoryId": "PC_21bqv5",
+      "brandId": "BR1",
+      "id": "PSC_4e8dq0"
+    },
+    {
+      "skuCode": "41",
+      "name": "Gol Kadhai  - 24",
+      "weight": "",
+      "productGroupId": "PG_vf9yhj",
+      "productCategoryId": "PC_21bqv5",
+      "brandId": "BR1",
+      "id": "PSC_f5094q"
+    },
+    {
+      "skuCode": "42",
+      "name": "Gol Kadhai  - 26",
+      "weight": "",
+      "productGroupId": "PG_vf9yhj",
+      "productCategoryId": "PC_21bqv5",
+      "brandId": "BR1",
+      "id": "PSC_6kkbp7"
+    },
+    {
+      "skuCode": "43",
+      "name": "Gol Kadhai  - 28",
+      "weight": "",
+      "productGroupId": "PG_vf9yhj",
+      "productCategoryId": "PC_21bqv5",
+      "brandId": "BR1",
+      "id": "PSC_d5nr3y"
+    },
+    {
+      "skuCode": "44",
+      "name": "Stainless Steel Sauce pan  - 14",
+      "weight": "",
+      "productGroupId": "PG_vf9yhj",
+      "productCategoryId": "PC_mg39l4",
+      "brandId": "BR1",
+      "id": "PSC_nkc00l"
+    },
+    {
+      "skuCode": "45",
+      "name": "Stainless Steel Sauce pan  - 16",
+      "weight": "",
+      "productGroupId": "PG_vf9yhj",
+      "productCategoryId": "PC_mg39l4",
+      "brandId": "BR1",
+      "id": "PSC_jj47nf"
+    },
+    {
+      "skuCode": "46",
+      "name": "Stainless Steel Sauce pan  - 18",
+      "weight": "",
+      "productGroupId": "PG_vf9yhj",
+      "productCategoryId": "PC_mg39l4",
+      "brandId": "BR1",
+      "id": "PSC_2276h5"
+    },
+    {
+      "skuCode": "47",
+      "name": "Stainless Steel Hammerred Sauce Pan  - 14",
+      "weight": "",
+      "productGroupId": "PG_vf9yhj",
+      "productCategoryId": "PC_mg39l4",
+      "brandId": "BR1",
+      "id": "PSC_7vp3po"
+    },
+    {
+      "skuCode": "48",
+      "name": "Stainless Steel Hammerred Sauce Pan  - 16",
+      "weight": "",
+      "productGroupId": "PG_vf9yhj",
+      "productCategoryId": "PC_mg39l4",
+      "brandId": "BR1",
+      "id": "PSC_rkv86f"
+    },
+    {
+      "skuCode": "49",
+      "name": "Stainless Steel Hammerred Sauce Pan  - 18",
+      "weight": "",
+      "productGroupId": "PG_vf9yhj",
+      "productCategoryId": "PC_mg39l4",
+      "brandId": "BR1",
+      "id": "PSC_xa2o1f"
+    },
+    {
+      "skuCode": "50",
+      "name": "Tope Encapsulated  - 14",
+      "weight": "",
+      "productGroupId": "PG_vf9yhj",
+      "productCategoryId": "PC_edydxr",
+      "brandId": "BR1",
+      "id": "PSC_s8q8os"
+    },
+    {
+      "skuCode": "51",
+      "name": "Tope Encapsulated  - 16",
+      "weight": "",
+      "productGroupId": "PG_vf9yhj",
+      "productCategoryId": "PC_edydxr",
+      "brandId": "BR1",
+      "id": "PSC_rh0jac"
+    },
+    {
+      "skuCode": "52",
+      "name": "Tope Encapsulated  - 18",
+      "weight": "",
+      "productGroupId": "PG_vf9yhj",
+      "productCategoryId": "PC_edydxr",
+      "brandId": "BR1",
+      "id": "PSC_j2vxk9"
+    },
+    {
+      "skuCode": "53",
+      "name": "Tope Encapsulated  - 20",
+      "weight": "",
+      "productGroupId": "PG_vf9yhj",
+      "productCategoryId": "PC_edydxr",
+      "brandId": "BR1",
+      "id": "PSC_v39n0j"
+    },
+    {
+      "skuCode": "54",
+      "name": "Tope Encapsulated  - 22",
+      "weight": "",
+      "productGroupId": "PG_vf9yhj",
+      "productCategoryId": "PC_edydxr",
+      "brandId": "BR1",
+      "id": "PSC_xvqp0m"
+    },
+    {
+      "skuCode": "55",
+      "name": "Tope Encapsulated  - 24",
+      "weight": "",
+      "productGroupId": "PG_vf9yhj",
+      "productCategoryId": "PC_edydxr",
+      "brandId": "BR1",
+      "id": "PSC_tw09qy"
+    },
+    {
+      "skuCode": "56",
+      "name": "Tope Hammerred - 14",
+      "weight": "",
+      "productGroupId": "PG_vf9yhj",
+      "productCategoryId": "PC_edydxr",
+      "brandId": "BR1",
+      "id": "PSC_ksics2"
+    },
+    {
+      "skuCode": "57",
+      "name": "Tope Hammerred - 16",
+      "weight": "",
+      "productGroupId": "PG_vf9yhj",
+      "productCategoryId": "PC_edydxr",
+      "brandId": "BR1",
+      "id": "PSC_cgkeu8"
+    },
+    {
+      "skuCode": "58",
+      "name": "Tope Hammerred - 18",
+      "weight": "",
+      "productGroupId": "PG_vf9yhj",
+      "productCategoryId": "PC_edydxr",
+      "brandId": "BR1",
+      "id": "PSC_2mcmap"
+    },
+    {
+      "skuCode": "59",
+      "name": "Tope Hammerred - 19",
+      "weight": "",
+      "productGroupId": "PG_vf9yhj",
+      "productCategoryId": "PC_edydxr",
+      "brandId": "BR1",
+      "id": "PSC_2hrjm7"
+    },
+    {
+      "skuCode": "60",
+      "name": "Tope Hammerred - 22",
+      "weight": "",
+      "productGroupId": "PG_vf9yhj",
+      "productCategoryId": "PC_edydxr",
+      "brandId": "BR1",
+      "id": "PSC_7n0336"
+    },
+    {
+      "skuCode": "61",
+      "name": "Tope Hammerred - 24",
+      "weight": "",
+      "productGroupId": "PG_vf9yhj",
+      "productCategoryId": "PC_edydxr",
+      "brandId": "BR1",
+      "id": "PSC_5vonvh"
+    },
+    {
+      "skuCode": "62",
+      "name": "Stainless Steel Tope - 14",
+      "weight": "",
+      "productGroupId": "PG_vf9yhj",
+      "productCategoryId": "PC_edydxr",
+      "brandId": "BR1",
+      "id": "PSC_iddwbc"
+    },
+    {
+      "skuCode": "63",
+      "name": "Stainless Steel Tope - 16",
+      "weight": "",
+      "productGroupId": "PG_vf9yhj",
+      "productCategoryId": "PC_edydxr",
+      "brandId": "BR1",
+      "id": "PSC_3elbgu"
+    },
+    {
+      "skuCode": "64",
+      "name": "Stainless Steel Tope - 18",
+      "weight": "",
+      "productGroupId": "PG_vf9yhj",
+      "productCategoryId": "PC_edydxr",
+      "brandId": "BR1",
+      "id": "PSC_s2ba2b"
+    },
+    {
+      "skuCode": "65",
+      "name": "Stainless Steel Tope - 20",
+      "weight": "",
+      "productGroupId": "PG_vf9yhj",
+      "productCategoryId": "PC_edydxr",
+      "brandId": "BR1",
+      "id": "PSC_0v3i7m"
+    },
+    {
+      "skuCode": "66",
+      "name": "Stainless Steel Tope - 22",
+      "weight": "",
+      "productGroupId": "PG_vf9yhj",
+      "productCategoryId": "PC_edydxr",
+      "brandId": "BR1",
+      "id": "PSC_2vyeo7"
+    },
+    {
+      "skuCode": "67",
+      "name": "Stainless Steel Tope - 24",
+      "weight": "",
+      "productGroupId": "PG_vf9yhj",
+      "productCategoryId": "PC_edydxr",
+      "brandId": "BR1",
+      "id": "PSC_9vgst4"
+    },
+    {
+      "skuCode": "68",
+      "name": "Stainless Steel Tope Combo  - 16/18/20",
+      "weight": "",
+      "productGroupId": "PG_vf9yhj",
+      "productCategoryId": "PC_edydxr",
+      "brandId": "BR1",
+      "id": "PSC_laom71"
+    },
+    {
+      "skuCode": "69",
+      "name": "Towels Bamboo 2 Bath & 2 Hand  - 73X150",
+      "weight": "",
+      "productGroupId": "PG_zhux4k",
+      "productCategoryId": "PC_ncey5g",
+      "brandId": "BR1",
+      "id": "PSC_b3f3a8"
+    },
+    {
+      "skuCode": "70",
+      "name": "Triply WOK - 20",
+      "weight": "",
+      "productGroupId": "PG_vf9yhj",
+      "productCategoryId": "PC_e0ut7i",
+      "brandId": "BR1",
+      "id": "PSC_9wxr69"
+    },
+    {
+      "skuCode": "71",
+      "name": "Triply WOK - 22",
+      "weight": "",
+      "productGroupId": "PG_vf9yhj",
+      "productCategoryId": "PC_e0ut7i",
+      "brandId": "BR1",
+      "id": "PSC_r7yv4h"
+    },
+    {
+      "skuCode": "72",
+      "name": "Triply WOK - 24",
+      "weight": "",
+      "productGroupId": "PG_vf9yhj",
+      "productCategoryId": "PC_e0ut7i",
+      "brandId": "BR1",
+      "id": "PSC_dd8smi"
+    },
+    {
+      "skuCode": "73",
+      "name": "Head Towel  -",
+      "weight": "",
+      "productGroupId": "PG_zhux4k",
+      "productCategoryId": "PC_9kyg3s",
+      "brandId": "BR1",
+      "id": "PSC_gsdnjv"
+    },
+    {
+      "skuCode": "74",
+      "name": "Gym Towel  -",
+      "weight": "",
+      "productGroupId": "PG_zhux4k",
+      "productCategoryId": "PC_43yr0v",
+      "brandId": "BR1",
+      "id": "PSC_775ilg"
+    }
+  ],
   "aopCycles": [
     {
       "id": "CYC_xba629",
