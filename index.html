@@ -1849,13 +1849,20 @@ function renderParetoSubTable(host, key){
       {key:'productGroupId', label:'Pdt Grp', type:'select', options:()=>optList(DATA.productGroups,g=>g.name), width:200}
     ], {prefix:'PC', addLabel:'Add'});
   } else if(key === 'productSubCategories'){
+    // One column per distinct Partner Code from the Partner-Model master
+    // (e.g. FK -> FKASIN, MY -> MYASIN) - dynamic since new partners get added.
+    const partnerCodes = [...new Set(DATA.partnerModels.map(pm=>pm.partnerCode).filter(Boolean))];
+    const asinCols = partnerCodes.map(code=> ({key:`asin_${code}`, label:`${code}ASIN`, width:130}));
     renderMasterTable(host, DATA.productSubCategories, [
+      {key:'eanCode', label:'EAN Code', width:140},
       {key:'skuCode', label:'SKU Code', width:140},
       {key:'name', label:'Pdt Sub Cat', width:220},
       {key:'weight', label:'Weight', type:'number', width:100},
+      {key:'lbh', label:'L*B*H', width:120},
       {key:'productGroupId', label:'Pdt Grp', type:'select', options:()=>optList(DATA.productGroups,g=>g.name), width:170},
       {key:'productCategoryId', label:'Pdt Cat', type:'select', options:()=>optList(DATA.productCategories,c=>c.name), width:170},
-      {key:'brandId', label:'Brand', type:'select', options:()=>optList(DATA.brands,b=>b.name), width:170}
+      {key:'brandId', label:'Brand', type:'select', options:()=>optList(DATA.brands,b=>b.name), width:170},
+      ...asinCols
     ], {prefix:'PSC', addLabel:'Add'});
   } else if(key === 'brandCategoryMapping'){
     renderMasterTable(host, DATA.brandCategoryMapping, [
