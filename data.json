@@ -15,7 +15,7 @@
       "Feb",
       "Mar"
     ],
-    "savedAt": "2026-09-03T12:09:09.285Z",
+    "savedAt": "2026-09-03T12:09:25.668Z",
     "activeCycleId": "CYC_czj5yj"
   },
   "channels": [
@@ -152,6 +152,13 @@
       "model": "B2C",
       "creditDays": 7,
       "id": "BPM_5hcz6t"
+    },
+    {
+      "id": "BPM_cid5cs",
+      "brandId": "BR1",
+      "partner": "WH Store",
+      "model": "B2C",
+      "creditDays": 0
     }
   ],
   "expenseLineItems": [
