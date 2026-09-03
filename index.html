@@ -665,13 +665,13 @@ async function loadData(){
 /* ---------------------------------------------------------------
    GENERIC TABLE EDITOR
    ----------------------------------------------------------------*/
-function fieldInput(row, col){
+function fieldInput(row, col, precomputedOpts){
   const val = row[col.key] ?? '';
   if(col.readOnly){
     return `<span class="readonlycell" data-key="${col.key}">${val}</span>`;
   }
   if(col.type === 'select'){
-    const opts = col.options();
+    const opts = precomputedOpts || col.options();
     if(opts.length && !opts.some(o=>o.id===val)){
       // No blank placeholder — a select always shows a real option. If the
       // stored value doesn't match one (unset, or an old/removed value),
@@ -821,6 +821,11 @@ function isDuplicateRow(candidate, arr, cols){
 function renderMasterTable(container, arr, cols, opts){
   opts = opts || {};
   const pasteHint = cols.map(c=>c.label).join(' | ');
+  // Each select column's option list only depends on the master data, not on
+  // the row - computing it once here (rather than inside fieldInput, once per
+  // row) turns an O(rows x select-columns) full-array recompute into O(select-columns).
+  const colOptsCache = new Map();
+  cols.forEach(c=>{ if(c.type==='select') colOptsCache.set(c.key, c.options()); });
 
   let html = '';
   if(opts.paste !== false){
@@ -831,7 +836,7 @@ function renderMasterTable(container, arr, cols, opts){
     html += `<div class="addform">`;
     cols.forEach(c=>{
       const w = c.width || 130;
-      html += `<div class="addfield" style="width:${w}px;"><label>${c.label}</label>${fieldInput({}, c).replace('data-key','data-addkey')}</div>`;
+      html += `<div class="addfield" style="width:${w}px;"><label>${c.label}</label>${fieldInput({}, c, colOptsCache.get(c.key)).replace('data-key','data-addkey')}</div>`;
     });
     html += `<button class="btn primary addbtn" id="addRowBtn2">${opts.addLabel || 'Add'}</button>`;
     html += `</div>`;
@@ -853,7 +858,7 @@ function renderMasterTable(container, arr, cols, opts){
   html += `<th></th></tr></thead><tbody>`;
   arr.forEach((row,idx)=>{
     html += `<tr data-idx="${idx}"><td><input type="checkbox" class="rowsel" data-selidx="${idx}"></td>`;
-    cols.forEach(c=> html += `<td>${fieldInput(row,c)}</td>`);
+    cols.forEach(c=> html += `<td>${fieldInput(row,c,colOptsCache.get(c.key))}</td>`);
     html += `<td class="actionscell"><div class="actionsrow"><button class="btn-sm" data-editidx="${idx}">Edit</button><button class="btn-sm danger" data-del="${idx}">Remove</button></div></td></tr>`;
   });
   html += `</tbody></table>`;
@@ -863,60 +868,76 @@ function renderMasterTable(container, arr, cols, opts){
 
   function rerender(){ renderMasterTable(container, arr, cols, opts); if(opts.onChange) opts.onChange(); markDirty(); }
 
-  container.querySelectorAll('tbody input[data-key],tbody select[data-key]').forEach(el=>{
-    el.addEventListener('change', e=>{
-      const tr = e.target.closest('tr');
+  // Delegated listeners on the container (a handful total) instead of one
+  // addEventListener per cell/button - with hundreds of rows, individually
+  // wiring every input/select/button on every render is the dominant cost
+  // of a re-render, and none of it is needed since events bubble.
+  if(!container._masterTableDelegated){
+    container._masterTableDelegated = true;
+
+    container.addEventListener('change', e=>{
+      const el = e.target;
+      if(!el.matches('tbody input[data-key],tbody select[data-key]')) return;
+      const tr = el.closest('tr');
       const idx = +tr.dataset.idx;
-      const key = e.target.dataset.key;
-      let v = e.target.value;
-      if(e.target.type === 'number') v = v === '' ? '' : parseFloat(v);
-      arr[idx][key] = v;
-      if(opts.onChange) opts.onChange();
-      markDirty();
-    });
-  });
-
-  container.querySelectorAll('[data-del]').forEach(btn=>{
-    btn.addEventListener('click', e=>{ arr.splice(+btn.dataset.del,1); rerender(); });
-  });
-
-  container.querySelectorAll('[data-editidx]').forEach(btn=>{
-    btn.addEventListener('click', e=>{
-      const tr = btn.closest('tr');
-      const firstField = tr.querySelector('input,select');
-      if(firstField) firstField.focus();
-    });
-  });
-
-  const selAll = container.querySelector('#selAll');
-  if(selAll) selAll.addEventListener('change', ()=>{
-    container.querySelectorAll('.rowsel').forEach(cb=> cb.checked = selAll.checked);
-  });
-
-  const delSelBtn = container.querySelector('#deleteSelBtn');
-  if(delSelBtn) delSelBtn.addEventListener('click', ()=>{
-    const idxs = Array.from(container.querySelectorAll('.rowsel:checked')).map(cb=>+cb.dataset.selidx);
-    if(!idxs.length) return;
-    idxs.sort((a,b)=>b-a).forEach(i=> arr.splice(i,1));
-    rerender();
-  });
-
-  const addBtn = container.querySelector('#addRowBtn2');
-  if(addBtn) addBtn.addEventListener('click', ()=>{
-    const row = {id: uid(opts.prefix||'ROW')};
-    container.querySelectorAll('[data-addkey]').forEach(el=>{
+      const key = el.dataset.key;
       let v = el.value;
       if(el.type === 'number') v = v === '' ? '' : parseFloat(v);
-      row[el.dataset.addkey] = v;
+      container._masterTableArr[idx][key] = v;
+      if(container._masterTableOpts.onChange) container._masterTableOpts.onChange();
+      markDirty();
     });
-    if(opts.buildRow) Object.assign(row, opts.buildRow(row) || {});
-    if(isDuplicateRow(row, arr, cols)){
-      alert('That row already exists — not adding a duplicate.');
-      return;
-    }
-    arr.push(row);
-    rerender();
-  });
+
+    container.addEventListener('click', e=>{
+      const delBtn = e.target.closest('[data-del]');
+      if(delBtn){
+        container._masterTableArr.splice(+delBtn.dataset.del,1);
+        container._masterTableRerender();
+        return;
+      }
+      const editBtn = e.target.closest('[data-editidx]');
+      if(editBtn){
+        const tr = editBtn.closest('tr');
+        const firstField = tr.querySelector('input,select');
+        if(firstField) firstField.focus();
+        return;
+      }
+      if(e.target.id === 'deleteSelBtn'){
+        const idxs = Array.from(container.querySelectorAll('.rowsel:checked')).map(cb=>+cb.dataset.selidx);
+        if(!idxs.length) return;
+        idxs.sort((a,b)=>b-a).forEach(i=> container._masterTableArr.splice(i,1));
+        container._masterTableRerender();
+        return;
+      }
+      if(e.target.id === 'addRowBtn2'){
+        const row = {id: uid(container._masterTableOpts.prefix||'ROW')};
+        container.querySelectorAll('[data-addkey]').forEach(el=>{
+          let v = el.value;
+          if(el.type === 'number') v = v === '' ? '' : parseFloat(v);
+          row[el.dataset.addkey] = v;
+        });
+        if(container._masterTableOpts.buildRow) Object.assign(row, container._masterTableOpts.buildRow(row) || {});
+        if(isDuplicateRow(row, container._masterTableArr, container._masterTableCols)){
+          alert('That row already exists — not adding a duplicate.');
+          return;
+        }
+        container._masterTableArr.push(row);
+        container._masterTableRerender();
+        return;
+      }
+    });
+
+    container.addEventListener('change', e=>{
+      if(e.target.id !== 'selAll') return;
+      container.querySelectorAll('.rowsel').forEach(cb=> cb.checked = e.target.checked);
+    });
+  }
+  // Update the closure state the delegated listeners read, since arr/cols/opts
+  // (and rerender itself) are fresh on every call to renderMasterTable.
+  container._masterTableArr = arr;
+  container._masterTableCols = cols;
+  container._masterTableOpts = opts;
+  container._masterTableRerender = rerender;
 
   const importBtn = container.querySelector('#importBtn');
   if(importBtn) importBtn.addEventListener('click', ()=>{
