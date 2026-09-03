@@ -15,7 +15,7 @@
       "Feb",
       "Mar"
     ],
-    "savedAt": "2026-09-03T14:01:03.319Z",
+    "savedAt": "2026-09-03T14:05:36.184Z",
     "activeCycleId": "CYC_czj5yj"
   },
   "channels": [
@@ -14160,6 +14160,25 @@
       "asin_IN": "",
       "asin_WHS": "",
       "id": "PSC_qb3e4f"
+    },
+    {
+      "eanCode": "-",
+      "skuCode": "NBHP01FR006-BE",
+      "name": "Feather 100% Microfiber 2000 GSM 60x40 Cm (Set of 1)",
+      "weight": 480,
+      "lbh": "",
+      "productGroupId": "PG_zhux4k",
+      "productCategoryId": "PC_r2a5ac",
+      "brandId": "BR1",
+      "asin_FK": "",
+      "asin_AZ": "B0F9P9ZJXM",
+      "asin_AZUS": "",
+      "asin_BK": "",
+      "asin_WS": "",
+      "asin_MY": "",
+      "asin_IN": "",
+      "asin_WHS": "",
+      "id": "PSC_2umg6n"
     }
   ],
   "aopCycles": [
