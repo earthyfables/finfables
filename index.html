@@ -1863,7 +1863,7 @@ function renderParetoSubTable(host, key){
       {key:'productCategoryId', label:'Pdt Cat', type:'select', options:()=>optList(DATA.productCategories,c=>c.name), width:170},
       {key:'brandId', label:'Brand', type:'select', options:()=>optList(DATA.brands,b=>b.name), width:170},
       ...asinCols
-    ], {prefix:'PSC', addLabel:'Add'});
+    ], {prefix:'PSC', addLabel:'Add', allowAdd:false});
   } else if(key === 'brandCategoryMapping'){
     renderMasterTable(host, DATA.brandCategoryMapping, [
       {key:'brandId', label:'Brand', type:'select', options:()=>optList(DATA.brands,b=>b.name), width:200},
