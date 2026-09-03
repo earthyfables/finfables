@@ -15,7 +15,7 @@
       "Feb",
       "Mar"
     ],
-    "savedAt": "2026-09-03T11:40:55.383Z",
+    "savedAt": "2026-09-03T11:41:00.790Z",
     "activeCycleId": "CYC_czj5yj"
   },
   "channels": [
@@ -86,7 +86,7 @@
     {
       "id": "PM_yln11y",
       "partner": "Instamart",
-      "model": "B2B",
+      "model": "B2C",
       "partnerGroup": "QCK"
     }
   ],
