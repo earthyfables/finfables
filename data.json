@@ -15,7 +15,7 @@
       "Feb",
       "Mar"
     ],
-    "savedAt": "2026-09-03T12:07:14.954Z",
+    "savedAt": "2026-09-03T12:09:09.285Z",
     "activeCycleId": "CYC_czj5yj"
   },
   "channels": [
@@ -88,6 +88,12 @@
       "partner": "Instamart",
       "model": "B2C",
       "partnerGroup": "QCK"
+    },
+    {
+      "id": "PM_znvmp9",
+      "partner": "WH Store",
+      "model": "B2C",
+      "partnerGroup": "Other Offline"
     }
   ],
   "brandPartnerMapping": [
