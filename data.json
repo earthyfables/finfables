@@ -15,7 +15,7 @@
       "Feb",
       "Mar"
     ],
-    "savedAt": "2026-09-03T13:14:21.938Z",
+    "savedAt": "2026-09-03T13:14:44.073Z",
     "activeCycleId": "CYC_czj5yj"
   },
   "channels": [
@@ -27648,7 +27648,78 @@
     "CYC_czj5yj": {},
     "CYC_xba629": {}
   },
-  "brandCategoryMapping": [],
+  "brandCategoryMapping": [
+    {
+      "brandId": "BR1",
+      "productCategoryId": "PC_r2a5ac",
+      "id": "BCM_ix7yx9"
+    },
+    {
+      "brandId": "BR1",
+      "productCategoryId": "PC_ofapit",
+      "id": "BCM_9xl2ph"
+    },
+    {
+      "brandId": "BR1",
+      "productCategoryId": "PC_t2rz6a",
+      "id": "BCM_fotuih"
+    },
+    {
+      "brandId": "BR1",
+      "productCategoryId": "PC_d7uwz1",
+      "id": "BCM_cfidn1"
+    },
+    {
+      "brandId": "BR1",
+      "productCategoryId": "PC_h01yup",
+      "id": "BCM_3vigrm"
+    },
+    {
+      "brandId": "BR1",
+      "productCategoryId": "PC_21bqv5",
+      "id": "BCM_8iu8kr"
+    },
+    {
+      "brandId": "BR1",
+      "productCategoryId": "PC_mg39l4",
+      "id": "BCM_fwatic"
+    },
+    {
+      "brandId": "BR1",
+      "productCategoryId": "PC_edydxr",
+      "id": "BCM_vqsjm3"
+    },
+    {
+      "brandId": "BR1",
+      "productCategoryId": "PC_ncey5g",
+      "id": "BCM_qwljwg"
+    },
+    {
+      "brandId": "BR1",
+      "productCategoryId": "PC_e0ut7i",
+      "id": "BCM_jk4zk3"
+    },
+    {
+      "brandId": "BR1",
+      "productCategoryId": "PC_9kyg3s",
+      "id": "BCM_ew541o"
+    },
+    {
+      "brandId": "BR1",
+      "productCategoryId": "PC_43yr0v",
+      "id": "BCM_d2xnpj"
+    },
+    {
+      "brandId": "BR_i228uj",
+      "productCategoryId": "PC_r2a5ac",
+      "id": "BCM_xho137"
+    },
+    {
+      "brandId": "BR_i228uj",
+      "productCategoryId": "PC_ofapit",
+      "id": "BCM_sbdrza"
+    }
+  ],
   "monthlyGMVByBrandByCycle": {
     "": {}
   }
