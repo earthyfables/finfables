@@ -15,7 +15,7 @@
       "Feb",
       "Mar"
     ],
-    "savedAt": "2026-09-03T12:13:14.992Z",
+    "savedAt": "2026-09-03T12:13:18.406Z",
     "activeCycleId": "CYC_czj5yj"
   },
   "channels": [
@@ -79,7 +79,8 @@
       "partner": "Website",
       "model": "B2C",
       "partnerGroup": "Website",
-      "id": "PM_w4g7wl"
+      "id": "PM_w4g7wl",
+      "partnerCode": "WS"
     },
     {
       "partner": "Myntra",
