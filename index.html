@@ -532,6 +532,7 @@ const SEED = {
   codbLineItems:[], marketplaceDeductionMapping:[],
   productGroups:[{id:"PG1",name:"Personal Care"}],
   productCategories:[{id:"PC1",name:"Towels",productGroupId:"PG1"}],
+  brandCategoryMapping:[],
   productSubCategories:[{id:"PSC1",name:"Bath Towel",productGroupId:"PG1",productCategoryId:"PC1",amrp:100,acogs:40}],
   salesInputByCycle:{'':[]}, codbRateCardByCycle:{'':{}}, miscInputsByCycle:{'':{}}, discMarginGstByCycle:{'':{}}, paretoInputByCycle:{'':{}},
   debtorsByCycle:{'':{}}, debtorsOverrideByCycle:{'':{}}, creditorsByCycle:{'':[]}, inventoryByCycle:{'':{}}, creditorPmtOverrideByCycle:{'':{}}
@@ -552,7 +553,7 @@ async function loadData(){
   DATA = fromFile || JSON.parse(JSON.stringify(SEED));
   // Migration: backfill any fields/arrays introduced after this data.json was last saved,
   // so older saved files keep working without losing existing rows.
-  ['codbLineItems','marketplaceDeductionMapping','productGroups','productCategories'].forEach(k=>{ if(!DATA[k]) DATA[k]=[]; });
+  ['codbLineItems','marketplaceDeductionMapping','productGroups','productCategories','brandCategoryMapping'].forEach(k=>{ if(!DATA[k]) DATA[k]=[]; });
   // Migrate salesInput from the old flat-array shape into the new cycle-scoped
   // shape ({'': [...], [cycleId]: [...]}) so that pre-existing data lands in
   // the default (no-cycle) bucket rather than being lost.
@@ -1795,6 +1796,7 @@ const PARETO_SUB_TABS = [
   {key:'productGroups', label:'Product Group'},
   {key:'productCategories', label:'Product Category'},
   {key:'productSubCategories', label:'Product Sub Category'},
+  {key:'brandCategoryMapping', label:'Brand → Pdt Cat Mapping'},
   {key:'paretoInput', label:'Pareto Input'}
 ];
 let paretoSubTab = 'productGroups';
@@ -1807,8 +1809,7 @@ function renderParetoSubTable(host, key){
   } else if(key === 'productCategories'){
     renderMasterTable(host, DATA.productCategories, [
       {key:'name', label:'Pdt Cat', width:220},
-      {key:'productGroupId', label:'Pdt Grp', type:'select', options:()=>optList(DATA.productGroups,g=>g.name), width:200},
-      {key:'brandId', label:'Brand', type:'select', options:()=>optList(DATA.brands,b=>b.name), width:170}
+      {key:'productGroupId', label:'Pdt Grp', type:'select', options:()=>optList(DATA.productGroups,g=>g.name), width:200}
     ], {prefix:'PC', addLabel:'Add'});
   } else if(key === 'productSubCategories'){
     renderMasterTable(host, DATA.productSubCategories, [
@@ -1819,6 +1820,11 @@ function renderParetoSubTable(host, key){
       {key:'productCategoryId', label:'Pdt Cat', type:'select', options:()=>optList(DATA.productCategories,c=>c.name), width:170},
       {key:'brandId', label:'Brand', type:'select', options:()=>optList(DATA.brands,b=>b.name), width:170}
     ], {prefix:'PSC', addLabel:'Add'});
+  } else if(key === 'brandCategoryMapping'){
+    renderMasterTable(host, DATA.brandCategoryMapping, [
+      {key:'brandId', label:'Brand', type:'select', options:()=>optList(DATA.brands,b=>b.name), width:200},
+      {key:'productCategoryId', label:'Pdt Cat', type:'select', options:()=>optList(DATA.productCategories,c=>c.name), width:200}
+    ], {prefix:'BCM', addLabel:'Add mapping'});
   } else {
     renderParetoInputScreen(host);
   }
