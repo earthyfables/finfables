@@ -15,7 +15,7 @@
       "Feb",
       "Mar"
     ],
-    "savedAt": "2026-09-03T12:06:40.663Z",
+    "savedAt": "2026-09-03T12:06:51.941Z",
     "activeCycleId": "CYC_czj5yj"
   },
   "channels": [
@@ -1098,6 +1098,16 @@
       "brandId": "BR_i228uj",
       "partnerModelId": "PM_lkql7m",
       "codbLineItemId": "CLI_6qsvs6"
+    },
+    {
+      "brandId": "BR_i228uj",
+      "partnerModelId": "PM_lkql7m",
+      "codbLineItemId": "CLI_u9nlrh"
+    },
+    {
+      "brandId": "BR_i228uj",
+      "partnerModelId": "PM_lkql7m",
+      "codbLineItemId": "CLI_c5qu8y"
     }
   ],
   "partnerGroups": [
