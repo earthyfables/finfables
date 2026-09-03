@@ -1805,7 +1805,8 @@ function renderParetoSubTable(host, key){
   } else if(key === 'productCategories'){
     renderMasterTable(host, DATA.productCategories, [
       {key:'name', label:'Pdt Cat', width:220},
-      {key:'productGroupId', label:'Pdt Grp', type:'select', options:()=>optList(DATA.productGroups,g=>g.name), width:200}
+      {key:'productGroupId', label:'Pdt Grp', type:'select', options:()=>optList(DATA.productGroups,g=>g.name), width:200},
+      {key:'brandId', label:'Brand', type:'select', options:()=>optList(DATA.brands,b=>b.name), width:170}
     ], {prefix:'PC', addLabel:'Add'});
   } else if(key === 'productSubCategories'){
     renderMasterTable(host, DATA.productSubCategories, [
