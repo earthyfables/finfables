@@ -15,7 +15,7 @@
       "Feb",
       "Mar"
     ],
-    "savedAt": "2026-09-03T13:08:04.494Z",
+    "savedAt": "2026-09-03T13:14:21.938Z",
     "activeCycleId": "CYC_czj5yj"
   },
   "channels": [
@@ -27648,18 +27648,7 @@
     "CYC_czj5yj": {},
     "CYC_xba629": {}
   },
-  "brandCategoryMapping": [
-    {
-      "brandId": "BR1",
-      "productCategoryId": "PC_43yr0v",
-      "id": "BCM_i1sjbp"
-    },
-    {
-      "brandId": "BR_i228uj",
-      "productCategoryId": "PC_ofapit",
-      "id": "BCM_bzqxrj"
-    }
-  ],
+  "brandCategoryMapping": [],
   "monthlyGMVByBrandByCycle": {
     "": {}
   }
