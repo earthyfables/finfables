@@ -15,7 +15,7 @@
       "Feb",
       "Mar"
     ],
-    "savedAt": "2026-09-03T13:14:44.073Z",
+    "savedAt": "2026-09-03T13:17:16.144Z",
     "activeCycleId": "CYC_czj5yj"
   },
   "channels": [
@@ -1237,427 +1237,498 @@
       "id": "PSC_vfhh8o",
       "name": "Bath Towels Combed 600 GSM set of 2 - 75x150",
       "productGroupId": "PG_zhux4k",
-      "productCategoryId": "PC_ofapit"
+      "productCategoryId": "PC_ofapit",
+      "brandId": "BR1"
     },
     {
       "id": "PSC_ya8p7s",
       "name": "Bath Towels Combed 600 GSM Set of 1 Small Size - 70X140",
       "productGroupId": "PG_zhux4k",
-      "productCategoryId": "PC_ofapit"
+      "productCategoryId": "PC_ofapit",
+      "brandId": "BR1"
     },
     {
       "id": "PSC_grcdkh",
       "name": "Bath Towels Combed Combo 600 GSM set of 1 Bath , 2 Hand   - 75x150",
       "productGroupId": "PG_zhux4k",
-      "productCategoryId": "PC_ofapit"
+      "productCategoryId": "PC_ofapit",
+      "brandId": "BR1"
     },
     {
       "id": "PSC_0dqud5",
       "name": "Bath Towels Combed Combo 600 GSM set of 2 Bath , 2 Hand 2 Face  - 75x150",
       "productGroupId": "PG_zhux4k",
-      "productCategoryId": "PC_ofapit"
+      "productCategoryId": "PC_ofapit",
+      "brandId": "BR1"
     },
     {
       "id": "PSC_bs6c4a",
       "name": "Bath Towels Combed 500 GSM set of 1  - 140X70",
       "productGroupId": "PG_zhux4k",
-      "productCategoryId": "PC_ofapit"
+      "productCategoryId": "PC_ofapit",
+      "brandId": "BR1"
     },
     {
       "id": "PSC_gnojd0",
       "name": "Bath Towels Combed 500 GSM set of 2 - 140X70",
       "productGroupId": "PG_zhux4k",
-      "productCategoryId": "PC_ofapit"
+      "productCategoryId": "PC_ofapit",
+      "brandId": "BR1"
     },
     {
       "id": "PSC_2ypjy3",
       "name": "Towels Bamboo Bath Set of 1 - 73X150",
       "productGroupId": "PG_zhux4k",
-      "productCategoryId": "PC_ofapit"
+      "productCategoryId": "PC_ofapit",
+      "brandId": "BR1"
     },
     {
       "id": "PSC_tje05j",
       "name": "Towels Bamboo Set of 2 - 73X150",
       "productGroupId": "PG_zhux4k",
-      "productCategoryId": "PC_ofapit"
+      "productCategoryId": "PC_ofapit",
+      "brandId": "BR1"
     },
     {
       "id": "PSC_j4pq6u",
       "name": "Bath Towels Combed 400 GSM - 70X140",
       "productGroupId": "PG_zhux4k",
-      "productCategoryId": "PC_ofapit"
+      "productCategoryId": "PC_ofapit",
+      "brandId": "BR1"
     },
     {
       "id": "PSC_24kez0",
       "name": "Bath Towels Combed 400 GSM Set of 2  - 70X140",
       "productGroupId": "PG_zhux4k",
-      "productCategoryId": "PC_ofapit"
+      "productCategoryId": "PC_ofapit",
+      "brandId": "BR1"
     },
     {
       "id": "PSC_57jds1",
       "name": "Face Towels 600 GSM set of 3 - 30X30",
       "productGroupId": "PG_zhux4k",
-      "productCategoryId": "PC_t2rz6a"
+      "productCategoryId": "PC_t2rz6a",
+      "brandId": "BR1"
     },
     {
       "id": "PSC_a7uh0h",
       "name": "Face Towels 600 GSM set of 4 - 30X30",
       "productGroupId": "PG_zhux4k",
-      "productCategoryId": "PC_t2rz6a"
+      "productCategoryId": "PC_t2rz6a",
+      "brandId": "BR1"
     },
     {
       "id": "PSC_wv5mal",
       "name": "Triply Frying Pan  - 20",
       "productGroupId": "PG_vf9yhj",
-      "productCategoryId": "PC_d7uwz1"
+      "productCategoryId": "PC_d7uwz1",
+      "brandId": "BR1"
     },
     {
       "id": "PSC_0hporz",
       "name": "Triply Frying Pan  - 22",
       "productGroupId": "PG_vf9yhj",
-      "productCategoryId": "PC_d7uwz1"
+      "productCategoryId": "PC_d7uwz1",
+      "brandId": "BR1"
     },
     {
       "id": "PSC_v29f1s",
       "name": "Triply Frying Pan  - 24",
       "productGroupId": "PG_vf9yhj",
-      "productCategoryId": "PC_d7uwz1"
+      "productCategoryId": "PC_d7uwz1",
+      "brandId": "BR1"
     },
     {
       "id": "PSC_ojadqb",
       "name": "Triply Sauce Pan  - 14",
       "productGroupId": "PG_vf9yhj",
-      "productCategoryId": "PC_d7uwz1"
+      "productCategoryId": "PC_d7uwz1",
+      "brandId": "BR1"
     },
     {
       "id": "PSC_5c4qz5",
       "name": "Triply Sauce Pan  - 16",
       "productGroupId": "PG_vf9yhj",
-      "productCategoryId": "PC_d7uwz1"
+      "productCategoryId": "PC_d7uwz1",
+      "brandId": "BR1"
     },
     {
       "id": "PSC_g7o7w9",
       "name": "Triply Sauce Pan  - 18",
       "productGroupId": "PG_vf9yhj",
-      "productCategoryId": "PC_d7uwz1"
+      "productCategoryId": "PC_d7uwz1",
+      "brandId": "BR1"
     },
     {
       "id": "PSC_yn1pzp",
       "name": "Stainless Steel Frying Pan  - 20",
       "productGroupId": "PG_vf9yhj",
-      "productCategoryId": "PC_d7uwz1"
+      "productCategoryId": "PC_d7uwz1",
+      "brandId": "BR1"
     },
     {
       "id": "PSC_4uuj75",
       "name": "Stainless Steel Frying Pan  - 22",
       "productGroupId": "PG_vf9yhj",
-      "productCategoryId": "PC_d7uwz1"
+      "productCategoryId": "PC_d7uwz1",
+      "brandId": "BR1"
     },
     {
       "id": "PSC_frk6vu",
       "name": "Stainless Steel Frying Pan  - 24",
       "productGroupId": "PG_vf9yhj",
-      "productCategoryId": "PC_d7uwz1"
+      "productCategoryId": "PC_d7uwz1",
+      "brandId": "BR1"
     },
     {
       "id": "PSC_7ly51o",
       "name": "Stainless Steel Hammerred Frying Pan  - 20",
       "productGroupId": "PG_vf9yhj",
-      "productCategoryId": "PC_d7uwz1"
+      "productCategoryId": "PC_d7uwz1",
+      "brandId": "BR1"
     },
     {
       "id": "PSC_caq3uy",
       "name": "Stainless Steel Hammerred Frying Pan  - 22",
       "productGroupId": "PG_vf9yhj",
-      "productCategoryId": "PC_d7uwz1"
+      "productCategoryId": "PC_d7uwz1",
+      "brandId": "BR1"
     },
     {
       "id": "PSC_5fycm5",
       "name": "Stainless Steel Hammerred Frying Pan  - 24",
       "productGroupId": "PG_vf9yhj",
-      "productCategoryId": "PC_d7uwz1"
+      "productCategoryId": "PC_d7uwz1",
+      "brandId": "BR1"
     },
     {
       "id": "PSC_anpbv2",
       "name": "Hand Towels Combed 600 GSM set of2  - 60X40",
       "productGroupId": "PG_zhux4k",
-      "productCategoryId": "PC_h01yup"
+      "productCategoryId": "PC_h01yup",
+      "brandId": "BR1"
     },
     {
       "id": "PSC_704ibx",
       "name": "Hand Towels Combed 600 GSM Set of 4 - 60X40",
       "productGroupId": "PG_zhux4k",
-      "productCategoryId": "PC_h01yup"
+      "productCategoryId": "PC_h01yup",
+      "brandId": "BR1"
     },
     {
       "id": "PSC_x06zwa",
       "name": "Hand Towels Bamboo set of 2   - 60X40",
       "productGroupId": "PG_zhux4k",
-      "productCategoryId": "PC_h01yup"
+      "productCategoryId": "PC_h01yup",
+      "brandId": "BR1"
     },
     {
       "id": "PSC_rilcbv",
       "name": "Hand Towels Bamboo set of 4  - 60X40",
       "productGroupId": "PG_zhux4k",
-      "productCategoryId": "PC_h01yup"
+      "productCategoryId": "PC_h01yup",
+      "brandId": "BR1"
     },
     {
       "id": "PSC_dxmvkf",
       "name": "Hand Towels Combed 400 GSM set of 2  - 60X40",
       "productGroupId": "PG_zhux4k",
-      "productCategoryId": "PC_h01yup"
+      "productCategoryId": "PC_h01yup",
+      "brandId": "BR1"
     },
     {
       "id": "PSC_cp6bsm",
       "name": "Hand Towels Combed 400 GSM set of 4 - 60X40",
       "productGroupId": "PG_zhux4k",
-      "productCategoryId": "PC_h01yup"
+      "productCategoryId": "PC_h01yup",
+      "brandId": "BR1"
     },
     {
       "id": "PSC_nuzmfh",
       "name": "Triply Kadhai  - 20",
       "productGroupId": "PG_vf9yhj",
-      "productCategoryId": "PC_21bqv5"
+      "productCategoryId": "PC_21bqv5",
+      "brandId": "BR1"
     },
     {
       "id": "PSC_hv9vb8",
       "name": "Triply Kadhai  - 22",
       "productGroupId": "PG_vf9yhj",
-      "productCategoryId": "PC_21bqv5"
+      "productCategoryId": "PC_21bqv5",
+      "brandId": "BR1"
     },
     {
       "id": "PSC_ovcbc1",
       "name": "Triply Kadhai  - 24",
       "productGroupId": "PG_vf9yhj",
-      "productCategoryId": "PC_21bqv5"
+      "productCategoryId": "PC_21bqv5",
+      "brandId": "BR1"
     },
     {
       "id": "PSC_ladycs",
       "name": "Triply Kadhai  - 26",
       "productGroupId": "PG_vf9yhj",
-      "productCategoryId": "PC_21bqv5"
+      "productCategoryId": "PC_21bqv5",
+      "brandId": "BR1"
     },
     {
       "id": "PSC_u6k8rr",
       "name": "Triply Kadhai  - 28",
       "productGroupId": "PG_vf9yhj",
-      "productCategoryId": "PC_21bqv5"
+      "productCategoryId": "PC_21bqv5",
+      "brandId": "BR1"
     },
     {
       "id": "PSC_q1n3rj",
       "name": "Triply Kadhai  - 30",
       "productGroupId": "PG_vf9yhj",
-      "productCategoryId": "PC_21bqv5"
+      "productCategoryId": "PC_21bqv5",
+      "brandId": "BR1"
     },
     {
       "id": "PSC_bm2o45",
       "name": "Gol Kadhai  - 22",
       "productGroupId": "PG_vf9yhj",
-      "productCategoryId": "PC_21bqv5"
+      "productCategoryId": "PC_21bqv5",
+      "brandId": "BR1"
     },
     {
       "id": "PSC_wsi4j3",
       "name": "Gol Kadhai  - 24",
       "productGroupId": "PG_vf9yhj",
-      "productCategoryId": "PC_21bqv5"
+      "productCategoryId": "PC_21bqv5",
+      "brandId": "BR1"
     },
     {
       "id": "PSC_kbxmiv",
       "name": "Gol Kadhai  - 26",
       "productGroupId": "PG_vf9yhj",
-      "productCategoryId": "PC_21bqv5"
+      "productCategoryId": "PC_21bqv5",
+      "brandId": "BR1"
     },
     {
       "id": "PSC_vpb25a",
       "name": "Gol Kadhai  - 28",
       "productGroupId": "PG_vf9yhj",
-      "productCategoryId": "PC_21bqv5"
+      "productCategoryId": "PC_21bqv5",
+      "brandId": "BR1"
     },
     {
       "id": "PSC_d97h80",
       "name": "Stainless Steel Sauce pan  - 14",
       "productGroupId": "PG_vf9yhj",
-      "productCategoryId": "PC_mg39l4"
+      "productCategoryId": "PC_mg39l4",
+      "brandId": "BR1"
     },
     {
       "id": "PSC_nf1bw4",
       "name": "Stainless Steel Sauce pan  - 16",
       "productGroupId": "PG_vf9yhj",
-      "productCategoryId": "PC_mg39l4"
+      "productCategoryId": "PC_mg39l4",
+      "brandId": "BR1"
     },
     {
       "id": "PSC_w9er1a",
       "name": "Stainless Steel Sauce pan  - 18",
       "productGroupId": "PG_vf9yhj",
-      "productCategoryId": "PC_mg39l4"
+      "productCategoryId": "PC_mg39l4",
+      "brandId": "BR1"
     },
     {
       "id": "PSC_90pwo5",
       "name": "Stainless Steel Hammerred Sauce Pan  - 14",
       "productGroupId": "PG_vf9yhj",
-      "productCategoryId": "PC_mg39l4"
+      "productCategoryId": "PC_mg39l4",
+      "brandId": "BR1"
     },
     {
       "id": "PSC_0cq05d",
       "name": "Stainless Steel Hammerred Sauce Pan  - 16",
       "productGroupId": "PG_vf9yhj",
-      "productCategoryId": "PC_mg39l4"
+      "productCategoryId": "PC_mg39l4",
+      "brandId": "BR1"
     },
     {
       "id": "PSC_nx00yi",
       "name": "Stainless Steel Hammerred Sauce Pan  - 18",
       "productGroupId": "PG_vf9yhj",
-      "productCategoryId": "PC_mg39l4"
+      "productCategoryId": "PC_mg39l4",
+      "brandId": "BR1"
     },
     {
       "id": "PSC_e0u7eo",
       "name": "Tope Encapsulated  - 14",
       "productGroupId": "PG_vf9yhj",
-      "productCategoryId": "PC_edydxr"
+      "productCategoryId": "PC_edydxr",
+      "brandId": "BR1"
     },
     {
       "id": "PSC_iug7mn",
       "name": "Tope Encapsulated  - 16",
       "productGroupId": "PG_vf9yhj",
-      "productCategoryId": "PC_edydxr"
+      "productCategoryId": "PC_edydxr",
+      "brandId": "BR1"
     },
     {
       "id": "PSC_hiwn0h",
       "name": "Tope Encapsulated  - 18",
       "productGroupId": "PG_vf9yhj",
-      "productCategoryId": "PC_edydxr"
+      "productCategoryId": "PC_edydxr",
+      "brandId": "BR1"
     },
     {
       "id": "PSC_b30bgu",
       "name": "Tope Encapsulated  - 20",
       "productGroupId": "PG_vf9yhj",
-      "productCategoryId": "PC_edydxr"
+      "productCategoryId": "PC_edydxr",
+      "brandId": "BR1"
     },
     {
       "id": "PSC_t8trza",
       "name": "Tope Encapsulated  - 22",
       "productGroupId": "PG_vf9yhj",
-      "productCategoryId": "PC_edydxr"
+      "productCategoryId": "PC_edydxr",
+      "brandId": "BR1"
     },
     {
       "id": "PSC_dncy3l",
       "name": "Tope Encapsulated  - 24",
       "productGroupId": "PG_vf9yhj",
-      "productCategoryId": "PC_edydxr"
+      "productCategoryId": "PC_edydxr",
+      "brandId": "BR1"
     },
     {
       "id": "PSC_d0vkau",
       "name": "Tope Hammerred - 14",
       "productGroupId": "PG_vf9yhj",
-      "productCategoryId": "PC_edydxr"
+      "productCategoryId": "PC_edydxr",
+      "brandId": "BR1"
     },
     {
       "id": "PSC_d8nzsx",
       "name": "Tope Hammerred - 16",
       "productGroupId": "PG_vf9yhj",
-      "productCategoryId": "PC_edydxr"
+      "productCategoryId": "PC_edydxr",
+      "brandId": "BR1"
     },
     {
       "id": "PSC_36ua4u",
       "name": "Tope Hammerred - 18",
       "productGroupId": "PG_vf9yhj",
-      "productCategoryId": "PC_edydxr"
+      "productCategoryId": "PC_edydxr",
+      "brandId": "BR1"
     },
     {
       "id": "PSC_x96g3t",
       "name": "Tope Hammerred - 19",
       "productGroupId": "PG_vf9yhj",
-      "productCategoryId": "PC_edydxr"
+      "productCategoryId": "PC_edydxr",
+      "brandId": "BR1"
     },
     {
       "id": "PSC_hfywd1",
       "name": "Tope Hammerred - 22",
       "productGroupId": "PG_vf9yhj",
-      "productCategoryId": "PC_edydxr"
+      "productCategoryId": "PC_edydxr",
+      "brandId": "BR1"
     },
     {
       "id": "PSC_ru5tr5",
       "name": "Tope Hammerred - 24",
       "productGroupId": "PG_vf9yhj",
-      "productCategoryId": "PC_edydxr"
+      "productCategoryId": "PC_edydxr",
+      "brandId": "BR1"
     },
     {
       "id": "PSC_kwqrmi",
       "name": "Stainless Steel Tope - 14",
       "productGroupId": "PG_vf9yhj",
-      "productCategoryId": "PC_edydxr"
+      "productCategoryId": "PC_edydxr",
+      "brandId": "BR1"
     },
     {
       "id": "PSC_mmidz3",
       "name": "Stainless Steel Tope - 16",
       "productGroupId": "PG_vf9yhj",
-      "productCategoryId": "PC_edydxr"
+      "productCategoryId": "PC_edydxr",
+      "brandId": "BR1"
     },
     {
       "id": "PSC_pe58t1",
       "name": "Stainless Steel Tope - 18",
       "productGroupId": "PG_vf9yhj",
-      "productCategoryId": "PC_edydxr"
+      "productCategoryId": "PC_edydxr",
+      "brandId": "BR1"
     },
     {
       "id": "PSC_1m6xgm",
       "name": "Stainless Steel Tope - 20",
       "productGroupId": "PG_vf9yhj",
-      "productCategoryId": "PC_edydxr"
+      "productCategoryId": "PC_edydxr",
+      "brandId": "BR1"
     },
     {
       "id": "PSC_graitd",
       "name": "Stainless Steel Tope - 22",
       "productGroupId": "PG_vf9yhj",
-      "productCategoryId": "PC_edydxr"
+      "productCategoryId": "PC_edydxr",
+      "brandId": "BR1"
     },
     {
       "id": "PSC_exsr1i",
       "name": "Stainless Steel Tope - 24",
       "productGroupId": "PG_vf9yhj",
-      "productCategoryId": "PC_edydxr"
+      "productCategoryId": "PC_edydxr",
+      "brandId": "BR1"
     },
     {
       "id": "PSC_0nb1br",
       "name": "Stainless Steel Tope Combo  - 16/18/20",
       "productGroupId": "PG_vf9yhj",
-      "productCategoryId": "PC_edydxr"
+      "productCategoryId": "PC_edydxr",
+      "brandId": "BR1"
     },
     {
       "id": "PSC_7f0pvv",
       "name": "Towels Bamboo 2 Bath & 2 Hand  - 73X150",
       "productGroupId": "PG_zhux4k",
-      "productCategoryId": "PC_ncey5g"
+      "productCategoryId": "PC_ncey5g",
+      "brandId": "BR1"
     },
     {
       "id": "PSC_bogr5s",
       "name": "Triply WOK - 20",
       "productGroupId": "PG_vf9yhj",
-      "productCategoryId": "PC_e0ut7i"
+      "productCategoryId": "PC_e0ut7i",
+      "brandId": "BR1"
     },
     {
       "id": "PSC_zjz3g0",
       "name": "Triply WOK - 22",
       "productGroupId": "PG_vf9yhj",
-      "productCategoryId": "PC_e0ut7i"
+      "productCategoryId": "PC_e0ut7i",
+      "brandId": "BR1"
     },
     {
       "id": "PSC_vgqab2",
       "name": "Triply WOK - 24",
       "productGroupId": "PG_vf9yhj",
-      "productCategoryId": "PC_e0ut7i"
+      "productCategoryId": "PC_e0ut7i",
+      "brandId": "BR1"
     },
     {
       "id": "PSC_jfzy5a",
       "name": "Head Towel  -",
       "productGroupId": "PG_zhux4k",
-      "productCategoryId": "PC_9kyg3s"
+      "productCategoryId": "PC_9kyg3s",
+      "brandId": "BR1"
     },
     {
       "id": "PSC_hf2t1m",
       "name": "Gym Towel  -",
       "productGroupId": "PG_zhux4k",
-      "productCategoryId": "PC_43yr0v"
+      "productCategoryId": "PC_43yr0v",
+      "brandId": "BR1"
     },
     {
       "skuCode": "SKU Code",
@@ -1665,7 +1736,8 @@
       "weight": "",
       "productGroupId": "PG_zhux4k",
       "productCategoryId": "PC_r2a5ac",
-      "id": "PSC_lfh3n8"
+      "id": "PSC_lfh3n8",
+      "brandId": "BR1"
     },
     {
       "skuCode": "EFHC01FT001-BE",
@@ -1673,7 +1745,8 @@
       "weight": 60,
       "productGroupId": "PG_zhux4k",
       "productCategoryId": "PC_r2a5ac",
-      "id": "PSC_tdclxt"
+      "id": "PSC_tdclxt",
+      "brandId": "BR1"
     },
     {
       "skuCode": "EFHC01FT002-BE",
@@ -1681,7 +1754,8 @@
       "weight": 60,
       "productGroupId": "PG_zhux4k",
       "productCategoryId": "PC_r2a5ac",
-      "id": "PSC_judxo2"
+      "id": "PSC_judxo2",
+      "brandId": "BR1"
     },
     {
       "skuCode": "EFHC01FT003-BE",
@@ -1689,7 +1763,8 @@
       "weight": 60,
       "productGroupId": "PG_zhux4k",
       "productCategoryId": "PC_ofapit",
-      "id": "PSC_rgqvgi"
+      "id": "PSC_rgqvgi",
+      "brandId": "BR1"
     },
     {
       "skuCode": "EFHC01FT004-BE",
@@ -1697,7 +1772,8 @@
       "weight": 60,
       "productGroupId": "PG_zhux4k",
       "productCategoryId": "PC_ofapit",
-      "id": "PSC_2fl298"
+      "id": "PSC_2fl298",
+      "brandId": "BR1"
     },
     {
       "skuCode": "EFHC01FT005-BE",
@@ -1705,7 +1781,8 @@
       "weight": 60,
       "productGroupId": "PG_zhux4k",
       "productCategoryId": "PC_ofapit",
-      "id": "PSC_9hx6sh"
+      "id": "PSC_9hx6sh",
+      "brandId": "BR1"
     },
     {
       "skuCode": "EFHC01FT006-BE",
@@ -1713,7 +1790,8 @@
       "weight": 60,
       "productGroupId": "PG_zhux4k",
       "productCategoryId": "PC_ofapit",
-      "id": "PSC_zb0dlj"
+      "id": "PSC_zb0dlj",
+      "brandId": "BR1"
     },
     {
       "skuCode": "EFHC01FT007-BE",
@@ -1721,7 +1799,8 @@
       "weight": 60,
       "productGroupId": "PG_zhux4k",
       "productCategoryId": "PC_ofapit",
-      "id": "PSC_r1yh5c"
+      "id": "PSC_r1yh5c",
+      "brandId": "BR1"
     },
     {
       "skuCode": "EFHC01FT008-BE",
@@ -1729,7 +1808,8 @@
       "weight": 60,
       "productGroupId": "PG_zhux4k",
       "productCategoryId": "PC_ofapit",
-      "id": "PSC_mvfxg5"
+      "id": "PSC_mvfxg5",
+      "brandId": "BR1"
     },
     {
       "skuCode": "EFHC01FT301-BE",
@@ -1737,7 +1817,8 @@
       "weight": 230,
       "productGroupId": "PG_zhux4k",
       "productCategoryId": "PC_ofapit",
-      "id": "PSC_74ecj1"
+      "id": "PSC_74ecj1",
+      "brandId": "BR1"
     },
     {
       "skuCode": "EFHC01FT302-BE",
@@ -1745,7 +1826,8 @@
       "weight": 230,
       "productGroupId": "PG_zhux4k",
       "productCategoryId": "PC_ofapit",
-      "id": "PSC_kats7e"
+      "id": "PSC_kats7e",
+      "brandId": "BR1"
     },
     {
       "skuCode": "EFHC01FT303-BE",
@@ -1753,7 +1835,8 @@
       "weight": 230,
       "productGroupId": "PG_zhux4k",
       "productCategoryId": "PC_ofapit",
-      "id": "PSC_0kgila"
+      "id": "PSC_0kgila",
+      "brandId": "BR1"
     },
     {
       "skuCode": "EFHC01FT304-BE",
@@ -1761,7 +1844,8 @@
       "weight": 230,
       "productGroupId": "PG_zhux4k",
       "productCategoryId": "PC_ofapit",
-      "id": "PSC_4fgrqp"
+      "id": "PSC_4fgrqp",
+      "brandId": "BR1"
     },
     {
       "skuCode": "EFHC01FT305-BE",
@@ -1769,7 +1853,8 @@
       "weight": 230,
       "productGroupId": "PG_zhux4k",
       "productCategoryId": "PC_ofapit",
-      "id": "PSC_fa9h2a"
+      "id": "PSC_fa9h2a",
+      "brandId": "BR1"
     },
     {
       "skuCode": "EFHC01FT306-BE",
@@ -1777,7 +1862,8 @@
       "weight": 230,
       "productGroupId": "PG_zhux4k",
       "productCategoryId": "PC_t2rz6a",
-      "id": "PSC_18zruv"
+      "id": "PSC_18zruv",
+      "brandId": "BR1"
     },
     {
       "skuCode": "EFHC01FT307-BE",
@@ -1785,7 +1871,8 @@
       "weight": 230,
       "productGroupId": "PG_zhux4k",
       "productCategoryId": "PC_t2rz6a",
-      "id": "PSC_164je8"
+      "id": "PSC_164je8",
+      "brandId": "BR1"
     },
     {
       "skuCode": "EFHC01FT308-BE",
@@ -1793,7 +1880,8 @@
       "weight": 230,
       "productGroupId": "PG_zhux4k",
       "productCategoryId": "PC_d7uwz1",
-      "id": "PSC_m5f6bg"
+      "id": "PSC_m5f6bg",
+      "brandId": "BR1"
     },
     {
       "skuCode": "EFHC01FT401-BE",
@@ -1801,7 +1889,8 @@
       "weight": 280,
       "productGroupId": "PG_zhux4k",
       "productCategoryId": "PC_d7uwz1",
-      "id": "PSC_odtek5"
+      "id": "PSC_odtek5",
+      "brandId": "BR1"
     },
     {
       "skuCode": "EFHC01FT402-BE",
@@ -1809,7 +1898,8 @@
       "weight": 280,
       "productGroupId": "PG_zhux4k",
       "productCategoryId": "PC_d7uwz1",
-      "id": "PSC_l0y2mr"
+      "id": "PSC_l0y2mr",
+      "brandId": "BR1"
     },
     {
       "skuCode": "EFHC01FT403-BE",
@@ -1817,7 +1907,8 @@
       "weight": 280,
       "productGroupId": "PG_zhux4k",
       "productCategoryId": "PC_d7uwz1",
-      "id": "PSC_mvrz5q"
+      "id": "PSC_mvrz5q",
+      "brandId": "BR1"
     },
     {
       "skuCode": "EFHC01FT404-BE",
@@ -1825,7 +1916,8 @@
       "weight": 280,
       "productGroupId": "PG_zhux4k",
       "productCategoryId": "PC_d7uwz1",
-      "id": "PSC_4i3itj"
+      "id": "PSC_4i3itj",
+      "brandId": "BR1"
     },
     {
       "skuCode": "EFHC01FT405-BE",
@@ -1833,7 +1925,8 @@
       "weight": 280,
       "productGroupId": "PG_zhux4k",
       "productCategoryId": "PC_d7uwz1",
-      "id": "PSC_mskstu"
+      "id": "PSC_mskstu",
+      "brandId": "BR1"
     },
     {
       "skuCode": "EFHC01FT406-BE",
@@ -1841,7 +1934,8 @@
       "weight": 280,
       "productGroupId": "PG_zhux4k",
       "productCategoryId": "PC_d7uwz1",
-      "id": "PSC_c1pk0v"
+      "id": "PSC_c1pk0v",
+      "brandId": "BR1"
     },
     {
       "skuCode": "EFHC01FT407-BE",
@@ -1849,7 +1943,8 @@
       "weight": 280,
       "productGroupId": "PG_zhux4k",
       "productCategoryId": "PC_d7uwz1",
-      "id": "PSC_j83pzf"
+      "id": "PSC_j83pzf",
+      "brandId": "BR1"
     },
     {
       "skuCode": "EFHC01FT408-BE",
@@ -1857,7 +1952,8 @@
       "weight": 280,
       "productGroupId": "PG_zhux4k",
       "productCategoryId": "PC_d7uwz1",
-      "id": "PSC_1yajmz"
+      "id": "PSC_1yajmz",
+      "brandId": "BR1"
     },
     {
       "skuCode": "EFHC01FT601-BE",
@@ -1865,7 +1961,8 @@
       "weight": 380,
       "productGroupId": "PG_zhux4k",
       "productCategoryId": "PC_d7uwz1",
-      "id": "PSC_60n0ju"
+      "id": "PSC_60n0ju",
+      "brandId": "BR1"
     },
     {
       "skuCode": "EFHC01FT602-BE",
@@ -1873,7 +1970,8 @@
       "weight": 380,
       "productGroupId": "PG_zhux4k",
       "productCategoryId": "PC_d7uwz1",
-      "id": "PSC_jzhx7i"
+      "id": "PSC_jzhx7i",
+      "brandId": "BR1"
     },
     {
       "skuCode": "EFHC01FT603-BE",
@@ -1881,7 +1979,8 @@
       "weight": 380,
       "productGroupId": "PG_zhux4k",
       "productCategoryId": "PC_d7uwz1",
-      "id": "PSC_u2plx5"
+      "id": "PSC_u2plx5",
+      "brandId": "BR1"
     },
     {
       "skuCode": "EFHC01FT604-BE",
@@ -1889,7 +1988,8 @@
       "weight": 380,
       "productGroupId": "PG_zhux4k",
       "productCategoryId": "PC_h01yup",
-      "id": "PSC_rt7kmn"
+      "id": "PSC_rt7kmn",
+      "brandId": "BR1"
     },
     {
       "skuCode": "EFHC01FT605-BE",
@@ -1897,7 +1997,8 @@
       "weight": 380,
       "productGroupId": "PG_zhux4k",
       "productCategoryId": "PC_h01yup",
-      "id": "PSC_cvwkwp"
+      "id": "PSC_cvwkwp",
+      "brandId": "BR1"
     },
     {
       "skuCode": "EFHC01FT606-BE",
@@ -1905,7 +2006,8 @@
       "weight": 380,
       "productGroupId": "PG_zhux4k",
       "productCategoryId": "PC_h01yup",
-      "id": "PSC_oal371"
+      "id": "PSC_oal371",
+      "brandId": "BR1"
     },
     {
       "skuCode": "EFHC01FT607-BE",
@@ -1913,7 +2015,8 @@
       "weight": 380,
       "productGroupId": "PG_zhux4k",
       "productCategoryId": "PC_h01yup",
-      "id": "PSC_a3rubp"
+      "id": "PSC_a3rubp",
+      "brandId": "BR1"
     },
     {
       "skuCode": "EFHC01FT608-BE",
@@ -1921,7 +2024,8 @@
       "weight": 380,
       "productGroupId": "PG_zhux4k",
       "productCategoryId": "PC_h01yup",
-      "id": "PSC_aa2ene"
+      "id": "PSC_aa2ene",
+      "brandId": "BR1"
     },
     {
       "skuCode": "EFHC01HT001-BE",
@@ -1929,7 +2033,8 @@
       "weight": 140,
       "productGroupId": "PG_zhux4k",
       "productCategoryId": "PC_h01yup",
-      "id": "PSC_oplorv"
+      "id": "PSC_oplorv",
+      "brandId": "BR1"
     },
     {
       "skuCode": "EFHC01HT002-BE",
@@ -1937,7 +2042,8 @@
       "weight": 140,
       "productGroupId": "PG_zhux4k",
       "productCategoryId": "PC_21bqv5",
-      "id": "PSC_yi5jkc"
+      "id": "PSC_yi5jkc",
+      "brandId": "BR1"
     },
     {
       "skuCode": "EFHC01HT003-BE",
@@ -1945,7 +2051,8 @@
       "weight": 140,
       "productGroupId": "PG_zhux4k",
       "productCategoryId": "PC_21bqv5",
-      "id": "PSC_v8inj2"
+      "id": "PSC_v8inj2",
+      "brandId": "BR1"
     },
     {
       "skuCode": "EFHC01HT004-BE",
@@ -1953,7 +2060,8 @@
       "weight": 140,
       "productGroupId": "PG_zhux4k",
       "productCategoryId": "PC_21bqv5",
-      "id": "PSC_9yrgku"
+      "id": "PSC_9yrgku",
+      "brandId": "BR1"
     },
     {
       "skuCode": "EFHC01HT005-BE",
@@ -1961,7 +2069,8 @@
       "weight": 140,
       "productGroupId": "PG_zhux4k",
       "productCategoryId": "PC_21bqv5",
-      "id": "PSC_bkivlb"
+      "id": "PSC_bkivlb",
+      "brandId": "BR1"
     },
     {
       "skuCode": "EFHC01HT006-BE",
@@ -1969,7 +2078,8 @@
       "weight": 140,
       "productGroupId": "PG_zhux4k",
       "productCategoryId": "PC_21bqv5",
-      "id": "PSC_917cvm"
+      "id": "PSC_917cvm",
+      "brandId": "BR1"
     },
     {
       "skuCode": "EFHC01HT007-BE",
@@ -1977,7 +2087,8 @@
       "weight": 140,
       "productGroupId": "PG_zhux4k",
       "productCategoryId": "PC_21bqv5",
-      "id": "PSC_77q6h4"
+      "id": "PSC_77q6h4",
+      "brandId": "BR1"
     },
     {
       "skuCode": "EFHC01HT008-BE",
@@ -1985,7 +2096,8 @@
       "weight": 140,
       "productGroupId": "PG_zhux4k",
       "productCategoryId": "PC_21bqv5",
-      "id": "PSC_h2w4ue"
+      "id": "PSC_h2w4ue",
+      "brandId": "BR1"
     },
     {
       "skuCode": "EFHC01HT201-BE",
@@ -1993,7 +2105,8 @@
       "weight": 350,
       "productGroupId": "PG_zhux4k",
       "productCategoryId": "PC_21bqv5",
-      "id": "PSC_5cyegf"
+      "id": "PSC_5cyegf",
+      "brandId": "BR1"
     },
     {
       "skuCode": "EFHC01HT202-BE",
@@ -2001,7 +2114,8 @@
       "weight": 350,
       "productGroupId": "PG_zhux4k",
       "productCategoryId": "PC_21bqv5",
-      "id": "PSC_dgoowz"
+      "id": "PSC_dgoowz",
+      "brandId": "BR1"
     },
     {
       "skuCode": "EFHC01HT203-BE",
@@ -2009,7 +2123,8 @@
       "weight": 350,
       "productGroupId": "PG_zhux4k",
       "productCategoryId": "PC_21bqv5",
-      "id": "PSC_6qocty"
+      "id": "PSC_6qocty",
+      "brandId": "BR1"
     },
     {
       "skuCode": "EFHC01HT204-BE",
@@ -2017,7 +2132,8 @@
       "weight": 350,
       "productGroupId": "PG_zhux4k",
       "productCategoryId": "PC_mg39l4",
-      "id": "PSC_918n69"
+      "id": "PSC_918n69",
+      "brandId": "BR1"
     },
     {
       "skuCode": "EFHC01HT205-BE",
@@ -2025,7 +2141,8 @@
       "weight": 350,
       "productGroupId": "PG_zhux4k",
       "productCategoryId": "PC_mg39l4",
-      "id": "PSC_jdrtif"
+      "id": "PSC_jdrtif",
+      "brandId": "BR1"
     },
     {
       "skuCode": "EFHC01HT206-BE",
@@ -2033,7 +2150,8 @@
       "weight": 350,
       "productGroupId": "PG_zhux4k",
       "productCategoryId": "PC_mg39l4",
-      "id": "PSC_gu9a0q"
+      "id": "PSC_gu9a0q",
+      "brandId": "BR1"
     },
     {
       "skuCode": "EFHC01HT207-BE",
@@ -2041,7 +2159,8 @@
       "weight": 350,
       "productGroupId": "PG_zhux4k",
       "productCategoryId": "PC_mg39l4",
-      "id": "PSC_9ixcaw"
+      "id": "PSC_9ixcaw",
+      "brandId": "BR1"
     },
     {
       "skuCode": "EFHC01HT208-BE",
@@ -2049,7 +2168,8 @@
       "weight": 350,
       "productGroupId": "PG_zhux4k",
       "productCategoryId": "PC_mg39l4",
-      "id": "PSC_m7mg1y"
+      "id": "PSC_m7mg1y",
+      "brandId": "BR1"
     },
     {
       "skuCode": "EFHC01HT401-BE",
@@ -2057,7 +2177,8 @@
       "weight": 605,
       "productGroupId": "PG_zhux4k",
       "productCategoryId": "PC_mg39l4",
-      "id": "PSC_fd14l9"
+      "id": "PSC_fd14l9",
+      "brandId": "BR1"
     },
     {
       "skuCode": "EFHC01HT402-BE",
@@ -2065,7 +2186,8 @@
       "weight": 605,
       "productGroupId": "PG_zhux4k",
       "productCategoryId": "PC_edydxr",
-      "id": "PSC_nzue17"
+      "id": "PSC_nzue17",
+      "brandId": "BR1"
     },
     {
       "skuCode": "EFHC01HT403-BE",
@@ -2073,7 +2195,8 @@
       "weight": 605,
       "productGroupId": "PG_zhux4k",
       "productCategoryId": "PC_edydxr",
-      "id": "PSC_1aiq7x"
+      "id": "PSC_1aiq7x",
+      "brandId": "BR1"
     },
     {
       "skuCode": "EFHC01HT404-BE",
@@ -2081,7 +2204,8 @@
       "weight": 605,
       "productGroupId": "PG_zhux4k",
       "productCategoryId": "PC_edydxr",
-      "id": "PSC_1hxmfu"
+      "id": "PSC_1hxmfu",
+      "brandId": "BR1"
     },
     {
       "skuCode": "EFHC01HT405-BE",
@@ -2089,7 +2213,8 @@
       "weight": 605,
       "productGroupId": "PG_zhux4k",
       "productCategoryId": "PC_edydxr",
-      "id": "PSC_5c7xrl"
+      "id": "PSC_5c7xrl",
+      "brandId": "BR1"
     },
     {
       "skuCode": "EFHC01HT406-BE",
@@ -2097,7 +2222,8 @@
       "weight": 605,
       "productGroupId": "PG_zhux4k",
       "productCategoryId": "PC_edydxr",
-      "id": "PSC_2lzalt"
+      "id": "PSC_2lzalt",
+      "brandId": "BR1"
     },
     {
       "skuCode": "EFHC01HT407-BE",
@@ -2105,7 +2231,8 @@
       "weight": 605,
       "productGroupId": "PG_zhux4k",
       "productCategoryId": "PC_edydxr",
-      "id": "PSC_utnr8t"
+      "id": "PSC_utnr8t",
+      "brandId": "BR1"
     },
     {
       "skuCode": "EFHC01HT408-BE",
@@ -2113,7 +2240,8 @@
       "weight": 605,
       "productGroupId": "PG_zhux4k",
       "productCategoryId": "PC_edydxr",
-      "id": "PSC_y3gdyd"
+      "id": "PSC_y3gdyd",
+      "brandId": "BR1"
     },
     {
       "skuCode": "EFHC01HT601-BE",
@@ -2121,7 +2249,8 @@
       "weight": 900,
       "productGroupId": "PG_zhux4k",
       "productCategoryId": "PC_edydxr",
-      "id": "PSC_43tk7k"
+      "id": "PSC_43tk7k",
+      "brandId": "BR1"
     },
     {
       "skuCode": "EFHC01HT602-BE",
@@ -2129,7 +2258,8 @@
       "weight": 900,
       "productGroupId": "PG_zhux4k",
       "productCategoryId": "PC_edydxr",
-      "id": "PSC_q21k12"
+      "id": "PSC_q21k12",
+      "brandId": "BR1"
     },
     {
       "skuCode": "EFHC01HT603-BE",
@@ -2137,7 +2267,8 @@
       "weight": 900,
       "productGroupId": "PG_zhux4k",
       "productCategoryId": "PC_edydxr",
-      "id": "PSC_09fh0q"
+      "id": "PSC_09fh0q",
+      "brandId": "BR1"
     },
     {
       "skuCode": "EFHC01HT604-BE",
@@ -2145,7 +2276,8 @@
       "weight": 900,
       "productGroupId": "PG_zhux4k",
       "productCategoryId": "PC_edydxr",
-      "id": "PSC_z16pzv"
+      "id": "PSC_z16pzv",
+      "brandId": "BR1"
     },
     {
       "skuCode": "EFHC01HT605-BE",
@@ -2153,7 +2285,8 @@
       "weight": 900,
       "productGroupId": "PG_zhux4k",
       "productCategoryId": "PC_edydxr",
-      "id": "PSC_oftefd"
+      "id": "PSC_oftefd",
+      "brandId": "BR1"
     },
     {
       "skuCode": "EFHC01HT606-BE",
@@ -2161,7 +2294,8 @@
       "weight": 900,
       "productGroupId": "PG_zhux4k",
       "productCategoryId": "PC_edydxr",
-      "id": "PSC_93qx0t"
+      "id": "PSC_93qx0t",
+      "brandId": "BR1"
     },
     {
       "skuCode": "EFHC01HT607-BE",
@@ -2169,7 +2303,8 @@
       "weight": 900,
       "productGroupId": "PG_zhux4k",
       "productCategoryId": "PC_edydxr",
-      "id": "PSC_71ywss"
+      "id": "PSC_71ywss",
+      "brandId": "BR1"
     },
     {
       "skuCode": "EFHC01HT608-BE",
@@ -2177,7 +2312,8 @@
       "weight": 900,
       "productGroupId": "PG_zhux4k",
       "productCategoryId": "PC_edydxr",
-      "id": "PSC_aqou3u"
+      "id": "PSC_aqou3u",
+      "brandId": "BR1"
     },
     {
       "skuCode": "EFHC01GT001-BE",
@@ -2185,7 +2321,8 @@
       "weight": 240,
       "productGroupId": "PG_zhux4k",
       "productCategoryId": "PC_edydxr",
-      "id": "PSC_es8hu4"
+      "id": "PSC_es8hu4",
+      "brandId": "BR1"
     },
     {
       "skuCode": "EFHC01GT002-BE",
@@ -2193,7 +2330,8 @@
       "weight": 240,
       "productGroupId": "PG_zhux4k",
       "productCategoryId": "PC_edydxr",
-      "id": "PSC_gaifmp"
+      "id": "PSC_gaifmp",
+      "brandId": "BR1"
     },
     {
       "skuCode": "EFHC01GT003-BE",
@@ -2201,7 +2339,8 @@
       "weight": 240,
       "productGroupId": "PG_zhux4k",
       "productCategoryId": "PC_edydxr",
-      "id": "PSC_swjfwn"
+      "id": "PSC_swjfwn",
+      "brandId": "BR1"
     },
     {
       "skuCode": "EFHC01GT004-BE",
@@ -2209,7 +2348,8 @@
       "weight": 240,
       "productGroupId": "PG_zhux4k",
       "productCategoryId": "PC_edydxr",
-      "id": "PSC_wb0i0d"
+      "id": "PSC_wb0i0d",
+      "brandId": "BR1"
     },
     {
       "skuCode": "EFHC01GT005-BE",
@@ -2217,7 +2357,8 @@
       "weight": 240,
       "productGroupId": "PG_zhux4k",
       "productCategoryId": "PC_ncey5g",
-      "id": "PSC_rek9g9"
+      "id": "PSC_rek9g9",
+      "brandId": "BR1"
     },
     {
       "skuCode": "EFHC01GT006-BE",
@@ -2225,7 +2366,8 @@
       "weight": 240,
       "productGroupId": "PG_zhux4k",
       "productCategoryId": "PC_e0ut7i",
-      "id": "PSC_v4jzqk"
+      "id": "PSC_v4jzqk",
+      "brandId": "BR1"
     },
     {
       "skuCode": "EFHC01GT007-BE",
@@ -2233,7 +2375,8 @@
       "weight": 240,
       "productGroupId": "PG_zhux4k",
       "productCategoryId": "PC_e0ut7i",
-      "id": "PSC_insduu"
+      "id": "PSC_insduu",
+      "brandId": "BR1"
     },
     {
       "skuCode": "EFHC01GT008-BE",
@@ -2241,7 +2384,8 @@
       "weight": 240,
       "productGroupId": "PG_zhux4k",
       "productCategoryId": "PC_e0ut7i",
-      "id": "PSC_n1t3th"
+      "id": "PSC_n1t3th",
+      "brandId": "BR1"
     },
     {
       "skuCode": "EFHC01GT201-BE",
@@ -2249,7 +2393,8 @@
       "weight": 420,
       "productGroupId": "PG_zhux4k",
       "productCategoryId": "PC_9kyg3s",
-      "id": "PSC_f2s2dq"
+      "id": "PSC_f2s2dq",
+      "brandId": "BR1"
     },
     {
       "skuCode": "EFHC01GT202-BE",
@@ -2257,7 +2402,8 @@
       "weight": 420,
       "productGroupId": "PG_zhux4k",
       "productCategoryId": "PC_43yr0v",
-      "id": "PSC_ml0d94"
+      "id": "PSC_ml0d94",
+      "brandId": "BR1"
     },
     {
       "skuCode": "EFHC01GT203-BE",
@@ -2265,7 +2411,8 @@
       "weight": 420,
       "productGroupId": "PG_zhux4k",
       "productCategoryId": "PC_r2a5ac",
-      "id": "PSC_1j2cio"
+      "id": "PSC_1j2cio",
+      "brandId": "BR1"
     },
     {
       "skuCode": "EFHC01GT204-BE",
@@ -2273,7 +2420,8 @@
       "weight": 420,
       "productGroupId": "PG_zhux4k",
       "productCategoryId": "PC_r2a5ac",
-      "id": "PSC_20b5dz"
+      "id": "PSC_20b5dz",
+      "brandId": "BR1"
     },
     {
       "skuCode": "EFHC01GT205-BE",
@@ -2281,7 +2429,8 @@
       "weight": 420,
       "productGroupId": "PG_zhux4k",
       "productCategoryId": "PC_r2a5ac",
-      "id": "PSC_q3gyat"
+      "id": "PSC_q3gyat",
+      "brandId": "BR1"
     },
     {
       "skuCode": "EFHC01GT206-BE",
@@ -2289,7 +2438,8 @@
       "weight": 420,
       "productGroupId": "PG_zhux4k",
       "productCategoryId": "PC_r2a5ac",
-      "id": "PSC_72fruq"
+      "id": "PSC_72fruq",
+      "brandId": "BR1"
     },
     {
       "skuCode": "EFHC01GT207-BE",
@@ -2297,7 +2447,8 @@
       "weight": 420,
       "productGroupId": "PG_zhux4k",
       "productCategoryId": "PC_r2a5ac",
-      "id": "PSC_prqvas"
+      "id": "PSC_prqvas",
+      "brandId": "BR1"
     },
     {
       "skuCode": "EFHC01GT208-BE",
@@ -2305,7 +2456,8 @@
       "weight": 420,
       "productGroupId": "PG_zhux4k",
       "productCategoryId": "PC_r2a5ac",
-      "id": "PSC_5pv3eu"
+      "id": "PSC_5pv3eu",
+      "brandId": "BR1"
     },
     {
       "skuCode": "EFHC02BT001-BE",
@@ -2313,7 +2465,8 @@
       "weight": 695,
       "productGroupId": "PG_zhux4k",
       "productCategoryId": "PC_r2a5ac",
-      "id": "PSC_i2aapx"
+      "id": "PSC_i2aapx",
+      "brandId": "BR1"
     },
     {
       "skuCode": "EFHC02BT002-BE",
@@ -2321,7 +2474,8 @@
       "weight": 695,
       "productGroupId": "PG_zhux4k",
       "productCategoryId": "PC_r2a5ac",
-      "id": "PSC_v5r7r7"
+      "id": "PSC_v5r7r7",
+      "brandId": "BR1"
     },
     {
       "skuCode": "EFHC02BT003-BE",
@@ -2329,7 +2483,8 @@
       "weight": 695,
       "productGroupId": "PG_zhux4k",
       "productCategoryId": "PC_r2a5ac",
-      "id": "PSC_9v790t"
+      "id": "PSC_9v790t",
+      "brandId": "BR1"
     },
     {
       "skuCode": "EFHC02BT004-BE",
@@ -2337,7 +2492,8 @@
       "weight": 695,
       "productGroupId": "PG_zhux4k",
       "productCategoryId": "PC_r2a5ac",
-      "id": "PSC_mieskq"
+      "id": "PSC_mieskq",
+      "brandId": "BR1"
     },
     {
       "skuCode": "EFHC02BT005-BE",
@@ -2345,7 +2501,8 @@
       "weight": 695,
       "productGroupId": "PG_zhux4k",
       "productCategoryId": "PC_r2a5ac",
-      "id": "PSC_a0jo1g"
+      "id": "PSC_a0jo1g",
+      "brandId": "BR1"
     },
     {
       "skuCode": "EFHC02BT006-BE",
@@ -2353,7 +2510,8 @@
       "weight": 695,
       "productGroupId": "PG_zhux4k",
       "productCategoryId": "PC_r2a5ac",
-      "id": "PSC_j2czn1"
+      "id": "PSC_j2czn1",
+      "brandId": "BR1"
     },
     {
       "skuCode": "EFHC02BT007-BE",
@@ -2361,7 +2519,8 @@
       "weight": 695,
       "productGroupId": "PG_zhux4k",
       "productCategoryId": "PC_r2a5ac",
-      "id": "PSC_caxw6y"
+      "id": "PSC_caxw6y",
+      "brandId": "BR1"
     },
     {
       "skuCode": "EFHC02BT008-BE",
@@ -2369,7 +2528,8 @@
       "weight": 695,
       "productGroupId": "PG_zhux4k",
       "productCategoryId": "PC_r2a5ac",
-      "id": "PSC_o33ykq"
+      "id": "PSC_o33ykq",
+      "brandId": "BR1"
     },
     {
       "skuCode": "EFHC02BT201-BE",
@@ -2377,7 +2537,8 @@
       "weight": 1120,
       "productGroupId": "PG_zhux4k",
       "productCategoryId": "PC_r2a5ac",
-      "id": "PSC_zl38u7"
+      "id": "PSC_zl38u7",
+      "brandId": "BR1"
     },
     {
       "skuCode": "EFHC02BT202-BE",
@@ -2385,7 +2546,8 @@
       "weight": 1120,
       "productGroupId": "PG_zhux4k",
       "productCategoryId": "PC_r2a5ac",
-      "id": "PSC_syppvx"
+      "id": "PSC_syppvx",
+      "brandId": "BR1"
     },
     {
       "skuCode": "EFHC02BT203-BE",
@@ -2393,7 +2555,8 @@
       "weight": 1120,
       "productGroupId": "PG_zhux4k",
       "productCategoryId": "PC_r2a5ac",
-      "id": "PSC_zs65fv"
+      "id": "PSC_zs65fv",
+      "brandId": "BR1"
     },
     {
       "skuCode": "EFHC02BT204-BE",
@@ -2401,7 +2564,8 @@
       "weight": 1120,
       "productGroupId": "PG_zhux4k",
       "productCategoryId": "PC_r2a5ac",
-      "id": "PSC_jp536n"
+      "id": "PSC_jp536n",
+      "brandId": "BR1"
     },
     {
       "skuCode": "EFHC02BT205-BE",
@@ -2409,7 +2573,8 @@
       "weight": 1120,
       "productGroupId": "PG_zhux4k",
       "productCategoryId": "PC_r2a5ac",
-      "id": "PSC_yzx9na"
+      "id": "PSC_yzx9na",
+      "brandId": "BR1"
     },
     {
       "skuCode": "EFHC02BT206-BE",
@@ -2417,7 +2582,8 @@
       "weight": 1120,
       "productGroupId": "PG_zhux4k",
       "productCategoryId": "PC_r2a5ac",
-      "id": "PSC_d5n1ot"
+      "id": "PSC_d5n1ot",
+      "brandId": "BR1"
     },
     {
       "skuCode": "EFHC02BT207-BE",
@@ -2425,7 +2591,8 @@
       "weight": 1120,
       "productGroupId": "PG_zhux4k",
       "productCategoryId": "PC_r2a5ac",
-      "id": "PSC_q34e88"
+      "id": "PSC_q34e88",
+      "brandId": "BR1"
     },
     {
       "skuCode": "EFHC02BT208-BE",
@@ -2433,7 +2600,8 @@
       "weight": 1120,
       "productGroupId": "PG_zhux4k",
       "productCategoryId": "PC_r2a5ac",
-      "id": "PSC_2tq1k1"
+      "id": "PSC_2tq1k1",
+      "brandId": "BR1"
     },
     {
       "skuCode": "EFHC02BT401-BE",
@@ -2441,7 +2609,8 @@
       "weight": 2230,
       "productGroupId": "PG_zhux4k",
       "productCategoryId": "PC_r2a5ac",
-      "id": "PSC_wxhwmn"
+      "id": "PSC_wxhwmn",
+      "brandId": "BR1"
     },
     {
       "skuCode": "EFHC02BT402-BE",
@@ -2449,7 +2618,8 @@
       "weight": 2230,
       "productGroupId": "PG_zhux4k",
       "productCategoryId": "PC_r2a5ac",
-      "id": "PSC_4bfiww"
+      "id": "PSC_4bfiww",
+      "brandId": "BR1"
     },
     {
       "skuCode": "EFHC02BT403-BE",
@@ -2457,7 +2627,8 @@
       "weight": 2230,
       "productGroupId": "PG_zhux4k",
       "productCategoryId": "PC_r2a5ac",
-      "id": "PSC_fybmf3"
+      "id": "PSC_fybmf3",
+      "brandId": "BR1"
     },
     {
       "skuCode": "EFHC02BT404-BE",
@@ -2465,7 +2636,8 @@
       "weight": 2230,
       "productGroupId": "PG_zhux4k",
       "productCategoryId": "PC_r2a5ac",
-      "id": "PSC_wfed4v"
+      "id": "PSC_wfed4v",
+      "brandId": "BR1"
     },
     {
       "skuCode": "EFHC02BT405-BE",
@@ -2473,7 +2645,8 @@
       "weight": 2230,
       "productGroupId": "PG_zhux4k",
       "productCategoryId": "PC_r2a5ac",
-      "id": "PSC_vme2ps"
+      "id": "PSC_vme2ps",
+      "brandId": "BR1"
     },
     {
       "skuCode": "EFHC02BT406-BE",
@@ -2481,7 +2654,8 @@
       "weight": 2230,
       "productGroupId": "PG_zhux4k",
       "productCategoryId": "PC_r2a5ac",
-      "id": "PSC_erz80i"
+      "id": "PSC_erz80i",
+      "brandId": "BR1"
     },
     {
       "skuCode": "EFHC02BT407-BE",
@@ -2489,7 +2663,8 @@
       "weight": 2230,
       "productGroupId": "PG_zhux4k",
       "productCategoryId": "PC_r2a5ac",
-      "id": "PSC_1cz9um"
+      "id": "PSC_1cz9um",
+      "brandId": "BR1"
     },
     {
       "skuCode": "EFHC02BT408-BE",
@@ -2497,7 +2672,8 @@
       "weight": 2230,
       "productGroupId": "PG_zhux4k",
       "productCategoryId": "PC_r2a5ac",
-      "id": "PSC_5nz3wy"
+      "id": "PSC_5nz3wy",
+      "brandId": "BR1"
     },
     {
       "skuCode": "EFHC04BT001-BE",
@@ -2505,7 +2681,8 @@
       "weight": 620,
       "productGroupId": "PG_zhux4k",
       "productCategoryId": "PC_r2a5ac",
-      "id": "PSC_nbxyr7"
+      "id": "PSC_nbxyr7",
+      "brandId": "BR1"
     },
     {
       "skuCode": "EFHC04BT002-BE",
@@ -2513,7 +2690,8 @@
       "weight": 620,
       "productGroupId": "PG_zhux4k",
       "productCategoryId": "PC_r2a5ac",
-      "id": "PSC_jz3scd"
+      "id": "PSC_jz3scd",
+      "brandId": "BR1"
     },
     {
       "skuCode": "EFHC04BT003-BE",
@@ -2521,7 +2699,8 @@
       "weight": 620,
       "productGroupId": "PG_zhux4k",
       "productCategoryId": "PC_r2a5ac",
-      "id": "PSC_tznv53"
+      "id": "PSC_tznv53",
+      "brandId": "BR1"
     },
     {
       "skuCode": "EFHC04BT004-BE",
@@ -2529,7 +2708,8 @@
       "weight": 620,
       "productGroupId": "PG_zhux4k",
       "productCategoryId": "PC_r2a5ac",
-      "id": "PSC_aczfu2"
+      "id": "PSC_aczfu2",
+      "brandId": "BR1"
     },
     {
       "skuCode": "EFHC04BT005-BE",
@@ -2537,7 +2717,8 @@
       "weight": 620,
       "productGroupId": "PG_zhux4k",
       "productCategoryId": "PC_r2a5ac",
-      "id": "PSC_cr8ei9"
+      "id": "PSC_cr8ei9",
+      "brandId": "BR1"
     },
     {
       "skuCode": "EFHC04BT006-BE",
@@ -2545,7 +2726,8 @@
       "weight": 620,
       "productGroupId": "PG_zhux4k",
       "productCategoryId": "PC_r2a5ac",
-      "id": "PSC_41vrvf"
+      "id": "PSC_41vrvf",
+      "brandId": "BR1"
     },
     {
       "skuCode": "EFHC04BT007-BE",
@@ -2553,7 +2735,8 @@
       "weight": 620,
       "productGroupId": "PG_zhux4k",
       "productCategoryId": "PC_r2a5ac",
-      "id": "PSC_sr8hyv"
+      "id": "PSC_sr8hyv",
+      "brandId": "BR1"
     },
     {
       "skuCode": "EFHC04BT008-BE",
@@ -2561,7 +2744,8 @@
       "weight": 620,
       "productGroupId": "PG_zhux4k",
       "productCategoryId": "PC_r2a5ac",
-      "id": "PSC_wex93x"
+      "id": "PSC_wex93x",
+      "brandId": "BR1"
     },
     {
       "skuCode": "EFHC04BT201-BE",
@@ -2569,7 +2753,8 @@
       "weight": 1630,
       "productGroupId": "PG_zhux4k",
       "productCategoryId": "PC_r2a5ac",
-      "id": "PSC_m3erip"
+      "id": "PSC_m3erip",
+      "brandId": "BR1"
     },
     {
       "skuCode": "EFHC04BT202-BE",
@@ -2577,7 +2762,8 @@
       "weight": 1630,
       "productGroupId": "PG_zhux4k",
       "productCategoryId": "PC_r2a5ac",
-      "id": "PSC_1j5kyh"
+      "id": "PSC_1j5kyh",
+      "brandId": "BR1"
     },
     {
       "skuCode": "EFHC04BT203-BE",
@@ -2585,7 +2771,8 @@
       "weight": 1630,
       "productGroupId": "PG_zhux4k",
       "productCategoryId": "PC_r2a5ac",
-      "id": "PSC_8809i1"
+      "id": "PSC_8809i1",
+      "brandId": "BR1"
     },
     {
       "skuCode": "EFHC04BT204-BE",
@@ -2593,7 +2780,8 @@
       "weight": 1630,
       "productGroupId": "PG_zhux4k",
       "productCategoryId": "PC_r2a5ac",
-      "id": "PSC_v25k44"
+      "id": "PSC_v25k44",
+      "brandId": "BR1"
     },
     {
       "skuCode": "EFHC04BT205-BE",
@@ -2601,7 +2789,8 @@
       "weight": 1630,
       "productGroupId": "PG_zhux4k",
       "productCategoryId": "PC_r2a5ac",
-      "id": "PSC_q5z9ml"
+      "id": "PSC_q5z9ml",
+      "brandId": "BR1"
     },
     {
       "skuCode": "EFHC04BT206-BE",
@@ -2609,7 +2798,8 @@
       "weight": 1630,
       "productGroupId": "PG_zhux4k",
       "productCategoryId": "PC_r2a5ac",
-      "id": "PSC_zwmjsl"
+      "id": "PSC_zwmjsl",
+      "brandId": "BR1"
     },
     {
       "skuCode": "EFHC04BT207-BE",
@@ -2617,7 +2807,8 @@
       "weight": 1630,
       "productGroupId": "PG_zhux4k",
       "productCategoryId": "PC_r2a5ac",
-      "id": "PSC_q6oswc"
+      "id": "PSC_q6oswc",
+      "brandId": "BR1"
     },
     {
       "skuCode": "EFHC04BT208-BE",
@@ -2625,7 +2816,8 @@
       "weight": 1630,
       "productGroupId": "PG_zhux4k",
       "productCategoryId": "PC_r2a5ac",
-      "id": "PSC_n7mrel"
+      "id": "PSC_n7mrel",
+      "brandId": "BR1"
     },
     {
       "skuCode": "EFHC04HB001-21",
@@ -2633,7 +2825,8 @@
       "weight": 1100,
       "productGroupId": "PG_zhux4k",
       "productCategoryId": "PC_r2a5ac",
-      "id": "PSC_6yp07z"
+      "id": "PSC_6yp07z",
+      "brandId": "BR1"
     },
     {
       "skuCode": "EFHC04HB002-21",
@@ -2641,7 +2834,8 @@
       "weight": 1100,
       "productGroupId": "PG_zhux4k",
       "productCategoryId": "PC_r2a5ac",
-      "id": "PSC_qz6x0z"
+      "id": "PSC_qz6x0z",
+      "brandId": "BR1"
     },
     {
       "skuCode": "EFHC04HB003-21",
@@ -2649,7 +2843,8 @@
       "weight": 1100,
       "productGroupId": "PG_zhux4k",
       "productCategoryId": "PC_r2a5ac",
-      "id": "PSC_oe3ydq"
+      "id": "PSC_oe3ydq",
+      "brandId": "BR1"
     },
     {
       "skuCode": "EFHC04HB004-21",
@@ -2657,7 +2852,8 @@
       "weight": 1100,
       "productGroupId": "PG_zhux4k",
       "productCategoryId": "PC_r2a5ac",
-      "id": "PSC_wdq5m8"
+      "id": "PSC_wdq5m8",
+      "brandId": "BR1"
     },
     {
       "skuCode": "EFHC04HB005-21",
@@ -2665,7 +2861,8 @@
       "weight": 1100,
       "productGroupId": "PG_zhux4k",
       "productCategoryId": "PC_r2a5ac",
-      "id": "PSC_3s0txz"
+      "id": "PSC_3s0txz",
+      "brandId": "BR1"
     },
     {
       "skuCode": "EFHC04HB006-21",
@@ -2673,7 +2870,8 @@
       "weight": 1100,
       "productGroupId": "PG_zhux4k",
       "productCategoryId": "PC_r2a5ac",
-      "id": "PSC_fc11v2"
+      "id": "PSC_fc11v2",
+      "brandId": "BR1"
     },
     {
       "skuCode": "EFHC04HB007-21",
@@ -2681,7 +2879,8 @@
       "weight": 1100,
       "productGroupId": "PG_zhux4k",
       "productCategoryId": "PC_r2a5ac",
-      "id": "PSC_e5t5ck"
+      "id": "PSC_e5t5ck",
+      "brandId": "BR1"
     },
     {
       "skuCode": "EFHC04HB008-21",
@@ -2689,7 +2888,8 @@
       "weight": 1100,
       "productGroupId": "PG_zhux4k",
       "productCategoryId": "PC_r2a5ac",
-      "id": "PSC_9fwfx0"
+      "id": "PSC_9fwfx0",
+      "brandId": "BR1"
     },
     {
       "skuCode": "EFHC04FHB001-221",
@@ -2697,7 +2897,8 @@
       "weight": 1150,
       "productGroupId": "PG_zhux4k",
       "productCategoryId": "PC_r2a5ac",
-      "id": "PSC_ntfr38"
+      "id": "PSC_ntfr38",
+      "brandId": "BR1"
     },
     {
       "skuCode": "EFHC04FHB002-221",
@@ -2705,7 +2906,8 @@
       "weight": 1150,
       "productGroupId": "PG_zhux4k",
       "productCategoryId": "PC_r2a5ac",
-      "id": "PSC_rn0cfq"
+      "id": "PSC_rn0cfq",
+      "brandId": "BR1"
     },
     {
       "skuCode": "EFHC04FHB003-221",
@@ -2713,7 +2915,8 @@
       "weight": 1150,
       "productGroupId": "PG_zhux4k",
       "productCategoryId": "PC_r2a5ac",
-      "id": "PSC_upka4w"
+      "id": "PSC_upka4w",
+      "brandId": "BR1"
     },
     {
       "skuCode": "EFHC04FHB004-221",
@@ -2721,7 +2924,8 @@
       "weight": 1150,
       "productGroupId": "PG_zhux4k",
       "productCategoryId": "PC_r2a5ac",
-      "id": "PSC_3mdc96"
+      "id": "PSC_3mdc96",
+      "brandId": "BR1"
     },
     {
       "skuCode": "EFHC04FHB005-221",
@@ -2729,7 +2933,8 @@
       "weight": 1150,
       "productGroupId": "PG_zhux4k",
       "productCategoryId": "PC_r2a5ac",
-      "id": "PSC_qar3w4"
+      "id": "PSC_qar3w4",
+      "brandId": "BR1"
     },
     {
       "skuCode": "EFHC04FHB006-221",
@@ -2737,7 +2942,8 @@
       "weight": 1150,
       "productGroupId": "PG_zhux4k",
       "productCategoryId": "PC_r2a5ac",
-      "id": "PSC_2jsk5j"
+      "id": "PSC_2jsk5j",
+      "brandId": "BR1"
     },
     {
       "skuCode": "EFHC04FHB007-221",
@@ -2745,7 +2951,8 @@
       "weight": 1150,
       "productGroupId": "PG_zhux4k",
       "productCategoryId": "PC_r2a5ac",
-      "id": "PSC_crpz9z"
+      "id": "PSC_crpz9z",
+      "brandId": "BR1"
     },
     {
       "skuCode": "EFHC04FHB008-221",
@@ -2753,7 +2960,8 @@
       "weight": 1150,
       "productGroupId": "PG_zhux4k",
       "productCategoryId": "PC_r2a5ac",
-      "id": "PSC_6qhirr"
+      "id": "PSC_6qhirr",
+      "brandId": "BR1"
     },
     {
       "skuCode": "EFHC04FHB001-222",
@@ -2761,7 +2969,8 @@
       "weight": 1780,
       "productGroupId": "PG_zhux4k",
       "productCategoryId": "PC_r2a5ac",
-      "id": "PSC_9c3gh7"
+      "id": "PSC_9c3gh7",
+      "brandId": "BR1"
     },
     {
       "skuCode": "EFHC04FHB002-222",
@@ -2769,7 +2978,8 @@
       "weight": 1780,
       "productGroupId": "PG_zhux4k",
       "productCategoryId": "PC_r2a5ac",
-      "id": "PSC_ypaiqi"
+      "id": "PSC_ypaiqi",
+      "brandId": "BR1"
     },
     {
       "skuCode": "EFHC04FHB003-222",
@@ -2777,7 +2987,8 @@
       "weight": 1780,
       "productGroupId": "PG_zhux4k",
       "productCategoryId": "PC_r2a5ac",
-      "id": "PSC_otowa6"
+      "id": "PSC_otowa6",
+      "brandId": "BR1"
     },
     {
       "skuCode": "EFHC04FHB004-222",
@@ -2785,7 +2996,8 @@
       "weight": 1780,
       "productGroupId": "PG_zhux4k",
       "productCategoryId": "PC_r2a5ac",
-      "id": "PSC_js1427"
+      "id": "PSC_js1427",
+      "brandId": "BR1"
     },
     {
       "skuCode": "EFHC04FHB005-222",
@@ -2793,7 +3005,8 @@
       "weight": 1780,
       "productGroupId": "PG_zhux4k",
       "productCategoryId": "PC_r2a5ac",
-      "id": "PSC_n0o7av"
+      "id": "PSC_n0o7av",
+      "brandId": "BR1"
     },
     {
       "skuCode": "EFHC04FHB006-222",
@@ -2801,7 +3014,8 @@
       "weight": 1780,
       "productGroupId": "PG_zhux4k",
       "productCategoryId": "PC_r2a5ac",
-      "id": "PSC_89nvf7"
+      "id": "PSC_89nvf7",
+      "brandId": "BR1"
     },
     {
       "skuCode": "EFHC04FHB007-222",
@@ -2809,7 +3023,8 @@
       "weight": 1780,
       "productGroupId": "PG_zhux4k",
       "productCategoryId": "PC_r2a5ac",
-      "id": "PSC_j6uurg"
+      "id": "PSC_j6uurg",
+      "brandId": "BR1"
     },
     {
       "skuCode": "EFHC04FHB008-222",
@@ -2817,7 +3032,8 @@
       "weight": 1780,
       "productGroupId": "PG_zhux4k",
       "productCategoryId": "PC_r2a5ac",
-      "id": "PSC_efsvz1"
+      "id": "PSC_efsvz1",
+      "brandId": "BR1"
     },
     {
       "skuCode": "EFHC01HT041-BE",
@@ -2825,7 +3041,8 @@
       "weight": 110,
       "productGroupId": "PG_zhux4k",
       "productCategoryId": "PC_r2a5ac",
-      "id": "PSC_66x4x0"
+      "id": "PSC_66x4x0",
+      "brandId": "BR1"
     },
     {
       "skuCode": "EFHC01HT042-BE",
@@ -2833,7 +3050,8 @@
       "weight": 110,
       "productGroupId": "PG_zhux4k",
       "productCategoryId": "PC_r2a5ac",
-      "id": "PSC_tvdx1b"
+      "id": "PSC_tvdx1b",
+      "brandId": "BR1"
     },
     {
       "skuCode": "EFHC01HT043-BE",
@@ -2841,7 +3059,8 @@
       "weight": 110,
       "productGroupId": "PG_zhux4k",
       "productCategoryId": "PC_r2a5ac",
-      "id": "PSC_048wli"
+      "id": "PSC_048wli",
+      "brandId": "BR1"
     },
     {
       "skuCode": "EFHC01HT044-BE",
@@ -2849,7 +3068,8 @@
       "weight": 110,
       "productGroupId": "PG_zhux4k",
       "productCategoryId": "PC_r2a5ac",
-      "id": "PSC_ls43zr"
+      "id": "PSC_ls43zr",
+      "brandId": "BR1"
     },
     {
       "skuCode": "EFHC01HT241-BE",
@@ -2857,7 +3077,8 @@
       "weight": 95,
       "productGroupId": "PG_zhux4k",
       "productCategoryId": "PC_r2a5ac",
-      "id": "PSC_e9msty"
+      "id": "PSC_e9msty",
+      "brandId": "BR1"
     },
     {
       "skuCode": "EFHC01HT242-BE",
@@ -2865,7 +3086,8 @@
       "weight": 95,
       "productGroupId": "PG_zhux4k",
       "productCategoryId": "PC_r2a5ac",
-      "id": "PSC_p4avmz"
+      "id": "PSC_p4avmz",
+      "brandId": "BR1"
     },
     {
       "skuCode": "EFHC01HT243-BE",
@@ -2873,7 +3095,8 @@
       "weight": 95,
       "productGroupId": "PG_zhux4k",
       "productCategoryId": "PC_r2a5ac",
-      "id": "PSC_i85xn0"
+      "id": "PSC_i85xn0",
+      "brandId": "BR1"
     },
     {
       "skuCode": "EFHC01HT244-BE",
@@ -2881,7 +3104,8 @@
       "weight": 95,
       "productGroupId": "PG_zhux4k",
       "productCategoryId": "PC_r2a5ac",
-      "id": "PSC_sa6a9g"
+      "id": "PSC_sa6a9g",
+      "brandId": "BR1"
     },
     {
       "skuCode": "EFHC01HT441-BE",
@@ -2889,7 +3113,8 @@
       "weight": 200,
       "productGroupId": "PG_zhux4k",
       "productCategoryId": "PC_r2a5ac",
-      "id": "PSC_qnm0es"
+      "id": "PSC_qnm0es",
+      "brandId": "BR1"
     },
     {
       "skuCode": "EFHC01HT442-BE",
@@ -2897,7 +3122,8 @@
       "weight": 200,
       "productGroupId": "PG_zhux4k",
       "productCategoryId": "PC_r2a5ac",
-      "id": "PSC_3ki24a"
+      "id": "PSC_3ki24a",
+      "brandId": "BR1"
     },
     {
       "skuCode": "EFHC01HT443-BE",
@@ -2905,7 +3131,8 @@
       "weight": 200,
       "productGroupId": "PG_zhux4k",
       "productCategoryId": "PC_r2a5ac",
-      "id": "PSC_klyute"
+      "id": "PSC_klyute",
+      "brandId": "BR1"
     },
     {
       "skuCode": "EFHC01HT444-BE",
@@ -2913,7 +3140,8 @@
       "weight": 200,
       "productGroupId": "PG_zhux4k",
       "productCategoryId": "PC_r2a5ac",
-      "id": "PSC_314vbd"
+      "id": "PSC_314vbd",
+      "brandId": "BR1"
     },
     {
       "skuCode": "EFHC01HT641-BE",
@@ -2921,7 +3149,8 @@
       "weight": 300,
       "productGroupId": "PG_zhux4k",
       "productCategoryId": "PC_r2a5ac",
-      "id": "PSC_bfucj6"
+      "id": "PSC_bfucj6",
+      "brandId": "BR1"
     },
     {
       "skuCode": "EFHC01HT642-BE",
@@ -2929,7 +3158,8 @@
       "weight": 300,
       "productGroupId": "PG_zhux4k",
       "productCategoryId": "PC_r2a5ac",
-      "id": "PSC_9v2gbg"
+      "id": "PSC_9v2gbg",
+      "brandId": "BR1"
     },
     {
       "skuCode": "EFHC01HT643-BE",
@@ -2937,7 +3167,8 @@
       "weight": 300,
       "productGroupId": "PG_zhux4k",
       "productCategoryId": "PC_r2a5ac",
-      "id": "PSC_rbf33z"
+      "id": "PSC_rbf33z",
+      "brandId": "BR1"
     },
     {
       "skuCode": "EFHC01HT644-BE",
@@ -2945,7 +3176,8 @@
       "weight": 300,
       "productGroupId": "PG_zhux4k",
       "productCategoryId": "PC_r2a5ac",
-      "id": "PSC_xj8i3d"
+      "id": "PSC_xj8i3d",
+      "brandId": "BR1"
     },
     {
       "skuCode": "EFHC02BT041-BE",
@@ -2953,7 +3185,8 @@
       "weight": 380,
       "productGroupId": "PG_zhux4k",
       "productCategoryId": "PC_r2a5ac",
-      "id": "PSC_bbhtb6"
+      "id": "PSC_bbhtb6",
+      "brandId": "BR1"
     },
     {
       "skuCode": "EFHC02BT042-BE",
@@ -2961,7 +3194,8 @@
       "weight": 380,
       "productGroupId": "PG_zhux4k",
       "productCategoryId": "PC_r2a5ac",
-      "id": "PSC_lgckpx"
+      "id": "PSC_lgckpx",
+      "brandId": "BR1"
     },
     {
       "skuCode": "EFHC02BT043-BE",
@@ -2969,7 +3203,8 @@
       "weight": 380,
       "productGroupId": "PG_zhux4k",
       "productCategoryId": "PC_r2a5ac",
-      "id": "PSC_nwfjbw"
+      "id": "PSC_nwfjbw",
+      "brandId": "BR1"
     },
     {
       "skuCode": "EFHC02BT044-BE",
@@ -2977,7 +3212,8 @@
       "weight": 380,
       "productGroupId": "PG_zhux4k",
       "productCategoryId": "PC_r2a5ac",
-      "id": "PSC_wgwye1"
+      "id": "PSC_wgwye1",
+      "brandId": "BR1"
     },
     {
       "skuCode": "EFHC02BT241-BE",
@@ -2985,7 +3221,8 @@
       "weight": 770,
       "productGroupId": "PG_zhux4k",
       "productCategoryId": "PC_r2a5ac",
-      "id": "PSC_5e8g1n"
+      "id": "PSC_5e8g1n",
+      "brandId": "BR1"
     },
     {
       "skuCode": "EFHC02BT242-BE",
@@ -2993,7 +3230,8 @@
       "weight": 770,
       "productGroupId": "PG_zhux4k",
       "productCategoryId": "PC_r2a5ac",
-      "id": "PSC_0x5v4t"
+      "id": "PSC_0x5v4t",
+      "brandId": "BR1"
     },
     {
       "skuCode": "EFHC02BT243-BE",
@@ -3001,7 +3239,8 @@
       "weight": 770,
       "productGroupId": "PG_zhux4k",
       "productCategoryId": "PC_r2a5ac",
-      "id": "PSC_an5yml"
+      "id": "PSC_an5yml",
+      "brandId": "BR1"
     },
     {
       "skuCode": "EFHC02BT244-BE",
@@ -3009,7 +3248,8 @@
       "weight": 770,
       "productGroupId": "PG_zhux4k",
       "productCategoryId": "PC_r2a5ac",
-      "id": "PSC_jg5cfu"
+      "id": "PSC_jg5cfu",
+      "brandId": "BR1"
     },
     {
       "skuCode": "EFHC02BT1041-BE",
@@ -3017,7 +3257,8 @@
       "weight": 3800,
       "productGroupId": "PG_zhux4k",
       "productCategoryId": "PC_r2a5ac",
-      "id": "PSC_l6gtvj"
+      "id": "PSC_l6gtvj",
+      "brandId": "BR1"
     },
     {
       "skuCode": "EFHC02BT1042-BE",
@@ -3025,7 +3266,8 @@
       "weight": 3800,
       "productGroupId": "PG_zhux4k",
       "productCategoryId": "PC_r2a5ac",
-      "id": "PSC_wpa7xs"
+      "id": "PSC_wpa7xs",
+      "brandId": "BR1"
     },
     {
       "skuCode": "EFHC02BT1043-BE",
@@ -3033,7 +3275,8 @@
       "weight": 3800,
       "productGroupId": "PG_zhux4k",
       "productCategoryId": "PC_r2a5ac",
-      "id": "PSC_lklcp9"
+      "id": "PSC_lklcp9",
+      "brandId": "BR1"
     },
     {
       "skuCode": "EFHC02BT1044-BE",
@@ -3041,7 +3284,8 @@
       "weight": 3800,
       "productGroupId": "PG_zhux4k",
       "productCategoryId": "PC_r2a5ac",
-      "id": "PSC_1htd8b"
+      "id": "PSC_1htd8b",
+      "brandId": "BR1"
     },
     {
       "skuCode": "EFHC02HB041-21",
@@ -3049,7 +3293,8 @@
       "weight": 480,
       "productGroupId": "PG_zhux4k",
       "productCategoryId": "PC_r2a5ac",
-      "id": "PSC_rky247"
+      "id": "PSC_rky247",
+      "brandId": "BR1"
     },
     {
       "skuCode": "EFHC02HB042-21",
@@ -3057,7 +3302,8 @@
       "weight": 480,
       "productGroupId": "PG_zhux4k",
       "productCategoryId": "PC_r2a5ac",
-      "id": "PSC_e39kg1"
+      "id": "PSC_e39kg1",
+      "brandId": "BR1"
     },
     {
       "skuCode": "EFHC02HB043-21",
@@ -3065,7 +3311,8 @@
       "weight": 480,
       "productGroupId": "PG_zhux4k",
       "productCategoryId": "PC_r2a5ac",
-      "id": "PSC_4n614h"
+      "id": "PSC_4n614h",
+      "brandId": "BR1"
     },
     {
       "skuCode": "EFHC02HB044-21",
@@ -3073,7 +3320,8 @@
       "weight": 480,
       "productGroupId": "PG_zhux4k",
       "productCategoryId": "PC_r2a5ac",
-      "id": "PSC_fmr4og"
+      "id": "PSC_fmr4og",
+      "brandId": "BR1"
     },
     {
       "skuCode": "EFHC02HB041-22",
@@ -3081,7 +3329,8 @@
       "weight": 860,
       "productGroupId": "PG_zhux4k",
       "productCategoryId": "PC_r2a5ac",
-      "id": "PSC_h12sjf"
+      "id": "PSC_h12sjf",
+      "brandId": "BR1"
     },
     {
       "skuCode": "EFHC02HB042-22",
@@ -3089,7 +3338,8 @@
       "weight": 860,
       "productGroupId": "PG_zhux4k",
       "productCategoryId": "PC_r2a5ac",
-      "id": "PSC_f95zeg"
+      "id": "PSC_f95zeg",
+      "brandId": "BR1"
     },
     {
       "skuCode": "EFHC02HB043-22",
@@ -3097,7 +3347,8 @@
       "weight": 860,
       "productGroupId": "PG_zhux4k",
       "productCategoryId": "PC_r2a5ac",
-      "id": "PSC_w6e5xt"
+      "id": "PSC_w6e5xt",
+      "brandId": "BR1"
     },
     {
       "skuCode": "EFHC02HB044-22",
@@ -3105,7 +3356,8 @@
       "weight": 860,
       "productGroupId": "PG_zhux4k",
       "productCategoryId": "PC_r2a5ac",
-      "id": "PSC_344j3t"
+      "id": "PSC_344j3t",
+      "brandId": "BR1"
     },
     {
       "skuCode": "EFHC02HB041-1010",
@@ -3113,7 +3365,8 @@
       "weight": 4200,
       "productGroupId": "PG_zhux4k",
       "productCategoryId": "PC_r2a5ac",
-      "id": "PSC_hchvm4"
+      "id": "PSC_hchvm4",
+      "brandId": "BR1"
     },
     {
       "skuCode": "EFHC02HB042-1010",
@@ -3121,7 +3374,8 @@
       "weight": 4200,
       "productGroupId": "PG_zhux4k",
       "productCategoryId": "PC_r2a5ac",
-      "id": "PSC_bks2dm"
+      "id": "PSC_bks2dm",
+      "brandId": "BR1"
     },
     {
       "skuCode": "EFHC02HB043-1010",
@@ -3129,7 +3383,8 @@
       "weight": 4200,
       "productGroupId": "PG_zhux4k",
       "productCategoryId": "PC_r2a5ac",
-      "id": "PSC_otz8qo"
+      "id": "PSC_otz8qo",
+      "brandId": "BR1"
     },
     {
       "skuCode": "EFHC02HB044-1010",
@@ -3137,7 +3392,8 @@
       "weight": 4200,
       "productGroupId": "PG_zhux4k",
       "productCategoryId": "PC_r2a5ac",
-      "id": "PSC_g0y3of"
+      "id": "PSC_g0y3of",
+      "brandId": "BR1"
     },
     {
       "skuCode": "EFHC02BT051-BE",
@@ -3145,7 +3401,8 @@
       "weight": 470,
       "productGroupId": "PG_zhux4k",
       "productCategoryId": "PC_r2a5ac",
-      "id": "PSC_olygak"
+      "id": "PSC_olygak",
+      "brandId": "BR1"
     },
     {
       "skuCode": "EFHC02BT052-BE",
@@ -3153,7 +3410,8 @@
       "weight": 470,
       "productGroupId": "PG_zhux4k",
       "productCategoryId": "PC_r2a5ac",
-      "id": "PSC_xiq4yg"
+      "id": "PSC_xiq4yg",
+      "brandId": "BR1"
     },
     {
       "skuCode": "EFHC02BT053-BE",
@@ -3161,7 +3419,8 @@
       "weight": 470,
       "productGroupId": "PG_zhux4k",
       "productCategoryId": "PC_r2a5ac",
-      "id": "PSC_taicle"
+      "id": "PSC_taicle",
+      "brandId": "BR1"
     },
     {
       "skuCode": "EFHC02BT054-BE",
@@ -3169,7 +3428,8 @@
       "weight": 470,
       "productGroupId": "PG_zhux4k",
       "productCategoryId": "PC_r2a5ac",
-      "id": "PSC_4m62rx"
+      "id": "PSC_4m62rx",
+      "brandId": "BR1"
     },
     {
       "skuCode": "EFHC02BT251-BE",
@@ -3177,7 +3437,8 @@
       "weight": 940,
       "productGroupId": "PG_zhux4k",
       "productCategoryId": "PC_r2a5ac",
-      "id": "PSC_mjijp6"
+      "id": "PSC_mjijp6",
+      "brandId": "BR1"
     },
     {
       "skuCode": "EFHC02BT252-BE",
@@ -3185,7 +3446,8 @@
       "weight": 940,
       "productGroupId": "PG_zhux4k",
       "productCategoryId": "PC_r2a5ac",
-      "id": "PSC_c7xlot"
+      "id": "PSC_c7xlot",
+      "brandId": "BR1"
     },
     {
       "skuCode": "EFHC02BT253-BE",
@@ -3193,7 +3455,8 @@
       "weight": 940,
       "productGroupId": "PG_zhux4k",
       "productCategoryId": "PC_r2a5ac",
-      "id": "PSC_3pq53h"
+      "id": "PSC_3pq53h",
+      "brandId": "BR1"
     },
     {
       "skuCode": "EFHC02BT254-BE",
@@ -3201,7 +3464,8 @@
       "weight": 940,
       "productGroupId": "PG_zhux4k",
       "productCategoryId": "PC_r2a5ac",
-      "id": "PSC_w7ibrh"
+      "id": "PSC_w7ibrh",
+      "brandId": "BR1"
     },
     {
       "skuCode": "EFHC02BT1051-BE",
@@ -3209,7 +3473,8 @@
       "weight": 4700,
       "productGroupId": "PG_zhux4k",
       "productCategoryId": "PC_r2a5ac",
-      "id": "PSC_wxij8u"
+      "id": "PSC_wxij8u",
+      "brandId": "BR1"
     },
     {
       "skuCode": "EFHC02BT1052-BE",
@@ -3217,7 +3482,8 @@
       "weight": 4700,
       "productGroupId": "PG_zhux4k",
       "productCategoryId": "PC_r2a5ac",
-      "id": "PSC_dgii4s"
+      "id": "PSC_dgii4s",
+      "brandId": "BR1"
     },
     {
       "skuCode": "EFHC02BT1053-BE",
@@ -3225,7 +3491,8 @@
       "weight": 4700,
       "productGroupId": "PG_zhux4k",
       "productCategoryId": "PC_r2a5ac",
-      "id": "PSC_8kvtv4"
+      "id": "PSC_8kvtv4",
+      "brandId": "BR1"
     },
     {
       "skuCode": "EFHC02BT1054-BE",
@@ -3233,7 +3500,8 @@
       "weight": 4700,
       "productGroupId": "PG_zhux4k",
       "productCategoryId": "PC_r2a5ac",
-      "id": "PSC_c8ac0l"
+      "id": "PSC_c8ac0l",
+      "brandId": "BR1"
     },
     {
       "skuCode": "EFHC01HD051-BE",
@@ -3241,7 +3509,8 @@
       "weight": 210,
       "productGroupId": "PG_zhux4k",
       "productCategoryId": "PC_r2a5ac",
-      "id": "PSC_e984lc"
+      "id": "PSC_e984lc",
+      "brandId": "BR1"
     },
     {
       "skuCode": "EFHC01HD052-BE",
@@ -3249,7 +3518,8 @@
       "weight": 210,
       "productGroupId": "PG_zhux4k",
       "productCategoryId": "PC_r2a5ac",
-      "id": "PSC_m3fwl5"
+      "id": "PSC_m3fwl5",
+      "brandId": "BR1"
     },
     {
       "skuCode": "EFHC01HD053-BE",
@@ -3257,7 +3527,8 @@
       "weight": 210,
       "productGroupId": "PG_zhux4k",
       "productCategoryId": "PC_r2a5ac",
-      "id": "PSC_9bn4jh"
+      "id": "PSC_9bn4jh",
+      "brandId": "BR1"
     },
     {
       "skuCode": "EFHC01HD054-BE",
@@ -3265,7 +3536,8 @@
       "weight": 210,
       "productGroupId": "PG_zhux4k",
       "productCategoryId": "PC_r2a5ac",
-      "id": "PSC_tgwwrn"
+      "id": "PSC_tgwwrn",
+      "brandId": "BR1"
     },
     {
       "skuCode": "EFHC01HD055-BE",
@@ -3273,7 +3545,8 @@
       "weight": 210,
       "productGroupId": "PG_zhux4k",
       "productCategoryId": "PC_r2a5ac",
-      "id": "PSC_to01oc"
+      "id": "PSC_to01oc",
+      "brandId": "BR1"
     },
     {
       "skuCode": "EFHC01HD057-BE",
@@ -3281,7 +3554,8 @@
       "weight": 210,
       "productGroupId": "PG_zhux4k",
       "productCategoryId": "PC_r2a5ac",
-      "id": "PSC_0jvl5w"
+      "id": "PSC_0jvl5w",
+      "brandId": "BR1"
     },
     {
       "skuCode": "EFHC01HD058-BE",
@@ -3289,7 +3563,8 @@
       "weight": 210,
       "productGroupId": "PG_zhux4k",
       "productCategoryId": "PC_r2a5ac",
-      "id": "PSC_x2y6em"
+      "id": "PSC_x2y6em",
+      "brandId": "BR1"
     },
     {
       "skuCode": "EFHB02FT001-BE",
@@ -3297,7 +3572,8 @@
       "weight": 130,
       "productGroupId": "PG_zhux4k",
       "productCategoryId": "PC_r2a5ac",
-      "id": "PSC_d7zodt"
+      "id": "PSC_d7zodt",
+      "brandId": "BR1"
     },
     {
       "skuCode": "EFHB02FT002-BE",
@@ -3305,7 +3581,8 @@
       "weight": 130,
       "productGroupId": "PG_zhux4k",
       "productCategoryId": "PC_r2a5ac",
-      "id": "PSC_50nbbb"
+      "id": "PSC_50nbbb",
+      "brandId": "BR1"
     },
     {
       "skuCode": "EFHB02FT003-BE",
@@ -3313,7 +3590,8 @@
       "weight": 130,
       "productGroupId": "PG_zhux4k",
       "productCategoryId": "PC_r2a5ac",
-      "id": "PSC_whea6w"
+      "id": "PSC_whea6w",
+      "brandId": "BR1"
     },
     {
       "skuCode": "EFHB02FT004-BE",
@@ -3321,7 +3599,8 @@
       "weight": 130,
       "productGroupId": "PG_zhux4k",
       "productCategoryId": "PC_r2a5ac",
-      "id": "PSC_6btbet"
+      "id": "PSC_6btbet",
+      "brandId": "BR1"
     },
     {
       "skuCode": "EFHB02FT005-BE",
@@ -3329,7 +3608,8 @@
       "weight": 130,
       "productGroupId": "PG_zhux4k",
       "productCategoryId": "PC_r2a5ac",
-      "id": "PSC_0lklkz"
+      "id": "PSC_0lklkz",
+      "brandId": "BR1"
     },
     {
       "skuCode": "EFHB02FT006-BE",
@@ -3337,7 +3617,8 @@
       "weight": 130,
       "productGroupId": "PG_zhux4k",
       "productCategoryId": "PC_r2a5ac",
-      "id": "PSC_vx1pyo"
+      "id": "PSC_vx1pyo",
+      "brandId": "BR1"
     },
     {
       "skuCode": "EFHB02FT301-BE",
@@ -3345,7 +3626,8 @@
       "weight": 230,
       "productGroupId": "PG_zhux4k",
       "productCategoryId": "PC_r2a5ac",
-      "id": "PSC_mbpjw0"
+      "id": "PSC_mbpjw0",
+      "brandId": "BR1"
     },
     {
       "skuCode": "EFHB02FT302-BE",
@@ -3353,7 +3635,8 @@
       "weight": 230,
       "productGroupId": "PG_zhux4k",
       "productCategoryId": "PC_r2a5ac",
-      "id": "PSC_nbfx0d"
+      "id": "PSC_nbfx0d",
+      "brandId": "BR1"
     },
     {
       "skuCode": "EFHB02FT303-BE",
@@ -3361,7 +3644,8 @@
       "weight": 230,
       "productGroupId": "PG_zhux4k",
       "productCategoryId": "PC_r2a5ac",
-      "id": "PSC_jld1hw"
+      "id": "PSC_jld1hw",
+      "brandId": "BR1"
     },
     {
       "skuCode": "EFHB02FT304-BE",
@@ -3369,7 +3653,8 @@
       "weight": 230,
       "productGroupId": "PG_zhux4k",
       "productCategoryId": "PC_r2a5ac",
-      "id": "PSC_0k1gnw"
+      "id": "PSC_0k1gnw",
+      "brandId": "BR1"
     },
     {
       "skuCode": "EFHB02FT305-BE",
@@ -3377,7 +3662,8 @@
       "weight": 230,
       "productGroupId": "PG_zhux4k",
       "productCategoryId": "PC_r2a5ac",
-      "id": "PSC_8341r3"
+      "id": "PSC_8341r3",
+      "brandId": "BR1"
     },
     {
       "skuCode": "EFHB02FT306-BE",
@@ -3385,7 +3671,8 @@
       "weight": 230,
       "productGroupId": "PG_zhux4k",
       "productCategoryId": "PC_r2a5ac",
-      "id": "PSC_a3bie8"
+      "id": "PSC_a3bie8",
+      "brandId": "BR1"
     },
     {
       "skuCode": "EFHB02FT401-BE",
@@ -3393,7 +3680,8 @@
       "weight": 280,
       "productGroupId": "PG_zhux4k",
       "productCategoryId": "PC_r2a5ac",
-      "id": "PSC_6d9kfd"
+      "id": "PSC_6d9kfd",
+      "brandId": "BR1"
     },
     {
       "skuCode": "EFHB02FT402-BE",
@@ -3401,7 +3689,8 @@
       "weight": 280,
       "productGroupId": "PG_zhux4k",
       "productCategoryId": "PC_r2a5ac",
-      "id": "PSC_olnhiw"
+      "id": "PSC_olnhiw",
+      "brandId": "BR1"
     },
     {
       "skuCode": "EFHB02FT403-BE",
@@ -3409,7 +3698,8 @@
       "weight": 280,
       "productGroupId": "PG_zhux4k",
       "productCategoryId": "PC_r2a5ac",
-      "id": "PSC_zggm4k"
+      "id": "PSC_zggm4k",
+      "brandId": "BR1"
     },
     {
       "skuCode": "EFHB02FT404-BE",
@@ -3417,7 +3707,8 @@
       "weight": 280,
       "productGroupId": "PG_zhux4k",
       "productCategoryId": "PC_r2a5ac",
-      "id": "PSC_klzq9x"
+      "id": "PSC_klzq9x",
+      "brandId": "BR1"
     },
     {
       "skuCode": "EFHB02FT405-BE",
@@ -3425,7 +3716,8 @@
       "weight": 280,
       "productGroupId": "PG_zhux4k",
       "productCategoryId": "PC_r2a5ac",
-      "id": "PSC_0q31wz"
+      "id": "PSC_0q31wz",
+      "brandId": "BR1"
     },
     {
       "skuCode": "EFHB02FT406-BE",
@@ -3433,7 +3725,8 @@
       "weight": 280,
       "productGroupId": "PG_zhux4k",
       "productCategoryId": "PC_r2a5ac",
-      "id": "PSC_2x0lkk"
+      "id": "PSC_2x0lkk",
+      "brandId": "BR1"
     },
     {
       "skuCode": "EFHB01HT001-BE",
@@ -3441,7 +3734,8 @@
       "weight": 140,
       "productGroupId": "PG_zhux4k",
       "productCategoryId": "PC_r2a5ac",
-      "id": "PSC_zrl28r"
+      "id": "PSC_zrl28r",
+      "brandId": "BR1"
     },
     {
       "skuCode": "EFHB01HT002-BE",
@@ -3449,7 +3743,8 @@
       "weight": 140,
       "productGroupId": "PG_zhux4k",
       "productCategoryId": "PC_r2a5ac",
-      "id": "PSC_kxfafi"
+      "id": "PSC_kxfafi",
+      "brandId": "BR1"
     },
     {
       "skuCode": "EFHB01HT003-BE",
@@ -3457,7 +3752,8 @@
       "weight": 140,
       "productGroupId": "PG_zhux4k",
       "productCategoryId": "PC_r2a5ac",
-      "id": "PSC_v8vrvj"
+      "id": "PSC_v8vrvj",
+      "brandId": "BR1"
     },
     {
       "skuCode": "EFHB01HT004-BE",
@@ -3465,7 +3761,8 @@
       "weight": 140,
       "productGroupId": "PG_zhux4k",
       "productCategoryId": "PC_r2a5ac",
-      "id": "PSC_65n8hq"
+      "id": "PSC_65n8hq",
+      "brandId": "BR1"
     },
     {
       "skuCode": "EFHB01HT005-BE",
@@ -3473,7 +3770,8 @@
       "weight": 140,
       "productGroupId": "PG_zhux4k",
       "productCategoryId": "PC_r2a5ac",
-      "id": "PSC_bfscp6"
+      "id": "PSC_bfscp6",
+      "brandId": "BR1"
     },
     {
       "skuCode": "EFHB01HT006-BE",
@@ -3481,7 +3779,8 @@
       "weight": 140,
       "productGroupId": "PG_zhux4k",
       "productCategoryId": "PC_r2a5ac",
-      "id": "PSC_r570mj"
+      "id": "PSC_r570mj",
+      "brandId": "BR1"
     },
     {
       "skuCode": "EFHB01HT201-BE",
@@ -3489,7 +3788,8 @@
       "weight": 364,
       "productGroupId": "PG_zhux4k",
       "productCategoryId": "PC_r2a5ac",
-      "id": "PSC_jgq5w5"
+      "id": "PSC_jgq5w5",
+      "brandId": "BR1"
     },
     {
       "skuCode": "EFHB01HT202-BE",
@@ -3497,7 +3797,8 @@
       "weight": 364,
       "productGroupId": "PG_zhux4k",
       "productCategoryId": "PC_r2a5ac",
-      "id": "PSC_lrwi9f"
+      "id": "PSC_lrwi9f",
+      "brandId": "BR1"
     },
     {
       "skuCode": "EFHB01HT203-BE",
@@ -3505,7 +3806,8 @@
       "weight": 364,
       "productGroupId": "PG_zhux4k",
       "productCategoryId": "PC_r2a5ac",
-      "id": "PSC_ooqk4v"
+      "id": "PSC_ooqk4v",
+      "brandId": "BR1"
     },
     {
       "skuCode": "EFHB01HT204-BE",
@@ -3513,7 +3815,8 @@
       "weight": 364,
       "productGroupId": "PG_zhux4k",
       "productCategoryId": "PC_r2a5ac",
-      "id": "PSC_ew438q"
+      "id": "PSC_ew438q",
+      "brandId": "BR1"
     },
     {
       "skuCode": "EFHB01HT205-BE",
@@ -3521,7 +3824,8 @@
       "weight": 364,
       "productGroupId": "PG_zhux4k",
       "productCategoryId": "PC_r2a5ac",
-      "id": "PSC_fqwsf4"
+      "id": "PSC_fqwsf4",
+      "brandId": "BR1"
     },
     {
       "skuCode": "EFHB01HT206-BE",
@@ -3529,7 +3833,8 @@
       "weight": 364,
       "productGroupId": "PG_zhux4k",
       "productCategoryId": "PC_r2a5ac",
-      "id": "PSC_y5b11h"
+      "id": "PSC_y5b11h",
+      "brandId": "BR1"
     },
     {
       "skuCode": "EFHB01HT401-BE",
@@ -3537,7 +3842,8 @@
       "weight": 633,
       "productGroupId": "PG_zhux4k",
       "productCategoryId": "PC_r2a5ac",
-      "id": "PSC_rif18h"
+      "id": "PSC_rif18h",
+      "brandId": "BR1"
     },
     {
       "skuCode": "EFHB01HT402-BE",
@@ -3545,7 +3851,8 @@
       "weight": 633,
       "productGroupId": "PG_zhux4k",
       "productCategoryId": "PC_r2a5ac",
-      "id": "PSC_72phz3"
+      "id": "PSC_72phz3",
+      "brandId": "BR1"
     },
     {
       "skuCode": "EFHB01HT403-BE",
@@ -3553,7 +3860,8 @@
       "weight": 633,
       "productGroupId": "PG_zhux4k",
       "productCategoryId": "PC_r2a5ac",
-      "id": "PSC_zkq42f"
+      "id": "PSC_zkq42f",
+      "brandId": "BR1"
     },
     {
       "skuCode": "EFHB01HT404-BE",
@@ -3561,7 +3869,8 @@
       "weight": 633,
       "productGroupId": "PG_zhux4k",
       "productCategoryId": "PC_r2a5ac",
-      "id": "PSC_hvqc0w"
+      "id": "PSC_hvqc0w",
+      "brandId": "BR1"
     },
     {
       "skuCode": "EFHB01HT405-BE",
@@ -3569,7 +3878,8 @@
       "weight": 633,
       "productGroupId": "PG_zhux4k",
       "productCategoryId": "PC_r2a5ac",
-      "id": "PSC_iw69c3"
+      "id": "PSC_iw69c3",
+      "brandId": "BR1"
     },
     {
       "skuCode": "EFHB01HT406-BE",
@@ -3577,7 +3887,8 @@
       "weight": 633,
       "productGroupId": "PG_zhux4k",
       "productCategoryId": "PC_r2a5ac",
-      "id": "PSC_msekn1"
+      "id": "PSC_msekn1",
+      "brandId": "BR1"
     },
     {
       "skuCode": "EFHB02BT001-BE",
@@ -3585,7 +3896,8 @@
       "weight": 714,
       "productGroupId": "PG_zhux4k",
       "productCategoryId": "PC_r2a5ac",
-      "id": "PSC_bsfudi"
+      "id": "PSC_bsfudi",
+      "brandId": "BR1"
     },
     {
       "skuCode": "EFHB02BT002-BE",
@@ -3593,7 +3905,8 @@
       "weight": 714,
       "productGroupId": "PG_zhux4k",
       "productCategoryId": "PC_r2a5ac",
-      "id": "PSC_2kp94z"
+      "id": "PSC_2kp94z",
+      "brandId": "BR1"
     },
     {
       "skuCode": "EFHB02BT003-BE",
@@ -3601,7 +3914,8 @@
       "weight": 714,
       "productGroupId": "PG_zhux4k",
       "productCategoryId": "PC_r2a5ac",
-      "id": "PSC_yp5rn9"
+      "id": "PSC_yp5rn9",
+      "brandId": "BR1"
     },
     {
       "skuCode": "EFHB02BT004-BE",
@@ -3609,7 +3923,8 @@
       "weight": 714,
       "productGroupId": "PG_zhux4k",
       "productCategoryId": "PC_r2a5ac",
-      "id": "PSC_snh842"
+      "id": "PSC_snh842",
+      "brandId": "BR1"
     },
     {
       "skuCode": "EFHB02BT005-BE",
@@ -3617,7 +3932,8 @@
       "weight": 714,
       "productGroupId": "PG_zhux4k",
       "productCategoryId": "PC_r2a5ac",
-      "id": "PSC_dzonjx"
+      "id": "PSC_dzonjx",
+      "brandId": "BR1"
     },
     {
       "skuCode": "EFHB02BT006-BE",
@@ -3625,7 +3941,8 @@
       "weight": 714,
       "productGroupId": "PG_zhux4k",
       "productCategoryId": "PC_r2a5ac",
-      "id": "PSC_g6tnp1"
+      "id": "PSC_g6tnp1",
+      "brandId": "BR1"
     },
     {
       "skuCode": "EFHB02BT201-BE",
@@ -3633,7 +3950,8 @@
       "weight": 1200,
       "productGroupId": "PG_zhux4k",
       "productCategoryId": "PC_r2a5ac",
-      "id": "PSC_kkxfk2"
+      "id": "PSC_kkxfk2",
+      "brandId": "BR1"
     },
     {
       "skuCode": "EFHB02BT202-BE",
@@ -3641,7 +3959,8 @@
       "weight": 1200,
       "productGroupId": "PG_zhux4k",
       "productCategoryId": "PC_r2a5ac",
-      "id": "PSC_g46ek6"
+      "id": "PSC_g46ek6",
+      "brandId": "BR1"
     },
     {
       "skuCode": "EFHB02BT203-BE",
@@ -3649,7 +3968,8 @@
       "weight": 1200,
       "productGroupId": "PG_zhux4k",
       "productCategoryId": "PC_r2a5ac",
-      "id": "PSC_h98xw2"
+      "id": "PSC_h98xw2",
+      "brandId": "BR1"
     },
     {
       "skuCode": "EFHB02BT204-BE",
@@ -3657,7 +3977,8 @@
       "weight": 1200,
       "productGroupId": "PG_zhux4k",
       "productCategoryId": "PC_r2a5ac",
-      "id": "PSC_is49ib"
+      "id": "PSC_is49ib",
+      "brandId": "BR1"
     },
     {
       "skuCode": "EFHB02BT205-BE",
@@ -3665,7 +3986,8 @@
       "weight": 1200,
       "productGroupId": "PG_zhux4k",
       "productCategoryId": "PC_r2a5ac",
-      "id": "PSC_zn04jj"
+      "id": "PSC_zn04jj",
+      "brandId": "BR1"
     },
     {
       "skuCode": "EFHB02BT206-BE",
@@ -3673,7 +3995,8 @@
       "weight": 1200,
       "productGroupId": "PG_zhux4k",
       "productCategoryId": "PC_r2a5ac",
-      "id": "PSC_eulumu"
+      "id": "PSC_eulumu",
+      "brandId": "BR1"
     },
     {
       "skuCode": "EFHB02HB001-21",
@@ -3681,7 +4004,8 @@
       "weight": 960,
       "productGroupId": "PG_zhux4k",
       "productCategoryId": "PC_r2a5ac",
-      "id": "PSC_4h1i1f"
+      "id": "PSC_4h1i1f",
+      "brandId": "BR1"
     },
     {
       "skuCode": "EFHB02HB002-21",
@@ -3689,7 +4013,8 @@
       "weight": 960,
       "productGroupId": "PG_zhux4k",
       "productCategoryId": "PC_r2a5ac",
-      "id": "PSC_s6to25"
+      "id": "PSC_s6to25",
+      "brandId": "BR1"
     },
     {
       "skuCode": "EFHB02HB003-21",
@@ -3697,7 +4022,8 @@
       "weight": 960,
       "productGroupId": "PG_zhux4k",
       "productCategoryId": "PC_r2a5ac",
-      "id": "PSC_xxqhct"
+      "id": "PSC_xxqhct",
+      "brandId": "BR1"
     },
     {
       "skuCode": "EFHB02HB004-21",
@@ -3705,7 +4031,8 @@
       "weight": 960,
       "productGroupId": "PG_zhux4k",
       "productCategoryId": "PC_r2a5ac",
-      "id": "PSC_zcb0e6"
+      "id": "PSC_zcb0e6",
+      "brandId": "BR1"
     },
     {
       "skuCode": "EFHB02HB005-21",
@@ -3713,7 +4040,8 @@
       "weight": 960,
       "productGroupId": "PG_zhux4k",
       "productCategoryId": "PC_r2a5ac",
-      "id": "PSC_g7q1ev"
+      "id": "PSC_g7q1ev",
+      "brandId": "BR1"
     },
     {
       "skuCode": "EFHB02HB006-21",
@@ -3721,7 +4049,8 @@
       "weight": 960,
       "productGroupId": "PG_zhux4k",
       "productCategoryId": "PC_r2a5ac",
-      "id": "PSC_cr9rt5"
+      "id": "PSC_cr9rt5",
+      "brandId": "BR1"
     },
     {
       "skuCode": "EFHB02HB001-22",
@@ -3729,7 +4058,8 @@
       "weight": 1500,
       "productGroupId": "PG_zhux4k",
       "productCategoryId": "PC_r2a5ac",
-      "id": "PSC_24sqic"
+      "id": "PSC_24sqic",
+      "brandId": "BR1"
     },
     {
       "skuCode": "EFHB02HB002-22",
@@ -3737,7 +4067,8 @@
       "weight": 1500,
       "productGroupId": "PG_zhux4k",
       "productCategoryId": "PC_r2a5ac",
-      "id": "PSC_21a968"
+      "id": "PSC_21a968",
+      "brandId": "BR1"
     },
     {
       "skuCode": "EFHB02HB003-22",
@@ -3745,7 +4076,8 @@
       "weight": 1500,
       "productGroupId": "PG_zhux4k",
       "productCategoryId": "PC_r2a5ac",
-      "id": "PSC_93wajk"
+      "id": "PSC_93wajk",
+      "brandId": "BR1"
     },
     {
       "skuCode": "EFHB02HB004-22",
@@ -3753,7 +4085,8 @@
       "weight": 1500,
       "productGroupId": "PG_zhux4k",
       "productCategoryId": "PC_r2a5ac",
-      "id": "PSC_fmbkln"
+      "id": "PSC_fmbkln",
+      "brandId": "BR1"
     },
     {
       "skuCode": "EFHB02HB005-22",
@@ -3761,7 +4094,8 @@
       "weight": 1500,
       "productGroupId": "PG_zhux4k",
       "productCategoryId": "PC_r2a5ac",
-      "id": "PSC_g684jg"
+      "id": "PSC_g684jg",
+      "brandId": "BR1"
     },
     {
       "skuCode": "EFHB02HB006-22",
@@ -3769,7 +4103,8 @@
       "weight": 1500,
       "productGroupId": "PG_zhux4k",
       "productCategoryId": "PC_r2a5ac",
-      "id": "PSC_88f600"
+      "id": "PSC_88f600",
+      "brandId": "BR1"
     },
     {
       "skuCode": "EFHC02BM001-BE",
@@ -3777,7 +4112,8 @@
       "weight": 920,
       "productGroupId": "PG_zhux4k",
       "productCategoryId": "PC_r2a5ac",
-      "id": "PSC_nwbd0v"
+      "id": "PSC_nwbd0v",
+      "brandId": "BR1"
     },
     {
       "skuCode": "EFHC02BM002-BE",
@@ -3785,7 +4121,8 @@
       "weight": 920,
       "productGroupId": "PG_zhux4k",
       "productCategoryId": "PC_r2a5ac",
-      "id": "PSC_4d8f6e"
+      "id": "PSC_4d8f6e",
+      "brandId": "BR1"
     },
     {
       "skuCode": "EFHC02BM003-BE",
@@ -3793,7 +4130,8 @@
       "weight": 920,
       "productGroupId": "PG_zhux4k",
       "productCategoryId": "PC_r2a5ac",
-      "id": "PSC_2pcdlm"
+      "id": "PSC_2pcdlm",
+      "brandId": "BR1"
     },
     {
       "skuCode": "EFHC02BM004-BE",
@@ -3801,7 +4139,8 @@
       "weight": 920,
       "productGroupId": "PG_zhux4k",
       "productCategoryId": "PC_r2a5ac",
-      "id": "PSC_6xegdi"
+      "id": "PSC_6xegdi",
+      "brandId": "BR1"
     },
     {
       "skuCode": "EFHC02BM005-BE",
@@ -3809,7 +4148,8 @@
       "weight": 920,
       "productGroupId": "PG_zhux4k",
       "productCategoryId": "PC_r2a5ac",
-      "id": "PSC_o4fgd4"
+      "id": "PSC_o4fgd4",
+      "brandId": "BR1"
     },
     {
       "skuCode": "EFHC02BM006-BE",
@@ -3817,7 +4157,8 @@
       "weight": 920,
       "productGroupId": "PG_zhux4k",
       "productCategoryId": "PC_r2a5ac",
-      "id": "PSC_mmmphh"
+      "id": "PSC_mmmphh",
+      "brandId": "BR1"
     },
     {
       "skuCode": "EFHC02BM201-BE",
@@ -3825,7 +4166,8 @@
       "weight": 1700,
       "productGroupId": "PG_zhux4k",
       "productCategoryId": "PC_r2a5ac",
-      "id": "PSC_vdd5g8"
+      "id": "PSC_vdd5g8",
+      "brandId": "BR1"
     },
     {
       "skuCode": "EFHC02BM202-BE",
@@ -3833,7 +4175,8 @@
       "weight": 1700,
       "productGroupId": "PG_zhux4k",
       "productCategoryId": "PC_r2a5ac",
-      "id": "PSC_ehwsiv"
+      "id": "PSC_ehwsiv",
+      "brandId": "BR1"
     },
     {
       "skuCode": "EFHC02BM203-BE",
@@ -3841,7 +4184,8 @@
       "weight": 1700,
       "productGroupId": "PG_zhux4k",
       "productCategoryId": "PC_r2a5ac",
-      "id": "PSC_57jtli"
+      "id": "PSC_57jtli",
+      "brandId": "BR1"
     },
     {
       "skuCode": "EFHC02BM204-BE",
@@ -3849,7 +4193,8 @@
       "weight": 1700,
       "productGroupId": "PG_zhux4k",
       "productCategoryId": "PC_r2a5ac",
-      "id": "PSC_wpbpvj"
+      "id": "PSC_wpbpvj",
+      "brandId": "BR1"
     },
     {
       "skuCode": "EFHC02BM205-BE",
@@ -3857,7 +4202,8 @@
       "weight": 1700,
       "productGroupId": "PG_zhux4k",
       "productCategoryId": "PC_r2a5ac",
-      "id": "PSC_gedcxr"
+      "id": "PSC_gedcxr",
+      "brandId": "BR1"
     },
     {
       "skuCode": "EFHC02BM206-BE",
@@ -3865,7 +4211,8 @@
       "weight": 1700,
       "productGroupId": "PG_zhux4k",
       "productCategoryId": "PC_r2a5ac",
-      "id": "PSC_rd6zs6"
+      "id": "PSC_rd6zs6",
+      "brandId": "BR1"
     },
     {
       "skuCode": "EFHP01CP001-BE",
@@ -3873,7 +4220,8 @@
       "weight": 420,
       "productGroupId": "PG_zhux4k",
       "productCategoryId": "PC_r2a5ac",
-      "id": "PSC_6uv63h"
+      "id": "PSC_6uv63h",
+      "brandId": "BR1"
     },
     {
       "skuCode": "EFHP01CP002-BE",
@@ -3881,7 +4229,8 @@
       "weight": 420,
       "productGroupId": "PG_zhux4k",
       "productCategoryId": "PC_r2a5ac",
-      "id": "PSC_tnbuv6"
+      "id": "PSC_tnbuv6",
+      "brandId": "BR1"
     },
     {
       "skuCode": "EFHP01CP003-BE",
@@ -3889,7 +4238,8 @@
       "weight": 420,
       "productGroupId": "PG_zhux4k",
       "productCategoryId": "PC_r2a5ac",
-      "id": "PSC_9x1ecn"
+      "id": "PSC_9x1ecn",
+      "brandId": "BR1"
     },
     {
       "skuCode": "EFHP01CP004-BE",
@@ -3897,7 +4247,8 @@
       "weight": 420,
       "productGroupId": "PG_zhux4k",
       "productCategoryId": "PC_r2a5ac",
-      "id": "PSC_jt25g1"
+      "id": "PSC_jt25g1",
+      "brandId": "BR1"
     },
     {
       "skuCode": "EFHP01CP005-BE",
@@ -3905,7 +4256,8 @@
       "weight": 420,
       "productGroupId": "PG_zhux4k",
       "productCategoryId": "PC_r2a5ac",
-      "id": "PSC_i339bg"
+      "id": "PSC_i339bg",
+      "brandId": "BR1"
     },
     {
       "skuCode": "EFHP01CP006-BE",
@@ -3913,7 +4265,8 @@
       "weight": 420,
       "productGroupId": "PG_zhux4k",
       "productCategoryId": "PC_r2a5ac",
-      "id": "PSC_7oshug"
+      "id": "PSC_7oshug",
+      "brandId": "BR1"
     },
     {
       "skuCode": "EFHP01CP007-BE",
@@ -3921,7 +4274,8 @@
       "weight": 420,
       "productGroupId": "PG_zhux4k",
       "productCategoryId": "PC_r2a5ac",
-      "id": "PSC_p5e4ee"
+      "id": "PSC_p5e4ee",
+      "brandId": "BR1"
     },
     {
       "skuCode": "EFHP01LP001-BE",
@@ -3929,7 +4283,8 @@
       "weight": 420,
       "productGroupId": "PG_zhux4k",
       "productCategoryId": "PC_r2a5ac",
-      "id": "PSC_r9duig"
+      "id": "PSC_r9duig",
+      "brandId": "BR1"
     },
     {
       "skuCode": "EFHP01LP002-BE",
@@ -3937,7 +4292,8 @@
       "weight": 420,
       "productGroupId": "PG_zhux4k",
       "productCategoryId": "PC_r2a5ac",
-      "id": "PSC_qs0va9"
+      "id": "PSC_qs0va9",
+      "brandId": "BR1"
     },
     {
       "skuCode": "EFHP01LP003-BE",
@@ -3945,7 +4301,8 @@
       "weight": 420,
       "productGroupId": "PG_zhux4k",
       "productCategoryId": "PC_r2a5ac",
-      "id": "PSC_ypbgvi"
+      "id": "PSC_ypbgvi",
+      "brandId": "BR1"
     },
     {
       "skuCode": "EFHP01LP004-BE",
@@ -3953,7 +4310,8 @@
       "weight": 420,
       "productGroupId": "PG_zhux4k",
       "productCategoryId": "PC_r2a5ac",
-      "id": "PSC_i0me9v"
+      "id": "PSC_i0me9v",
+      "brandId": "BR1"
     },
     {
       "skuCode": "EFHP01LP005-BE",
@@ -3961,7 +4319,8 @@
       "weight": 420,
       "productGroupId": "PG_zhux4k",
       "productCategoryId": "PC_r2a5ac",
-      "id": "PSC_z9dd3u"
+      "id": "PSC_z9dd3u",
+      "brandId": "BR1"
     },
     {
       "skuCode": "EFHP01LP006-BE",
@@ -3969,7 +4328,8 @@
       "weight": 420,
       "productGroupId": "PG_zhux4k",
       "productCategoryId": "PC_r2a5ac",
-      "id": "PSC_p0h6qz"
+      "id": "PSC_p0h6qz",
+      "brandId": "BR1"
     },
     {
       "skuCode": "EFHP01LP007-BE",
@@ -3977,7 +4337,8 @@
       "weight": 420,
       "productGroupId": "PG_zhux4k",
       "productCategoryId": "PC_r2a5ac",
-      "id": "PSC_6pu9ph"
+      "id": "PSC_6pu9ph",
+      "brandId": "BR1"
     },
     {
       "skuCode": "EFHP01LP008-BE",
@@ -3985,7 +4346,8 @@
       "weight": 420,
       "productGroupId": "PG_zhux4k",
       "productCategoryId": "PC_r2a5ac",
-      "id": "PSC_z1ggj6"
+      "id": "PSC_z1ggj6",
+      "brandId": "BR1"
     },
     {
       "skuCode": "EFHP01CL001-BE",
@@ -3993,7 +4355,8 @@
       "weight": 740,
       "productGroupId": "PG_zhux4k",
       "productCategoryId": "PC_r2a5ac",
-      "id": "PSC_ugog0t"
+      "id": "PSC_ugog0t",
+      "brandId": "BR1"
     },
     {
       "skuCode": "EFHP01CL002-BE",
@@ -4001,7 +4364,8 @@
       "weight": 740,
       "productGroupId": "PG_zhux4k",
       "productCategoryId": "PC_r2a5ac",
-      "id": "PSC_90wds9"
+      "id": "PSC_90wds9",
+      "brandId": "BR1"
     },
     {
       "skuCode": "EFHP01CL003-BE",
@@ -4009,7 +4373,8 @@
       "weight": 740,
       "productGroupId": "PG_zhux4k",
       "productCategoryId": "PC_r2a5ac",
-      "id": "PSC_ixnqnc"
+      "id": "PSC_ixnqnc",
+      "brandId": "BR1"
     },
     {
       "skuCode": "EFHP01CL004-BE",
@@ -4017,7 +4382,8 @@
       "weight": 740,
       "productGroupId": "PG_zhux4k",
       "productCategoryId": "PC_r2a5ac",
-      "id": "PSC_4lbtp2"
+      "id": "PSC_4lbtp2",
+      "brandId": "BR1"
     },
     {
       "skuCode": "EFHP01CL005-BE",
@@ -4025,7 +4391,8 @@
       "weight": 740,
       "productGroupId": "PG_zhux4k",
       "productCategoryId": "PC_r2a5ac",
-      "id": "PSC_macl9u"
+      "id": "PSC_macl9u",
+      "brandId": "BR1"
     },
     {
       "skuCode": "EFHP01CL006-BE",
@@ -4033,7 +4400,8 @@
       "weight": 740,
       "productGroupId": "PG_zhux4k",
       "productCategoryId": "PC_r2a5ac",
-      "id": "PSC_l6u0v5"
+      "id": "PSC_l6u0v5",
+      "brandId": "BR1"
     },
     {
       "skuCode": "EFHP01PL001-BE",
@@ -4041,7 +4409,8 @@
       "weight": 480,
       "productGroupId": "PG_zhux4k",
       "productCategoryId": "PC_r2a5ac",
-      "id": "PSC_r04dfm"
+      "id": "PSC_r04dfm",
+      "brandId": "BR1"
     },
     {
       "skuCode": "EFHP01PL002-BE",
@@ -4049,7 +4418,8 @@
       "weight": 480,
       "productGroupId": "PG_zhux4k",
       "productCategoryId": "PC_r2a5ac",
-      "id": "PSC_45npfb"
+      "id": "PSC_45npfb",
+      "brandId": "BR1"
     },
     {
       "skuCode": "EFHP01PL003-BE",
@@ -4057,7 +4427,8 @@
       "weight": 480,
       "productGroupId": "PG_zhux4k",
       "productCategoryId": "PC_r2a5ac",
-      "id": "PSC_kyti64"
+      "id": "PSC_kyti64",
+      "brandId": "BR1"
     },
     {
       "skuCode": "EFHP01PL004-BE",
@@ -4065,7 +4436,8 @@
       "weight": 480,
       "productGroupId": "PG_zhux4k",
       "productCategoryId": "PC_r2a5ac",
-      "id": "PSC_p7718f"
+      "id": "PSC_p7718f",
+      "brandId": "BR1"
     },
     {
       "skuCode": "EFHP01PL005-BE",
@@ -4073,7 +4445,8 @@
       "weight": 480,
       "productGroupId": "PG_zhux4k",
       "productCategoryId": "PC_r2a5ac",
-      "id": "PSC_xou6p1"
+      "id": "PSC_xou6p1",
+      "brandId": "BR1"
     },
     {
       "skuCode": "EFHP01PL006-BE",
@@ -4081,7 +4454,8 @@
       "weight": 480,
       "productGroupId": "PG_zhux4k",
       "productCategoryId": "PC_r2a5ac",
-      "id": "PSC_azta6u"
+      "id": "PSC_azta6u",
+      "brandId": "BR1"
     },
     {
       "skuCode": "EFHP01PL007-BE",
@@ -4089,7 +4463,8 @@
       "weight": 480,
       "productGroupId": "PG_zhux4k",
       "productCategoryId": "PC_r2a5ac",
-      "id": "PSC_8i1cbo"
+      "id": "PSC_8i1cbo",
+      "brandId": "BR1"
     },
     {
       "skuCode": "EFHP01PL201-BE",
@@ -4097,7 +4472,8 @@
       "weight": 930,
       "productGroupId": "PG_zhux4k",
       "productCategoryId": "PC_r2a5ac",
-      "id": "PSC_rtxu7i"
+      "id": "PSC_rtxu7i",
+      "brandId": "BR1"
     },
     {
       "skuCode": "EFHP01PL202-BE",
@@ -4105,7 +4481,8 @@
       "weight": 930,
       "productGroupId": "PG_zhux4k",
       "productCategoryId": "PC_r2a5ac",
-      "id": "PSC_4pd8hc"
+      "id": "PSC_4pd8hc",
+      "brandId": "BR1"
     },
     {
       "skuCode": "EFHP01PL203-BE",
@@ -4113,7 +4490,8 @@
       "weight": 930,
       "productGroupId": "PG_zhux4k",
       "productCategoryId": "PC_r2a5ac",
-      "id": "PSC_n8j6ek"
+      "id": "PSC_n8j6ek",
+      "brandId": "BR1"
     },
     {
       "skuCode": "EFHP01PL204-BE",
@@ -4121,7 +4499,8 @@
       "weight": 930,
       "productGroupId": "PG_zhux4k",
       "productCategoryId": "PC_r2a5ac",
-      "id": "PSC_7aa6g0"
+      "id": "PSC_7aa6g0",
+      "brandId": "BR1"
     },
     {
       "skuCode": "EFHP01PL205-BE",
@@ -4129,7 +4508,8 @@
       "weight": 930,
       "productGroupId": "PG_zhux4k",
       "productCategoryId": "PC_r2a5ac",
-      "id": "PSC_oblimx"
+      "id": "PSC_oblimx",
+      "brandId": "BR1"
     },
     {
       "skuCode": "EFHP02PL001-BE",
@@ -4137,7 +4517,8 @@
       "weight": 625,
       "productGroupId": "PG_zhux4k",
       "productCategoryId": "PC_r2a5ac",
-      "id": "PSC_rnc85j"
+      "id": "PSC_rnc85j",
+      "brandId": "BR1"
     },
     {
       "skuCode": "EFHP02PL002-BE",
@@ -4145,7 +4526,8 @@
       "weight": 625,
       "productGroupId": "PG_zhux4k",
       "productCategoryId": "PC_r2a5ac",
-      "id": "PSC_tzvo42"
+      "id": "PSC_tzvo42",
+      "brandId": "BR1"
     },
     {
       "skuCode": "EFHP02PL003-BE",
@@ -4153,7 +4535,8 @@
       "weight": 625,
       "productGroupId": "PG_zhux4k",
       "productCategoryId": "PC_r2a5ac",
-      "id": "PSC_ds1i3u"
+      "id": "PSC_ds1i3u",
+      "brandId": "BR1"
     },
     {
       "skuCode": "EFHP02PL004-BE",
@@ -4161,7 +4544,8 @@
       "weight": 625,
       "productGroupId": "PG_zhux4k",
       "productCategoryId": "PC_r2a5ac",
-      "id": "PSC_nogele"
+      "id": "PSC_nogele",
+      "brandId": "BR1"
     },
     {
       "skuCode": "EFHP02PL005-BE",
@@ -4169,7 +4553,8 @@
       "weight": 625,
       "productGroupId": "PG_zhux4k",
       "productCategoryId": "PC_r2a5ac",
-      "id": "PSC_bd9dn8"
+      "id": "PSC_bd9dn8",
+      "brandId": "BR1"
     },
     {
       "skuCode": "EFHP02PL006-BE",
@@ -4177,7 +4562,8 @@
       "weight": 625,
       "productGroupId": "PG_zhux4k",
       "productCategoryId": "PC_r2a5ac",
-      "id": "PSC_c68pq3"
+      "id": "PSC_c68pq3",
+      "brandId": "BR1"
     },
     {
       "skuCode": "EFHP02PL007-BE",
@@ -4185,7 +4571,8 @@
       "weight": 625,
       "productGroupId": "PG_zhux4k",
       "productCategoryId": "PC_r2a5ac",
-      "id": "PSC_zkjj3w"
+      "id": "PSC_zkjj3w",
+      "brandId": "BR1"
     },
     {
       "skuCode": "EFHP01FR001-BE",
@@ -4193,7 +4580,8 @@
       "weight": 480,
       "productGroupId": "PG_zhux4k",
       "productCategoryId": "PC_r2a5ac",
-      "id": "PSC_z7tw20"
+      "id": "PSC_z7tw20",
+      "brandId": "BR1"
     },
     {
       "skuCode": "EFHP01FR002-BE",
@@ -4201,7 +4589,8 @@
       "weight": 480,
       "productGroupId": "PG_zhux4k",
       "productCategoryId": "PC_r2a5ac",
-      "id": "PSC_i96a75"
+      "id": "PSC_i96a75",
+      "brandId": "BR1"
     },
     {
       "skuCode": "EFHP01FR003-BE",
@@ -4209,7 +4598,8 @@
       "weight": 480,
       "productGroupId": "PG_zhux4k",
       "productCategoryId": "PC_r2a5ac",
-      "id": "PSC_d1gsmr"
+      "id": "PSC_d1gsmr",
+      "brandId": "BR1"
     },
     {
       "skuCode": "EFHP01FR004-BE",
@@ -4217,7 +4607,8 @@
       "weight": 480,
       "productGroupId": "PG_zhux4k",
       "productCategoryId": "PC_r2a5ac",
-      "id": "PSC_64pcd3"
+      "id": "PSC_64pcd3",
+      "brandId": "BR1"
     },
     {
       "skuCode": "EFHP01FR005-BE",
@@ -4225,7 +4616,8 @@
       "weight": 480,
       "productGroupId": "PG_zhux4k",
       "productCategoryId": "PC_r2a5ac",
-      "id": "PSC_tkh338"
+      "id": "PSC_tkh338",
+      "brandId": "BR1"
     },
     {
       "skuCode": "EFHP01FR006-BE",
@@ -4233,7 +4625,8 @@
       "weight": 480,
       "productGroupId": "PG_zhux4k",
       "productCategoryId": "PC_r2a5ac",
-      "id": "PSC_dth421"
+      "id": "PSC_dth421",
+      "brandId": "BR1"
     },
     {
       "skuCode": "EFKT20KD002",
@@ -4241,7 +4634,8 @@
       "weight": 1490,
       "productGroupId": "PG_vf9yhj",
       "productCategoryId": "PC_r2a5ac",
-      "id": "PSC_zp7h4z"
+      "id": "PSC_zp7h4z",
+      "brandId": "BR1"
     },
     {
       "skuCode": "EFKT22KD002",
@@ -4249,7 +4643,8 @@
       "weight": 1850,
       "productGroupId": "PG_vf9yhj",
       "productCategoryId": "PC_r2a5ac",
-      "id": "PSC_7iwsu0"
+      "id": "PSC_7iwsu0",
+      "brandId": "BR1"
     },
     {
       "skuCode": "EFKT24KD002",
@@ -4257,7 +4652,8 @@
       "weight": 2150,
       "productGroupId": "PG_vf9yhj",
       "productCategoryId": "PC_r2a5ac",
-      "id": "PSC_s1an3s"
+      "id": "PSC_s1an3s",
+      "brandId": "BR1"
     },
     {
       "skuCode": "EFKT26KD002",
@@ -4265,7 +4661,8 @@
       "weight": 2450,
       "productGroupId": "PG_vf9yhj",
       "productCategoryId": "PC_r2a5ac",
-      "id": "PSC_gmqu2h"
+      "id": "PSC_gmqu2h",
+      "brandId": "BR1"
     },
     {
       "skuCode": "EFKT28KD002",
@@ -4273,7 +4670,8 @@
       "weight": 2700,
       "productGroupId": "PG_vf9yhj",
       "productCategoryId": "PC_r2a5ac",
-      "id": "PSC_mnhdao"
+      "id": "PSC_mnhdao",
+      "brandId": "BR1"
     },
     {
       "skuCode": "EFKT30KD002",
@@ -4281,7 +4679,8 @@
       "weight": 2990,
       "productGroupId": "PG_vf9yhj",
       "productCategoryId": "PC_r2a5ac",
-      "id": "PSC_kwdztl"
+      "id": "PSC_kwdztl",
+      "brandId": "BR1"
     },
     {
       "skuCode": "EFKT14SP001",
@@ -4289,7 +4688,8 @@
       "weight": 980,
       "productGroupId": "PG_vf9yhj",
       "productCategoryId": "PC_r2a5ac",
-      "id": "PSC_evkblv"
+      "id": "PSC_evkblv",
+      "brandId": "BR1"
     },
     {
       "skuCode": "EFKT16SP001",
@@ -4297,7 +4697,8 @@
       "weight": 1250,
       "productGroupId": "PG_vf9yhj",
       "productCategoryId": "PC_r2a5ac",
-      "id": "PSC_dk732d"
+      "id": "PSC_dk732d",
+      "brandId": "BR1"
     },
     {
       "skuCode": "EFKT18SP001",
@@ -4305,7 +4706,8 @@
       "weight": 1400,
       "productGroupId": "PG_vf9yhj",
       "productCategoryId": "PC_r2a5ac",
-      "id": "PSC_66lwth"
+      "id": "PSC_66lwth",
+      "brandId": "BR1"
     },
     {
       "skuCode": "EFKT20FP001",
@@ -4313,7 +4715,8 @@
       "weight": 980,
       "productGroupId": "PG_vf9yhj",
       "productCategoryId": "PC_r2a5ac",
-      "id": "PSC_1u63cq"
+      "id": "PSC_1u63cq",
+      "brandId": "BR1"
     },
     {
       "skuCode": "EFKT22FP001",
@@ -4321,7 +4724,8 @@
       "weight": 1150,
       "productGroupId": "PG_vf9yhj",
       "productCategoryId": "PC_r2a5ac",
-      "id": "PSC_i8br21"
+      "id": "PSC_i8br21",
+      "brandId": "BR1"
     },
     {
       "skuCode": "EFKT24FP001",
@@ -4329,7 +4733,8 @@
       "weight": 1560,
       "productGroupId": "PG_vf9yhj",
       "productCategoryId": "PC_r2a5ac",
-      "id": "PSC_8tf519"
+      "id": "PSC_8tf519",
+      "brandId": "BR1"
     },
     {
       "skuCode": "EFKT20WO001",
@@ -4337,7 +4742,8 @@
       "weight": 1250,
       "productGroupId": "PG_vf9yhj",
       "productCategoryId": "PC_r2a5ac",
-      "id": "PSC_am1x2t"
+      "id": "PSC_am1x2t",
+      "brandId": "BR1"
     },
     {
       "skuCode": "EFKT22WO001",
@@ -4345,7 +4751,8 @@
       "weight": 1450,
       "productGroupId": "PG_vf9yhj",
       "productCategoryId": "PC_r2a5ac",
-      "id": "PSC_b7s2qo"
+      "id": "PSC_b7s2qo",
+      "brandId": "BR1"
     },
     {
       "skuCode": "EFKT1416SPFP",
@@ -4353,7 +4760,8 @@
       "weight": "",
       "productGroupId": "PG_vf9yhj",
       "productCategoryId": "PC_r2a5ac",
-      "id": "PSC_1xz7ce"
+      "id": "PSC_1xz7ce",
+      "brandId": "BR1"
     },
     {
       "skuCode": "EFKT1618SPFP",
@@ -4361,7 +4769,8 @@
       "weight": "",
       "productGroupId": "PG_vf9yhj",
       "productCategoryId": "PC_r2a5ac",
-      "id": "PSC_cmvgdc"
+      "id": "PSC_cmvgdc",
+      "brandId": "BR1"
     },
     {
       "skuCode": "EFKT1820SPFP",
@@ -4369,7 +4778,8 @@
       "weight": "",
       "productGroupId": "PG_vf9yhj",
       "productCategoryId": "PC_r2a5ac",
-      "id": "PSC_gtm602"
+      "id": "PSC_gtm602",
+      "brandId": "BR1"
     },
     {
       "skuCode": "EFKT1422SPKD",
@@ -4377,7 +4787,8 @@
       "weight": "",
       "productGroupId": "PG_vf9yhj",
       "productCategoryId": "PC_r2a5ac",
-      "id": "PSC_pm9ab8"
+      "id": "PSC_pm9ab8",
+      "brandId": "BR1"
     },
     {
       "skuCode": "EFKT1624SPKD",
@@ -4385,7 +4796,8 @@
       "weight": "",
       "productGroupId": "PG_vf9yhj",
       "productCategoryId": "PC_r2a5ac",
-      "id": "PSC_du7k3r"
+      "id": "PSC_du7k3r",
+      "brandId": "BR1"
     },
     {
       "skuCode": "EFKT1826SPKD",
@@ -4393,7 +4805,8 @@
       "weight": "",
       "productGroupId": "PG_vf9yhj",
       "productCategoryId": "PC_r2a5ac",
-      "id": "PSC_s7w8l2"
+      "id": "PSC_s7w8l2",
+      "brandId": "BR1"
     },
     {
       "skuCode": "EFKT2022FPKD",
@@ -4401,7 +4814,8 @@
       "weight": "",
       "productGroupId": "PG_vf9yhj",
       "productCategoryId": "PC_r2a5ac",
-      "id": "PSC_od5n2g"
+      "id": "PSC_od5n2g",
+      "brandId": "BR1"
     },
     {
       "skuCode": "EFKT2224FPKD",
@@ -4409,7 +4823,8 @@
       "weight": "",
       "productGroupId": "PG_vf9yhj",
       "productCategoryId": "PC_r2a5ac",
-      "id": "PSC_04vrmy"
+      "id": "PSC_04vrmy",
+      "brandId": "BR1"
     },
     {
       "skuCode": "EFKT2426FPKD",
@@ -4417,7 +4832,8 @@
       "weight": "",
       "productGroupId": "PG_vf9yhj",
       "productCategoryId": "PC_r2a5ac",
-      "id": "PSC_tg1uin"
+      "id": "PSC_tg1uin",
+      "brandId": "BR1"
     },
     {
       "skuCode": "EFKT142022SPFPKD",
@@ -4425,7 +4841,8 @@
       "weight": "",
       "productGroupId": "PG_vf9yhj",
       "productCategoryId": "PC_r2a5ac",
-      "id": "PSC_bivs7w"
+      "id": "PSC_bivs7w",
+      "brandId": "BR1"
     },
     {
       "skuCode": "EFKT162224SPFPKD",
@@ -4433,7 +4850,8 @@
       "weight": "",
       "productGroupId": "PG_vf9yhj",
       "productCategoryId": "PC_r2a5ac",
-      "id": "PSC_l70rws"
+      "id": "PSC_l70rws",
+      "brandId": "BR1"
     },
     {
       "skuCode": "EFKT182026SPFPKD",
@@ -4441,7 +4859,8 @@
       "weight": "",
       "productGroupId": "PG_vf9yhj",
       "productCategoryId": "PC_r2a5ac",
-      "id": "PSC_myjjxn"
+      "id": "PSC_myjjxn",
+      "brandId": "BR1"
     },
     {
       "skuCode": "EFKS22KD201",
@@ -4449,7 +4868,8 @@
       "weight": "",
       "productGroupId": "PG_vf9yhj",
       "productCategoryId": "PC_r2a5ac",
-      "id": "PSC_f21gq3"
+      "id": "PSC_f21gq3",
+      "brandId": "BR1"
     },
     {
       "skuCode": "EFKS24KD201",
@@ -4457,7 +4877,8 @@
       "weight": "",
       "productGroupId": "PG_vf9yhj",
       "productCategoryId": "PC_r2a5ac",
-      "id": "PSC_ijbrt5"
+      "id": "PSC_ijbrt5",
+      "brandId": "BR1"
     },
     {
       "skuCode": "EFKS26KD201",
@@ -4465,7 +4886,8 @@
       "weight": "",
       "productGroupId": "PG_vf9yhj",
       "productCategoryId": "PC_r2a5ac",
-      "id": "PSC_5b6ove"
+      "id": "PSC_5b6ove",
+      "brandId": "BR1"
     },
     {
       "skuCode": "EFKS28KD201",
@@ -4473,7 +4895,8 @@
       "weight": "",
       "productGroupId": "PG_vf9yhj",
       "productCategoryId": "PC_r2a5ac",
-      "id": "PSC_eiu91b"
+      "id": "PSC_eiu91b",
+      "brandId": "BR1"
     },
     {
       "skuCode": "EFKS22KD001",
@@ -4481,7 +4904,8 @@
       "weight": "",
       "productGroupId": "PG_vf9yhj",
       "productCategoryId": "PC_r2a5ac",
-      "id": "PSC_azmroj"
+      "id": "PSC_azmroj",
+      "brandId": "BR1"
     },
     {
       "skuCode": "EFKS22KD002",
@@ -4489,7 +4913,8 @@
       "weight": "",
       "productGroupId": "PG_vf9yhj",
       "productCategoryId": "PC_r2a5ac",
-      "id": "PSC_kvulgn"
+      "id": "PSC_kvulgn",
+      "brandId": "BR1"
     },
     {
       "skuCode": "EFKS24KD001",
@@ -4497,7 +4922,8 @@
       "weight": "",
       "productGroupId": "PG_vf9yhj",
       "productCategoryId": "PC_r2a5ac",
-      "id": "PSC_ebu5l8"
+      "id": "PSC_ebu5l8",
+      "brandId": "BR1"
     },
     {
       "skuCode": "EFKS24KD002",
@@ -4505,7 +4931,8 @@
       "weight": "",
       "productGroupId": "PG_vf9yhj",
       "productCategoryId": "PC_r2a5ac",
-      "id": "PSC_r68nlh"
+      "id": "PSC_r68nlh",
+      "brandId": "BR1"
     },
     {
       "skuCode": "EFKS26KD001",
@@ -4513,7 +4940,8 @@
       "weight": "",
       "productGroupId": "PG_vf9yhj",
       "productCategoryId": "PC_r2a5ac",
-      "id": "PSC_yubfso"
+      "id": "PSC_yubfso",
+      "brandId": "BR1"
     },
     {
       "skuCode": "EFKS26KD002",
@@ -4521,7 +4949,8 @@
       "weight": "",
       "productGroupId": "PG_vf9yhj",
       "productCategoryId": "PC_r2a5ac",
-      "id": "PSC_u7t537"
+      "id": "PSC_u7t537",
+      "brandId": "BR1"
     },
     {
       "skuCode": "EFKS28KD001",
@@ -4529,7 +4958,8 @@
       "weight": "",
       "productGroupId": "PG_vf9yhj",
       "productCategoryId": "PC_r2a5ac",
-      "id": "PSC_ht75zt"
+      "id": "PSC_ht75zt",
+      "brandId": "BR1"
     },
     {
       "skuCode": "EFKS28KD002",
@@ -4537,7 +4967,8 @@
       "weight": "",
       "productGroupId": "PG_vf9yhj",
       "productCategoryId": "PC_r2a5ac",
-      "id": "PSC_mfi39n"
+      "id": "PSC_mfi39n",
+      "brandId": "BR1"
     },
     {
       "skuCode": "EFKS30KD001",
@@ -4545,7 +4976,8 @@
       "weight": "",
       "productGroupId": "PG_vf9yhj",
       "productCategoryId": "PC_r2a5ac",
-      "id": "PSC_g4a9lq"
+      "id": "PSC_g4a9lq",
+      "brandId": "BR1"
     },
     {
       "skuCode": "EFKS30KD002",
@@ -4553,7 +4985,8 @@
       "weight": "",
       "productGroupId": "PG_vf9yhj",
       "productCategoryId": "PC_r2a5ac",
-      "id": "PSC_h9i7dz"
+      "id": "PSC_h9i7dz",
+      "brandId": "BR1"
     },
     {
       "skuCode": "EFKS14SP019",
@@ -4561,7 +4994,8 @@
       "weight": "",
       "productGroupId": "PG_vf9yhj",
       "productCategoryId": "PC_r2a5ac",
-      "id": "PSC_y60evq"
+      "id": "PSC_y60evq",
+      "brandId": "BR1"
     },
     {
       "skuCode": "EFKS16SP019",
@@ -4569,7 +5003,8 @@
       "weight": "",
       "productGroupId": "PG_vf9yhj",
       "productCategoryId": "PC_r2a5ac",
-      "id": "PSC_534k7f"
+      "id": "PSC_534k7f",
+      "brandId": "BR1"
     },
     {
       "skuCode": "EFKS18SP019",
@@ -4577,7 +5012,8 @@
       "weight": "",
       "productGroupId": "PG_vf9yhj",
       "productCategoryId": "PC_r2a5ac",
-      "id": "PSC_gn32yu"
+      "id": "PSC_gn32yu",
+      "brandId": "BR1"
     },
     {
       "skuCode": "EFKS14SP219",
@@ -4585,7 +5021,8 @@
       "weight": "",
       "productGroupId": "PG_vf9yhj",
       "productCategoryId": "PC_r2a5ac",
-      "id": "PSC_p2dfch"
+      "id": "PSC_p2dfch",
+      "brandId": "BR1"
     },
     {
       "skuCode": "EFKS16SP219",
@@ -4593,7 +5030,8 @@
       "weight": "",
       "productGroupId": "PG_vf9yhj",
       "productCategoryId": "PC_r2a5ac",
-      "id": "PSC_tircbq"
+      "id": "PSC_tircbq",
+      "brandId": "BR1"
     },
     {
       "skuCode": "EFKS18SP219",
@@ -4601,7 +5039,8 @@
       "weight": "",
       "productGroupId": "PG_vf9yhj",
       "productCategoryId": "PC_r2a5ac",
-      "id": "PSC_qsnwbh"
+      "id": "PSC_qsnwbh",
+      "brandId": "BR1"
     },
     {
       "skuCode": "EFKS20FP019",
@@ -4609,7 +5048,8 @@
       "weight": "",
       "productGroupId": "PG_vf9yhj",
       "productCategoryId": "PC_r2a5ac",
-      "id": "PSC_3lmke8"
+      "id": "PSC_3lmke8",
+      "brandId": "BR1"
     },
     {
       "skuCode": "EFKS22FP019",
@@ -4617,7 +5057,8 @@
       "weight": "",
       "productGroupId": "PG_vf9yhj",
       "productCategoryId": "PC_r2a5ac",
-      "id": "PSC_g9jgxd"
+      "id": "PSC_g9jgxd",
+      "brandId": "BR1"
     },
     {
       "skuCode": "EFKS24FP019",
@@ -4625,7 +5066,8 @@
       "weight": "",
       "productGroupId": "PG_vf9yhj",
       "productCategoryId": "PC_r2a5ac",
-      "id": "PSC_xboqtx"
+      "id": "PSC_xboqtx",
+      "brandId": "BR1"
     },
     {
       "skuCode": "EFKS20FP219",
@@ -4633,7 +5075,8 @@
       "weight": "",
       "productGroupId": "PG_vf9yhj",
       "productCategoryId": "PC_r2a5ac",
-      "id": "PSC_lgw7c0"
+      "id": "PSC_lgw7c0",
+      "brandId": "BR1"
     },
     {
       "skuCode": "EFKS22FP219",
@@ -4641,7 +5084,8 @@
       "weight": "",
       "productGroupId": "PG_vf9yhj",
       "productCategoryId": "PC_r2a5ac",
-      "id": "PSC_jemolk"
+      "id": "PSC_jemolk",
+      "brandId": "BR1"
     },
     {
       "skuCode": "EFKS24FP219",
@@ -4649,7 +5093,8 @@
       "weight": "",
       "productGroupId": "PG_vf9yhj",
       "productCategoryId": "PC_r2a5ac",
-      "id": "PSC_2zs2k5"
+      "id": "PSC_2zs2k5",
+      "brandId": "BR1"
     },
     {
       "skuCode": "EFKS16TP001",
@@ -4657,7 +5102,8 @@
       "weight": "",
       "productGroupId": "PG_vf9yhj",
       "productCategoryId": "PC_r2a5ac",
-      "id": "PSC_k7ka2j"
+      "id": "PSC_k7ka2j",
+      "brandId": "BR1"
     },
     {
       "skuCode": "EFKS18TP001",
@@ -4665,7 +5111,8 @@
       "weight": "",
       "productGroupId": "PG_vf9yhj",
       "productCategoryId": "PC_r2a5ac",
-      "id": "PSC_nl88t1"
+      "id": "PSC_nl88t1",
+      "brandId": "BR1"
     },
     {
       "skuCode": "EFKS19TP001",
@@ -4673,7 +5120,8 @@
       "weight": "",
       "productGroupId": "PG_vf9yhj",
       "productCategoryId": "PC_r2a5ac",
-      "id": "PSC_hj513m"
+      "id": "PSC_hj513m",
+      "brandId": "BR1"
     },
     {
       "skuCode": "EFKS20TP001",
@@ -4681,7 +5129,8 @@
       "weight": "",
       "productGroupId": "PG_vf9yhj",
       "productCategoryId": "PC_r2a5ac",
-      "id": "PSC_5jp4o4"
+      "id": "PSC_5jp4o4",
+      "brandId": "BR1"
     },
     {
       "skuCode": "EFKS22TP001",
@@ -4689,7 +5138,8 @@
       "weight": "",
       "productGroupId": "PG_vf9yhj",
       "productCategoryId": "PC_r2a5ac",
-      "id": "PSC_xvz1p0"
+      "id": "PSC_xvz1p0",
+      "brandId": "BR1"
     },
     {
       "skuCode": "EFKS24TP001",
@@ -4697,7 +5147,8 @@
       "weight": "",
       "productGroupId": "PG_vf9yhj",
       "productCategoryId": "PC_r2a5ac",
-      "id": "PSC_yih13q"
+      "id": "PSC_yih13q",
+      "brandId": "BR1"
     },
     {
       "skuCode": "EFKSC1TP001",
@@ -4705,7 +5156,8 @@
       "weight": "",
       "productGroupId": "PG_vf9yhj",
       "productCategoryId": "PC_r2a5ac",
-      "id": "PSC_w479uc"
+      "id": "PSC_w479uc",
+      "brandId": "BR1"
     },
     {
       "skuCode": "EFKSC2TP001",
@@ -4713,7 +5165,8 @@
       "weight": "",
       "productGroupId": "PG_vf9yhj",
       "productCategoryId": "PC_r2a5ac",
-      "id": "PSC_hmmff7"
+      "id": "PSC_hmmff7",
+      "brandId": "BR1"
     },
     {
       "skuCode": "EFKS14TP101",
@@ -4721,7 +5174,8 @@
       "weight": "",
       "productGroupId": "PG_vf9yhj",
       "productCategoryId": "PC_r2a5ac",
-      "id": "PSC_o5udeh"
+      "id": "PSC_o5udeh",
+      "brandId": "BR1"
     },
     {
       "skuCode": "EFKS16TP101",
@@ -4729,7 +5183,8 @@
       "weight": "",
       "productGroupId": "PG_vf9yhj",
       "productCategoryId": "PC_r2a5ac",
-      "id": "PSC_byhh6c"
+      "id": "PSC_byhh6c",
+      "brandId": "BR1"
     },
     {
       "skuCode": "EFKS18TP101",
@@ -4737,7 +5192,8 @@
       "weight": "",
       "productGroupId": "PG_vf9yhj",
       "productCategoryId": "PC_r2a5ac",
-      "id": "PSC_apt3eq"
+      "id": "PSC_apt3eq",
+      "brandId": "BR1"
     },
     {
       "skuCode": "EFKS20TP101",
@@ -4745,7 +5201,8 @@
       "weight": "",
       "productGroupId": "PG_vf9yhj",
       "productCategoryId": "PC_r2a5ac",
-      "id": "PSC_tc0w7d"
+      "id": "PSC_tc0w7d",
+      "brandId": "BR1"
     },
     {
       "skuCode": "EFKS22TP101",
@@ -4753,7 +5210,8 @@
       "weight": "",
       "productGroupId": "PG_vf9yhj",
       "productCategoryId": "PC_r2a5ac",
-      "id": "PSC_2uo3th"
+      "id": "PSC_2uo3th",
+      "brandId": "BR1"
     },
     {
       "skuCode": "EFKS24TP101",
@@ -4761,7 +5219,8 @@
       "weight": "",
       "productGroupId": "PG_vf9yhj",
       "productCategoryId": "PC_r2a5ac",
-      "id": "PSC_c2k3zi"
+      "id": "PSC_c2k3zi",
+      "brandId": "BR1"
     },
     {
       "skuCode": "EFKSC1TP101",
@@ -4769,7 +5228,8 @@
       "weight": "",
       "productGroupId": "PG_vf9yhj",
       "productCategoryId": "PC_r2a5ac",
-      "id": "PSC_z4b9ex"
+      "id": "PSC_z4b9ex",
+      "brandId": "BR1"
     },
     {
       "skuCode": "EFKSC2TP101",
@@ -4777,7 +5237,8 @@
       "weight": "",
       "productGroupId": "PG_vf9yhj",
       "productCategoryId": "PC_r2a5ac",
-      "id": "PSC_qlwnsl"
+      "id": "PSC_qlwnsl",
+      "brandId": "BR1"
     },
     {
       "skuCode": "EFKS16TP201",
@@ -4785,7 +5246,8 @@
       "weight": "",
       "productGroupId": "PG_vf9yhj",
       "productCategoryId": "PC_r2a5ac",
-      "id": "PSC_lnxpnk"
+      "id": "PSC_lnxpnk",
+      "brandId": "BR1"
     },
     {
       "skuCode": "EFKS18TP201",
@@ -4793,7 +5255,8 @@
       "weight": "",
       "productGroupId": "PG_vf9yhj",
       "productCategoryId": "PC_r2a5ac",
-      "id": "PSC_noqul2"
+      "id": "PSC_noqul2",
+      "brandId": "BR1"
     },
     {
       "skuCode": "EFKS19TP201",
@@ -4801,7 +5264,8 @@
       "weight": "",
       "productGroupId": "PG_vf9yhj",
       "productCategoryId": "PC_r2a5ac",
-      "id": "PSC_24tuct"
+      "id": "PSC_24tuct",
+      "brandId": "BR1"
     },
     {
       "skuCode": "EFKS20TP201",
@@ -4809,7 +5273,8 @@
       "weight": "",
       "productGroupId": "PG_vf9yhj",
       "productCategoryId": "PC_r2a5ac",
-      "id": "PSC_wxj3xm"
+      "id": "PSC_wxj3xm",
+      "brandId": "BR1"
     },
     {
       "skuCode": "EFKS22TP201",
@@ -4817,7 +5282,8 @@
       "weight": "",
       "productGroupId": "PG_vf9yhj",
       "productCategoryId": "PC_r2a5ac",
-      "id": "PSC_eislcs"
+      "id": "PSC_eislcs",
+      "brandId": "BR1"
     },
     {
       "skuCode": "EFKS24TP201",
@@ -4825,7 +5291,8 @@
       "weight": "",
       "productGroupId": "PG_vf9yhj",
       "productCategoryId": "PC_r2a5ac",
-      "id": "PSC_bilq2a"
+      "id": "PSC_bilq2a",
+      "brandId": "BR1"
     },
     {
       "skuCode": "EFKSC1TP201",
@@ -4833,7 +5300,8 @@
       "weight": "",
       "productGroupId": "PG_vf9yhj",
       "productCategoryId": "PC_r2a5ac",
-      "id": "PSC_9vo82m"
+      "id": "PSC_9vo82m",
+      "brandId": "BR1"
     },
     {
       "skuCode": "EFKSC2TP201",
@@ -4841,7 +5309,8 @@
       "weight": "",
       "productGroupId": "PG_vf9yhj",
       "productCategoryId": "PC_r2a5ac",
-      "id": "PSC_quaibm"
+      "id": "PSC_quaibm",
+      "brandId": "BR1"
     },
     {
       "skuCode": "EFKS23MK101",
@@ -4849,7 +5318,8 @@
       "weight": "",
       "productGroupId": "PG_vf9yhj",
       "productCategoryId": "PC_r2a5ac",
-      "id": "PSC_2qj3bg"
+      "id": "PSC_2qj3bg",
+      "brandId": "BR1"
     },
     {
       "skuCode": "EFKS27MK101",
@@ -4857,7 +5327,8 @@
       "weight": "",
       "productGroupId": "PG_vf9yhj",
       "productCategoryId": "PC_r2a5ac",
-      "id": "PSC_q3tsz9"
+      "id": "PSC_q3tsz9",
+      "brandId": "BR1"
     },
     {
       "skuCode": "EFKS18SM201",
@@ -4865,7 +5336,8 @@
       "weight": "",
       "productGroupId": "PG_vf9yhj",
       "productCategoryId": "PC_r2a5ac",
-      "id": "PSC_4a5wdt"
+      "id": "PSC_4a5wdt",
+      "brandId": "BR1"
     },
     {
       "skuCode": "EFKS18SM301",
@@ -4873,7 +5345,8 @@
       "weight": "",
       "productGroupId": "PG_vf9yhj",
       "productCategoryId": "PC_r2a5ac",
-      "id": "PSC_d0l1zc"
+      "id": "PSC_d0l1zc",
+      "brandId": "BR1"
     },
     {
       "skuCode": "EFKS20SM201",
@@ -4881,7 +5354,8 @@
       "weight": "",
       "productGroupId": "PG_vf9yhj",
       "productCategoryId": "PC_r2a5ac",
-      "id": "PSC_b081a5"
+      "id": "PSC_b081a5",
+      "brandId": "BR1"
     },
     {
       "skuCode": "EFKS20SM301",
@@ -4889,7 +5363,8 @@
       "weight": "",
       "productGroupId": "PG_vf9yhj",
       "productCategoryId": "PC_r2a5ac",
-      "id": "PSC_4ao65m"
+      "id": "PSC_4ao65m",
+      "brandId": "BR1"
     },
     {
       "skuCode": "EFKS04IM101",
@@ -4897,7 +5372,8 @@
       "weight": "",
       "productGroupId": "PG_vf9yhj",
       "productCategoryId": "PC_r2a5ac",
-      "id": "PSC_8te7og"
+      "id": "PSC_8te7og",
+      "brandId": "BR1"
     },
     {
       "skuCode": "EFKS06IM101",
@@ -4905,7 +5381,8 @@
       "weight": "",
       "productGroupId": "PG_vf9yhj",
       "productCategoryId": "PC_r2a5ac",
-      "id": "PSC_a4yl17"
+      "id": "PSC_a4yl17",
+      "brandId": "BR1"
     },
     {
       "skuCode": "EFKS20CR201",
@@ -4913,7 +5390,8 @@
       "weight": "",
       "productGroupId": "PG_vf9yhj",
       "productCategoryId": "PC_r2a5ac",
-      "id": "PSC_ofoarj"
+      "id": "PSC_ofoarj",
+      "brandId": "BR1"
     },
     {
       "skuCode": "EFKS22CR201",
@@ -4921,7 +5399,8 @@
       "weight": "",
       "productGroupId": "PG_vf9yhj",
       "productCategoryId": "PC_r2a5ac",
-      "id": "PSC_4be5c9"
+      "id": "PSC_4be5c9",
+      "brandId": "BR1"
     },
     {
       "skuCode": "EFKSC1CR201",
@@ -4929,7 +5408,8 @@
       "weight": "",
       "productGroupId": "PG_vf9yhj",
       "productCategoryId": "PC_r2a5ac",
-      "id": "PSC_ukel6i"
+      "id": "PSC_ukel6i",
+      "brandId": "BR1"
     },
     {
       "skuCode": "NBHP01MC401",
@@ -4937,7 +5417,8 @@
       "weight": "",
       "productGroupId": "PG_zhux4k",
       "productCategoryId": "PC_r2a5ac",
-      "id": "PSC_q0jiny"
+      "id": "PSC_q0jiny",
+      "brandId": "BR1"
     },
     {
       "skuCode": "NBHP01MC402",
@@ -4945,7 +5426,8 @@
       "weight": "",
       "productGroupId": "PG_zhux4k",
       "productCategoryId": "PC_r2a5ac",
-      "id": "PSC_fy713y"
+      "id": "PSC_fy713y",
+      "brandId": "BR1"
     },
     {
       "skuCode": "NBHP01MC403",
@@ -4953,7 +5435,8 @@
       "weight": "",
       "productGroupId": "PG_zhux4k",
       "productCategoryId": "PC_r2a5ac",
-      "id": "PSC_518ykj"
+      "id": "PSC_518ykj",
+      "brandId": "BR1"
     },
     {
       "skuCode": "NBHP01MC404",
@@ -4961,7 +5444,8 @@
       "weight": "",
       "productGroupId": "PG_zhux4k",
       "productCategoryId": "PC_r2a5ac",
-      "id": "PSC_rm0m0q"
+      "id": "PSC_rm0m0q",
+      "brandId": "BR1"
     },
     {
       "skuCode": "NBHP01MC405",
@@ -4969,7 +5453,8 @@
       "weight": "",
       "productGroupId": "PG_zhux4k",
       "productCategoryId": "PC_r2a5ac",
-      "id": "PSC_zjtb4i"
+      "id": "PSC_zjtb4i",
+      "brandId": "BR1"
     },
     {
       "skuCode": "NBHP01MC801",
@@ -4977,7 +5462,8 @@
       "weight": "",
       "productGroupId": "PG_zhux4k",
       "productCategoryId": "PC_r2a5ac",
-      "id": "PSC_enxh4p"
+      "id": "PSC_enxh4p",
+      "brandId": "BR1"
     },
     {
       "skuCode": "NBHP01MC802",
@@ -4985,7 +5471,8 @@
       "weight": "",
       "productGroupId": "PG_zhux4k",
       "productCategoryId": "PC_r2a5ac",
-      "id": "PSC_hzfgw6"
+      "id": "PSC_hzfgw6",
+      "brandId": "BR1"
     },
     {
       "skuCode": "NBHP01MC803",
@@ -4993,7 +5480,8 @@
       "weight": "",
       "productGroupId": "PG_zhux4k",
       "productCategoryId": "PC_r2a5ac",
-      "id": "PSC_vwyx3y"
+      "id": "PSC_vwyx3y",
+      "brandId": "BR1"
     },
     {
       "skuCode": "NBHP01MC804",
@@ -5001,7 +5489,8 @@
       "weight": "",
       "productGroupId": "PG_zhux4k",
       "productCategoryId": "PC_r2a5ac",
-      "id": "PSC_08vgkh"
+      "id": "PSC_08vgkh",
+      "brandId": "BR1"
     },
     {
       "skuCode": "NBHP01MC1201",
@@ -5009,7 +5498,8 @@
       "weight": "",
       "productGroupId": "PG_zhux4k",
       "productCategoryId": "PC_r2a5ac",
-      "id": "PSC_0dqlcv"
+      "id": "PSC_0dqlcv",
+      "brandId": "BR1"
     },
     {
       "skuCode": "NBHP01MC1202",
@@ -5017,7 +5507,8 @@
       "weight": "",
       "productGroupId": "PG_zhux4k",
       "productCategoryId": "PC_r2a5ac",
-      "id": "PSC_zpqmdn"
+      "id": "PSC_zpqmdn",
+      "brandId": "BR1"
     },
     {
       "skuCode": "NBHP01MC1203",
@@ -5025,7 +5516,8 @@
       "weight": "",
       "productGroupId": "PG_zhux4k",
       "productCategoryId": "PC_r2a5ac",
-      "id": "PSC_l4e6uv"
+      "id": "PSC_l4e6uv",
+      "brandId": "BR1"
     },
     {
       "skuCode": "NBHP01MC1204",
@@ -5033,7 +5525,8 @@
       "weight": "",
       "productGroupId": "PG_zhux4k",
       "productCategoryId": "PC_r2a5ac",
-      "id": "PSC_ipu8rk"
+      "id": "PSC_ipu8rk",
+      "brandId": "BR1"
     },
     {
       "skuCode": "NBHC01HT041",
@@ -5041,7 +5534,8 @@
       "weight": "",
       "productGroupId": "PG_zhux4k",
       "productCategoryId": "PC_r2a5ac",
-      "id": "PSC_33pkf1"
+      "id": "PSC_33pkf1",
+      "brandId": "BR1"
     },
     {
       "skuCode": "NBHC01HT042",
@@ -5049,7 +5543,8 @@
       "weight": "",
       "productGroupId": "PG_zhux4k",
       "productCategoryId": "PC_r2a5ac",
-      "id": "PSC_hg76zw"
+      "id": "PSC_hg76zw",
+      "brandId": "BR1"
     },
     {
       "skuCode": "NBHC01HT043",
@@ -5057,7 +5552,8 @@
       "weight": "",
       "productGroupId": "PG_zhux4k",
       "productCategoryId": "PC_r2a5ac",
-      "id": "PSC_sfewol"
+      "id": "PSC_sfewol",
+      "brandId": "BR1"
     },
     {
       "skuCode": "NBHC01HT044",
@@ -5065,7 +5561,8 @@
       "weight": "",
       "productGroupId": "PG_zhux4k",
       "productCategoryId": "PC_r2a5ac",
-      "id": "PSC_zup558"
+      "id": "PSC_zup558",
+      "brandId": "BR1"
     },
     {
       "skuCode": "NBHC01HT041-2",
@@ -5073,7 +5570,8 @@
       "weight": "",
       "productGroupId": "PG_zhux4k",
       "productCategoryId": "PC_r2a5ac",
-      "id": "PSC_k28v81"
+      "id": "PSC_k28v81",
+      "brandId": "BR1"
     },
     {
       "skuCode": "NBHC01HT042-2",
@@ -5081,7 +5579,8 @@
       "weight": "",
       "productGroupId": "PG_zhux4k",
       "productCategoryId": "PC_r2a5ac",
-      "id": "PSC_yc998q"
+      "id": "PSC_yc998q",
+      "brandId": "BR1"
     },
     {
       "skuCode": "NBHC01HT043-2",
@@ -5089,7 +5588,8 @@
       "weight": "",
       "productGroupId": "PG_zhux4k",
       "productCategoryId": "PC_r2a5ac",
-      "id": "PSC_002dom"
+      "id": "PSC_002dom",
+      "brandId": "BR1"
     },
     {
       "skuCode": "NBHC01HT044-2",
@@ -5097,7 +5597,8 @@
       "weight": "",
       "productGroupId": "PG_zhux4k",
       "productCategoryId": "PC_r2a5ac",
-      "id": "PSC_6x0p1i"
+      "id": "PSC_6x0p1i",
+      "brandId": "BR1"
     },
     {
       "skuCode": "NBHC01HT0412",
@@ -5105,7 +5606,8 @@
       "weight": "",
       "productGroupId": "PG_zhux4k",
       "productCategoryId": "PC_r2a5ac",
-      "id": "PSC_4gxfia"
+      "id": "PSC_4gxfia",
+      "brandId": "BR1"
     },
     {
       "skuCode": "NBHC01HT0413",
@@ -5113,7 +5615,8 @@
       "weight": "",
       "productGroupId": "PG_zhux4k",
       "productCategoryId": "PC_r2a5ac",
-      "id": "PSC_7o4fff"
+      "id": "PSC_7o4fff",
+      "brandId": "BR1"
     },
     {
       "skuCode": "NBHC01HT0414",
@@ -5121,7 +5624,8 @@
       "weight": "",
       "productGroupId": "PG_zhux4k",
       "productCategoryId": "PC_r2a5ac",
-      "id": "PSC_5v07az"
+      "id": "PSC_5v07az",
+      "brandId": "BR1"
     },
     {
       "skuCode": "NBHC01HT0423",
@@ -5129,7 +5633,8 @@
       "weight": "",
       "productGroupId": "PG_zhux4k",
       "productCategoryId": "PC_r2a5ac",
-      "id": "PSC_td9sx3"
+      "id": "PSC_td9sx3",
+      "brandId": "BR1"
     },
     {
       "skuCode": "NBHC01HT0424",
@@ -5137,7 +5642,8 @@
       "weight": "",
       "productGroupId": "PG_zhux4k",
       "productCategoryId": "PC_r2a5ac",
-      "id": "PSC_jifk07"
+      "id": "PSC_jifk07",
+      "brandId": "BR1"
     },
     {
       "skuCode": "NBHC01HT0434",
@@ -5145,7 +5651,8 @@
       "weight": "",
       "productGroupId": "PG_zhux4k",
       "productCategoryId": "PC_r2a5ac",
-      "id": "PSC_ckc2dc"
+      "id": "PSC_ckc2dc",
+      "brandId": "BR1"
     },
     {
       "skuCode": "NBHC01BT041",
@@ -5153,7 +5660,8 @@
       "weight": "",
       "productGroupId": "PG_zhux4k",
       "productCategoryId": "PC_r2a5ac",
-      "id": "PSC_1hzucl"
+      "id": "PSC_1hzucl",
+      "brandId": "BR1"
     },
     {
       "skuCode": "NBHC01BT042",
@@ -5161,7 +5669,8 @@
       "weight": "",
       "productGroupId": "PG_zhux4k",
       "productCategoryId": "PC_r2a5ac",
-      "id": "PSC_ua2qho"
+      "id": "PSC_ua2qho",
+      "brandId": "BR1"
     },
     {
       "skuCode": "NBHC01BT043",
@@ -5169,7 +5678,8 @@
       "weight": "",
       "productGroupId": "PG_zhux4k",
       "productCategoryId": "PC_r2a5ac",
-      "id": "PSC_y2590h"
+      "id": "PSC_y2590h",
+      "brandId": "BR1"
     },
     {
       "skuCode": "NBHC01BT044",
@@ -5177,7 +5687,8 @@
       "weight": "",
       "productGroupId": "PG_zhux4k",
       "productCategoryId": "PC_r2a5ac",
-      "id": "PSC_lwqm7h"
+      "id": "PSC_lwqm7h",
+      "brandId": "BR1"
     },
     {
       "skuCode": "NBHC01BT0412",
@@ -5185,7 +5696,8 @@
       "weight": "",
       "productGroupId": "PG_zhux4k",
       "productCategoryId": "PC_r2a5ac",
-      "id": "PSC_9sp8wk"
+      "id": "PSC_9sp8wk",
+      "brandId": "BR1"
     },
     {
       "skuCode": "NBHC01BT0413",
@@ -5193,7 +5705,8 @@
       "weight": "",
       "productGroupId": "PG_zhux4k",
       "productCategoryId": "PC_r2a5ac",
-      "id": "PSC_4lw43u"
+      "id": "PSC_4lw43u",
+      "brandId": "BR1"
     },
     {
       "skuCode": "NBHC01BT0414",
@@ -5201,7 +5714,8 @@
       "weight": "",
       "productGroupId": "PG_zhux4k",
       "productCategoryId": "PC_r2a5ac",
-      "id": "PSC_3abb0f"
+      "id": "PSC_3abb0f",
+      "brandId": "BR1"
     },
     {
       "skuCode": "NBHC01BT0423",
@@ -5209,7 +5723,8 @@
       "weight": "",
       "productGroupId": "PG_zhux4k",
       "productCategoryId": "PC_r2a5ac",
-      "id": "PSC_04v6i6"
+      "id": "PSC_04v6i6",
+      "brandId": "BR1"
     },
     {
       "skuCode": "NBHC01BT0424",
@@ -5217,7 +5732,8 @@
       "weight": "",
       "productGroupId": "PG_zhux4k",
       "productCategoryId": "PC_r2a5ac",
-      "id": "PSC_mnm712"
+      "id": "PSC_mnm712",
+      "brandId": "BR1"
     },
     {
       "skuCode": "NBHC01BT0434",
@@ -5225,7 +5741,8 @@
       "weight": "",
       "productGroupId": "PG_zhux4k",
       "productCategoryId": "PC_r2a5ac",
-      "id": "PSC_glb5bg"
+      "id": "PSC_glb5bg",
+      "brandId": "BR1"
     },
     {
       "skuCode": "NBHC01BT051",
@@ -5233,7 +5750,8 @@
       "weight": "",
       "productGroupId": "PG_zhux4k",
       "productCategoryId": "PC_r2a5ac",
-      "id": "PSC_wiocgz"
+      "id": "PSC_wiocgz",
+      "brandId": "BR1"
     },
     {
       "skuCode": "NBHC01BT052",
@@ -5241,7 +5759,8 @@
       "weight": "",
       "productGroupId": "PG_zhux4k",
       "productCategoryId": "PC_r2a5ac",
-      "id": "PSC_cq133f"
+      "id": "PSC_cq133f",
+      "brandId": "BR1"
     },
     {
       "skuCode": "NBHC01BT053",
@@ -5249,7 +5768,8 @@
       "weight": "",
       "productGroupId": "PG_zhux4k",
       "productCategoryId": "PC_r2a5ac",
-      "id": "PSC_mmt1e8"
+      "id": "PSC_mmt1e8",
+      "brandId": "BR1"
     },
     {
       "skuCode": "NBHC01BT054",
@@ -5257,7 +5777,8 @@
       "weight": "",
       "productGroupId": "PG_zhux4k",
       "productCategoryId": "PC_r2a5ac",
-      "id": "PSC_faikzs"
+      "id": "PSC_faikzs",
+      "brandId": "BR1"
     },
     {
       "skuCode": "NBHC01BT0512",
@@ -5265,7 +5786,8 @@
       "weight": "",
       "productGroupId": "PG_zhux4k",
       "productCategoryId": "PC_r2a5ac",
-      "id": "PSC_sw4gds"
+      "id": "PSC_sw4gds",
+      "brandId": "BR1"
     },
     {
       "skuCode": "NBHC01BT0513",
@@ -5273,7 +5795,8 @@
       "weight": "",
       "productGroupId": "PG_zhux4k",
       "productCategoryId": "PC_r2a5ac",
-      "id": "PSC_shd3mk"
+      "id": "PSC_shd3mk",
+      "brandId": "BR1"
     },
     {
       "skuCode": "NBHC01BT0514",
@@ -5281,7 +5804,8 @@
       "weight": "",
       "productGroupId": "PG_zhux4k",
       "productCategoryId": "PC_r2a5ac",
-      "id": "PSC_01j7v5"
+      "id": "PSC_01j7v5",
+      "brandId": "BR1"
     },
     {
       "skuCode": "NBHC01BT0523",
@@ -5289,7 +5813,8 @@
       "weight": "",
       "productGroupId": "PG_zhux4k",
       "productCategoryId": "PC_r2a5ac",
-      "id": "PSC_3io0tr"
+      "id": "PSC_3io0tr",
+      "brandId": "BR1"
     },
     {
       "skuCode": "NBHC01BT0524",
@@ -5297,7 +5822,8 @@
       "weight": "",
       "productGroupId": "PG_zhux4k",
       "productCategoryId": "PC_r2a5ac",
-      "id": "PSC_20fy7q"
+      "id": "PSC_20fy7q",
+      "brandId": "BR1"
     },
     {
       "skuCode": "NBHC01BT0534",
@@ -5305,7 +5831,8 @@
       "weight": "",
       "productGroupId": "PG_zhux4k",
       "productCategoryId": "PC_r2a5ac",
-      "id": "PSC_9eeynx"
+      "id": "PSC_9eeynx",
+      "brandId": "BR1"
     },
     {
       "skuCode": "FSHP01MC401",
@@ -5313,7 +5840,8 @@
       "weight": "",
       "productGroupId": "PG_zhux4k",
       "productCategoryId": "PC_r2a5ac",
-      "id": "PSC_lqnti5"
+      "id": "PSC_lqnti5",
+      "brandId": "BR1"
     },
     {
       "skuCode": "FSHP01MC402",
@@ -5321,7 +5849,8 @@
       "weight": "",
       "productGroupId": "PG_zhux4k",
       "productCategoryId": "PC_r2a5ac",
-      "id": "PSC_6rfkbf"
+      "id": "PSC_6rfkbf",
+      "brandId": "BR1"
     },
     {
       "skuCode": "FSHP01MC403",
@@ -5329,7 +5858,8 @@
       "weight": "",
       "productGroupId": "PG_zhux4k",
       "productCategoryId": "PC_r2a5ac",
-      "id": "PSC_vpj453"
+      "id": "PSC_vpj453",
+      "brandId": "BR1"
     },
     {
       "skuCode": "FSHP01MC404",
@@ -5337,7 +5867,8 @@
       "weight": "",
       "productGroupId": "PG_zhux4k",
       "productCategoryId": "PC_r2a5ac",
-      "id": "PSC_huaewv"
+      "id": "PSC_huaewv",
+      "brandId": "BR1"
     },
     {
       "skuCode": "FSHP01MC405",
@@ -5345,7 +5876,8 @@
       "weight": "",
       "productGroupId": "PG_zhux4k",
       "productCategoryId": "PC_r2a5ac",
-      "id": "PSC_xq8u86"
+      "id": "PSC_xq8u86",
+      "brandId": "BR1"
     },
     {
       "skuCode": "FSHP01MC801",
@@ -5353,7 +5885,8 @@
       "weight": "",
       "productGroupId": "PG_zhux4k",
       "productCategoryId": "PC_r2a5ac",
-      "id": "PSC_8um064"
+      "id": "PSC_8um064",
+      "brandId": "BR1"
     },
     {
       "skuCode": "FSHP01MC802",
@@ -5361,7 +5894,8 @@
       "weight": "",
       "productGroupId": "PG_zhux4k",
       "productCategoryId": "PC_r2a5ac",
-      "id": "PSC_5dvrcx"
+      "id": "PSC_5dvrcx",
+      "brandId": "BR1"
     },
     {
       "skuCode": "FSHP01MC803",
@@ -5369,7 +5903,8 @@
       "weight": "",
       "productGroupId": "PG_zhux4k",
       "productCategoryId": "PC_r2a5ac",
-      "id": "PSC_o7w320"
+      "id": "PSC_o7w320",
+      "brandId": "BR1"
     },
     {
       "skuCode": "FSHP01MC804",
@@ -5377,7 +5912,8 @@
       "weight": "",
       "productGroupId": "PG_zhux4k",
       "productCategoryId": "PC_r2a5ac",
-      "id": "PSC_swwi0y"
+      "id": "PSC_swwi0y",
+      "brandId": "BR1"
     },
     {
       "skuCode": "FSHP01MC1201",
@@ -5385,7 +5921,8 @@
       "weight": "",
       "productGroupId": "PG_zhux4k",
       "productCategoryId": "PC_r2a5ac",
-      "id": "PSC_6x9z8x"
+      "id": "PSC_6x9z8x",
+      "brandId": "BR1"
     },
     {
       "skuCode": "FSHP01MC1202",
@@ -5393,7 +5930,8 @@
       "weight": "",
       "productGroupId": "PG_zhux4k",
       "productCategoryId": "PC_r2a5ac",
-      "id": "PSC_yv0i69"
+      "id": "PSC_yv0i69",
+      "brandId": "BR1"
     },
     {
       "skuCode": "FSHP01MC1203",
@@ -5401,7 +5939,8 @@
       "weight": "",
       "productGroupId": "PG_zhux4k",
       "productCategoryId": "PC_r2a5ac",
-      "id": "PSC_evhu8g"
+      "id": "PSC_evhu8g",
+      "brandId": "BR1"
     },
     {
       "skuCode": "FSHP01MC1204",
@@ -5409,7 +5948,8 @@
       "weight": "",
       "productGroupId": "PG_zhux4k",
       "productCategoryId": "PC_r2a5ac",
-      "id": "PSC_v7b3em"
+      "id": "PSC_v7b3em",
+      "brandId": "BR1"
     },
     {
       "skuCode": "FSHC01HT041",
@@ -5417,7 +5957,8 @@
       "weight": "",
       "productGroupId": "PG_zhux4k",
       "productCategoryId": "PC_r2a5ac",
-      "id": "PSC_0c5q20"
+      "id": "PSC_0c5q20",
+      "brandId": "BR1"
     },
     {
       "skuCode": "FSHC01HT042",
@@ -5425,7 +5966,8 @@
       "weight": "",
       "productGroupId": "PG_zhux4k",
       "productCategoryId": "PC_r2a5ac",
-      "id": "PSC_xrzcsb"
+      "id": "PSC_xrzcsb",
+      "brandId": "BR1"
     },
     {
       "skuCode": "FSHC01HT043",
@@ -5433,7 +5975,8 @@
       "weight": "",
       "productGroupId": "PG_zhux4k",
       "productCategoryId": "PC_r2a5ac",
-      "id": "PSC_e49zrm"
+      "id": "PSC_e49zrm",
+      "brandId": "BR1"
     },
     {
       "skuCode": "FSHC01HT044",
@@ -5441,7 +5984,8 @@
       "weight": "",
       "productGroupId": "PG_zhux4k",
       "productCategoryId": "PC_r2a5ac",
-      "id": "PSC_70tlfy"
+      "id": "PSC_70tlfy",
+      "brandId": "BR1"
     },
     {
       "skuCode": "FSHC01HT041-2",
@@ -5449,7 +5993,8 @@
       "weight": "",
       "productGroupId": "PG_zhux4k",
       "productCategoryId": "PC_r2a5ac",
-      "id": "PSC_tx0ssm"
+      "id": "PSC_tx0ssm",
+      "brandId": "BR1"
     },
     {
       "skuCode": "FSHC01HT042-2",
@@ -5457,7 +6002,8 @@
       "weight": "",
       "productGroupId": "PG_zhux4k",
       "productCategoryId": "PC_r2a5ac",
-      "id": "PSC_42452h"
+      "id": "PSC_42452h",
+      "brandId": "BR1"
     },
     {
       "skuCode": "FSHC01HT043-2",
@@ -5465,7 +6011,8 @@
       "weight": "",
       "productGroupId": "PG_zhux4k",
       "productCategoryId": "PC_r2a5ac",
-      "id": "PSC_nusrqf"
+      "id": "PSC_nusrqf",
+      "brandId": "BR1"
     },
     {
       "skuCode": "FSHC01HT043-2N",
@@ -5473,7 +6020,8 @@
       "weight": "",
       "productGroupId": "PG_zhux4k",
       "productCategoryId": "PC_r2a5ac",
-      "id": "PSC_v9th7g"
+      "id": "PSC_v9th7g",
+      "brandId": "BR1"
     },
     {
       "skuCode": "FSHC01HT044-2",
@@ -5481,7 +6029,8 @@
       "weight": "",
       "productGroupId": "PG_zhux4k",
       "productCategoryId": "PC_r2a5ac",
-      "id": "PSC_6usg0g"
+      "id": "PSC_6usg0g",
+      "brandId": "BR1"
     },
     {
       "skuCode": "FSHC01HT0412",
@@ -5489,7 +6038,8 @@
       "weight": "",
       "productGroupId": "PG_zhux4k",
       "productCategoryId": "PC_r2a5ac",
-      "id": "PSC_zbr3u3"
+      "id": "PSC_zbr3u3",
+      "brandId": "BR1"
     },
     {
       "skuCode": "FSHC01HT0413",
@@ -5497,7 +6047,8 @@
       "weight": "",
       "productGroupId": "PG_zhux4k",
       "productCategoryId": "PC_r2a5ac",
-      "id": "PSC_e8pawy"
+      "id": "PSC_e8pawy",
+      "brandId": "BR1"
     },
     {
       "skuCode": "FSHC01HT0414",
@@ -5505,7 +6056,8 @@
       "weight": "",
       "productGroupId": "PG_zhux4k",
       "productCategoryId": "PC_r2a5ac",
-      "id": "PSC_cg8fvp"
+      "id": "PSC_cg8fvp",
+      "brandId": "BR1"
     },
     {
       "skuCode": "FSHC01HT0423",
@@ -5513,7 +6065,8 @@
       "weight": "",
       "productGroupId": "PG_zhux4k",
       "productCategoryId": "PC_r2a5ac",
-      "id": "PSC_e9y3ty"
+      "id": "PSC_e9y3ty",
+      "brandId": "BR1"
     },
     {
       "skuCode": "FSHC01HT0424",
@@ -5521,7 +6074,8 @@
       "weight": "",
       "productGroupId": "PG_zhux4k",
       "productCategoryId": "PC_r2a5ac",
-      "id": "PSC_lnyrsw"
+      "id": "PSC_lnyrsw",
+      "brandId": "BR1"
     },
     {
       "skuCode": "FSHC01HT0434",
@@ -5529,7 +6083,8 @@
       "weight": "",
       "productGroupId": "PG_zhux4k",
       "productCategoryId": "PC_r2a5ac",
-      "id": "PSC_m37734"
+      "id": "PSC_m37734",
+      "brandId": "BR1"
     },
     {
       "skuCode": "FSHC01BT041",
@@ -5537,7 +6092,8 @@
       "weight": "",
       "productGroupId": "PG_zhux4k",
       "productCategoryId": "PC_r2a5ac",
-      "id": "PSC_hbwh1g"
+      "id": "PSC_hbwh1g",
+      "brandId": "BR1"
     },
     {
       "skuCode": "FSHC01BT042",
@@ -5545,7 +6101,8 @@
       "weight": "",
       "productGroupId": "PG_zhux4k",
       "productCategoryId": "PC_r2a5ac",
-      "id": "PSC_8id0p9"
+      "id": "PSC_8id0p9",
+      "brandId": "BR1"
     },
     {
       "skuCode": "FSHC01BT043",
@@ -5553,7 +6110,8 @@
       "weight": "",
       "productGroupId": "PG_zhux4k",
       "productCategoryId": "PC_r2a5ac",
-      "id": "PSC_e4solw"
+      "id": "PSC_e4solw",
+      "brandId": "BR1"
     },
     {
       "skuCode": "FSHC01BT044",
@@ -5561,7 +6119,8 @@
       "weight": "",
       "productGroupId": "PG_zhux4k",
       "productCategoryId": "PC_r2a5ac",
-      "id": "PSC_p7u4b2"
+      "id": "PSC_p7u4b2",
+      "brandId": "BR1"
     },
     {
       "skuCode": "FSHC01BT0412",
@@ -5569,7 +6128,8 @@
       "weight": "",
       "productGroupId": "PG_zhux4k",
       "productCategoryId": "PC_r2a5ac",
-      "id": "PSC_r207p6"
+      "id": "PSC_r207p6",
+      "brandId": "BR1"
     },
     {
       "skuCode": "FSHC01BT0413",
@@ -5577,7 +6137,8 @@
       "weight": "",
       "productGroupId": "PG_zhux4k",
       "productCategoryId": "PC_r2a5ac",
-      "id": "PSC_kdfso3"
+      "id": "PSC_kdfso3",
+      "brandId": "BR1"
     },
     {
       "skuCode": "FSHC01BT0414",
@@ -5585,7 +6146,8 @@
       "weight": "",
       "productGroupId": "PG_zhux4k",
       "productCategoryId": "PC_r2a5ac",
-      "id": "PSC_lr4gad"
+      "id": "PSC_lr4gad",
+      "brandId": "BR1"
     },
     {
       "skuCode": "FSHC01BT0423",
@@ -5593,7 +6155,8 @@
       "weight": "",
       "productGroupId": "PG_zhux4k",
       "productCategoryId": "PC_r2a5ac",
-      "id": "PSC_vpk6ra"
+      "id": "PSC_vpk6ra",
+      "brandId": "BR1"
     },
     {
       "skuCode": "FSHC01BT0424",
@@ -5601,7 +6164,8 @@
       "weight": "",
       "productGroupId": "PG_zhux4k",
       "productCategoryId": "PC_r2a5ac",
-      "id": "PSC_5bc5wo"
+      "id": "PSC_5bc5wo",
+      "brandId": "BR1"
     },
     {
       "skuCode": "FSHC01BT0434",
@@ -5609,7 +6173,8 @@
       "weight": "",
       "productGroupId": "PG_zhux4k",
       "productCategoryId": "PC_r2a5ac",
-      "id": "PSC_splz7s"
+      "id": "PSC_splz7s",
+      "brandId": "BR1"
     },
     {
       "skuCode": "FSHC01BT051",
@@ -5617,7 +6182,8 @@
       "weight": "",
       "productGroupId": "PG_zhux4k",
       "productCategoryId": "PC_r2a5ac",
-      "id": "PSC_hyyhws"
+      "id": "PSC_hyyhws",
+      "brandId": "BR1"
     },
     {
       "skuCode": "FSHC01BT052",
@@ -5625,7 +6191,8 @@
       "weight": "",
       "productGroupId": "PG_zhux4k",
       "productCategoryId": "PC_r2a5ac",
-      "id": "PSC_wzufr9"
+      "id": "PSC_wzufr9",
+      "brandId": "BR1"
     },
     {
       "skuCode": "FSHC01BT053",
@@ -5633,7 +6200,8 @@
       "weight": "",
       "productGroupId": "PG_zhux4k",
       "productCategoryId": "PC_r2a5ac",
-      "id": "PSC_9t4m9w"
+      "id": "PSC_9t4m9w",
+      "brandId": "BR1"
     },
     {
       "skuCode": "FSHC01BT054",
@@ -5641,7 +6209,8 @@
       "weight": "",
       "productGroupId": "PG_zhux4k",
       "productCategoryId": "PC_r2a5ac",
-      "id": "PSC_lsi6da"
+      "id": "PSC_lsi6da",
+      "brandId": "BR1"
     },
     {
       "skuCode": "FSHC01BT0512",
@@ -5649,7 +6218,8 @@
       "weight": "",
       "productGroupId": "PG_zhux4k",
       "productCategoryId": "PC_r2a5ac",
-      "id": "PSC_sdzkj7"
+      "id": "PSC_sdzkj7",
+      "brandId": "BR1"
     },
     {
       "skuCode": "FSHC01BT0513",
@@ -5657,7 +6227,8 @@
       "weight": "",
       "productGroupId": "PG_zhux4k",
       "productCategoryId": "PC_r2a5ac",
-      "id": "PSC_by6kg5"
+      "id": "PSC_by6kg5",
+      "brandId": "BR1"
     },
     {
       "skuCode": "FSHC01BT0514",
@@ -5665,7 +6236,8 @@
       "weight": "",
       "productGroupId": "PG_zhux4k",
       "productCategoryId": "PC_r2a5ac",
-      "id": "PSC_hu1xro"
+      "id": "PSC_hu1xro",
+      "brandId": "BR1"
     },
     {
       "skuCode": "FSHC01BT0523",
@@ -5673,7 +6245,8 @@
       "weight": "",
       "productGroupId": "PG_zhux4k",
       "productCategoryId": "PC_r2a5ac",
-      "id": "PSC_yvsar5"
+      "id": "PSC_yvsar5",
+      "brandId": "BR1"
     },
     {
       "skuCode": "FSHC01BT0524",
@@ -5681,7 +6254,8 @@
       "weight": "",
       "productGroupId": "PG_zhux4k",
       "productCategoryId": "PC_r2a5ac",
-      "id": "PSC_qcq4o1"
+      "id": "PSC_qcq4o1",
+      "brandId": "BR1"
     },
     {
       "skuCode": "FSHC01BT0534",
@@ -5689,7 +6263,8 @@
       "weight": "",
       "productGroupId": "PG_zhux4k",
       "productCategoryId": "PC_r2a5ac",
-      "id": "PSC_m6y05c"
+      "id": "PSC_m6y05c",
+      "brandId": "BR1"
     },
     {
       "skuCode": "NBHC01FT401-BE",
@@ -5697,7 +6272,8 @@
       "weight": "",
       "productGroupId": "PG_zhux4k",
       "productCategoryId": "PC_r2a5ac",
-      "id": "PSC_gjm80x"
+      "id": "PSC_gjm80x",
+      "brandId": "BR1"
     },
     {
       "skuCode": "NBHC01FT402-BE",
@@ -5705,7 +6281,8 @@
       "weight": "",
       "productGroupId": "PG_zhux4k",
       "productCategoryId": "PC_r2a5ac",
-      "id": "PSC_vz6bpn"
+      "id": "PSC_vz6bpn",
+      "brandId": "BR1"
     },
     {
       "skuCode": "NBHC01FT403-BE",
@@ -5713,7 +6290,8 @@
       "weight": "",
       "productGroupId": "PG_zhux4k",
       "productCategoryId": "PC_r2a5ac",
-      "id": "PSC_fsg7yx"
+      "id": "PSC_fsg7yx",
+      "brandId": "BR1"
     },
     {
       "skuCode": "NBHC01FT404-BE",
@@ -5721,7 +6299,8 @@
       "weight": "",
       "productGroupId": "PG_zhux4k",
       "productCategoryId": "PC_r2a5ac",
-      "id": "PSC_iqx749"
+      "id": "PSC_iqx749",
+      "brandId": "BR1"
     },
     {
       "skuCode": "NBHC01FT405-BE",
@@ -5729,7 +6308,8 @@
       "weight": "",
       "productGroupId": "PG_zhux4k",
       "productCategoryId": "PC_r2a5ac",
-      "id": "PSC_u01hxz"
+      "id": "PSC_u01hxz",
+      "brandId": "BR1"
     },
     {
       "skuCode": "NBHC01FT406-BE",
@@ -5737,7 +6317,8 @@
       "weight": "",
       "productGroupId": "PG_zhux4k",
       "productCategoryId": "PC_r2a5ac",
-      "id": "PSC_68pdh7"
+      "id": "PSC_68pdh7",
+      "brandId": "BR1"
     },
     {
       "skuCode": "NBHC01FT407-BE",
@@ -5745,7 +6326,8 @@
       "weight": "",
       "productGroupId": "PG_zhux4k",
       "productCategoryId": "PC_r2a5ac",
-      "id": "PSC_ezaij5"
+      "id": "PSC_ezaij5",
+      "brandId": "BR1"
     },
     {
       "skuCode": "NBHC01FT408-BE",
@@ -5753,7 +6335,8 @@
       "weight": "",
       "productGroupId": "PG_zhux4k",
       "productCategoryId": "PC_r2a5ac",
-      "id": "PSC_dijhfz"
+      "id": "PSC_dijhfz",
+      "brandId": "BR1"
     },
     {
       "skuCode": "NBHC01FT601-BE",
@@ -5761,7 +6344,8 @@
       "weight": "",
       "productGroupId": "PG_zhux4k",
       "productCategoryId": "PC_r2a5ac",
-      "id": "PSC_ahv7d7"
+      "id": "PSC_ahv7d7",
+      "brandId": "BR1"
     },
     {
       "skuCode": "NBHC01FT602-BE",
@@ -5769,7 +6353,8 @@
       "weight": "",
       "productGroupId": "PG_zhux4k",
       "productCategoryId": "PC_r2a5ac",
-      "id": "PSC_k1vc5g"
+      "id": "PSC_k1vc5g",
+      "brandId": "BR1"
     },
     {
       "skuCode": "NBHC01FT603-BE",
@@ -5777,7 +6362,8 @@
       "weight": "",
       "productGroupId": "PG_zhux4k",
       "productCategoryId": "PC_r2a5ac",
-      "id": "PSC_zzddo3"
+      "id": "PSC_zzddo3",
+      "brandId": "BR1"
     },
     {
       "skuCode": "NBHC01FT604-BE",
@@ -5785,7 +6371,8 @@
       "weight": "",
       "productGroupId": "PG_zhux4k",
       "productCategoryId": "PC_r2a5ac",
-      "id": "PSC_kr3ta9"
+      "id": "PSC_kr3ta9",
+      "brandId": "BR1"
     },
     {
       "skuCode": "NBHC01FT605-BE",
@@ -5793,7 +6380,8 @@
       "weight": "",
       "productGroupId": "PG_zhux4k",
       "productCategoryId": "PC_r2a5ac",
-      "id": "PSC_ilnjh4"
+      "id": "PSC_ilnjh4",
+      "brandId": "BR1"
     },
     {
       "skuCode": "NBHC01FT606-BE",
@@ -5801,7 +6389,8 @@
       "weight": "",
       "productGroupId": "PG_zhux4k",
       "productCategoryId": "PC_r2a5ac",
-      "id": "PSC_ul0aaa"
+      "id": "PSC_ul0aaa",
+      "brandId": "BR1"
     },
     {
       "skuCode": "NBHC01FT607-BE",
@@ -5809,7 +6398,8 @@
       "weight": "",
       "productGroupId": "PG_zhux4k",
       "productCategoryId": "PC_r2a5ac",
-      "id": "PSC_7toro2"
+      "id": "PSC_7toro2",
+      "brandId": "BR1"
     },
     {
       "skuCode": "NBHC01FT608-BE",
@@ -5817,7 +6407,8 @@
       "weight": "",
       "productGroupId": "PG_zhux4k",
       "productCategoryId": "PC_r2a5ac",
-      "id": "PSC_ya1k3w"
+      "id": "PSC_ya1k3w",
+      "brandId": "BR1"
     },
     {
       "skuCode": "NBHC01HT001-BE",
@@ -5825,7 +6416,8 @@
       "weight": "",
       "productGroupId": "PG_zhux4k",
       "productCategoryId": "PC_r2a5ac",
-      "id": "PSC_wb82bu"
+      "id": "PSC_wb82bu",
+      "brandId": "BR1"
     },
     {
       "skuCode": "NBHC01HT002-BE",
@@ -5833,7 +6425,8 @@
       "weight": "",
       "productGroupId": "PG_zhux4k",
       "productCategoryId": "PC_r2a5ac",
-      "id": "PSC_bcj5n3"
+      "id": "PSC_bcj5n3",
+      "brandId": "BR1"
     },
     {
       "skuCode": "NBHC01HT003-BE",
@@ -5841,7 +6434,8 @@
       "weight": "",
       "productGroupId": "PG_zhux4k",
       "productCategoryId": "PC_r2a5ac",
-      "id": "PSC_hi0hnz"
+      "id": "PSC_hi0hnz",
+      "brandId": "BR1"
     },
     {
       "skuCode": "NBHC01HT004-BE",
@@ -5849,7 +6443,8 @@
       "weight": "",
       "productGroupId": "PG_zhux4k",
       "productCategoryId": "PC_r2a5ac",
-      "id": "PSC_t6m208"
+      "id": "PSC_t6m208",
+      "brandId": "BR1"
     },
     {
       "skuCode": "NBHC01HT005-BE",
@@ -5857,7 +6452,8 @@
       "weight": "",
       "productGroupId": "PG_zhux4k",
       "productCategoryId": "PC_r2a5ac",
-      "id": "PSC_17fyd6"
+      "id": "PSC_17fyd6",
+      "brandId": "BR1"
     },
     {
       "skuCode": "NBHC01HT006-BE",
@@ -5865,7 +6461,8 @@
       "weight": "",
       "productGroupId": "PG_zhux4k",
       "productCategoryId": "PC_r2a5ac",
-      "id": "PSC_pe0tkd"
+      "id": "PSC_pe0tkd",
+      "brandId": "BR1"
     },
     {
       "skuCode": "NBHC01HT007-BE",
@@ -5873,7 +6470,8 @@
       "weight": "",
       "productGroupId": "PG_zhux4k",
       "productCategoryId": "PC_r2a5ac",
-      "id": "PSC_rpxic7"
+      "id": "PSC_rpxic7",
+      "brandId": "BR1"
     },
     {
       "skuCode": "NBHC01HT008-BE",
@@ -5881,7 +6479,8 @@
       "weight": "",
       "productGroupId": "PG_zhux4k",
       "productCategoryId": "PC_r2a5ac",
-      "id": "PSC_mfnpu9"
+      "id": "PSC_mfnpu9",
+      "brandId": "BR1"
     },
     {
       "skuCode": "NBHC01HT201-BE",
@@ -5889,7 +6488,8 @@
       "weight": "",
       "productGroupId": "PG_zhux4k",
       "productCategoryId": "PC_r2a5ac",
-      "id": "PSC_xdvebr"
+      "id": "PSC_xdvebr",
+      "brandId": "BR1"
     },
     {
       "skuCode": "NBHC01HT202-BE",
@@ -5897,7 +6497,8 @@
       "weight": "",
       "productGroupId": "PG_zhux4k",
       "productCategoryId": "PC_r2a5ac",
-      "id": "PSC_mbwv6w"
+      "id": "PSC_mbwv6w",
+      "brandId": "BR1"
     },
     {
       "skuCode": "NBHC01HT203-BE",
@@ -5905,7 +6506,8 @@
       "weight": "",
       "productGroupId": "PG_zhux4k",
       "productCategoryId": "PC_r2a5ac",
-      "id": "PSC_bw8qon"
+      "id": "PSC_bw8qon",
+      "brandId": "BR1"
     },
     {
       "skuCode": "NBHC01HT204-BE",
@@ -5913,7 +6515,8 @@
       "weight": "",
       "productGroupId": "PG_zhux4k",
       "productCategoryId": "PC_r2a5ac",
-      "id": "PSC_62r840"
+      "id": "PSC_62r840",
+      "brandId": "BR1"
     },
     {
       "skuCode": "NBHC01HT205-BE",
@@ -5921,7 +6524,8 @@
       "weight": "",
       "productGroupId": "PG_zhux4k",
       "productCategoryId": "PC_r2a5ac",
-      "id": "PSC_51ebab"
+      "id": "PSC_51ebab",
+      "brandId": "BR1"
     },
     {
       "skuCode": "NBHC01HT206-BE",
@@ -5929,7 +6533,8 @@
       "weight": "",
       "productGroupId": "PG_zhux4k",
       "productCategoryId": "PC_r2a5ac",
-      "id": "PSC_oytwee"
+      "id": "PSC_oytwee",
+      "brandId": "BR1"
     },
     {
       "skuCode": "NBHC01HT207-BE",
@@ -5937,7 +6542,8 @@
       "weight": "",
       "productGroupId": "PG_zhux4k",
       "productCategoryId": "PC_r2a5ac",
-      "id": "PSC_cdnxb0"
+      "id": "PSC_cdnxb0",
+      "brandId": "BR1"
     },
     {
       "skuCode": "NBHC01HT208-BE",
@@ -5945,7 +6551,8 @@
       "weight": "",
       "productGroupId": "PG_zhux4k",
       "productCategoryId": "PC_r2a5ac",
-      "id": "PSC_dqrzfw"
+      "id": "PSC_dqrzfw",
+      "brandId": "BR1"
     },
     {
       "skuCode": "NBHC01HT401-BE",
@@ -5953,7 +6560,8 @@
       "weight": "",
       "productGroupId": "PG_zhux4k",
       "productCategoryId": "PC_r2a5ac",
-      "id": "PSC_gk3tor"
+      "id": "PSC_gk3tor",
+      "brandId": "BR1"
     },
     {
       "skuCode": "NBHC01HT402-BE",
@@ -5961,7 +6569,8 @@
       "weight": "",
       "productGroupId": "PG_zhux4k",
       "productCategoryId": "PC_r2a5ac",
-      "id": "PSC_5gq1of"
+      "id": "PSC_5gq1of",
+      "brandId": "BR1"
     },
     {
       "skuCode": "NBHC01HT403-BE",
@@ -5969,7 +6578,8 @@
       "weight": "",
       "productGroupId": "PG_zhux4k",
       "productCategoryId": "PC_r2a5ac",
-      "id": "PSC_10es1p"
+      "id": "PSC_10es1p",
+      "brandId": "BR1"
     },
     {
       "skuCode": "NBHC01HT404-BE",
@@ -5977,7 +6587,8 @@
       "weight": "",
       "productGroupId": "PG_zhux4k",
       "productCategoryId": "PC_r2a5ac",
-      "id": "PSC_bvl8id"
+      "id": "PSC_bvl8id",
+      "brandId": "BR1"
     },
     {
       "skuCode": "NBHC01HT405-BE",
@@ -5985,7 +6596,8 @@
       "weight": "",
       "productGroupId": "PG_zhux4k",
       "productCategoryId": "PC_r2a5ac",
-      "id": "PSC_o99zkm"
+      "id": "PSC_o99zkm",
+      "brandId": "BR1"
     },
     {
       "skuCode": "NBHC01HT406-BE",
@@ -5993,7 +6605,8 @@
       "weight": "",
       "productGroupId": "PG_zhux4k",
       "productCategoryId": "PC_r2a5ac",
-      "id": "PSC_w0cado"
+      "id": "PSC_w0cado",
+      "brandId": "BR1"
     },
     {
       "skuCode": "NBHC01HT407-BE",
@@ -6001,7 +6614,8 @@
       "weight": "",
       "productGroupId": "PG_zhux4k",
       "productCategoryId": "PC_r2a5ac",
-      "id": "PSC_sdlew8"
+      "id": "PSC_sdlew8",
+      "brandId": "BR1"
     },
     {
       "skuCode": "NBHC01HT408-BE",
@@ -6009,7 +6623,8 @@
       "weight": "",
       "productGroupId": "PG_zhux4k",
       "productCategoryId": "PC_r2a5ac",
-      "id": "PSC_12at8z"
+      "id": "PSC_12at8z",
+      "brandId": "BR1"
     },
     {
       "skuCode": "NBHC01HT601-BE",
@@ -6017,7 +6632,8 @@
       "weight": "",
       "productGroupId": "PG_zhux4k",
       "productCategoryId": "PC_r2a5ac",
-      "id": "PSC_aofms1"
+      "id": "PSC_aofms1",
+      "brandId": "BR1"
     },
     {
       "skuCode": "NBHC01HT602-BE",
@@ -6025,7 +6641,8 @@
       "weight": "",
       "productGroupId": "PG_zhux4k",
       "productCategoryId": "PC_r2a5ac",
-      "id": "PSC_h2bb8b"
+      "id": "PSC_h2bb8b",
+      "brandId": "BR1"
     },
     {
       "skuCode": "NBHC01HT603-BE",
@@ -6033,7 +6650,8 @@
       "weight": "",
       "productGroupId": "PG_zhux4k",
       "productCategoryId": "PC_r2a5ac",
-      "id": "PSC_wri5sh"
+      "id": "PSC_wri5sh",
+      "brandId": "BR1"
     },
     {
       "skuCode": "NBHC01HT604-BE",
@@ -6041,7 +6659,8 @@
       "weight": "",
       "productGroupId": "PG_zhux4k",
       "productCategoryId": "PC_r2a5ac",
-      "id": "PSC_wuobe4"
+      "id": "PSC_wuobe4",
+      "brandId": "BR1"
     },
     {
       "skuCode": "NBHC01HT605-BE",
@@ -6049,7 +6668,8 @@
       "weight": "",
       "productGroupId": "PG_zhux4k",
       "productCategoryId": "PC_r2a5ac",
-      "id": "PSC_dg40z2"
+      "id": "PSC_dg40z2",
+      "brandId": "BR1"
     },
     {
       "skuCode": "NBHC01HT606-BE",
@@ -6057,7 +6677,8 @@
       "weight": "",
       "productGroupId": "PG_zhux4k",
       "productCategoryId": "PC_r2a5ac",
-      "id": "PSC_8zepcl"
+      "id": "PSC_8zepcl",
+      "brandId": "BR1"
     },
     {
       "skuCode": "NBHC01HT607-BE",
@@ -6065,7 +6686,8 @@
       "weight": "",
       "productGroupId": "PG_zhux4k",
       "productCategoryId": "PC_r2a5ac",
-      "id": "PSC_pd995f"
+      "id": "PSC_pd995f",
+      "brandId": "BR1"
     },
     {
       "skuCode": "NBHC01HT608-BE",
@@ -6073,7 +6695,8 @@
       "weight": "",
       "productGroupId": "PG_zhux4k",
       "productCategoryId": "PC_r2a5ac",
-      "id": "PSC_0c6hj0"
+      "id": "PSC_0c6hj0",
+      "brandId": "BR1"
     },
     {
       "skuCode": "NBHC01GT001-BE",
@@ -6081,7 +6704,8 @@
       "weight": "",
       "productGroupId": "PG_zhux4k",
       "productCategoryId": "PC_r2a5ac",
-      "id": "PSC_9o47j7"
+      "id": "PSC_9o47j7",
+      "brandId": "BR1"
     },
     {
       "skuCode": "NBHC01GT002-BE",
@@ -6089,7 +6713,8 @@
       "weight": "",
       "productGroupId": "PG_zhux4k",
       "productCategoryId": "PC_r2a5ac",
-      "id": "PSC_4p8h7v"
+      "id": "PSC_4p8h7v",
+      "brandId": "BR1"
     },
     {
       "skuCode": "NBHC01GT003-BE",
@@ -6097,7 +6722,8 @@
       "weight": "",
       "productGroupId": "PG_zhux4k",
       "productCategoryId": "PC_r2a5ac",
-      "id": "PSC_7c5zfx"
+      "id": "PSC_7c5zfx",
+      "brandId": "BR1"
     },
     {
       "skuCode": "NBHC01GT004-BE",
@@ -6105,7 +6731,8 @@
       "weight": "",
       "productGroupId": "PG_zhux4k",
       "productCategoryId": "PC_r2a5ac",
-      "id": "PSC_cilivf"
+      "id": "PSC_cilivf",
+      "brandId": "BR1"
     },
     {
       "skuCode": "NBHC01GT005-BE",
@@ -6113,7 +6740,8 @@
       "weight": "",
       "productGroupId": "PG_zhux4k",
       "productCategoryId": "PC_r2a5ac",
-      "id": "PSC_otwh9b"
+      "id": "PSC_otwh9b",
+      "brandId": "BR1"
     },
     {
       "skuCode": "NBHC01GT006-BE",
@@ -6121,7 +6749,8 @@
       "weight": "",
       "productGroupId": "PG_zhux4k",
       "productCategoryId": "PC_r2a5ac",
-      "id": "PSC_88zedz"
+      "id": "PSC_88zedz",
+      "brandId": "BR1"
     },
     {
       "skuCode": "NBHC01GT007-BE",
@@ -6129,7 +6758,8 @@
       "weight": "",
       "productGroupId": "PG_zhux4k",
       "productCategoryId": "PC_r2a5ac",
-      "id": "PSC_i3zwp8"
+      "id": "PSC_i3zwp8",
+      "brandId": "BR1"
     },
     {
       "skuCode": "NBHC01GT008-BE",
@@ -6137,7 +6767,8 @@
       "weight": "",
       "productGroupId": "PG_zhux4k",
       "productCategoryId": "PC_r2a5ac",
-      "id": "PSC_vizza4"
+      "id": "PSC_vizza4",
+      "brandId": "BR1"
     },
     {
       "skuCode": "NBHC01GT201-BE",
@@ -6145,7 +6776,8 @@
       "weight": "",
       "productGroupId": "PG_zhux4k",
       "productCategoryId": "PC_r2a5ac",
-      "id": "PSC_kzy13h"
+      "id": "PSC_kzy13h",
+      "brandId": "BR1"
     },
     {
       "skuCode": "NBHC01GT202-BE",
@@ -6153,7 +6785,8 @@
       "weight": "",
       "productGroupId": "PG_zhux4k",
       "productCategoryId": "PC_r2a5ac",
-      "id": "PSC_oureed"
+      "id": "PSC_oureed",
+      "brandId": "BR1"
     },
     {
       "skuCode": "NBHC01GT203-BE",
@@ -6161,7 +6794,8 @@
       "weight": "",
       "productGroupId": "PG_zhux4k",
       "productCategoryId": "PC_r2a5ac",
-      "id": "PSC_ocdmo8"
+      "id": "PSC_ocdmo8",
+      "brandId": "BR1"
     },
     {
       "skuCode": "NBHC01GT204-BE",
@@ -6169,7 +6803,8 @@
       "weight": "",
       "productGroupId": "PG_zhux4k",
       "productCategoryId": "PC_r2a5ac",
-      "id": "PSC_h9963n"
+      "id": "PSC_h9963n",
+      "brandId": "BR1"
     },
     {
       "skuCode": "NBHC01GT205-BE",
@@ -6177,7 +6812,8 @@
       "weight": "",
       "productGroupId": "PG_zhux4k",
       "productCategoryId": "PC_r2a5ac",
-      "id": "PSC_j5yay7"
+      "id": "PSC_j5yay7",
+      "brandId": "BR1"
     },
     {
       "skuCode": "NBHC01GT206-BE",
@@ -6185,7 +6821,8 @@
       "weight": "",
       "productGroupId": "PG_zhux4k",
       "productCategoryId": "PC_r2a5ac",
-      "id": "PSC_4yh5zi"
+      "id": "PSC_4yh5zi",
+      "brandId": "BR1"
     },
     {
       "skuCode": "NBHC01GT207-BE",
@@ -6193,7 +6830,8 @@
       "weight": "",
       "productGroupId": "PG_zhux4k",
       "productCategoryId": "PC_r2a5ac",
-      "id": "PSC_7yx95r"
+      "id": "PSC_7yx95r",
+      "brandId": "BR1"
     },
     {
       "skuCode": "NBHC01GT208-BE",
@@ -6201,7 +6839,8 @@
       "weight": "",
       "productGroupId": "PG_zhux4k",
       "productCategoryId": "PC_r2a5ac",
-      "id": "PSC_ldwvl5"
+      "id": "PSC_ldwvl5",
+      "brandId": "BR1"
     },
     {
       "skuCode": "NBHC02BT001-BE",
@@ -6209,7 +6848,8 @@
       "weight": "",
       "productGroupId": "PG_zhux4k",
       "productCategoryId": "PC_r2a5ac",
-      "id": "PSC_3go9b9"
+      "id": "PSC_3go9b9",
+      "brandId": "BR1"
     },
     {
       "skuCode": "NBHC02BT002-BE",
@@ -6217,7 +6857,8 @@
       "weight": "",
       "productGroupId": "PG_zhux4k",
       "productCategoryId": "PC_r2a5ac",
-      "id": "PSC_9rvy7s"
+      "id": "PSC_9rvy7s",
+      "brandId": "BR1"
     },
     {
       "skuCode": "NBHC02BT003-BE",
@@ -6225,7 +6866,8 @@
       "weight": "",
       "productGroupId": "PG_zhux4k",
       "productCategoryId": "PC_r2a5ac",
-      "id": "PSC_kou34c"
+      "id": "PSC_kou34c",
+      "brandId": "BR1"
     },
     {
       "skuCode": "NBHC02BT004-BE",
@@ -6233,7 +6875,8 @@
       "weight": "",
       "productGroupId": "PG_zhux4k",
       "productCategoryId": "PC_r2a5ac",
-      "id": "PSC_i4304u"
+      "id": "PSC_i4304u",
+      "brandId": "BR1"
     },
     {
       "skuCode": "NBHC02BT005-BE",
@@ -6241,7 +6884,8 @@
       "weight": "",
       "productGroupId": "PG_zhux4k",
       "productCategoryId": "PC_r2a5ac",
-      "id": "PSC_1jdt3c"
+      "id": "PSC_1jdt3c",
+      "brandId": "BR1"
     },
     {
       "skuCode": "NBHC02BT006-BE",
@@ -6249,7 +6893,8 @@
       "weight": "",
       "productGroupId": "PG_zhux4k",
       "productCategoryId": "PC_r2a5ac",
-      "id": "PSC_m8s39f"
+      "id": "PSC_m8s39f",
+      "brandId": "BR1"
     },
     {
       "skuCode": "NBHC02BT007-BE",
@@ -6257,7 +6902,8 @@
       "weight": "",
       "productGroupId": "PG_zhux4k",
       "productCategoryId": "PC_r2a5ac",
-      "id": "PSC_dxh59e"
+      "id": "PSC_dxh59e",
+      "brandId": "BR1"
     },
     {
       "skuCode": "NBHC02BT008-BE",
@@ -6265,7 +6911,8 @@
       "weight": "",
       "productGroupId": "PG_zhux4k",
       "productCategoryId": "PC_r2a5ac",
-      "id": "PSC_0rj2l3"
+      "id": "PSC_0rj2l3",
+      "brandId": "BR1"
     },
     {
       "skuCode": "NBHC04BT001-BE",
@@ -6273,7 +6920,8 @@
       "weight": "",
       "productGroupId": "PG_zhux4k",
       "productCategoryId": "PC_r2a5ac",
-      "id": "PSC_cyf1ov"
+      "id": "PSC_cyf1ov",
+      "brandId": "BR1"
     },
     {
       "skuCode": "NBHC04BT002-BE",
@@ -6281,7 +6929,8 @@
       "weight": "",
       "productGroupId": "PG_zhux4k",
       "productCategoryId": "PC_r2a5ac",
-      "id": "PSC_3ehxy7"
+      "id": "PSC_3ehxy7",
+      "brandId": "BR1"
     },
     {
       "skuCode": "NBHC04BT003-BE",
@@ -6289,7 +6938,8 @@
       "weight": "",
       "productGroupId": "PG_zhux4k",
       "productCategoryId": "PC_r2a5ac",
-      "id": "PSC_6n0qfs"
+      "id": "PSC_6n0qfs",
+      "brandId": "BR1"
     },
     {
       "skuCode": "NBHC04BT004-BE",
@@ -6297,7 +6947,8 @@
       "weight": "",
       "productGroupId": "PG_zhux4k",
       "productCategoryId": "PC_r2a5ac",
-      "id": "PSC_r8u4aw"
+      "id": "PSC_r8u4aw",
+      "brandId": "BR1"
     },
     {
       "skuCode": "NBHC04BT005-BE",
@@ -6305,7 +6956,8 @@
       "weight": "",
       "productGroupId": "PG_zhux4k",
       "productCategoryId": "PC_r2a5ac",
-      "id": "PSC_s2fex3"
+      "id": "PSC_s2fex3",
+      "brandId": "BR1"
     },
     {
       "skuCode": "NBHC04BT006-BE",
@@ -6313,7 +6965,8 @@
       "weight": "",
       "productGroupId": "PG_zhux4k",
       "productCategoryId": "PC_r2a5ac",
-      "id": "PSC_yv276q"
+      "id": "PSC_yv276q",
+      "brandId": "BR1"
     },
     {
       "skuCode": "NBHC04BT007-BE",
@@ -6321,7 +6974,8 @@
       "weight": "",
       "productGroupId": "PG_zhux4k",
       "productCategoryId": "PC_r2a5ac",
-      "id": "PSC_fx7e5s"
+      "id": "PSC_fx7e5s",
+      "brandId": "BR1"
     },
     {
       "skuCode": "NBHC04BT008-BE",
@@ -6329,7 +6983,8 @@
       "weight": "",
       "productGroupId": "PG_zhux4k",
       "productCategoryId": "PC_r2a5ac",
-      "id": "PSC_b2tvaq"
+      "id": "PSC_b2tvaq",
+      "brandId": "BR1"
     },
     {
       "skuCode": "NBHC04BT201-BE",
@@ -6337,7 +6992,8 @@
       "weight": "",
       "productGroupId": "PG_zhux4k",
       "productCategoryId": "PC_r2a5ac",
-      "id": "PSC_agv094"
+      "id": "PSC_agv094",
+      "brandId": "BR1"
     },
     {
       "skuCode": "NBHC04BT202-BE",
@@ -6345,7 +7001,8 @@
       "weight": "",
       "productGroupId": "PG_zhux4k",
       "productCategoryId": "PC_r2a5ac",
-      "id": "PSC_2cxy6a"
+      "id": "PSC_2cxy6a",
+      "brandId": "BR1"
     },
     {
       "skuCode": "NBHC04BT203-BE",
@@ -6353,7 +7010,8 @@
       "weight": "",
       "productGroupId": "PG_zhux4k",
       "productCategoryId": "PC_r2a5ac",
-      "id": "PSC_q8x2ci"
+      "id": "PSC_q8x2ci",
+      "brandId": "BR1"
     },
     {
       "skuCode": "NBHC04BT204-BE",
@@ -6361,7 +7019,8 @@
       "weight": "",
       "productGroupId": "PG_zhux4k",
       "productCategoryId": "PC_r2a5ac",
-      "id": "PSC_gy4meu"
+      "id": "PSC_gy4meu",
+      "brandId": "BR1"
     },
     {
       "skuCode": "NBHC04BT205-BE",
@@ -6369,7 +7028,8 @@
       "weight": "",
       "productGroupId": "PG_zhux4k",
       "productCategoryId": "PC_r2a5ac",
-      "id": "PSC_4w4evf"
+      "id": "PSC_4w4evf",
+      "brandId": "BR1"
     },
     {
       "skuCode": "NBHC04BT206-BE",
@@ -6377,7 +7037,8 @@
       "weight": "",
       "productGroupId": "PG_zhux4k",
       "productCategoryId": "PC_r2a5ac",
-      "id": "PSC_en699r"
+      "id": "PSC_en699r",
+      "brandId": "BR1"
     },
     {
       "skuCode": "NBHC04BT207-BE",
@@ -6385,7 +7046,8 @@
       "weight": "",
       "productGroupId": "PG_zhux4k",
       "productCategoryId": "PC_r2a5ac",
-      "id": "PSC_x4ae7o"
+      "id": "PSC_x4ae7o",
+      "brandId": "BR1"
     },
     {
       "skuCode": "NBHC04BT208-BE",
@@ -6393,7 +7055,8 @@
       "weight": "",
       "productGroupId": "PG_zhux4k",
       "productCategoryId": "PC_r2a5ac",
-      "id": "PSC_2qnpk8"
+      "id": "PSC_2qnpk8",
+      "brandId": "BR1"
     },
     {
       "skuCode": "NBHC04HB001-21",
@@ -6401,7 +7064,8 @@
       "weight": "",
       "productGroupId": "PG_zhux4k",
       "productCategoryId": "PC_r2a5ac",
-      "id": "PSC_z22hhi"
+      "id": "PSC_z22hhi",
+      "brandId": "BR1"
     },
     {
       "skuCode": "NBHC04HB002-21",
@@ -6409,7 +7073,8 @@
       "weight": "",
       "productGroupId": "PG_zhux4k",
       "productCategoryId": "PC_r2a5ac",
-      "id": "PSC_5bq75o"
+      "id": "PSC_5bq75o",
+      "brandId": "BR1"
     },
     {
       "skuCode": "NBHC04HB003-21",
@@ -6417,7 +7082,8 @@
       "weight": "",
       "productGroupId": "PG_zhux4k",
       "productCategoryId": "PC_r2a5ac",
-      "id": "PSC_twg2ug"
+      "id": "PSC_twg2ug",
+      "brandId": "BR1"
     },
     {
       "skuCode": "NBHC04HB004-21",
@@ -6425,7 +7091,8 @@
       "weight": "",
       "productGroupId": "PG_zhux4k",
       "productCategoryId": "PC_r2a5ac",
-      "id": "PSC_2s01zr"
+      "id": "PSC_2s01zr",
+      "brandId": "BR1"
     },
     {
       "skuCode": "NBHC04HB005-21",
@@ -6433,7 +7100,8 @@
       "weight": "",
       "productGroupId": "PG_zhux4k",
       "productCategoryId": "PC_r2a5ac",
-      "id": "PSC_mnn5ge"
+      "id": "PSC_mnn5ge",
+      "brandId": "BR1"
     },
     {
       "skuCode": "NBHC04HB006-21",
@@ -6441,7 +7109,8 @@
       "weight": "",
       "productGroupId": "PG_zhux4k",
       "productCategoryId": "PC_r2a5ac",
-      "id": "PSC_p8a3oy"
+      "id": "PSC_p8a3oy",
+      "brandId": "BR1"
     },
     {
       "skuCode": "NBHC04HB007-21",
@@ -6449,7 +7118,8 @@
       "weight": "",
       "productGroupId": "PG_zhux4k",
       "productCategoryId": "PC_r2a5ac",
-      "id": "PSC_1a04sn"
+      "id": "PSC_1a04sn",
+      "brandId": "BR1"
     },
     {
       "skuCode": "NBHC04HB008-21",
@@ -6457,7 +7127,8 @@
       "weight": "",
       "productGroupId": "PG_zhux4k",
       "productCategoryId": "PC_r2a5ac",
-      "id": "PSC_9ecxts"
+      "id": "PSC_9ecxts",
+      "brandId": "BR1"
     },
     {
       "skuCode": "NBHC04FHB001-221",
@@ -6465,7 +7136,8 @@
       "weight": "",
       "productGroupId": "PG_zhux4k",
       "productCategoryId": "PC_r2a5ac",
-      "id": "PSC_z8tasw"
+      "id": "PSC_z8tasw",
+      "brandId": "BR1"
     },
     {
       "skuCode": "NBHC04FHB002-221",
@@ -6473,7 +7145,8 @@
       "weight": "",
       "productGroupId": "PG_zhux4k",
       "productCategoryId": "PC_r2a5ac",
-      "id": "PSC_o0pi0g"
+      "id": "PSC_o0pi0g",
+      "brandId": "BR1"
     },
     {
       "skuCode": "NBHC04FHB003-221",
@@ -6481,7 +7154,8 @@
       "weight": "",
       "productGroupId": "PG_zhux4k",
       "productCategoryId": "PC_r2a5ac",
-      "id": "PSC_9nydwc"
+      "id": "PSC_9nydwc",
+      "brandId": "BR1"
     },
     {
       "skuCode": "NBHC04FHB004-221",
@@ -6489,7 +7163,8 @@
       "weight": "",
       "productGroupId": "PG_zhux4k",
       "productCategoryId": "PC_r2a5ac",
-      "id": "PSC_vstmly"
+      "id": "PSC_vstmly",
+      "brandId": "BR1"
     },
     {
       "skuCode": "NBHC04FHB005-221",
@@ -6497,7 +7172,8 @@
       "weight": "",
       "productGroupId": "PG_zhux4k",
       "productCategoryId": "PC_r2a5ac",
-      "id": "PSC_6s6brq"
+      "id": "PSC_6s6brq",
+      "brandId": "BR1"
     },
     {
       "skuCode": "NBHC04FHB006-221",
@@ -6505,7 +7181,8 @@
       "weight": "",
       "productGroupId": "PG_zhux4k",
       "productCategoryId": "PC_r2a5ac",
-      "id": "PSC_8cmt3p"
+      "id": "PSC_8cmt3p",
+      "brandId": "BR1"
     },
     {
       "skuCode": "NBHC04FHB007-221",
@@ -6513,7 +7190,8 @@
       "weight": "",
       "productGroupId": "PG_zhux4k",
       "productCategoryId": "PC_r2a5ac",
-      "id": "PSC_bhy7lp"
+      "id": "PSC_bhy7lp",
+      "brandId": "BR1"
     },
     {
       "skuCode": "NBHC04FHB008-221",
@@ -6521,7 +7199,8 @@
       "weight": "",
       "productGroupId": "PG_zhux4k",
       "productCategoryId": "PC_r2a5ac",
-      "id": "PSC_wm6bcd"
+      "id": "PSC_wm6bcd",
+      "brandId": "BR1"
     },
     {
       "skuCode": "NBHC04FHB001-222",
@@ -6529,7 +7208,8 @@
       "weight": "",
       "productGroupId": "PG_zhux4k",
       "productCategoryId": "PC_r2a5ac",
-      "id": "PSC_qfaj7l"
+      "id": "PSC_qfaj7l",
+      "brandId": "BR1"
     },
     {
       "skuCode": "NBHC04FHB002-222",
@@ -6537,7 +7217,8 @@
       "weight": "",
       "productGroupId": "PG_zhux4k",
       "productCategoryId": "PC_r2a5ac",
-      "id": "PSC_xb13xc"
+      "id": "PSC_xb13xc",
+      "brandId": "BR1"
     },
     {
       "skuCode": "NBHC04FHB003-222",
@@ -6545,7 +7226,8 @@
       "weight": "",
       "productGroupId": "PG_zhux4k",
       "productCategoryId": "PC_r2a5ac",
-      "id": "PSC_knya2o"
+      "id": "PSC_knya2o",
+      "brandId": "BR1"
     },
     {
       "skuCode": "NBHC04FHB004-222",
@@ -6553,7 +7235,8 @@
       "weight": "",
       "productGroupId": "PG_zhux4k",
       "productCategoryId": "PC_r2a5ac",
-      "id": "PSC_1y1ws8"
+      "id": "PSC_1y1ws8",
+      "brandId": "BR1"
     },
     {
       "skuCode": "NBHC04FHB005-222",
@@ -6561,7 +7244,8 @@
       "weight": "",
       "productGroupId": "PG_zhux4k",
       "productCategoryId": "PC_r2a5ac",
-      "id": "PSC_myg3z4"
+      "id": "PSC_myg3z4",
+      "brandId": "BR1"
     },
     {
       "skuCode": "NBHC04FHB006-222",
@@ -6569,7 +7253,8 @@
       "weight": "",
       "productGroupId": "PG_zhux4k",
       "productCategoryId": "PC_r2a5ac",
-      "id": "PSC_dcx9dp"
+      "id": "PSC_dcx9dp",
+      "brandId": "BR1"
     },
     {
       "skuCode": "NBHC04FHB007-222",
@@ -6577,7 +7262,8 @@
       "weight": "",
       "productGroupId": "PG_zhux4k",
       "productCategoryId": "PC_r2a5ac",
-      "id": "PSC_t0geef"
+      "id": "PSC_t0geef",
+      "brandId": "BR1"
     },
     {
       "skuCode": "NBHC04FHB008-222",
@@ -6585,7 +7271,8 @@
       "weight": "",
       "productGroupId": "PG_zhux4k",
       "productCategoryId": "PC_r2a5ac",
-      "id": "PSC_f8g11f"
+      "id": "PSC_f8g11f",
+      "brandId": "BR1"
     },
     {
       "skuCode": "NBHC02BM001-BE",
@@ -6593,7 +7280,8 @@
       "weight": "",
       "productGroupId": "PG_zhux4k",
       "productCategoryId": "PC_r2a5ac",
-      "id": "PSC_2gdr2w"
+      "id": "PSC_2gdr2w",
+      "brandId": "BR1"
     },
     {
       "skuCode": "NBHC02BM002-BE",
@@ -6601,7 +7289,8 @@
       "weight": "",
       "productGroupId": "PG_zhux4k",
       "productCategoryId": "PC_r2a5ac",
-      "id": "PSC_h6d5sk"
+      "id": "PSC_h6d5sk",
+      "brandId": "BR1"
     },
     {
       "skuCode": "NBHC02BM003-BE",
@@ -6609,7 +7298,8 @@
       "weight": "",
       "productGroupId": "PG_zhux4k",
       "productCategoryId": "PC_r2a5ac",
-      "id": "PSC_ulgamt"
+      "id": "PSC_ulgamt",
+      "brandId": "BR1"
     },
     {
       "skuCode": "NBHC02BM004-BE",
@@ -6617,7 +7307,8 @@
       "weight": "",
       "productGroupId": "PG_zhux4k",
       "productCategoryId": "PC_r2a5ac",
-      "id": "PSC_ykmvms"
+      "id": "PSC_ykmvms",
+      "brandId": "BR1"
     },
     {
       "skuCode": "NBHC02BM005-BE",
@@ -6625,7 +7316,8 @@
       "weight": "",
       "productGroupId": "PG_zhux4k",
       "productCategoryId": "PC_r2a5ac",
-      "id": "PSC_wpqdwz"
+      "id": "PSC_wpqdwz",
+      "brandId": "BR1"
     },
     {
       "skuCode": "NBHC02BM006-BE",
@@ -6633,7 +7325,8 @@
       "weight": "",
       "productGroupId": "PG_zhux4k",
       "productCategoryId": "PC_r2a5ac",
-      "id": "PSC_baxk0p"
+      "id": "PSC_baxk0p",
+      "brandId": "BR1"
     },
     {
       "skuCode": "NBHP01CP001-BE",
@@ -6641,7 +7334,8 @@
       "weight": "",
       "productGroupId": "PG_zhux4k",
       "productCategoryId": "PC_r2a5ac",
-      "id": "PSC_bs4x7h"
+      "id": "PSC_bs4x7h",
+      "brandId": "BR1"
     },
     {
       "skuCode": "NBHP01CP002-BE",
@@ -6649,7 +7343,8 @@
       "weight": "",
       "productGroupId": "PG_zhux4k",
       "productCategoryId": "PC_r2a5ac",
-      "id": "PSC_wscb9t"
+      "id": "PSC_wscb9t",
+      "brandId": "BR1"
     },
     {
       "skuCode": "NBHP01CP003-BE",
@@ -6657,7 +7352,8 @@
       "weight": "",
       "productGroupId": "PG_zhux4k",
       "productCategoryId": "PC_r2a5ac",
-      "id": "PSC_ie6n8v"
+      "id": "PSC_ie6n8v",
+      "brandId": "BR1"
     },
     {
       "skuCode": "NBHP01CP004-BE",
@@ -6665,7 +7361,8 @@
       "weight": "",
       "productGroupId": "PG_zhux4k",
       "productCategoryId": "PC_r2a5ac",
-      "id": "PSC_xpvegj"
+      "id": "PSC_xpvegj",
+      "brandId": "BR1"
     },
     {
       "skuCode": "NBHP01CP005-BE",
@@ -6673,7 +7370,8 @@
       "weight": "",
       "productGroupId": "PG_zhux4k",
       "productCategoryId": "PC_r2a5ac",
-      "id": "PSC_zkbj3q"
+      "id": "PSC_zkbj3q",
+      "brandId": "BR1"
     },
     {
       "skuCode": "NBHP01CP006-BE",
@@ -6681,7 +7379,8 @@
       "weight": "",
       "productGroupId": "PG_zhux4k",
       "productCategoryId": "PC_r2a5ac",
-      "id": "PSC_jkn4uw"
+      "id": "PSC_jkn4uw",
+      "brandId": "BR1"
     },
     {
       "skuCode": "NBHP01LP001-BE",
@@ -6689,7 +7388,8 @@
       "weight": "",
       "productGroupId": "PG_zhux4k",
       "productCategoryId": "PC_r2a5ac",
-      "id": "PSC_f6fmct"
+      "id": "PSC_f6fmct",
+      "brandId": "BR1"
     },
     {
       "skuCode": "NBHP01LP002-BE",
@@ -6697,7 +7397,8 @@
       "weight": "",
       "productGroupId": "PG_zhux4k",
       "productCategoryId": "PC_r2a5ac",
-      "id": "PSC_kf9bjp"
+      "id": "PSC_kf9bjp",
+      "brandId": "BR1"
     },
     {
       "skuCode": "NBHP01LP003-BE",
@@ -6705,7 +7406,8 @@
       "weight": "",
       "productGroupId": "PG_zhux4k",
       "productCategoryId": "PC_r2a5ac",
-      "id": "PSC_8gu0xt"
+      "id": "PSC_8gu0xt",
+      "brandId": "BR1"
     },
     {
       "skuCode": "NBHP01LP004-BE",
@@ -6713,7 +7415,8 @@
       "weight": "",
       "productGroupId": "PG_zhux4k",
       "productCategoryId": "PC_r2a5ac",
-      "id": "PSC_9mwhgq"
+      "id": "PSC_9mwhgq",
+      "brandId": "BR1"
     },
     {
       "skuCode": "NBHP01LP005-BE",
@@ -6721,7 +7424,8 @@
       "weight": "",
       "productGroupId": "PG_zhux4k",
       "productCategoryId": "PC_r2a5ac",
-      "id": "PSC_sk63z4"
+      "id": "PSC_sk63z4",
+      "brandId": "BR1"
     },
     {
       "skuCode": "NBHP01LP006-BE",
@@ -6729,7 +7433,8 @@
       "weight": "",
       "productGroupId": "PG_zhux4k",
       "productCategoryId": "PC_r2a5ac",
-      "id": "PSC_l602gx"
+      "id": "PSC_l602gx",
+      "brandId": "BR1"
     },
     {
       "skuCode": "NBHP01LP007-BE",
@@ -6737,7 +7442,8 @@
       "weight": "",
       "productGroupId": "PG_zhux4k",
       "productCategoryId": "PC_r2a5ac",
-      "id": "PSC_ft9idf"
+      "id": "PSC_ft9idf",
+      "brandId": "BR1"
     },
     {
       "skuCode": "NBHP01LP008-BE",
@@ -6745,7 +7451,8 @@
       "weight": "",
       "productGroupId": "PG_zhux4k",
       "productCategoryId": "PC_r2a5ac",
-      "id": "PSC_2rf06u"
+      "id": "PSC_2rf06u",
+      "brandId": "BR1"
     },
     {
       "skuCode": "NBHP01CL001-BE",
@@ -6753,7 +7460,8 @@
       "weight": "",
       "productGroupId": "PG_zhux4k",
       "productCategoryId": "PC_r2a5ac",
-      "id": "PSC_f9gcq3"
+      "id": "PSC_f9gcq3",
+      "brandId": "BR1"
     },
     {
       "skuCode": "NBHP01CL002-BE",
@@ -6761,7 +7469,8 @@
       "weight": "",
       "productGroupId": "PG_zhux4k",
       "productCategoryId": "PC_r2a5ac",
-      "id": "PSC_nhtyny"
+      "id": "PSC_nhtyny",
+      "brandId": "BR1"
     },
     {
       "skuCode": "NBHP01CL003-BE",
@@ -6769,7 +7478,8 @@
       "weight": "",
       "productGroupId": "PG_zhux4k",
       "productCategoryId": "PC_r2a5ac",
-      "id": "PSC_k1cgw3"
+      "id": "PSC_k1cgw3",
+      "brandId": "BR1"
     },
     {
       "skuCode": "NBHP01CL004-BE",
@@ -6777,7 +7487,8 @@
       "weight": "",
       "productGroupId": "PG_zhux4k",
       "productCategoryId": "PC_r2a5ac",
-      "id": "PSC_kuh38w"
+      "id": "PSC_kuh38w",
+      "brandId": "BR1"
     },
     {
       "skuCode": "NBHP01CL005-BE",
@@ -6785,7 +7496,8 @@
       "weight": "",
       "productGroupId": "PG_zhux4k",
       "productCategoryId": "PC_r2a5ac",
-      "id": "PSC_p84bgh"
+      "id": "PSC_p84bgh",
+      "brandId": "BR1"
     },
     {
       "skuCode": "NBHP01CL006-BE",
@@ -6793,7 +7505,8 @@
       "weight": "",
       "productGroupId": "PG_zhux4k",
       "productCategoryId": "PC_r2a5ac",
-      "id": "PSC_yfihd8"
+      "id": "PSC_yfihd8",
+      "brandId": "BR1"
     },
     {
       "skuCode": "NBHP01PL001-BE",
@@ -6801,7 +7514,8 @@
       "weight": "",
       "productGroupId": "PG_zhux4k",
       "productCategoryId": "PC_r2a5ac",
-      "id": "PSC_gpyj1o"
+      "id": "PSC_gpyj1o",
+      "brandId": "BR1"
     },
     {
       "skuCode": "NBHP01PL002-BE",
@@ -6809,7 +7523,8 @@
       "weight": "",
       "productGroupId": "PG_zhux4k",
       "productCategoryId": "PC_r2a5ac",
-      "id": "PSC_7oglpa"
+      "id": "PSC_7oglpa",
+      "brandId": "BR1"
     },
     {
       "skuCode": "NBHP01PL003-BE",
@@ -6817,7 +7532,8 @@
       "weight": "",
       "productGroupId": "PG_zhux4k",
       "productCategoryId": "PC_r2a5ac",
-      "id": "PSC_0b3jxw"
+      "id": "PSC_0b3jxw",
+      "brandId": "BR1"
     },
     {
       "skuCode": "NBHP01PL004-BE",
@@ -6825,7 +7541,8 @@
       "weight": "",
       "productGroupId": "PG_zhux4k",
       "productCategoryId": "PC_r2a5ac",
-      "id": "PSC_t5685k"
+      "id": "PSC_t5685k",
+      "brandId": "BR1"
     },
     {
       "skuCode": "NBHP01PL005-BE",
@@ -6833,7 +7550,8 @@
       "weight": "",
       "productGroupId": "PG_zhux4k",
       "productCategoryId": "PC_r2a5ac",
-      "id": "PSC_gv4sl7"
+      "id": "PSC_gv4sl7",
+      "brandId": "BR1"
     },
     {
       "skuCode": "NBHP01PL006-BE",
@@ -6841,7 +7559,8 @@
       "weight": "",
       "productGroupId": "PG_zhux4k",
       "productCategoryId": "PC_r2a5ac",
-      "id": "PSC_x07nzi"
+      "id": "PSC_x07nzi",
+      "brandId": "BR1"
     },
     {
       "skuCode": "NBHP01FR001-BE",
@@ -6849,7 +7568,8 @@
       "weight": "",
       "productGroupId": "PG_zhux4k",
       "productCategoryId": "PC_r2a5ac",
-      "id": "PSC_2owzh7"
+      "id": "PSC_2owzh7",
+      "brandId": "BR1"
     },
     {
       "skuCode": "NBHP01FR002-BE",
@@ -6857,7 +7577,8 @@
       "weight": "",
       "productGroupId": "PG_zhux4k",
       "productCategoryId": "PC_r2a5ac",
-      "id": "PSC_d3xi3f"
+      "id": "PSC_d3xi3f",
+      "brandId": "BR1"
     },
     {
       "skuCode": "NBHP01FR003-BE",
@@ -6865,7 +7586,8 @@
       "weight": "",
       "productGroupId": "PG_zhux4k",
       "productCategoryId": "PC_r2a5ac",
-      "id": "PSC_h3cttj"
+      "id": "PSC_h3cttj",
+      "brandId": "BR1"
     },
     {
       "skuCode": "NBHP01FR004-BE",
@@ -6873,7 +7595,8 @@
       "weight": "",
       "productGroupId": "PG_zhux4k",
       "productCategoryId": "PC_r2a5ac",
-      "id": "PSC_sin9hx"
+      "id": "PSC_sin9hx",
+      "brandId": "BR1"
     },
     {
       "skuCode": "NBHP01FR005-BE",
@@ -6881,7 +7604,8 @@
       "weight": "",
       "productGroupId": "PG_zhux4k",
       "productCategoryId": "PC_r2a5ac",
-      "id": "PSC_0kj42f"
+      "id": "PSC_0kj42f",
+      "brandId": "BR1"
     },
     {
       "skuCode": "NBHP01FR006-BE",
@@ -6889,7 +7613,8 @@
       "weight": "",
       "productGroupId": "PG_zhux4k",
       "productCategoryId": "PC_r2a5ac",
-      "id": "PSC_38d4nu"
+      "id": "PSC_38d4nu",
+      "brandId": "BR1"
     },
     {
       "skuCode": "FSHP01CP001-BE",
@@ -6897,7 +7622,8 @@
       "weight": "",
       "productGroupId": "PG_zhux4k",
       "productCategoryId": "PC_r2a5ac",
-      "id": "PSC_uznlrz"
+      "id": "PSC_uznlrz",
+      "brandId": "BR1"
     },
     {
       "skuCode": "FSHP01CP002-BE",
@@ -6905,7 +7631,8 @@
       "weight": "",
       "productGroupId": "PG_zhux4k",
       "productCategoryId": "PC_r2a5ac",
-      "id": "PSC_n5ippb"
+      "id": "PSC_n5ippb",
+      "brandId": "BR1"
     },
     {
       "skuCode": "FSHP01CP003-BE",
@@ -6913,7 +7640,8 @@
       "weight": "",
       "productGroupId": "PG_zhux4k",
       "productCategoryId": "PC_r2a5ac",
-      "id": "PSC_raerbq"
+      "id": "PSC_raerbq",
+      "brandId": "BR1"
     },
     {
       "skuCode": "FSHP01CP004-BE",
@@ -6921,7 +7649,8 @@
       "weight": "",
       "productGroupId": "PG_zhux4k",
       "productCategoryId": "PC_r2a5ac",
-      "id": "PSC_zdqtfj"
+      "id": "PSC_zdqtfj",
+      "brandId": "BR1"
     },
     {
       "skuCode": "FSHP01CP005-BE",
@@ -6929,7 +7658,8 @@
       "weight": "",
       "productGroupId": "PG_zhux4k",
       "productCategoryId": "PC_r2a5ac",
-      "id": "PSC_rqq1xy"
+      "id": "PSC_rqq1xy",
+      "brandId": "BR1"
     },
     {
       "skuCode": "FSHP01CP006-BE",
@@ -6937,7 +7667,8 @@
       "weight": "",
       "productGroupId": "PG_zhux4k",
       "productCategoryId": "PC_r2a5ac",
-      "id": "PSC_h3dkiq"
+      "id": "PSC_h3dkiq",
+      "brandId": "BR1"
     },
     {
       "skuCode": "FSHP01CP007-BE",
@@ -6945,7 +7676,8 @@
       "weight": "",
       "productGroupId": "PG_zhux4k",
       "productCategoryId": "PC_r2a5ac",
-      "id": "PSC_av9iek"
+      "id": "PSC_av9iek",
+      "brandId": "BR1"
     },
     {
       "skuCode": "FSHP01PL001-BE",
@@ -6953,7 +7685,8 @@
       "weight": "",
       "productGroupId": "PG_zhux4k",
       "productCategoryId": "PC_r2a5ac",
-      "id": "PSC_x3e9ew"
+      "id": "PSC_x3e9ew",
+      "brandId": "BR1"
     },
     {
       "skuCode": "FSHP01PL002-BE",
@@ -6961,7 +7694,8 @@
       "weight": "",
       "productGroupId": "PG_zhux4k",
       "productCategoryId": "PC_r2a5ac",
-      "id": "PSC_vfyox5"
+      "id": "PSC_vfyox5",
+      "brandId": "BR1"
     },
     {
       "skuCode": "FSHP01PL003-BE",
@@ -6969,7 +7703,8 @@
       "weight": "",
       "productGroupId": "PG_zhux4k",
       "productCategoryId": "PC_r2a5ac",
-      "id": "PSC_mflqoi"
+      "id": "PSC_mflqoi",
+      "brandId": "BR1"
     },
     {
       "skuCode": "FSHP01PL004-BE",
@@ -6977,7 +7712,8 @@
       "weight": "",
       "productGroupId": "PG_zhux4k",
       "productCategoryId": "PC_r2a5ac",
-      "id": "PSC_9e9ejx"
+      "id": "PSC_9e9ejx",
+      "brandId": "BR1"
     },
     {
       "skuCode": "FSHP01PL005-BE",
@@ -6985,7 +7721,8 @@
       "weight": "",
       "productGroupId": "PG_zhux4k",
       "productCategoryId": "PC_r2a5ac",
-      "id": "PSC_pjpa5c"
+      "id": "PSC_pjpa5c",
+      "brandId": "BR1"
     },
     {
       "skuCode": "FSHP01PL006-BE",
@@ -6993,7 +7730,8 @@
       "weight": "",
       "productGroupId": "PG_zhux4k",
       "productCategoryId": "PC_r2a5ac",
-      "id": "PSC_zjxpq9"
+      "id": "PSC_zjxpq9",
+      "brandId": "BR1"
     },
     {
       "skuCode": "FSHP01PL007-BE",
@@ -7001,7 +7739,8 @@
       "weight": "",
       "productGroupId": "PG_zhux4k",
       "productCategoryId": "PC_r2a5ac",
-      "id": "PSC_b4fvgy"
+      "id": "PSC_b4fvgy",
+      "brandId": "BR1"
     },
     {
       "skuCode": "FSHP02PL001-BE",
@@ -7009,7 +7748,8 @@
       "weight": "",
       "productGroupId": "PG_zhux4k",
       "productCategoryId": "PC_r2a5ac",
-      "id": "PSC_dy21lh"
+      "id": "PSC_dy21lh",
+      "brandId": "BR1"
     },
     {
       "skuCode": "FSHP02PL002-BE",
@@ -7017,7 +7757,8 @@
       "weight": "",
       "productGroupId": "PG_zhux4k",
       "productCategoryId": "PC_r2a5ac",
-      "id": "PSC_57c2as"
+      "id": "PSC_57c2as",
+      "brandId": "BR1"
     },
     {
       "skuCode": "FSHP02PL003-BE",
@@ -7025,7 +7766,8 @@
       "weight": "",
       "productGroupId": "PG_zhux4k",
       "productCategoryId": "PC_r2a5ac",
-      "id": "PSC_duay8e"
+      "id": "PSC_duay8e",
+      "brandId": "BR1"
     },
     {
       "skuCode": "FSHP02PL004-BE",
@@ -7033,7 +7775,8 @@
       "weight": "",
       "productGroupId": "PG_zhux4k",
       "productCategoryId": "PC_r2a5ac",
-      "id": "PSC_nfu598"
+      "id": "PSC_nfu598",
+      "brandId": "BR1"
     },
     {
       "skuCode": "FSHP02PL005-BE",
@@ -7041,7 +7784,8 @@
       "weight": "",
       "productGroupId": "PG_zhux4k",
       "productCategoryId": "PC_r2a5ac",
-      "id": "PSC_ipdgle"
+      "id": "PSC_ipdgle",
+      "brandId": "BR1"
     },
     {
       "skuCode": "FSHP02PL006-BE",
@@ -7049,7 +7793,8 @@
       "weight": "",
       "productGroupId": "PG_zhux4k",
       "productCategoryId": "PC_r2a5ac",
-      "id": "PSC_yvslmq"
+      "id": "PSC_yvslmq",
+      "brandId": "BR1"
     },
     {
       "skuCode": "FSHP02PL007-BE",
@@ -7057,7 +7802,8 @@
       "weight": "",
       "productGroupId": "PG_zhux4k",
       "productCategoryId": "PC_r2a5ac",
-      "id": "PSC_zimli3"
+      "id": "PSC_zimli3",
+      "brandId": "BR1"
     },
     {
       "skuCode": "FSHC02BM001-BE",
@@ -7065,7 +7811,8 @@
       "weight": "",
       "productGroupId": "PG_zhux4k",
       "productCategoryId": "PC_r2a5ac",
-      "id": "PSC_1ea6u2"
+      "id": "PSC_1ea6u2",
+      "brandId": "BR1"
     },
     {
       "skuCode": "FSHC02BM002-BE",
@@ -7073,7 +7820,8 @@
       "weight": "",
       "productGroupId": "PG_zhux4k",
       "productCategoryId": "PC_r2a5ac",
-      "id": "PSC_km41ta"
+      "id": "PSC_km41ta",
+      "brandId": "BR1"
     },
     {
       "skuCode": "FSHC02BM003-BE",
@@ -7081,7 +7829,8 @@
       "weight": "",
       "productGroupId": "PG_zhux4k",
       "productCategoryId": "PC_r2a5ac",
-      "id": "PSC_8s2tbc"
+      "id": "PSC_8s2tbc",
+      "brandId": "BR1"
     },
     {
       "skuCode": "FSHC02BM004-BE",
@@ -7089,7 +7838,8 @@
       "weight": "",
       "productGroupId": "PG_zhux4k",
       "productCategoryId": "PC_r2a5ac",
-      "id": "PSC_wl3d8l"
+      "id": "PSC_wl3d8l",
+      "brandId": "BR1"
     },
     {
       "skuCode": "FSHC02BM005-BE",
@@ -7097,7 +7847,8 @@
       "weight": "",
       "productGroupId": "PG_zhux4k",
       "productCategoryId": "PC_r2a5ac",
-      "id": "PSC_4v89qp"
+      "id": "PSC_4v89qp",
+      "brandId": "BR1"
     },
     {
       "skuCode": "FSHC02BM006-BE",
@@ -7105,7 +7856,8 @@
       "weight": "",
       "productGroupId": "PG_zhux4k",
       "productCategoryId": "PC_r2a5ac",
-      "id": "PSC_p0k7ff"
+      "id": "PSC_p0k7ff",
+      "brandId": "BR1"
     }
   ],
   "aopCycles": [
@@ -26831,77 +27583,290 @@
         "acogs": 270,
         "gstPct": 5
       },
-      "PSC_vfhh8o": {},
-      "PSC_ya8p7s": {},
-      "PSC_grcdkh": {},
-      "PSC_0dqud5": {},
-      "PSC_bs6c4a": {},
-      "PSC_gnojd0": {},
-      "PSC_2ypjy3": {},
-      "PSC_tje05j": {},
-      "PSC_j4pq6u": {},
-      "PSC_24kez0": {},
-      "PSC_57jds1": {},
-      "PSC_a7uh0h": {},
-      "PSC_wv5mal": {},
-      "PSC_0hporz": {},
-      "PSC_v29f1s": {},
-      "PSC_ojadqb": {},
-      "PSC_5c4qz5": {},
-      "PSC_g7o7w9": {},
-      "PSC_yn1pzp": {},
-      "PSC_4uuj75": {},
-      "PSC_frk6vu": {},
-      "PSC_7ly51o": {},
-      "PSC_caq3uy": {},
-      "PSC_5fycm5": {},
-      "PSC_anpbv2": {},
-      "PSC_704ibx": {},
-      "PSC_x06zwa": {},
-      "PSC_rilcbv": {},
-      "PSC_dxmvkf": {},
-      "PSC_cp6bsm": {},
-      "PSC_nuzmfh": {},
-      "PSC_hv9vb8": {},
-      "PSC_ovcbc1": {},
-      "PSC_ladycs": {},
-      "PSC_u6k8rr": {},
-      "PSC_q1n3rj": {},
-      "PSC_bm2o45": {},
-      "PSC_wsi4j3": {},
-      "PSC_kbxmiv": {},
-      "PSC_vpb25a": {},
-      "PSC_d97h80": {},
-      "PSC_nf1bw4": {},
-      "PSC_w9er1a": {},
-      "PSC_90pwo5": {},
-      "PSC_0cq05d": {},
-      "PSC_nx00yi": {},
-      "PSC_e0u7eo": {},
-      "PSC_iug7mn": {},
-      "PSC_hiwn0h": {},
-      "PSC_b30bgu": {},
-      "PSC_t8trza": {},
-      "PSC_dncy3l": {},
-      "PSC_d0vkau": {},
-      "PSC_d8nzsx": {},
-      "PSC_36ua4u": {},
-      "PSC_x96g3t": {},
-      "PSC_hfywd1": {},
-      "PSC_ru5tr5": {},
-      "PSC_kwqrmi": {},
-      "PSC_mmidz3": {},
-      "PSC_pe58t1": {},
-      "PSC_1m6xgm": {},
-      "PSC_graitd": {},
-      "PSC_exsr1i": {},
-      "PSC_0nb1br": {},
-      "PSC_7f0pvv": {},
-      "PSC_bogr5s": {},
-      "PSC_zjz3g0": {},
-      "PSC_vgqab2": {},
-      "PSC_jfzy5a": {},
-      "PSC_hf2t1m": {},
+      "PSC_vfhh8o": {
+        "acogs": 1902,
+        "gstPct": 540
+      },
+      "PSC_ya8p7s": {
+        "acogs": 899,
+        "gstPct": 250
+      },
+      "PSC_grcdkh": {
+        "acogs": 1332,
+        "gstPct": 388
+      },
+      "PSC_0dqud5": {
+        "acogs": 2570,
+        "gstPct": 704
+      },
+      "PSC_bs6c4a": {
+        "acogs": 665,
+        "gstPct": 186
+      },
+      "PSC_gnojd0": {
+        "acogs": 1330,
+        "gstPct": 186
+      },
+      "PSC_2ypjy3": {
+        "acogs": 1237,
+        "gstPct": 331
+      },
+      "PSC_tje05j": {
+        "acogs": 1274,
+        "gstPct": 662
+      },
+      "PSC_j4pq6u": {
+        "acogs": 475,
+        "gstPct": 145
+      },
+      "PSC_24kez0": {
+        "acogs": 899,
+        "gstPct": 290
+      },
+      "PSC_57jds1": {
+        "acogs": 380,
+        "gstPct": 72
+      },
+      "PSC_a7uh0h": {
+        "acogs": 475,
+        "gstPct": 96
+      },
+      "PSC_wv5mal": {
+        "acogs": 1456,
+        "gstPct": 362
+      },
+      "PSC_0hporz": {
+        "acogs": 1627,
+        "gstPct": 437
+      },
+      "PSC_v29f1s": {
+        "acogs": 1799,
+        "gstPct": 514
+      },
+      "PSC_ojadqb": {
+        "acogs": 1370,
+        "gstPct": 370
+      },
+      "PSC_5c4qz5": {
+        "acogs": 1541,
+        "gstPct": 432
+      },
+      "PSC_g7o7w9": {
+        "acogs": 1713,
+        "gstPct": 528
+      },
+      "PSC_yn1pzp": {
+        "acogs": 771,
+        "gstPct": 163
+      },
+      "PSC_4uuj75": {
+        "acogs": 813,
+        "gstPct": 203
+      },
+      "PSC_frk6vu": {
+        "acogs": 856,
+        "gstPct": 229
+      },
+      "PSC_7ly51o": {
+        "acogs": 813,
+        "gstPct": 174
+      },
+      "PSC_caq3uy": {
+        "acogs": 856,
+        "gstPct": 218
+      },
+      "PSC_5fycm5": {
+        "acogs": 1028,
+        "gstPct": 245
+      },
+      "PSC_anpbv2": {
+        "acogs": 475,
+        "gstPct": 118
+      },
+      "PSC_704ibx": {
+        "acogs": 856,
+        "gstPct": 236
+      },
+      "PSC_x06zwa": {
+        "acogs": 570,
+        "gstPct": 146
+      },
+      "PSC_rilcbv": {
+        "acogs": 951,
+        "gstPct": 292
+      },
+      "PSC_dxmvkf": {
+        "acogs": 284,
+        "gstPct": 76
+      },
+      "PSC_cp6bsm": {
+        "acogs": 499,
+        "gstPct": 152
+      },
+      "PSC_nuzmfh": {
+        "acogs": 1713,
+        "gstPct": 505
+      },
+      "PSC_hv9vb8": {
+        "acogs": 1970,
+        "gstPct": 583
+      },
+      "PSC_ovcbc1": {
+        "acogs": 2142,
+        "gstPct": 669
+      },
+      "PSC_ladycs": {
+        "acogs": 2313,
+        "gstPct": 759
+      },
+      "PSC_u6k8rr": {
+        "acogs": 2484,
+        "gstPct": 842
+      },
+      "PSC_q1n3rj": {
+        "acogs": 2741,
+        "gstPct": 940
+      },
+      "PSC_bm2o45": {
+        "acogs": 1627,
+        "gstPct": 448
+      },
+      "PSC_wsi4j3": {
+        "acogs": 1713,
+        "gstPct": 523
+      },
+      "PSC_kbxmiv": {
+        "acogs": 1884,
+        "gstPct": 598
+      },
+      "PSC_vpb25a": {
+        "acogs": 2056,
+        "gstPct": 655
+      },
+      "PSC_d97h80": {
+        "acogs": 771,
+        "gstPct": 170
+      },
+      "PSC_nf1bw4": {
+        "acogs": 813,
+        "gstPct": 199
+      },
+      "PSC_w9er1a": {
+        "acogs": 856,
+        "gstPct": 232
+      },
+      "PSC_90pwo5": {
+        "acogs": 1113,
+        "gstPct": 300
+      },
+      "PSC_0cq05d": {
+        "acogs": 1285,
+        "gstPct": 364
+      },
+      "PSC_nx00yi": {
+        "acogs": 1371,
+        "gstPct": 431
+      },
+      "PSC_e0u7eo": {
+        "acogs": 684,
+        "gstPct": 170
+      },
+      "PSC_iug7mn": {
+        "acogs": 770,
+        "gstPct": 199
+      },
+      "PSC_hiwn0h": {
+        "acogs": 856,
+        "gstPct": 241
+      },
+      "PSC_b30bgu": {
+        "acogs": 1027,
+        "gstPct": 290
+      },
+      "PSC_t8trza": {
+        "acogs": 1199,
+        "gstPct": 367
+      },
+      "PSC_dncy3l": {
+        "acogs": 1370,
+        "gstPct": 437
+      },
+      "PSC_d0vkau": {
+        "acogs": 1027,
+        "gstPct": 281
+      },
+      "PSC_d8nzsx": {
+        "acogs": 1113,
+        "gstPct": 302
+      },
+      "PSC_36ua4u": {
+        "acogs": 1242,
+        "gstPct": 351
+      },
+      "PSC_x96g3t": {
+        "acogs": 1327,
+        "gstPct": 404
+      },
+      "PSC_hfywd1": {
+        "acogs": 1456,
+        "gstPct": 469
+      },
+      "PSC_ru5tr5": {
+        "acogs": 1713,
+        "gstPct": 534
+      },
+      "PSC_kwqrmi": {
+        "acogs": 856,
+        "gstPct": 258
+      },
+      "PSC_mmidz3": {
+        "acogs": 1028,
+        "gstPct": 276
+      },
+      "PSC_pe58t1": {
+        "acogs": 1113,
+        "gstPct": 322
+      },
+      "PSC_1m6xgm": {
+        "acogs": 1199,
+        "gstPct": 370
+      },
+      "PSC_graitd": {
+        "acogs": 1285,
+        "gstPct": 430
+      },
+      "PSC_exsr1i": {
+        "acogs": 1456,
+        "gstPct": 489
+      },
+      "PSC_0nb1br": {
+        "acogs": 3684,
+        "gstPct": 1407
+      },
+      "PSC_7f0pvv": {
+        "acogs": 3044,
+        "gstPct": 808
+      },
+      "PSC_bogr5s": {
+        "acogs": 1713,
+        "gstPct": 432
+      },
+      "PSC_zjz3g0": {
+        "acogs": 1799,
+        "gstPct": 504
+      },
+      "PSC_vgqab2": {
+        "acogs": 1970,
+        "gstPct": 600
+      },
+      "PSC_jfzy5a": {
+        "acogs": 499,
+        "gstPct": 90
+      },
+      "PSC_hf2t1m": {
+        "acogs": 499,
+        "gstPct": 123
+      },
       "PSC_lfh3n8": {},
       "PSC_tdclxt": {},
       "PSC_judxo2": {},
