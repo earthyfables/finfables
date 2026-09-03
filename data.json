@@ -15,7 +15,7 @@
       "Feb",
       "Mar"
     ],
-    "savedAt": "2026-09-03T11:58:47.219Z",
+    "savedAt": "2026-09-03T11:59:25.373Z",
     "activeCycleId": "CYC_czj5yj"
   },
   "channels": [
@@ -139,6 +139,13 @@
       "partner": "Instamart",
       "model": "B2C",
       "creditDays": 15
+    },
+    {
+      "brandId": "BR_i228uj",
+      "partner": "Flipkart",
+      "model": "B2C",
+      "creditDays": 7,
+      "id": "BPM_5hcz6t"
     }
   ],
   "expenseLineItems": [
