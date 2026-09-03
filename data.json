@@ -15,7 +15,7 @@
       "Feb",
       "Mar"
     ],
-    "savedAt": "2026-09-03T13:17:16.144Z",
+    "savedAt": "2026-09-03T13:17:30.571Z",
     "activeCycleId": "CYC_czj5yj"
   },
   "channels": [
@@ -27583,290 +27583,77 @@
         "acogs": 270,
         "gstPct": 5
       },
-      "PSC_vfhh8o": {
-        "acogs": 1902,
-        "gstPct": 540
-      },
-      "PSC_ya8p7s": {
-        "acogs": 899,
-        "gstPct": 250
-      },
-      "PSC_grcdkh": {
-        "acogs": 1332,
-        "gstPct": 388
-      },
-      "PSC_0dqud5": {
-        "acogs": 2570,
-        "gstPct": 704
-      },
-      "PSC_bs6c4a": {
-        "acogs": 665,
-        "gstPct": 186
-      },
-      "PSC_gnojd0": {
-        "acogs": 1330,
-        "gstPct": 186
-      },
-      "PSC_2ypjy3": {
-        "acogs": 1237,
-        "gstPct": 331
-      },
-      "PSC_tje05j": {
-        "acogs": 1274,
-        "gstPct": 662
-      },
-      "PSC_j4pq6u": {
-        "acogs": 475,
-        "gstPct": 145
-      },
-      "PSC_24kez0": {
-        "acogs": 899,
-        "gstPct": 290
-      },
-      "PSC_57jds1": {
-        "acogs": 380,
-        "gstPct": 72
-      },
-      "PSC_a7uh0h": {
-        "acogs": 475,
-        "gstPct": 96
-      },
-      "PSC_wv5mal": {
-        "acogs": 1456,
-        "gstPct": 362
-      },
-      "PSC_0hporz": {
-        "acogs": 1627,
-        "gstPct": 437
-      },
-      "PSC_v29f1s": {
-        "acogs": 1799,
-        "gstPct": 514
-      },
-      "PSC_ojadqb": {
-        "acogs": 1370,
-        "gstPct": 370
-      },
-      "PSC_5c4qz5": {
-        "acogs": 1541,
-        "gstPct": 432
-      },
-      "PSC_g7o7w9": {
-        "acogs": 1713,
-        "gstPct": 528
-      },
-      "PSC_yn1pzp": {
-        "acogs": 771,
-        "gstPct": 163
-      },
-      "PSC_4uuj75": {
-        "acogs": 813,
-        "gstPct": 203
-      },
-      "PSC_frk6vu": {
-        "acogs": 856,
-        "gstPct": 229
-      },
-      "PSC_7ly51o": {
-        "acogs": 813,
-        "gstPct": 174
-      },
-      "PSC_caq3uy": {
-        "acogs": 856,
-        "gstPct": 218
-      },
-      "PSC_5fycm5": {
-        "acogs": 1028,
-        "gstPct": 245
-      },
-      "PSC_anpbv2": {
-        "acogs": 475,
-        "gstPct": 118
-      },
-      "PSC_704ibx": {
-        "acogs": 856,
-        "gstPct": 236
-      },
-      "PSC_x06zwa": {
-        "acogs": 570,
-        "gstPct": 146
-      },
-      "PSC_rilcbv": {
-        "acogs": 951,
-        "gstPct": 292
-      },
-      "PSC_dxmvkf": {
-        "acogs": 284,
-        "gstPct": 76
-      },
-      "PSC_cp6bsm": {
-        "acogs": 499,
-        "gstPct": 152
-      },
-      "PSC_nuzmfh": {
-        "acogs": 1713,
-        "gstPct": 505
-      },
-      "PSC_hv9vb8": {
-        "acogs": 1970,
-        "gstPct": 583
-      },
-      "PSC_ovcbc1": {
-        "acogs": 2142,
-        "gstPct": 669
-      },
-      "PSC_ladycs": {
-        "acogs": 2313,
-        "gstPct": 759
-      },
-      "PSC_u6k8rr": {
-        "acogs": 2484,
-        "gstPct": 842
-      },
-      "PSC_q1n3rj": {
-        "acogs": 2741,
-        "gstPct": 940
-      },
-      "PSC_bm2o45": {
-        "acogs": 1627,
-        "gstPct": 448
-      },
-      "PSC_wsi4j3": {
-        "acogs": 1713,
-        "gstPct": 523
-      },
-      "PSC_kbxmiv": {
-        "acogs": 1884,
-        "gstPct": 598
-      },
-      "PSC_vpb25a": {
-        "acogs": 2056,
-        "gstPct": 655
-      },
-      "PSC_d97h80": {
-        "acogs": 771,
-        "gstPct": 170
-      },
-      "PSC_nf1bw4": {
-        "acogs": 813,
-        "gstPct": 199
-      },
-      "PSC_w9er1a": {
-        "acogs": 856,
-        "gstPct": 232
-      },
-      "PSC_90pwo5": {
-        "acogs": 1113,
-        "gstPct": 300
-      },
-      "PSC_0cq05d": {
-        "acogs": 1285,
-        "gstPct": 364
-      },
-      "PSC_nx00yi": {
-        "acogs": 1371,
-        "gstPct": 431
-      },
-      "PSC_e0u7eo": {
-        "acogs": 684,
-        "gstPct": 170
-      },
-      "PSC_iug7mn": {
-        "acogs": 770,
-        "gstPct": 199
-      },
-      "PSC_hiwn0h": {
-        "acogs": 856,
-        "gstPct": 241
-      },
-      "PSC_b30bgu": {
-        "acogs": 1027,
-        "gstPct": 290
-      },
-      "PSC_t8trza": {
-        "acogs": 1199,
-        "gstPct": 367
-      },
-      "PSC_dncy3l": {
-        "acogs": 1370,
-        "gstPct": 437
-      },
-      "PSC_d0vkau": {
-        "acogs": 1027,
-        "gstPct": 281
-      },
-      "PSC_d8nzsx": {
-        "acogs": 1113,
-        "gstPct": 302
-      },
-      "PSC_36ua4u": {
-        "acogs": 1242,
-        "gstPct": 351
-      },
-      "PSC_x96g3t": {
-        "acogs": 1327,
-        "gstPct": 404
-      },
-      "PSC_hfywd1": {
-        "acogs": 1456,
-        "gstPct": 469
-      },
-      "PSC_ru5tr5": {
-        "acogs": 1713,
-        "gstPct": 534
-      },
-      "PSC_kwqrmi": {
-        "acogs": 856,
-        "gstPct": 258
-      },
-      "PSC_mmidz3": {
-        "acogs": 1028,
-        "gstPct": 276
-      },
-      "PSC_pe58t1": {
-        "acogs": 1113,
-        "gstPct": 322
-      },
-      "PSC_1m6xgm": {
-        "acogs": 1199,
-        "gstPct": 370
-      },
-      "PSC_graitd": {
-        "acogs": 1285,
-        "gstPct": 430
-      },
-      "PSC_exsr1i": {
-        "acogs": 1456,
-        "gstPct": 489
-      },
-      "PSC_0nb1br": {
-        "acogs": 3684,
-        "gstPct": 1407
-      },
-      "PSC_7f0pvv": {
-        "acogs": 3044,
-        "gstPct": 808
-      },
-      "PSC_bogr5s": {
-        "acogs": 1713,
-        "gstPct": 432
-      },
-      "PSC_zjz3g0": {
-        "acogs": 1799,
-        "gstPct": 504
-      },
-      "PSC_vgqab2": {
-        "acogs": 1970,
-        "gstPct": 600
-      },
-      "PSC_jfzy5a": {
-        "acogs": 499,
-        "gstPct": 90
-      },
-      "PSC_hf2t1m": {
-        "acogs": 499,
-        "gstPct": 123
-      },
+      "PSC_vfhh8o": {},
+      "PSC_ya8p7s": {},
+      "PSC_grcdkh": {},
+      "PSC_0dqud5": {},
+      "PSC_bs6c4a": {},
+      "PSC_gnojd0": {},
+      "PSC_2ypjy3": {},
+      "PSC_tje05j": {},
+      "PSC_j4pq6u": {},
+      "PSC_24kez0": {},
+      "PSC_57jds1": {},
+      "PSC_a7uh0h": {},
+      "PSC_wv5mal": {},
+      "PSC_0hporz": {},
+      "PSC_v29f1s": {},
+      "PSC_ojadqb": {},
+      "PSC_5c4qz5": {},
+      "PSC_g7o7w9": {},
+      "PSC_yn1pzp": {},
+      "PSC_4uuj75": {},
+      "PSC_frk6vu": {},
+      "PSC_7ly51o": {},
+      "PSC_caq3uy": {},
+      "PSC_5fycm5": {},
+      "PSC_anpbv2": {},
+      "PSC_704ibx": {},
+      "PSC_x06zwa": {},
+      "PSC_rilcbv": {},
+      "PSC_dxmvkf": {},
+      "PSC_cp6bsm": {},
+      "PSC_nuzmfh": {},
+      "PSC_hv9vb8": {},
+      "PSC_ovcbc1": {},
+      "PSC_ladycs": {},
+      "PSC_u6k8rr": {},
+      "PSC_q1n3rj": {},
+      "PSC_bm2o45": {},
+      "PSC_wsi4j3": {},
+      "PSC_kbxmiv": {},
+      "PSC_vpb25a": {},
+      "PSC_d97h80": {},
+      "PSC_nf1bw4": {},
+      "PSC_w9er1a": {},
+      "PSC_90pwo5": {},
+      "PSC_0cq05d": {},
+      "PSC_nx00yi": {},
+      "PSC_e0u7eo": {},
+      "PSC_iug7mn": {},
+      "PSC_hiwn0h": {},
+      "PSC_b30bgu": {},
+      "PSC_t8trza": {},
+      "PSC_dncy3l": {},
+      "PSC_d0vkau": {},
+      "PSC_d8nzsx": {},
+      "PSC_36ua4u": {},
+      "PSC_x96g3t": {},
+      "PSC_hfywd1": {},
+      "PSC_ru5tr5": {},
+      "PSC_kwqrmi": {},
+      "PSC_mmidz3": {},
+      "PSC_pe58t1": {},
+      "PSC_1m6xgm": {},
+      "PSC_graitd": {},
+      "PSC_exsr1i": {},
+      "PSC_0nb1br": {},
+      "PSC_7f0pvv": {},
+      "PSC_bogr5s": {},
+      "PSC_zjz3g0": {},
+      "PSC_vgqab2": {},
+      "PSC_jfzy5a": {},
+      "PSC_hf2t1m": {},
       "PSC_lfh3n8": {},
       "PSC_tdclxt": {},
       "PSC_judxo2": {},
