@@ -794,6 +794,12 @@ function renderEditableTable(container, arr, cols, opts){
 
 let autosaveTimer = null;
 function markDirty(){
+  paretoLevelPLCache.clear();
+  itemIndexCache = new WeakMap();
+  sumOthersCache = new WeakMap();
+  totalPLCache.clear();
+  filteredPLCache.clear();
+  partnerModelPLCache.clear();
   if(autosaveTimer) clearTimeout(autosaveTimer);
   markUnsavedStatus();
   autosaveTimer = setTimeout(saveToGitHub, 2500);
@@ -1999,12 +2005,39 @@ let paretoMixChannelId = '';
 // Category Mix and Pareto Mix — the first item in the list is never directly
 // editable; its % is always 100 minus whatever the other items sum to, so
 // the group can never fail to total 100%.
+// getDifferentialPct is called for every (Partner-Model x Sub Category x
+// month) combination - with hundreds of Sub Categories, the naive
+// items.findIndex() linear scan alone runs into tens of millions of
+// operations. itemIndexCache gives O(1) index lookups per items array
+// (subCats or pms, which are stable references within a render pass), and
+// sumOthersCache avoids recomputing the "first item auto-balances" sum
+// (itself an O(n) scan) for every single Sub Category queried against the
+// same Partner-Model/month - it only actually depends on (items, mixObj,
+// month), not on which itemId triggered the lookup.
+let itemIndexCache = new WeakMap();
+function getItemIndex(items, itemId){
+  let map = itemIndexCache.get(items);
+  if(!map){
+    map = new Map();
+    items.forEach((it,i)=> map.set(it.id, i));
+    itemIndexCache.set(items, map);
+  }
+  return map.has(itemId) ? map.get(itemId) : -1;
+}
+let sumOthersCache = new WeakMap();
 function getDifferentialPct(items, mixObj, itemId, month){
-  const idx = items.findIndex(it=>it.id===itemId);
+  const idx = getItemIndex(items, itemId);
   if(idx <= 0){
+    let mixCache = sumOthersCache.get(items);
+    if(!mixCache){ mixCache = new WeakMap(); sumOthersCache.set(items, mixCache); }
+    let monthCache = mixCache.get(mixObj);
+    if(!monthCache){ monthCache = new Map(); mixCache.set(mixObj, monthCache); }
+    if(monthCache.has(month)) return monthCache.get(month);
     let sumOthers = 0;
     for(let i=1;i<items.length;i++) sumOthers += (+((mixObj[items[i].id]||{})[month])||0);
-    return 100 - sumOthers;
+    const result = 100 - sumOthers;
+    monthCache.set(month, result);
+    return result;
   }
   return (+((mixObj[itemId]||{})[month])||0);
 }
@@ -2858,7 +2891,7 @@ function computeCodbItemCost(li, pmId, scId, ctx){
   }
 }
 
-function computeParetoLevelPL(pmId, scId, month){
+function computeParetoLevelPLUncached(pmId, scId, month){
   const gmvByMonth = getCycleObj('monthlyGMVByCycle');
   const chMix = getCycleObj('channelMixByCycle');
   const paretoMixAll = getCycleObj('paretoMixByCycle');
@@ -2918,8 +2951,26 @@ function computeParetoLevelPL(pmId, scId, month){
   return {GMV, Returns, Discount, Margin, GST, NSV, MRPVal, NetQty, GrossQty, COGS, CM1, CODCharges, CODB, CM2, CAC, CM3, codbByItem};
 }
 
+// The uncached version above is expensive (iterates masters, GST-rate
+// lookups, CODB items, etc.) and gets called for every (Partner-Model x
+// Sub Category) pair, for every month, from several different higher-level
+// aggregations (computeTotalPL, computeFilteredPL, computePartnerModelPL) -
+// with hundreds of Sub Categories this adds up to thousands of redundant
+// recomputations of the exact same (pmId, scId, month) combination within a
+// single render pass. Cache is cleared on every render() call (see below),
+// so it never serves stale data across an actual edit or tab switch.
+let paretoLevelPLCache = new Map();
+function computeParetoLevelPL(pmId, scId, month){
+  const key = pmId+'|'+scId+'|'+month;
+  const cached = paretoLevelPLCache.get(key);
+  if(cached) return cached;
+  const result = computeParetoLevelPLUncached(pmId, scId, month);
+  paretoLevelPLCache.set(key, result);
+  return result;
+}
+
 const PL_SUM_KEYS = ['GMV','Returns','Discount','Margin','GST','NSV','MRPVal','NetQty','GrossQty','COGS','CM1','CODCharges','CODB','CM2','CAC','CM3'];
-function computePartnerModelPL(pmId, month){
+function computePartnerModelPLUncached(pmId, month){
   const subCats = DATA.productSubCategories;
   const totals = {}; PL_SUM_KEYS.forEach(k=> totals[k]=0);
   const codbByItem = {};
@@ -2930,6 +2981,20 @@ function computePartnerModelPL(pmId, month){
   });
   totals.codbByItem = codbByItem;
   return totals;
+}
+// Each of these aggregate functions iterates every (Partner-Model x Sub
+// Category) pair - even with the inner computeParetoLevelPL cached, that's
+// still thousands of iterations per call, and these get called repeatedly
+// (once per P&L row, per Key Ratio, per month) within a single render. Cache
+// keyed on the same lifecycle as the caches above (cleared on render()/markDirty()).
+let partnerModelPLCache = new Map();
+function computePartnerModelPL(pmId, month){
+  const key = pmId+'|'+month;
+  const cached = partnerModelPLCache.get(key);
+  if(cached) return cached;
+  const result = computePartnerModelPLUncached(pmId, month);
+  partnerModelPLCache.set(key, result);
+  return result;
 }
 
 /* ---------------------------------------------------------------
@@ -3055,7 +3120,7 @@ let plFilters = {
 };
 let plOpenDropdownId = null; // preserves which filter dropdown stays open across re-renders
 
-function computeTotalPL(month){
+function computeTotalPLUncached(month){
   const pms = DATA.partnerModels;
   const subCats = DATA.productSubCategories;
   const totals = {}; PL_SUM_KEYS.forEach(k=> totals[k]=0);
@@ -3068,8 +3133,16 @@ function computeTotalPL(month){
   totals.codbByItem = codbByItem;
   return totals;
 }
+let totalPLCache = new Map();
+function computeTotalPL(month){
+  const cached = totalPLCache.get(month);
+  if(cached) return cached;
+  const result = computeTotalPLUncached(month);
+  totalPLCache.set(month, result);
+  return result;
+}
 
-function computeFilteredPL(month){
+function computeFilteredPLUncached(month){
   const pms = DATA.partnerModels.filter(pm=>
     (plFilters.partnerGroup.length===0 || plFilters.partnerGroup.includes(pm.partnerGroup)) &&
     (plFilters.partnerModel.length===0 || plFilters.partnerModel.includes(pm.id))
@@ -3088,6 +3161,18 @@ function computeFilteredPL(month){
   }));
   totals.codbByItem = codbByItem;
   return totals;
+}
+// Keyed on month + the current filter selections (not just month), since the
+// result depends on plFilters too - a stale cache hit after changing a
+// filter would show the wrong Partner/Product-wise numbers.
+let filteredPLCache = new Map();
+function computeFilteredPL(month){
+  const key = month+'|'+JSON.stringify(plFilters);
+  const cached = filteredPLCache.get(key);
+  if(cached) return cached;
+  const result = computeFilteredPLUncached(month);
+  filteredPLCache.set(key, result);
+  return result;
 }
 
 function multiSelectHtml(id, label, options, selected){
@@ -4324,6 +4409,12 @@ const copyFromSel = panel.querySelector('#cycleCopyFrom');
 
 const MASTER_TAB_KEYS = MASTER_TABS.map(t=>t.key);
 function render(){
+  paretoLevelPLCache.clear();
+  itemIndexCache = new WeakMap();
+  sumOthersCache = new WeakMap();
+  totalPLCache.clear();
+  filteredPLCache.clear();
+  partnerModelPLCache.clear();
   renderCyclePanel();
   document.querySelectorAll('.navitem').forEach(b=>{
     const isActive = b.dataset.tab==='mastersConfig' ? MASTER_TAB_KEYS.includes(activeTab) : b.dataset.tab===activeTab;
