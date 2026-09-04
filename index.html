@@ -867,6 +867,10 @@ function isDuplicateRow(candidate, arr, cols){
   return arr.some(r=> rowMatches(r, candidate, cols));
 }
 
+const MASTER_TABLE_VIRTUALIZE_THRESHOLD = 100;
+const MASTER_TABLE_ROW_HEIGHT_DEFAULT = 45; // corrected from measurement after first render
+const MASTER_TABLE_BUFFER_ROWS = 8; // extra rows rendered above/below the visible window
+
 function renderMasterTable(container, arr, cols, opts){
   opts = opts || {};
   const pasteHint = cols.map(c=>c.label).join(' | ');
@@ -902,20 +906,78 @@ function renderMasterTable(container, arr, cols, opts){
   html += `<table class="mastertable"><colgroup><col style="width:34px;">`;
   cols.forEach(c=> html += `<col${c.width?` style="width:${c.width}px;"`:''}>`);
   html += `<col style="width:150px;"></colgroup>`;
-  html += `<thead><tr><th><input type="checkbox" id="selAll"></th>`;
+  const selectedIds = container._masterTableSelected || (container._masterTableSelected = new Set());
+  const allSelected = arr.length>0 && arr.every(row=> selectedIds.has(row.id));
+  html += `<thead><tr><th><input type="checkbox" id="selAll"${allSelected?' checked':''}></th>`;
   cols.forEach(c=> html += `<th>${c.label}</th>`);
-  html += `<th></th></tr></thead><tbody>`;
-  arr.forEach((row,idx)=>{
-    html += `<tr data-idx="${idx}"><td><input type="checkbox" class="rowsel" data-selidx="${idx}"></td>`;
-    cols.forEach(c=> html += `<td>${fieldInput(row,c,colOptsCache.get(c.key))}</td>`);
-    html += `<td class="actionscell"><div class="actionsrow"><button class="btn-sm" data-editidx="${idx}">Edit</button><button class="btn-sm danger" data-del="${idx}">Remove</button></div></td></tr>`;
-  });
+  html += `<th></th></tr></thead><tbody id="masterTableBody">`;
+
+  // Below the threshold, every row renders up front exactly as before - this
+  // keeps the vast majority of (small) master tables completely unaffected.
+  // Above it, only the rows within the visible scroll window (plus a small
+  // buffer) actually become <tr> elements; two spacer rows account for the
+  // height of everything not currently rendered, so the scrollbar still
+  // reflects the table's true full length and jumping to any scroll position
+  // works immediately.
+  const virtualize = arr.length > MASTER_TABLE_VIRTUALIZE_THRESHOLD;
+  function rowHtml(row, idx){
+    let rowHtml = `<tr data-idx="${idx}"><td><input type="checkbox" class="rowsel" data-selidx="${idx}"${selectedIds.has(row.id)?' checked':''}></td>`;
+    cols.forEach(c=> rowHtml += `<td>${fieldInput(row,c,colOptsCache.get(c.key))}</td>`);
+    rowHtml += `<td class="actionscell"><div class="actionsrow"><button class="btn-sm" data-editidx="${idx}">Edit</button><button class="btn-sm danger" data-del="${idx}">Remove</button></div></td></tr>`;
+    return rowHtml;
+  }
+  if(!virtualize){
+    arr.forEach((row,idx)=>{ html += rowHtml(row, idx); });
+  } else {
+    const rowH = container._masterTableRowHeight || MASTER_TABLE_ROW_HEIGHT_DEFAULT;
+    const prevScrollTop = container._masterTablePendingScrollTop || 0;
+    const viewportH = container._masterTableViewportH || 500;
+    const centerIdx = Math.floor(prevScrollTop / rowH);
+    const visibleCount = Math.ceil(viewportH / rowH);
+    const startIdx = Math.max(0, centerIdx - MASTER_TABLE_BUFFER_ROWS);
+    const endIdx = Math.min(arr.length, centerIdx + visibleCount + MASTER_TABLE_BUFFER_ROWS);
+    const colSpan = cols.length + 2;
+    if(startIdx > 0){
+      html += `<tr class="vspacer" style="height:${startIdx*rowH}px;"><td colspan="${colSpan}" style="padding:0; border:0;"></td></tr>`;
+    }
+    for(let idx=startIdx; idx<endIdx; idx++){ html += rowHtml(arr[idx], idx); }
+    if(endIdx < arr.length){
+      html += `<tr class="vspacer" style="height:${(arr.length-endIdx)*rowH}px;"><td colspan="${colSpan}" style="padding:0; border:0;"></td></tr>`;
+    }
+  }
   html += `</tbody></table>`;
   html += scrollClose;
 
   container.innerHTML = html;
 
   function rerender(){ renderMasterTable(container, arr, cols, opts); if(opts.onChange) opts.onChange(); markDirty(); }
+
+  if(virtualize){
+    const scrollEl = container.querySelector('.scrollbox');
+    if(scrollEl){
+      // Measure the actual row height once real rows exist, so spacer math
+      // matches this table's real font/padding rather than a guessed default.
+      const sampleRow = scrollEl.querySelector('tbody tr:not(.vspacer)');
+      if(sampleRow) container._masterTableRowHeight = sampleRow.getBoundingClientRect().height || MASTER_TABLE_ROW_HEIGHT_DEFAULT;
+      container._masterTableViewportH = scrollEl.clientHeight || container._masterTableViewportH || 500;
+      scrollEl.scrollTop = prevScrollTopForRestore(container);
+      // container.innerHTML above just replaced the whole subtree, so this is
+      // always a brand new element - the listener needs wiring on every call,
+      // not just the first (the old element and its listener are discarded
+      // together when replaced, so there's no risk of double-attaching).
+      let scrollFrame = null;
+      scrollEl.addEventListener('scroll', ()=>{
+        if(scrollFrame !== null) return; // already have a pending re-render for this scroll burst
+        scrollFrame = requestAnimationFrame(()=>{
+          scrollFrame = null;
+          container._masterTablePendingScrollTop = scrollEl.scrollTop;
+          container._masterTableViewportH = scrollEl.clientHeight;
+          renderMasterTable(container, container._masterTableArr, container._masterTableCols, container._masterTableOpts);
+        });
+      });
+    }
+  }
+  function prevScrollTopForRestore(c){ return c._masterTablePendingScrollTop || 0; }
 
   // Delegated listeners on the container (a handful total) instead of one
   // addEventListener per cell/button - with hundreds of rows, individually
@@ -940,6 +1002,8 @@ function renderMasterTable(container, arr, cols, opts){
     container.addEventListener('click', e=>{
       const delBtn = e.target.closest('[data-del]');
       if(delBtn){
+        const removedId = container._masterTableArr[+delBtn.dataset.del] && container._masterTableArr[+delBtn.dataset.del].id;
+        if(removedId && container._masterTableSelected) container._masterTableSelected.delete(removedId);
         container._masterTableArr.splice(+delBtn.dataset.del,1);
         container._masterTableRerender();
         return;
@@ -952,9 +1016,17 @@ function renderMasterTable(container, arr, cols, opts){
         return;
       }
       if(e.target.id === 'deleteSelBtn'){
-        const idxs = Array.from(container.querySelectorAll('.rowsel:checked')).map(cb=>+cb.dataset.selidx);
+        // Selection is tracked by row id, not DOM checkbox state, so this
+        // correctly includes rows the user checked before scrolling them out
+        // of the virtualized window - not just whatever happens to be
+        // currently rendered.
+        const selected = container._masterTableSelected;
+        if(!selected || !selected.size) return;
+        const idxs = [];
+        container._masterTableArr.forEach((row,i)=>{ if(selected.has(row.id)) idxs.push(i); });
         if(!idxs.length) return;
         idxs.sort((a,b)=>b-a).forEach(i=> container._masterTableArr.splice(i,1));
+        selected.clear();
         container._masterTableRerender();
         return;
       }
@@ -977,7 +1049,26 @@ function renderMasterTable(container, arr, cols, opts){
     });
 
     container.addEventListener('change', e=>{
+      if(!e.target.matches('.rowsel')) return;
+      const tr = e.target.closest('tr');
+      const idx = +tr.dataset.idx;
+      const row = container._masterTableArr[idx];
+      if(!row) return;
+      if(!container._masterTableSelected) container._masterTableSelected = new Set();
+      if(e.target.checked) container._masterTableSelected.add(row.id);
+      else container._masterTableSelected.delete(row.id);
+    });
+
+    container.addEventListener('change', e=>{
       if(e.target.id !== 'selAll') return;
+      if(!container._masterTableSelected) container._masterTableSelected = new Set();
+      // Select-all covers the FULL dataset, including rows not currently
+      // rendered (virtualized out of view) - not just what's on screen.
+      if(e.target.checked){
+        container._masterTableArr.forEach(row=> container._masterTableSelected.add(row.id));
+      } else {
+        container._masterTableSelected.clear();
+      }
       container.querySelectorAll('.rowsel').forEach(cb=> cb.checked = e.target.checked);
     });
   }
