@@ -871,6 +871,37 @@ const MASTER_TABLE_VIRTUALIZE_THRESHOLD = 100;
 const MASTER_TABLE_ROW_HEIGHT_DEFAULT = 45; // corrected from measurement after first render
 const MASTER_TABLE_BUFFER_ROWS = 8; // extra rows rendered above/below the visible window
 
+function masterRowHtml(row, idx, cols, colOptsCache, selectedIds){
+  let html = `<tr data-idx="${idx}"><td><input type="checkbox" class="rowsel" data-selidx="${idx}"${selectedIds.has(row.id)?' checked':''}></td>`;
+  cols.forEach(c=> html += `<td>${fieldInput(row,c,colOptsCache.get(c.key))}</td>`);
+  html += `<td class="actionscell"><div class="actionsrow"><button class="btn-sm" data-editidx="${idx}">Edit</button><button class="btn-sm danger" data-del="${idx}">Remove</button></div></td></tr>`;
+  return html;
+}
+// Builds just the <tbody> inner content for the virtualized window (visible
+// rows + spacers) - kept standalone (not nested inside renderMasterTable) so
+// the scroll handler can call it directly to refresh only the tbody, without
+// rebuilding the paste box, add form, delete button, or table headers that
+// scrolling never actually changes.
+function virtualizedTbodyInnerHtml(container, arr, cols, colOptsCache, selectedIds){
+  let html = '';
+  const rowH = container._masterTableRowHeight || MASTER_TABLE_ROW_HEIGHT_DEFAULT;
+  const prevScrollTop = container._masterTablePendingScrollTop || 0;
+  const viewportH = container._masterTableViewportH || 500;
+  const centerIdx = Math.floor(prevScrollTop / rowH);
+  const visibleCount = Math.ceil(viewportH / rowH);
+  const startIdx = Math.max(0, centerIdx - MASTER_TABLE_BUFFER_ROWS);
+  const endIdx = Math.min(arr.length, centerIdx + visibleCount + MASTER_TABLE_BUFFER_ROWS);
+  const colSpan = cols.length + 2;
+  if(startIdx > 0){
+    html += `<tr class="vspacer" style="height:${startIdx*rowH}px;"><td colspan="${colSpan}" style="padding:0; border:0;"></td></tr>`;
+  }
+  for(let idx=startIdx; idx<endIdx; idx++){ html += masterRowHtml(arr[idx], idx, cols, colOptsCache, selectedIds); }
+  if(endIdx < arr.length){
+    html += `<tr class="vspacer" style="height:${(arr.length-endIdx)*rowH}px;"><td colspan="${colSpan}" style="padding:0; border:0;"></td></tr>`;
+  }
+  return html;
+}
+
 function renderMasterTable(container, arr, cols, opts){
   opts = opts || {};
   const pasteHint = cols.map(c=>c.label).join(' | ');
@@ -879,6 +910,7 @@ function renderMasterTable(container, arr, cols, opts){
   // row) turns an O(rows x select-columns) full-array recompute into O(select-columns).
   const colOptsCache = new Map();
   cols.forEach(c=>{ if(c.type==='select') colOptsCache.set(c.key, c.options()); });
+  container._masterTableColOptsCache = colOptsCache;
 
   let html = '';
   if(opts.paste !== false){
@@ -920,31 +952,8 @@ function renderMasterTable(container, arr, cols, opts){
   // reflects the table's true full length and jumping to any scroll position
   // works immediately.
   const virtualize = arr.length > MASTER_TABLE_VIRTUALIZE_THRESHOLD;
-  function rowHtml(row, idx){
-    let rowHtml = `<tr data-idx="${idx}"><td><input type="checkbox" class="rowsel" data-selidx="${idx}"${selectedIds.has(row.id)?' checked':''}></td>`;
-    cols.forEach(c=> rowHtml += `<td>${fieldInput(row,c,colOptsCache.get(c.key))}</td>`);
-    rowHtml += `<td class="actionscell"><div class="actionsrow"><button class="btn-sm" data-editidx="${idx}">Edit</button><button class="btn-sm danger" data-del="${idx}">Remove</button></div></td></tr>`;
-    return rowHtml;
-  }
-  if(!virtualize){
-    arr.forEach((row,idx)=>{ html += rowHtml(row, idx); });
-  } else {
-    const rowH = container._masterTableRowHeight || MASTER_TABLE_ROW_HEIGHT_DEFAULT;
-    const prevScrollTop = container._masterTablePendingScrollTop || 0;
-    const viewportH = container._masterTableViewportH || 500;
-    const centerIdx = Math.floor(prevScrollTop / rowH);
-    const visibleCount = Math.ceil(viewportH / rowH);
-    const startIdx = Math.max(0, centerIdx - MASTER_TABLE_BUFFER_ROWS);
-    const endIdx = Math.min(arr.length, centerIdx + visibleCount + MASTER_TABLE_BUFFER_ROWS);
-    const colSpan = cols.length + 2;
-    if(startIdx > 0){
-      html += `<tr class="vspacer" style="height:${startIdx*rowH}px;"><td colspan="${colSpan}" style="padding:0; border:0;"></td></tr>`;
-    }
-    for(let idx=startIdx; idx<endIdx; idx++){ html += rowHtml(arr[idx], idx); }
-    if(endIdx < arr.length){
-      html += `<tr class="vspacer" style="height:${(arr.length-endIdx)*rowH}px;"><td colspan="${colSpan}" style="padding:0; border:0;"></td></tr>`;
-    }
-  }
+  html += virtualize ? virtualizedTbodyInnerHtml(container, arr, cols, colOptsCache, selectedIds)
+                      : arr.map((row,idx)=> masterRowHtml(row, idx, cols, colOptsCache, selectedIds)).join('');
   html += `</tbody></table>`;
   html += scrollClose;
 
@@ -993,7 +1002,17 @@ function renderMasterTable(container, arr, cols, opts){
           container._masterTableScrollFrame = null;
           container._masterTablePendingScrollTop = scrollEl.scrollTop;
           container._masterTableViewportH = scrollEl.clientHeight;
-          renderMasterTable(container, container._masterTableArr, container._masterTableCols, container._masterTableOpts);
+          // Scrolling only ever changes WHICH rows are visible - everything
+          // else on screen (paste box, add form, delete button, table
+          // headers, colgroup) is completely unaffected by scroll position,
+          // so only the tbody's own innerHTML needs rebuilding here. Rebuilding
+          // the entire screen on every scroll frame (as a full renderMasterTable
+          // call would) redoes a lot of unnecessary work and is what made
+          // scrolling feel sluggish.
+          const tbody = container.querySelector('#masterTableBody');
+          if(tbody){
+            tbody.innerHTML = virtualizedTbodyInnerHtml(container, container._masterTableArr, container._masterTableCols, container._masterTableColOptsCache, selectedIds);
+          }
         });
       });
     }
