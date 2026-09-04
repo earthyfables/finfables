@@ -2380,33 +2380,33 @@ function renderParetoMix(host){
   }
   subCats.forEach(sc=>{ if(!mix[sc.id]) mix[sc.id] = {}; });
 
-  html += pasteBoxHtml('Pdt Sub Cat | ' + MONTHS.join(' | ') + ' (first sub-category auto-balances, skip it)');
+  html += pasteBoxHtml('EAN Code | ' + MONTHS.join(' | ') + ' (first sub-category auto-balances, skip it)');
   const hasParetoMixData = Object.values(mix).some(m=> Object.values(m||{}).some(v=> v!==undefined && v!==''));
   if(hasParetoMixData){
     html += `<button class="btn-sm danger" id="clearParetoMixBtn" style="margin-bottom:10px;">🗑 Delete all Pareto Mix data for ${pmLabel(pms.find(p=>p.id===paretoMixChannelId))}</button>`;
   }
 
-  html += `<div class="panel"><div class="scrollbox" style="max-height:65vh;"><table class="ledger"><thead><tr><th>Pdt Sub Cat</th><th>Brand</th>`;
+  html += `<div class="panel"><div class="scrollbox" style="max-height:65vh;"><table class="ledger"><thead><tr><th>EAN Code</th><th>Pdt Sub Cat</th><th>Brand</th>`;
   MONTHS.forEach(m=> html += `<th>${m}</th>`);
   html += `</tr></thead><tbody>`;
   subCats.forEach((sc,si)=>{
     const brand = DATA.brands.find(b=>b.id===sc.brandId);
-    html += `<tr><td>${sc.name}${si===0?' (auto)':''}</td><td>${brand ? brand.name : ''}</td>`;
+    html += `<tr><td>${sc.eanCode||''}</td><td>${sc.name}${si===0?' (auto)':''}</td><td>${brand ? brand.name : ''}</td>`;
     MONTHS.forEach(m=> html += pctCellHtml(subCats, mix, sc, si, m, 'paretomixcell', 'sc'));
     html += `</tr>`;
   });
-  html += `<tr class="subtotal"><td>Total</td><td></td>`;
+  html += `<tr class="subtotal"><td>Total</td><td></td><td></td>`;
   MONTHS.forEach(()=> html += pctTotalCell(100));
   html += `</tr></tbody></table></div></div>`;
 
   html += `<div class="cyclelabel" style="color:var(--ink-soft); margin:18px 0 8px 0; font-size:11px; text-transform:uppercase; letter-spacing:0.05em; font-weight:700;">Resulting Pareto × Partner-Model × Month GMV (read-only)</div>`;
-  html += `<div class="panel"><div class="scrollbox" style="max-height:65vh;"><table class="ledger"><thead><tr><th>Pdt Sub Cat</th><th>Brand</th>`;
+  html += `<div class="panel"><div class="scrollbox" style="max-height:65vh;"><table class="ledger"><thead><tr><th>EAN Code</th><th>Pdt Sub Cat</th><th>Brand</th>`;
   MONTHS.forEach(m=> html += `<th>${m}</th>`);
   html += `<th class="total-col">FY Total</th></tr></thead><tbody>`;
   const monthColTotals = MONTHS.map(()=>0);
   subCats.forEach(sc=>{
     const brand = DATA.brands.find(b=>b.id===sc.brandId);
-    html += `<tr><td>${sc.name}</td><td>${brand ? brand.name : ''}</td>`;
+    html += `<tr><td>${sc.eanCode||''}</td><td>${sc.name}</td><td>${brand ? brand.name : ''}</td>`;
     let rowTotal = 0;
     MONTHS.forEach((m,mi)=>{
       const scPct = getDifferentialPct(subCats, mix, sc.id, m);
@@ -2418,7 +2418,7 @@ function renderParetoMix(host){
     });
     html += `<td class="total-col" style="font-weight:700;">${fmt(rowTotal)}</td></tr>`;
   });
-  html += `<tr class="subtotal"><td>Total</td><td></td>`;
+  html += `<tr class="subtotal"><td>Total</td><td></td><td></td>`;
   let grand = 0;
   monthColTotals.forEach(t=>{ grand += t; html += `<td>${fmt(t)}</td>`; });
   html += `<td class="total-col">${fmt(grand)}</td></tr>`;
@@ -2446,8 +2446,8 @@ function renderParetoMix(host){
   wirePasteBox(host, (rows)=>{
     rows.forEach(parts=>{
       if(parts.length < 2) return;
-      const scName = parts[0].trim();
-      const idx = subCats.findIndex(s=> normalizeText(s.name) === normalizeText(scName));
+      const eanVal = parts[0].trim();
+      const idx = subCats.findIndex(s=> normalizeText(s.eanCode) === normalizeText(eanVal));
       if(idx <= 0) return; // skip unmatched or the auto-balancing first sub-category
       const sc = subCats[idx];
       if(!mix[sc.id]) mix[sc.id] = {};
