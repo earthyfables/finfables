@@ -963,22 +963,51 @@ function renderMasterTable(container, arr, cols, opts){
     // column is blank", letting every column after it silently shift left.
     const lines = text.split(/\r?\n/).map(l=> l.replace(/\r$/,'')).filter(l=> l.trim()!=='');
 
-    // If any pasted row is missing its first (identifying) column, reject the
-    // whole paste rather than silently importing it - a blank first cell
-    // means every column after it in that row has shifted one slot to the
-    // left of where it belongs (e.g. SKU Code ending up under EAN Code).
     const keyLabel = cols[0].label;
-    const blankKeyRows = [];
+    const matchCols = opts.matchColumns ? cols.filter(c=> opts.matchColumns.includes(c.key)) : [cols[0]];
+
+    // Two shift signals, checked before touching any data: (1) a line with
+    // fewer tab-separated segments than there are columns - some source cell
+    // was blank and its tab got dropped on copy, so everything after it
+    // shifted left; (2) the first (identifying) column blank even when the
+    // tab WAS preserved. Either one means the row's columns are misaligned.
+    const shortRows = [], blankKeyRows = [];
+    const requiredCount = opts.requiredColumnCount || cols.length;
     lines.forEach((line,i)=>{
-      const firstCell = (line.split('\t')[0]||'').trim();
-      if(!firstCell) blankKeyRows.push(i+1);
+      const parts = line.split('\t');
+      if(parts.length < requiredCount) shortRows.push(i+1);
+      if(!(parts[0]||'').trim()) blankKeyRows.push(i+1);
     });
-    if(blankKeyRows.length){
-      alert(`Import cancelled — ${blankKeyRows.length} row(s) (line ${blankKeyRows.join(', ')}) are missing "${keyLabel}". Every row needs a "${keyLabel}" value, or the columns after it will land in the wrong place. Nothing was imported.`);
+    if(shortRows.length || blankKeyRows.length){
+      const msgs = [];
+      if(blankKeyRows.length) msgs.push(`${blankKeyRows.length} row(s) (line ${blankKeyRows.join(', ')}) are missing "${keyLabel}"`);
+      const shortOnly = shortRows.filter(i=> !blankKeyRows.includes(i));
+      if(shortOnly.length) msgs.push(`${shortOnly.length} row(s) (line ${shortOnly.join(', ')}) have fewer values than expected (${requiredCount} columns needed)`);
+      alert(`Import cancelled — ${msgs.join('; ')}. A blank cell needs its tab kept so later columns don't land in the wrong place. Nothing was imported.`);
       return;
     }
 
-    const matchCols = opts.matchColumns ? cols.filter(c=> opts.matchColumns.includes(c.key)) : [cols[0]];
+    // Same key appearing more than once WITHIN this paste - each occurrence
+    // would silently overwrite the previous one as they're processed in
+    // order, so flag it rather than letting that happen invisibly.
+    const seenInBatch = new Map(); // matchKey string -> first line number
+    const dupeLines = [];
+    lines.forEach((line,i)=>{
+      const parts = line.split('\t');
+      const row = {};
+      cols.forEach((c,j)=>{ row[c.key] = resolveValueForCol(c, parts[j]); });
+      const matchKey = matchCols.map(c=> normalizeText(String(row[c.key] ?? ''))).join('||');
+      if(seenInBatch.has(matchKey)){
+        dupeLines.push(`line ${i+1} duplicates line ${seenInBatch.get(matchKey)}`);
+      } else {
+        seenInBatch.set(matchKey, i+1);
+      }
+    });
+    if(dupeLines.length){
+      const proceed = confirm(`This paste has duplicate "${matchCols.map(c=>c.label).join(' + ')}" values within itself: ${dupeLines.join('; ')}. The later line will overwrite the earlier one's values. Continue anyway?`);
+      if(!proceed) return;
+    }
+
     let added = 0, updated = 0, skipped = 0;
     lines.forEach(line=>{
       const parts = line.split('\t');
@@ -1898,7 +1927,7 @@ function renderParetoSubTable(host, key){
       {key:'productCategoryId', label:'Pdt Cat', type:'select', options:()=>optList(DATA.productCategories,c=>c.name), width:170},
       {key:'brandId', label:'Brand', type:'select', options:()=>optList(DATA.brands,b=>b.name), width:170},
       ...asinCols
-    ], {prefix:'PSC', addLabel:'Add', allowAdd:false});
+    ], {prefix:'PSC', addLabel:'Add', allowAdd:false, requiredColumnCount:8});
   } else if(key === 'brandCategoryMapping'){
     renderMasterTable(host, DATA.brandCategoryMapping, [
       {key:'brandId', label:'Brand', type:'select', options:()=>optList(DATA.brands,b=>b.name), width:200},
