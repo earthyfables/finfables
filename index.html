@@ -1443,17 +1443,17 @@ function renderParetoInputScreen(container){
   subCats.forEach(sc=>{ if(!store[sc.id]) store[sc.id] = {}; });
 
   let html = `<div class="footnote" style="margin-bottom:14px;">Auto-populated from Pareto Master — AMRP, ACOGS, and GST% per Product Sub Category, cycle-scoped.</div>`;
-  html += pasteBoxHtml('Pdt Sub Cat | AMRP | ACOGS | GST%');
+  html += pasteBoxHtml('EAN Code | AMRP | ACOGS | GST%');
 
   const hasData = subCats.some(sc=> Object.values(store[sc.id]).some(v=> v!==undefined && v!==''));
   if(hasData) html += `<button class="btn-sm danger" id="clearParetoInputBtn" style="margin-bottom:14px;">🗑 Delete all Pareto Input data</button>`;
 
-  html += `<div class="panel"><div class="scrollbox" style="max-height:65vh; overflow-x:auto;"><table class="ledger compact"><colgroup><col style="width:120px;"><col style="width:260px;"><col style="width:140px;"><col style="width:110px;"><col style="width:110px;"><col style="width:100px;"></colgroup><thead><tr><th style="text-align:left;">SKU Code</th><th style="text-align:left;">Pdt Sub Cat</th><th style="text-align:left;">Brand</th><th>AMRP</th><th>ACOGS</th><th>GST%</th></tr></thead><tbody>`;
+  html += `<div class="panel"><div class="scrollbox" style="max-height:65vh; overflow-x:auto;"><table class="ledger compact"><colgroup><col style="width:130px;"><col style="width:120px;"><col style="width:260px;"><col style="width:140px;"><col style="width:110px;"><col style="width:110px;"><col style="width:100px;"></colgroup><thead><tr><th style="text-align:left;">EAN Code</th><th style="text-align:left;">SKU Code</th><th style="text-align:left;">Pdt Sub Cat</th><th style="text-align:left;">Brand</th><th>AMRP</th><th>ACOGS</th><th>GST%</th></tr></thead><tbody>`;
   subCats.forEach(sc=>{
     const cell = store[sc.id];
     const gstDisplay = (cell.gstPct!==undefined && cell.gstPct!=='') ? Number(cell.gstPct).toFixed(2) : '';
     const brand = DATA.brands.find(b=>b.id===sc.brandId);
-    html += `<tr><td style="text-align:left;">${sc.skuCode||''}</td><td style="text-align:left;">${sc.name}</td><td style="text-align:left;">${brand ? brand.name : ''}</td>`;
+    html += `<tr><td style="text-align:left;">${sc.eanCode||''}</td><td style="text-align:left;">${sc.skuCode||''}</td><td style="text-align:left;">${sc.name}</td><td style="text-align:left;">${brand ? brand.name : ''}</td>`;
     html += `<td><input type="number" step="any" class="paretoinputcell" data-sc="${sc.id}" data-field="amrp" value="${cell.amrp!==undefined && cell.amrp!==''? cell.amrp : ''}"></td>`;
     html += `<td><input type="number" step="any" class="paretoinputcell" data-sc="${sc.id}" data-field="acogs" value="${cell.acogs!==undefined && cell.acogs!==''? cell.acogs : ''}"></td>`;
     html += `<td><input type="number" step="0.01" class="paretoinputcell" data-sc="${sc.id}" data-field="gstPct" value="${gstDisplay}"></td>`;
@@ -1483,8 +1483,8 @@ function renderParetoInputScreen(container){
   wirePasteBox(container, (rows)=>{
     rows.forEach(parts=>{
       if(parts.length < 2) return;
-      const scName = parts[0].trim();
-      const sc = subCats.find(x=> normalizeText(x.name) === normalizeText(scName));
+      const eanVal = parts[0].trim();
+      const sc = subCats.find(x=> normalizeText(x.eanCode) === normalizeText(eanVal));
       if(!sc) return;
       const cell = store[sc.id];
       const amrp = cleanNum(parts[1]);
