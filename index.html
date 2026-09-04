@@ -1974,6 +1974,29 @@ function renderParetoSubTable(host, key){
   }
 }
 
+// Wires a set of pill buttons (matched by [data-{dataAttr}]) so clicking one
+// updates the active highlight instantly, then defers the actual re-render
+// to the next frame instead of running it synchronously inside the click
+// handler. Any screen whose pill switch can involve hundreds of rows should
+// use this - it's what keeps the click itself feeling instant even while the
+// underlying table build takes real time.
+function wireDeferredPills(container, dataAttr, onSelect, host, renderFn){
+  container.querySelectorAll(`[data-${dataAttr}]`).forEach(btn=>{
+    btn.addEventListener('click', ()=>{
+      container.querySelectorAll(`[data-${dataAttr}]`).forEach(b=> b.classList.toggle('active', b===btn));
+      onSelect(btn.dataset[dataAttr]);
+      // Clearing the host (innerHTML = ...) is itself expensive when it
+      // currently holds hundreds of rows - deferring only the rebuild and
+      // clearing synchronously here would still block on destroying the old
+      // DOM tree, so both steps happen together in the next frame instead.
+      requestAnimationFrame(()=>{
+        host.innerHTML = `<div class="footnote">Loading…</div>`;
+        renderFn(host);
+      });
+    });
+  });
+}
+
 function renderParetoMasterScreen(container){
   let pillsHtml = `<div class="pillbar">`;
   PARETO_SUB_TABS.forEach(t=>{
@@ -1981,20 +2004,9 @@ function renderParetoMasterScreen(container){
   });
   pillsHtml += `</div>`;
   container.innerHTML = pillsHtml + `<div id="paretoSubHost"></div>`;
-  container.querySelectorAll('[data-paretotab]').forEach(btn=>{
-    btn.addEventListener('click', ()=>{
-      // Give the browser a paint first (pill highlight, instant) before the
-      // potentially large table build - some of these lists run into the
-      // hundreds of rows, and building all of that synchronously inside the
-      // click handler is what makes the click itself look slow/unresponsive.
-      container.querySelectorAll('[data-paretotab]').forEach(b=> b.classList.toggle('active', b===btn));
-      paretoSubTab = btn.dataset.paretotab;
-      const host = container.querySelector('#paretoSubHost');
-      host.innerHTML = `<div class="footnote">Loading…</div>`;
-      requestAnimationFrame(()=> renderParetoSubTable(host, paretoSubTab));
-    });
-  });
-  renderParetoSubTable(container.querySelector('#paretoSubHost'), paretoSubTab);
+  const host = container.querySelector('#paretoSubHost');
+  wireDeferredPills(container, 'paretotab', (val)=>{ paretoSubTab = val; }, host, (h)=> renderParetoSubTable(h, paretoSubTab));
+  renderParetoSubTable(host, paretoSubTab);
 }
 
 const SALES_INPUT_SUB_TABS = [
@@ -2360,6 +2372,15 @@ function renderParetoMix(host){
   if(!paretoMixChannelId || !pms.some(pm=>pm.id===paretoMixChannelId)){
     paretoMixChannelId = pms[0].id;
   }
+  let pillsHtml = `<div class="pillbar" style="margin-bottom:14px;">${pms.map(pm=>`<button class="pill ${pm.id===paretoMixChannelId?'active':''}" data-paretomixpm="${pm.id}">${pmLabel(pm)}</button>`).join('')}</div>`;
+  host.innerHTML = pillsHtml + `<div id="paretoMixBodyHost"></div>`;
+  const bodyHost = host.querySelector('#paretoMixBodyHost');
+  wireDeferredPills(host, 'paretomixpm', (val)=>{ paretoMixChannelId = val; }, bodyHost, renderParetoMixBody);
+  renderParetoMixBody(bodyHost);
+}
+
+function renderParetoMixBody(host){
+  const pms = DATA.partnerModels;
   const subCats = DATA.productSubCategories;
   const gmv = getCycleObj('monthlyGMVByCycle');
   const chMix = getCycleObj('channelMixByCycle');
@@ -2368,14 +2389,10 @@ function renderParetoMix(host){
   const mix = paretoMixAll[paretoMixChannelId];
 
   let html = `<div class="footnote" style="margin-bottom:14px;">For the selected Partner-Model, split its month GMV across Product Sub Categories (Pareto) — the first one auto-balances to 100%.</div>`;
-  html += `<div class="pillbar" style="margin-bottom:14px;">${pms.map(pm=>`<button class="pill ${pm.id===paretoMixChannelId?'active':''}" data-paretomixpm="${pm.id}">${pmLabel(pm)}</button>`).join('')}</div>`;
 
   if(!subCats.length){
     html += `<div class="footnote">No Product Sub Categories yet — add some in Pareto Master first.</div>`;
     host.innerHTML = html;
-    host.querySelectorAll('[data-paretomixpm]').forEach(btn=>{
-      btn.addEventListener('click', ()=>{ paretoMixChannelId = btn.dataset.paretomixpm; renderParetoMix(host); });
-    });
     return;
   }
   subCats.forEach(sc=>{ if(!mix[sc.id]) mix[sc.id] = {}; });
@@ -2425,21 +2442,18 @@ function renderParetoMix(host){
   html += `</tbody></table></div></div>`;
 
   host.innerHTML = html;
-  host.querySelectorAll('[data-paretomixpm]').forEach(btn=>{
-    btn.addEventListener('click', ()=>{ paretoMixChannelId = btn.dataset.paretomixpm; renderParetoMix(host); });
-  });
   const clearParetoMixBtn = host.querySelector('#clearParetoMixBtn');
   if(clearParetoMixBtn) clearParetoMixBtn.addEventListener('click', ()=>{
     if(!confirm('Delete all Pareto Mix % data for this Partner-Model? This cannot be undone.')) return;
     subCats.forEach(sc=>{ mix[sc.id] = {}; });
     markDirty();
-    renderParetoMix(host);
+    renderParetoMixBody(host);
   });
   host.querySelectorAll('.paretomixcell').forEach(inp=>{
     inp.addEventListener('change', ()=>{
       mix[inp.dataset.sc][inp.dataset.month] = inp.value===''?'':parseFloat(inp.value);
       markDirty();
-      renderParetoMix(host);
+      renderParetoMixBody(host);
     });
   });
 
@@ -2457,7 +2471,7 @@ function renderParetoMix(host){
       });
     });
     markDirty();
-    renderParetoMix(host);
+    renderParetoMixBody(host);
   });
 }
 
@@ -2474,13 +2488,9 @@ function renderSalesInputsScreen(container){
   });
   pillsHtml += `</div>`;
   container.innerHTML = pillsHtml + `<div id="salesInputSubHost"></div>`;
-  container.querySelectorAll('[data-salesinputtab]').forEach(btn=>{
-    btn.addEventListener('click', ()=>{
-      salesInputSubTab = btn.dataset.salesinputtab;
-      renderSalesInputsScreen(container);
-    });
-  });
-  renderSalesInputSubTable(container.querySelector('#salesInputSubHost'), salesInputSubTab);
+  const host = container.querySelector('#salesInputSubHost');
+  wireDeferredPills(container, 'salesinputtab', (val)=>{ salesInputSubTab = val; }, host, (h)=> renderSalesInputSubTable(h, salesInputSubTab));
+  renderSalesInputSubTable(host, salesInputSubTab);
 }
 
 const DMG_METRICS = [
