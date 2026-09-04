@@ -1389,9 +1389,10 @@ function renderCodbRateCardScreen(container){
     groupEndIdx.add(colCursor - 1);
   });
 
-  const stickyColsWidth = 150 + 250;
+  const stickyColsWidth = 150 + 340;
   const totalTableWidth = stickyColsWidth + columns.length * 150;
-  html += `<div class="panel" style="max-width:100%;"><div class="scrollbox" style="max-height:75vh; overflow-x:auto;"><table class="ledger compact" style="table-layout:fixed; width:${totalTableWidth}px;"><colgroup><col style="width:150px;"><col style="width:250px;">${columns.map(()=>'<col style="width:150px;">').join('')}</colgroup><thead>`;
+  const truncCellStyle = 'text-align:left; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;';
+  html += `<div class="panel" style="max-width:100%;"><div class="scrollbox" style="max-height:75vh; overflow-x:auto;"><table class="ledger compact" style="table-layout:fixed; width:${totalTableWidth}px;"><colgroup><col style="width:150px;"><col style="width:340px;">${columns.map(()=>'<col style="width:150px;">').join('')}</colgroup><thead>`;
   html += `<tr><th class="stickyleftcol"></th><th class="stickyleftcol2"></th>`;
   lineItems.forEach(li=>{
     const span = getEffectiveChannels(li, pms).length;
@@ -1402,7 +1403,7 @@ function renderCodbRateCardScreen(container){
   columns.forEach(({pm}, i)=> html += `<th${groupEndIdx.has(i)?' class="feegroupend"':''}>${channelLabel(pm)}</th>`);
   html += `</tr></thead><tbody>`;
   subCats.forEach(sc=>{
-    html += `<tr><td class="stickyleftcol" style="text-align:left;">${sc.eanCode||''}</td><td class="stickyleftcol2" style="text-align:left;">${sc.name}</td>`;
+    html += `<tr><td class="stickyleftcol" style="${truncCellStyle}" title="${sc.eanCode||''}">${sc.eanCode||''}</td><td class="stickyleftcol2" style="${truncCellStyle}" title="${sc.name}">${sc.name}</td>`;
     columns.forEach(({li,pm}, i)=>{
       const v = store[pm.id][li.id][sc.id];
       html += `<td${groupEndIdx.has(i)?' class="feegroupend"':''}><input type="number" step="any" class="codbratecell2" data-li="${li.id}" data-pm="${pm.id}" data-sc="${sc.id}" value="${v!==undefined && v!==''? v : ''}"></td>`;
