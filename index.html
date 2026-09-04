@@ -902,6 +902,60 @@ function virtualizedTbodyInnerHtml(container, arr, cols, colOptsCache, selectedI
   return html;
 }
 
+// Generic version of the same windowing math, usable by any large table -
+// not just renderMasterTable's - given a row count, a colSpan for the spacer
+// cells, and a callback that builds one row's HTML by index. State (row
+// height, scroll position, viewport height) lives on stateHost under
+// stateKey, so multiple independent virtualized tables can share one host
+// element (e.g. Pareto Mix %'s input and read-only tables) without clashing.
+function virtualizedRowsHtml(stateHost, stateKey, rowCount, colSpan, rowBuilder){
+  const state = stateHost[stateKey] || (stateHost[stateKey] = {});
+  const rowH = state.rowHeight || MASTER_TABLE_ROW_HEIGHT_DEFAULT;
+  const prevScrollTop = state.pendingScrollTop || 0;
+  const viewportH = state.viewportH || 500;
+  const centerIdx = Math.floor(prevScrollTop / rowH);
+  const visibleCount = Math.ceil(viewportH / rowH);
+  const startIdx = Math.max(0, centerIdx - MASTER_TABLE_BUFFER_ROWS);
+  const endIdx = Math.min(rowCount, centerIdx + visibleCount + MASTER_TABLE_BUFFER_ROWS);
+  let html = '';
+  if(startIdx > 0){
+    html += `<tr class="vspacer" style="height:${startIdx*rowH}px;"><td colspan="${colSpan}" style="padding:0; border:0;"></td></tr>`;
+  }
+  for(let idx=startIdx; idx<endIdx; idx++){ html += rowBuilder(idx); }
+  if(endIdx < rowCount){
+    html += `<tr class="vspacer" style="height:${(rowCount-endIdx)*rowH}px;"><td colspan="${colSpan}" style="padding:0; border:0;"></td></tr>`;
+  }
+  return html;
+}
+// Wires a virtualized table's scrollbox: measures real row height from the
+// first rendered row, restores scroll position after the element was
+// recreated (flagging that restore so the resulting native 'scroll' event
+// doesn't re-trigger this same handler - the loop that caused the original
+// "stuck after first scroll" bug), and throttles genuine user-scroll updates
+// to one per animation frame via a guard stored on stateHost (not a local
+// variable, which would reset on every re-render and stop throttling anything).
+function wireVirtualizedScroll(stateHost, stateKey, scrollEl, updateFn){
+  const state = stateHost[stateKey] || (stateHost[stateKey] = {});
+  const sampleRow = scrollEl.querySelector('tbody tr:not(.vspacer)');
+  if(sampleRow) state.rowHeight = sampleRow.getBoundingClientRect().height || MASTER_TABLE_ROW_HEIGHT_DEFAULT;
+  state.viewportH = scrollEl.clientHeight || state.viewportH || 500;
+  const targetScrollTop = state.pendingScrollTop || 0;
+  if(scrollEl.scrollTop !== targetScrollTop){
+    state.ignoreNextScroll = true;
+    scrollEl.scrollTop = targetScrollTop;
+  }
+  scrollEl.addEventListener('scroll', ()=>{
+    if(state.ignoreNextScroll){ state.ignoreNextScroll = false; return; }
+    if(state.scrollFrame !== null && state.scrollFrame !== undefined) return;
+    state.scrollFrame = requestAnimationFrame(()=>{
+      state.scrollFrame = null;
+      state.pendingScrollTop = scrollEl.scrollTop;
+      state.viewportH = scrollEl.clientHeight;
+      updateFn();
+    });
+  });
+}
+
 function renderMasterTable(container, arr, cols, opts){
   opts = opts || {};
   const pasteHint = cols.map(c=>c.label).join(' | ');
@@ -2510,6 +2564,29 @@ function renderParetoMix(host){
   renderParetoMixBody(bodyHost);
 }
 
+function paretoMixInputRowHtml(sc, si, subCats, mix){
+  const brand = DATA.brands.find(b=>b.id===sc.brandId);
+  let html = `<tr><td>${sc.eanCode||''}</td><td>${sc.name}${si===0?' (auto)':''}</td><td>${brand ? brand.name : ''}</td>`;
+  MONTHS.forEach(m=> html += pctCellHtml(subCats, mix, sc, si, m, 'paretomixcell', 'sc'));
+  html += `</tr>`;
+  return html;
+}
+function paretoMixResultRowHtml(sc, subCats, mix, pms, chMix, gmv){
+  const brand = DATA.brands.find(b=>b.id===sc.brandId);
+  let html = `<tr><td>${sc.eanCode||''}</td><td>${sc.name}</td><td>${brand ? brand.name : ''}</td>`;
+  let rowTotal = 0;
+  MONTHS.forEach(m=>{
+    const scPct = getDifferentialPct(subCats, mix, sc.id, m);
+    const channelPct = getDifferentialPct(pms, chMix, paretoMixChannelId, m);
+    const channelMonthGMV = (+gmv[m]||0) * channelPct / 100;
+    const val = channelMonthGMV * scPct / 100;
+    rowTotal += val;
+    html += `<td>${fmt(val)}</td>`;
+  });
+  html += `<td class="total-col" style="font-weight:700;">${fmt(rowTotal)}</td></tr>`;
+  return html;
+}
+
 function renderParetoMixBody(host){
   const pms = DATA.partnerModels;
   const subCats = DATA.productSubCategories;
@@ -2534,15 +2611,16 @@ function renderParetoMixBody(host){
     html += `<button class="btn-sm danger" id="clearParetoMixBtn" style="margin-bottom:10px;">🗑 Delete all Pareto Mix data for ${pmLabel(pms.find(p=>p.id===paretoMixChannelId))}</button>`;
   }
 
+  const virtualize = subCats.length > MASTER_TABLE_VIRTUALIZE_THRESHOLD;
+  const inputColSpan = 3 + MONTHS.length;
+  const resultColSpan = 3 + MONTHS.length + 1;
+
   html += `<div class="panel"><div class="scrollbox" style="max-height:65vh;"><table class="ledger"><thead><tr><th>EAN Code</th><th>Pdt Sub Cat</th><th>Brand</th>`;
   MONTHS.forEach(m=> html += `<th>${m}</th>`);
-  html += `</tr></thead><tbody>`;
-  subCats.forEach((sc,si)=>{
-    const brand = DATA.brands.find(b=>b.id===sc.brandId);
-    html += `<tr><td>${sc.eanCode||''}</td><td>${sc.name}${si===0?' (auto)':''}</td><td>${brand ? brand.name : ''}</td>`;
-    MONTHS.forEach(m=> html += pctCellHtml(subCats, mix, sc, si, m, 'paretomixcell', 'sc'));
-    html += `</tr>`;
-  });
+  html += `</tr></thead><tbody id="paretoMixInputBody">`;
+  html += virtualize
+    ? virtualizedRowsHtml(host, '_paretoMixInputVirt', subCats.length, inputColSpan, idx=> paretoMixInputRowHtml(subCats[idx], idx, subCats, mix))
+    : subCats.map((sc,si)=> paretoMixInputRowHtml(sc, si, subCats, mix)).join('');
   html += `<tr class="subtotal"><td>Total</td><td></td><td></td>`;
   MONTHS.forEach(()=> html += pctTotalCell(100));
   html += `</tr></tbody></table></div></div>`;
@@ -2550,21 +2628,20 @@ function renderParetoMixBody(host){
   html += `<div class="cyclelabel" style="color:var(--ink-soft); margin:18px 0 8px 0; font-size:11px; text-transform:uppercase; letter-spacing:0.05em; font-weight:700;">Resulting Pareto × Partner-Model × Month GMV (read-only)</div>`;
   html += `<div class="panel"><div class="scrollbox" style="max-height:65vh;"><table class="ledger"><thead><tr><th>EAN Code</th><th>Pdt Sub Cat</th><th>Brand</th>`;
   MONTHS.forEach(m=> html += `<th>${m}</th>`);
-  html += `<th class="total-col">FY Total</th></tr></thead><tbody>`;
+  html += `<th class="total-col">FY Total</th></tr></thead><tbody id="paretoMixResultBody">`;
+  html += virtualize
+    ? virtualizedRowsHtml(host, '_paretoMixResultVirt', subCats.length, resultColSpan, idx=> paretoMixResultRowHtml(subCats[idx], subCats, mix, pms, chMix, gmv))
+    : subCats.map(sc=> paretoMixResultRowHtml(sc, subCats, mix, pms, chMix, gmv)).join('');
+  // The Total row is a genuine sum across every Sub Category, not just the
+  // rendered window - virtualization only limits how many <tr> elements
+  // exist on screen, it doesn't change what the underlying data adds up to.
   const monthColTotals = MONTHS.map(()=>0);
   subCats.forEach(sc=>{
-    const brand = DATA.brands.find(b=>b.id===sc.brandId);
-    html += `<tr><td>${sc.eanCode||''}</td><td>${sc.name}</td><td>${brand ? brand.name : ''}</td>`;
-    let rowTotal = 0;
     MONTHS.forEach((m,mi)=>{
       const scPct = getDifferentialPct(subCats, mix, sc.id, m);
       const channelPct = getDifferentialPct(pms, chMix, paretoMixChannelId, m);
-      const channelMonthGMV = (+gmv[m]||0) * channelPct / 100;
-      const val = channelMonthGMV * scPct / 100;
-      rowTotal += val; monthColTotals[mi] += val;
-      html += `<td>${fmt(val)}</td>`;
+      monthColTotals[mi] += (+gmv[m]||0) * channelPct / 100 * scPct / 100;
     });
-    html += `<td class="total-col" style="font-weight:700;">${fmt(rowTotal)}</td></tr>`;
   });
   html += `<tr class="subtotal"><td>Total</td><td></td><td></td>`;
   let grand = 0;
@@ -2573,6 +2650,32 @@ function renderParetoMixBody(host){
   html += `</tbody></table></div></div>`;
 
   host.innerHTML = html;
+
+  if(virtualize){
+    const inputScrollEl = host.querySelectorAll('.scrollbox')[0];
+    const resultScrollEl = host.querySelectorAll('.scrollbox')[1];
+    if(inputScrollEl){
+      wireVirtualizedScroll(host, '_paretoMixInputVirt', inputScrollEl, ()=>{
+        const tbody = host.querySelector('#paretoMixInputBody');
+        if(tbody){
+          let rowsHtml = virtualizedRowsHtml(host, '_paretoMixInputVirt', subCats.length, inputColSpan, idx=> paretoMixInputRowHtml(subCats[idx], idx, subCats, mix));
+          const totalRow = tbody.querySelector('tr.subtotal');
+          tbody.innerHTML = rowsHtml + (totalRow ? totalRow.outerHTML : '');
+        }
+      });
+    }
+    if(resultScrollEl){
+      wireVirtualizedScroll(host, '_paretoMixResultVirt', resultScrollEl, ()=>{
+        const tbody = host.querySelector('#paretoMixResultBody');
+        if(tbody){
+          let rowsHtml = virtualizedRowsHtml(host, '_paretoMixResultVirt', subCats.length, resultColSpan, idx=> paretoMixResultRowHtml(subCats[idx], subCats, mix, pms, chMix, gmv));
+          const totalRow = tbody.querySelector('tr.subtotal');
+          tbody.innerHTML = rowsHtml + (totalRow ? totalRow.outerHTML : '');
+        }
+      });
+    }
+  }
+
   const clearParetoMixBtn = host.querySelector('#clearParetoMixBtn');
   if(clearParetoMixBtn) clearParetoMixBtn.addEventListener('click', ()=>{
     if(!confirm('Delete all Pareto Mix % data for this Partner-Model? This cannot be undone.')) return;
