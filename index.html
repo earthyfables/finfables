@@ -609,6 +609,22 @@ async function loadData(){
   if(!DATA.creditorsByCycle) DATA.creditorsByCycle = {'':[]};
   if(!DATA.creditorPmtOverrideByCycle) DATA.creditorPmtOverrideByCycle = {'':{}};
   if(!DATA.monthlyGMVByBrandByCycle) DATA.monthlyGMVByBrandByCycle = {'':{}};
+  // Migrate pre-existing flat monthly GMV (from before per-Brand GMV existed)
+  // into the new structure under the cycle's own Brand, so nothing entered
+  // before this feature shipped silently disappears or gets overwritten.
+  DATA.aopCycles.forEach(cycle=>{
+    const oldFlat = DATA.monthlyGMVByCycle[cycle.id];
+    const alreadyMigrated = DATA.monthlyGMVByBrandByCycle[cycle.id] &&
+      Object.keys(DATA.monthlyGMVByBrandByCycle[cycle.id]).some(bid=>
+        Object.values(DATA.monthlyGMVByBrandByCycle[cycle.id][bid]||{}).some(v=> v!==undefined && v!=='' && v!==0));
+    if(oldFlat && !alreadyMigrated && cycle.brandId){
+      const hasOldValues = Object.values(oldFlat).some(v=> v!==undefined && v!=='' && v!==0);
+      if(hasOldValues){
+        if(!DATA.monthlyGMVByBrandByCycle[cycle.id]) DATA.monthlyGMVByBrandByCycle[cycle.id] = {};
+        DATA.monthlyGMVByBrandByCycle[cycle.id][cycle.brandId] = {...oldFlat};
+      }
+    }
+  });
   if(!DATA.inventoryByCycle) DATA.inventoryByCycle = {'':{}};
   if(!DATA.paretoInputByCycle['']) DATA.paretoInputByCycle[''] = {};
   {
