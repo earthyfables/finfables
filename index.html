@@ -609,48 +609,45 @@ async function loadData(){
   if(!DATA.creditorsByCycle) DATA.creditorsByCycle = {'':[]};
   if(!DATA.creditorPmtOverrideByCycle) DATA.creditorPmtOverrideByCycle = {'':{}};
   if(!DATA.monthlyGMVByBrandByCycle) DATA.monthlyGMVByBrandByCycle = {'':{}};
-  // Migrate pre-existing flat monthly GMV (from before per-Brand GMV existed)
-  // into the new structure under the cycle's own Brand, so nothing entered
-  // before this feature shipped silently disappears or gets overwritten.
+  // Reverse migration: GMV was briefly restructured to per-Brand rows, then
+  // reverted back to a single flat total per cycle (cycles are single-Brand,
+  // so per-Brand rows within one cycle didn't make sense). Anything that got
+  // migrated into the per-Brand structure in the meantime needs to come back
+  // out, under the cycle's own Brand, so it isn't silently lost.
   DATA.aopCycles.forEach(cycle=>{
-    const oldFlat = DATA.monthlyGMVByCycle[cycle.id];
-    const alreadyMigrated = DATA.monthlyGMVByBrandByCycle[cycle.id] &&
-      Object.keys(DATA.monthlyGMVByBrandByCycle[cycle.id]).some(bid=>
-        Object.values(DATA.monthlyGMVByBrandByCycle[cycle.id][bid]||{}).some(v=> v!==undefined && v!=='' && v!==0));
-    if(oldFlat && !alreadyMigrated && cycle.brandId){
-      const hasOldValues = Object.values(oldFlat).some(v=> v!==undefined && v!=='' && v!==0);
-      if(hasOldValues){
-        if(!DATA.monthlyGMVByBrandByCycle[cycle.id]) DATA.monthlyGMVByBrandByCycle[cycle.id] = {};
-        DATA.monthlyGMVByBrandByCycle[cycle.id][cycle.brandId] = {...oldFlat};
-      }
+    if(!cycle.brandId) return;
+    const brandNested = DATA.monthlyGMVByBrandByCycle[cycle.id];
+    const brandRow = brandNested ? brandNested[cycle.brandId] : null;
+    if(!brandRow) return;
+    const hasBrandValues = Object.values(brandRow).some(v=> v!==undefined && v!=='' && v!==0);
+    if(!hasBrandValues) return;
+    const flat = DATA.monthlyGMVByCycle[cycle.id];
+    const flatHasValues = flat && Object.values(flat).some(v=> v!==undefined && v!=='' && v!==0);
+    if(!flatHasValues){
+      DATA.monthlyGMVByCycle[cycle.id] = {...brandRow};
     }
   });
   if(!DATA.inventoryByCycle) DATA.inventoryByCycle = {'':{}};
-  // Migrate pre-existing flat Channel Mix % / Pareto Mix % (from before
-  // per-Brand Sales Input existed) into the new Brand-nested structure,
-  // under the cycle's own Brand - same reasoning as the GMV migration above.
-  (function migrateMixDataToBrandNested(){
-    const pmIds = new Set(DATA.partnerModels.map(pm=>pm.id));
+  // Same reverse migration for Channel Mix % / Pareto Mix %, which went
+  // through the same brief per-Brand restructuring.
+  (function unnestMixDataFromBrand(){
     const brandIds = new Set(DATA.brands.map(b=>b.id));
     DATA.aopCycles.forEach(cycle=>{
       if(!cycle.brandId) return;
       const chMixForCycle = DATA.channelMixByCycle[cycle.id];
       if(chMixForCycle){
         const topKeys = Object.keys(chMixForCycle);
-        const looksFlat = topKeys.some(k=> pmIds.has(k)) && !topKeys.some(k=> brandIds.has(k));
-        if(looksFlat){
-          DATA.channelMixByCycle[cycle.id] = { [cycle.brandId]: chMixForCycle };
+        const looksBrandNested = topKeys.length>0 && topKeys.every(k=> brandIds.has(k));
+        if(looksBrandNested && chMixForCycle[cycle.brandId]){
+          DATA.channelMixByCycle[cycle.id] = chMixForCycle[cycle.brandId];
         }
       }
       const paretoMixForCycle = DATA.paretoMixByCycle[cycle.id];
       if(paretoMixForCycle){
         const topKeys = Object.keys(paretoMixForCycle);
-        // Pareto Mix's top level is keyed by Partner-Model id too (same shape
-        // as Channel Mix - a per-PM map of Sub Category percentages), so the
-        // same pmId-based detection applies here.
-        const looksFlat = topKeys.some(k=> pmIds.has(k)) && !topKeys.some(k=> brandIds.has(k));
-        if(looksFlat){
-          DATA.paretoMixByCycle[cycle.id] = { [cycle.brandId]: paretoMixForCycle };
+        const looksBrandNested = topKeys.length>0 && topKeys.every(k=> brandIds.has(k));
+        if(looksBrandNested && paretoMixForCycle[cycle.brandId]){
+          DATA.paretoMixByCycle[cycle.id] = paretoMixForCycle[cycle.brandId];
         }
       }
     });
@@ -2188,62 +2185,34 @@ function getUniquePdtCatWeightCombos(){
 }
 
 function renderMonthlyGMV(host){
-  if(!DATA.brands.length){
-    host.innerHTML = `<div class="footnote">No Brands defined yet — add some in "Masters &amp; Config → Brand Master" first.</div>`;
-    return;
-  }
   const gmv = getCycleObj('monthlyGMVByCycle');
-  const gmvByBrand = getCycleObj('monthlyGMVByBrandByCycle');
-  DATA.brands.forEach(b=>{ if(!gmvByBrand[b.id]) gmvByBrand[b.id] = {}; });
-
-  const recomputeTotals = ()=>{
-    MONTHS.forEach(m=>{
-      let sum = 0;
-      DATA.brands.forEach(b=>{ sum += +((gmvByBrand[b.id]||{})[m])||0; });
-      gmv[m] = sum;
-    });
-  };
-  recomputeTotals();
-
   const total = MONTHS.reduce((s,m)=> s+(+gmv[m]||0), 0);
-  const hasData = DATA.brands.some(b=> Object.values(gmvByBrand[b.id]||{}).some(v=> v!==undefined && v!==''));
-  let html = `<div class="footnote" style="margin-bottom:14px;">Enter GMV per Brand for each month — FY Total feeds Channel Mix % below to derive Partner-Model-wise GMV.</div>`;
-  html += pasteBoxHtml('Brand | ' + MONTHS.join(' | '));
+  const hasData = Object.keys(gmv).some(k=> gmv[k]!==undefined && gmv[k]!=='');
+  let html = `<div class="footnote" style="margin-bottom:14px;">Enter total GMV for each month. This feeds Channel Mix % below to derive Partner-Model-wise GMV.</div>`;
+  html += pasteBoxHtml('Month | GMV');
   if(hasData) html += `<button class="btn-sm danger" id="clearGmvBtn" style="margin-bottom:10px;">🗑 Delete all GMV data</button>`;
-  html += `<div class="panel"><div class="scrollbox" style="max-height:65vh; overflow-x:auto;"><table class="ledger compact"><colgroup><col style="width:180px;">${MONTHS.map(()=>'<col style="width:100px;">').join('')}<col style="width:110px;"></colgroup><thead><tr><th style="text-align:left;">Brand</th>`;
-  MONTHS.forEach(m=> html += `<th>${m}</th>`);
-  html += `<th class="total-col">FY Total</th></tr></thead><tbody>`;
-  DATA.brands.forEach(b=>{
-    let rowTotal = 0;
-    html += `<tr><td style="text-align:left;">${b.name}</td>`;
-    MONTHS.forEach(m=>{
-      const v = (gmvByBrand[b.id]||{})[m];
-      rowTotal += +v||0;
-      const display = (v!==undefined && v!=='') ? Math.round(v).toLocaleString('en-IN') : '';
-      html += `<td><input type="text" inputmode="decimal" class="gmvbrandcell" data-brand="${b.id}" data-month="${m}" value="${display}"></td>`;
-    });
-    html += `<td class="total-col">${fmt(rowTotal)}</td></tr>`;
+  html += `<div class="panel"><div class="scrollbox" style="max-height:65vh;"><table class="ledger compact"><colgroup><col style="width:130px;"><col style="width:150px;"></colgroup><thead><tr><th>Month</th><th>GMV</th></tr></thead><tbody>`;
+  MONTHS.forEach(m=>{
+    const v = gmv[m];
+    const display = (v!==undefined && v!=='') ? Math.round(v).toLocaleString('en-IN') : '';
+    html += `<tr><td>${m}</td><td><input type="text" inputmode="decimal" class="gmvcell" data-month="${m}" value="${display}"></td></tr>`;
   });
-  html += `<tr class="subtotal"><td>FY Total</td>`;
-  MONTHS.forEach(m=> html += `<td>${fmt(gmv[m]||0)}</td>`);
-  html += `<td class="total-col">${fmt(total)}</td></tr>`;
+  html += `<tr class="subtotal"><td>FY Total</td><td>${fmt(total)}</td></tr>`;
   html += `</tbody></table></div></div>`;
   host.innerHTML = html;
 
   const clearBtn = host.querySelector('#clearGmvBtn');
   if(clearBtn) clearBtn.addEventListener('click', ()=>{
     if(!confirm('Delete all GMV data for this cycle? This cannot be undone.')) return;
-    DATA.brands.forEach(b=>{ gmvByBrand[b.id] = {}; });
-    recomputeTotals();
+    Object.keys(gmv).forEach(k=> delete gmv[k]);
     markDirty();
     renderMonthlyGMV(host);
   });
 
-  host.querySelectorAll('.gmvbrandcell').forEach(inp=>{
+  host.querySelectorAll('.gmvcell').forEach(inp=>{
     inp.addEventListener('change', ()=>{
       const n = cleanNum(inp.value);
-      gmvByBrand[inp.dataset.brand][inp.dataset.month] = n===null ? '' : Math.round(n);
-      recomputeTotals();
+      gmv[inp.dataset.month] = n===null ? '' : Math.round(n);
       markDirty();
       renderMonthlyGMV(host);
     });
@@ -2252,49 +2221,19 @@ function renderMonthlyGMV(host){
   wirePasteBox(host, (rows)=>{
     rows.forEach(parts=>{
       if(parts.length < 2) return;
-      const brandName = parts[0].trim();
-      const brand = DATA.brands.find(b=> normalizeText(b.name)===normalizeText(brandName));
-      if(!brand) return;
-      if(!gmvByBrand[brand.id]) gmvByBrand[brand.id] = {};
-      MONTHS.forEach((m,i)=>{
-        const n = cleanNum(parts[i+1]);
-        if(n !== null) gmvByBrand[brand.id][m] = Math.round(n);
-      });
+      const month = parts[0].trim();
+      if(!MONTHS.includes(month)) return;
+      const n = cleanNum(parts[1]);
+      if(n !== null) gmv[month] = Math.round(n);
     });
-    recomputeTotals();
     markDirty();
     renderMonthlyGMV(host);
   });
 }
 
-let channelMixBrand = '';
 function renderChannelMix(host){
-  if(!DATA.brands.length){
-    host.innerHTML = `<div class="footnote">No Brands defined yet — add some in "Masters &amp; Config → Brand Master" first.</div>`;
-    return;
-  }
-  if(!channelMixBrand || !DATA.brands.some(b=>b.id===channelMixBrand)) channelMixBrand = DATA.brands[0].id;
-
-  let html = `<div class="pillbar" style="margin-bottom:14px;">`;
-  DATA.brands.forEach(b=>{
-    html += `<button class="pill ${b.id===channelMixBrand?'active':''}" data-brandpill="${b.id}">${b.name}</button>`;
-  });
-  html += `</div><div id="channelMixBrandHost"></div>`;
-  host.innerHTML = html;
-  host.querySelectorAll('[data-brandpill]').forEach(btn=>{
-    btn.addEventListener('click', ()=>{
-      channelMixBrand = btn.dataset.brandpill;
-      renderChannelMix(host);
-    });
-  });
-  renderChannelMixForBrand(host.querySelector('#channelMixBrandHost'), channelMixBrand);
-}
-
-function renderChannelMixForBrand(host, brandId){
-  const gmvByBrand = getCycleObj('monthlyGMVByBrandByCycle');
-  const gmv = gmvByBrand[brandId] || (gmvByBrand[brandId] = {});
-  const mixByBrand = getCycleObj('channelMixByCycle');
-  const mix = mixByBrand[brandId] || (mixByBrand[brandId] = {}); // keyed by Partner-Model id
+  const gmv = getCycleObj('monthlyGMVByCycle');
+  const mix = getCycleObj('channelMixByCycle'); // keyed by Partner-Model id
   const pms = DATA.partnerModels;
 
   if(!pms.length){
@@ -2346,16 +2285,16 @@ function renderChannelMixForBrand(host, brandId){
   host.innerHTML = html;
   const clearChannelMixBtn = host.querySelector('#clearChannelMixBtn');
   if(clearChannelMixBtn) clearChannelMixBtn.addEventListener('click', ()=>{
-    if(!confirm('Delete all Channel Mix % data for this Brand? This cannot be undone.')) return;
+    if(!confirm('Delete all Channel Mix % data for this cycle? This cannot be undone.')) return;
     pms.forEach(pm=>{ mix[pm.id] = {}; });
     markDirty();
-    renderChannelMixForBrand(host, brandId);
+    renderChannelMix(host);
   });
   host.querySelectorAll('.mixcell').forEach(inp=>{
     inp.addEventListener('change', ()=>{
       mix[inp.dataset.pm][inp.dataset.month] = inp.value===''?'':parseFloat(inp.value);
       markDirty();
-      renderChannelMixForBrand(host, brandId);
+      renderChannelMix(host);
     });
   });
 
@@ -2371,34 +2310,11 @@ function renderChannelMixForBrand(host, brandId){
       });
     });
     markDirty();
-    renderChannelMixForBrand(host, brandId);
+    renderChannelMix(host);
   });
 }
 
-let paretoMixBrand = '';
 function renderParetoMix(host){
-  if(!DATA.brands.length){
-    host.innerHTML = `<div class="footnote">No Brands defined yet — add some in "Masters &amp; Config → Brand Master" first.</div>`;
-    return;
-  }
-  if(!paretoMixBrand || !DATA.brands.some(b=>b.id===paretoMixBrand)) paretoMixBrand = DATA.brands[0].id;
-
-  let html = `<div class="pillbar" style="margin-bottom:14px;">`;
-  DATA.brands.forEach(b=>{
-    html += `<button class="pill ${b.id===paretoMixBrand?'active':''}" data-brandpill="${b.id}">${b.name}</button>`;
-  });
-  html += `</div><div id="paretoMixBrandHost"></div>`;
-  host.innerHTML = html;
-  host.querySelectorAll('[data-brandpill]').forEach(btn=>{
-    btn.addEventListener('click', ()=>{
-      paretoMixBrand = btn.dataset.brandpill;
-      renderParetoMix(host);
-    });
-  });
-  renderParetoMixForBrand(host.querySelector('#paretoMixBrandHost'), paretoMixBrand);
-}
-
-function renderParetoMixForBrand(host, brandId){
   const pms = DATA.partnerModels;
   if(!pms.length){
     host.innerHTML = `<div class="footnote">No Partner-Models defined yet — add some in "Masters &amp; Config → Partner-Model master" first.</div>`;
@@ -2407,24 +2323,21 @@ function renderParetoMixForBrand(host, brandId){
   if(!paretoMixChannelId || !pms.some(pm=>pm.id===paretoMixChannelId)){
     paretoMixChannelId = pms[0].id;
   }
-  const subCats = DATA.productSubCategories.filter(sc=> sc.brandId===brandId);
-  const gmvByBrand = getCycleObj('monthlyGMVByBrandByCycle');
-  const gmv = gmvByBrand[brandId] || (gmvByBrand[brandId] = {});
-  const chMixByBrand = getCycleObj('channelMixByCycle');
-  const chMix = chMixByBrand[brandId] || (chMixByBrand[brandId] = {});
-  const paretoMixByBrand = getCycleObj('paretoMixByCycle');
-  const paretoMixAll = paretoMixByBrand[brandId] || (paretoMixByBrand[brandId] = {});
+  const subCats = DATA.productSubCategories;
+  const gmv = getCycleObj('monthlyGMVByCycle');
+  const chMix = getCycleObj('channelMixByCycle');
+  const paretoMixAll = getCycleObj('paretoMixByCycle');
   if(!paretoMixAll[paretoMixChannelId]) paretoMixAll[paretoMixChannelId] = {};
   const mix = paretoMixAll[paretoMixChannelId];
 
-  let html = `<div class="footnote" style="margin-bottom:14px;">For the selected Partner-Model, split its month GMV across this Brand's Product Sub Categories (Pareto) — the first one auto-balances to 100%.</div>`;
+  let html = `<div class="footnote" style="margin-bottom:14px;">For the selected Partner-Model, split its month GMV across Product Sub Categories (Pareto) — the first one auto-balances to 100%.</div>`;
   html += `<div class="pillbar" style="margin-bottom:14px;">${pms.map(pm=>`<button class="pill ${pm.id===paretoMixChannelId?'active':''}" data-paretomixpm="${pm.id}">${pmLabel(pm)}</button>`).join('')}</div>`;
 
   if(!subCats.length){
-    html += `<div class="footnote">No Product Sub Categories for this Brand yet — add some in Pareto Master first.</div>`;
+    html += `<div class="footnote">No Product Sub Categories yet — add some in Pareto Master first.</div>`;
     host.innerHTML = html;
     host.querySelectorAll('[data-paretomixpm]').forEach(btn=>{
-      btn.addEventListener('click', ()=>{ paretoMixChannelId = btn.dataset.paretomixpm; renderParetoMixForBrand(host, brandId); });
+      btn.addEventListener('click', ()=>{ paretoMixChannelId = btn.dataset.paretomixpm; renderParetoMix(host); });
     });
     return;
   }
@@ -2436,25 +2349,27 @@ function renderParetoMixForBrand(host, brandId){
     html += `<button class="btn-sm danger" id="clearParetoMixBtn" style="margin-bottom:10px;">🗑 Delete all Pareto Mix data for ${pmLabel(pms.find(p=>p.id===paretoMixChannelId))}</button>`;
   }
 
-  html += `<div class="panel"><div class="scrollbox" style="max-height:65vh;"><table class="ledger"><thead><tr><th>Pdt Sub Cat</th>`;
+  html += `<div class="panel"><div class="scrollbox" style="max-height:65vh;"><table class="ledger"><thead><tr><th>Pdt Sub Cat</th><th>Brand</th>`;
   MONTHS.forEach(m=> html += `<th>${m}</th>`);
   html += `</tr></thead><tbody>`;
   subCats.forEach((sc,si)=>{
-    html += `<tr><td>${sc.name}${si===0?' (auto)':''}</td>`;
+    const brand = DATA.brands.find(b=>b.id===sc.brandId);
+    html += `<tr><td>${sc.name}${si===0?' (auto)':''}</td><td>${brand ? brand.name : ''}</td>`;
     MONTHS.forEach(m=> html += pctCellHtml(subCats, mix, sc, si, m, 'paretomixcell', 'sc'));
     html += `</tr>`;
   });
-  html += `<tr class="subtotal"><td>Total</td>`;
+  html += `<tr class="subtotal"><td>Total</td><td></td>`;
   MONTHS.forEach(()=> html += pctTotalCell(100));
   html += `</tr></tbody></table></div></div>`;
 
   html += `<div class="cyclelabel" style="color:var(--ink-soft); margin:18px 0 8px 0; font-size:11px; text-transform:uppercase; letter-spacing:0.05em; font-weight:700;">Resulting Pareto × Partner-Model × Month GMV (read-only)</div>`;
-  html += `<div class="panel"><div class="scrollbox" style="max-height:65vh;"><table class="ledger"><thead><tr><th>Pdt Sub Cat</th>`;
+  html += `<div class="panel"><div class="scrollbox" style="max-height:65vh;"><table class="ledger"><thead><tr><th>Pdt Sub Cat</th><th>Brand</th>`;
   MONTHS.forEach(m=> html += `<th>${m}</th>`);
   html += `<th class="total-col">FY Total</th></tr></thead><tbody>`;
   const monthColTotals = MONTHS.map(()=>0);
   subCats.forEach(sc=>{
-    html += `<tr><td>${sc.name}</td>`;
+    const brand = DATA.brands.find(b=>b.id===sc.brandId);
+    html += `<tr><td>${sc.name}</td><td>${brand ? brand.name : ''}</td>`;
     let rowTotal = 0;
     MONTHS.forEach((m,mi)=>{
       const scPct = getDifferentialPct(subCats, mix, sc.id, m);
@@ -2466,7 +2381,7 @@ function renderParetoMixForBrand(host, brandId){
     });
     html += `<td class="total-col" style="font-weight:700;">${fmt(rowTotal)}</td></tr>`;
   });
-  html += `<tr class="subtotal"><td>Total</td>`;
+  html += `<tr class="subtotal"><td>Total</td><td></td>`;
   let grand = 0;
   monthColTotals.forEach(t=>{ grand += t; html += `<td>${fmt(t)}</td>`; });
   html += `<td class="total-col">${fmt(grand)}</td></tr>`;
@@ -2474,20 +2389,20 @@ function renderParetoMixForBrand(host, brandId){
 
   host.innerHTML = html;
   host.querySelectorAll('[data-paretomixpm]').forEach(btn=>{
-    btn.addEventListener('click', ()=>{ paretoMixChannelId = btn.dataset.paretomixpm; renderParetoMixForBrand(host, brandId); });
+    btn.addEventListener('click', ()=>{ paretoMixChannelId = btn.dataset.paretomixpm; renderParetoMix(host); });
   });
   const clearParetoMixBtn = host.querySelector('#clearParetoMixBtn');
   if(clearParetoMixBtn) clearParetoMixBtn.addEventListener('click', ()=>{
-    if(!confirm('Delete all Pareto Mix % data for this Partner-Model, in this Brand? This cannot be undone.')) return;
+    if(!confirm('Delete all Pareto Mix % data for this Partner-Model? This cannot be undone.')) return;
     subCats.forEach(sc=>{ mix[sc.id] = {}; });
     markDirty();
-    renderParetoMixForBrand(host, brandId);
+    renderParetoMix(host);
   });
   host.querySelectorAll('.paretomixcell').forEach(inp=>{
     inp.addEventListener('change', ()=>{
       mix[inp.dataset.sc][inp.dataset.month] = inp.value===''?'':parseFloat(inp.value);
       markDirty();
-      renderParetoMixForBrand(host, brandId);
+      renderParetoMix(host);
     });
   });
 
@@ -2505,7 +2420,7 @@ function renderParetoMixForBrand(host, brandId){
       });
     });
     markDirty();
-    renderParetoMixForBrand(host, brandId);
+    renderParetoMix(host);
   });
 }
 
@@ -2944,17 +2859,11 @@ function computeCodbItemCost(li, pmId, scId, ctx){
 }
 
 function computeParetoLevelPL(pmId, scId, month){
-  // Brand comes from the Sub Category itself (every Sub Category belongs to
-  // exactly one Brand), so this function's own signature never needs to
-  // change - every existing caller throughout the app keeps working as-is,
-  // while GMV / Channel Mix % / Pareto Mix % are now looked up per-Brand.
-  const sc0 = DATA.productSubCategories.find(x=>x.id===scId);
-  const brandId = sc0 ? sc0.brandId : '';
-  const gmvByMonth = getCycleObj('monthlyGMVByBrandByCycle')[brandId] || {};
-  const chMix = getCycleObj('channelMixByCycle')[brandId] || {};
-  const paretoMixAll = getCycleObj('paretoMixByCycle')[brandId] || {};
+  const gmvByMonth = getCycleObj('monthlyGMVByCycle');
+  const chMix = getCycleObj('channelMixByCycle');
+  const paretoMixAll = getCycleObj('paretoMixByCycle');
   const mix = paretoMixAll[pmId] || {};
-  const subCats = DATA.productSubCategories.filter(x=> x.brandId===brandId);
+  const subCats = DATA.productSubCategories;
   const pms = DATA.partnerModels;
   const dmg = getCycleObj('discMarginGstByCycle');
   const paretoInput = getCycleObj('paretoInputByCycle');
