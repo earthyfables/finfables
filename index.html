@@ -958,7 +958,26 @@ function renderMasterTable(container, arr, cols, opts){
   const importBtn = container.querySelector('#importBtn');
   if(importBtn) importBtn.addEventListener('click', ()=>{
     const text = container.querySelector('#pasteArea').value;
-    const lines = text.split(/\r?\n/).map(l=>l.trim()).filter(Boolean);
+    // Only drop fully-blank lines - trimming each line's content would strip
+    // a leading tab too, which is exactly what signals "this row's first
+    // column is blank", letting every column after it silently shift left.
+    const lines = text.split(/\r?\n/).map(l=> l.replace(/\r$/,'')).filter(l=> l.trim()!=='');
+
+    // If any pasted row is missing its first (identifying) column, reject the
+    // whole paste rather than silently importing it - a blank first cell
+    // means every column after it in that row has shifted one slot to the
+    // left of where it belongs (e.g. SKU Code ending up under EAN Code).
+    const keyLabel = cols[0].label;
+    const blankKeyRows = [];
+    lines.forEach((line,i)=>{
+      const firstCell = (line.split('\t')[0]||'').trim();
+      if(!firstCell) blankKeyRows.push(i+1);
+    });
+    if(blankKeyRows.length){
+      alert(`Import cancelled — ${blankKeyRows.length} row(s) (line ${blankKeyRows.join(', ')}) are missing "${keyLabel}". Every row needs a "${keyLabel}" value, or the columns after it will land in the wrong place. Nothing was imported.`);
+      return;
+    }
+
     const matchCols = opts.matchColumns ? cols.filter(c=> opts.matchColumns.includes(c.key)) : [cols[0]];
     let added = 0, updated = 0, skipped = 0;
     lines.forEach(line=>{
@@ -1774,7 +1793,7 @@ function wireCreditorsPasteBoxes(container, entries, onUpdate){
     const clearBtn = balBox.querySelector('#clearPasteBtn');
     if(importBtn) importBtn.addEventListener('click', ()=>{
       const text = balBox.querySelector('#pasteArea').value;
-      const lines = text.split(/\r?\n/).map(l=>l.trim()).filter(Boolean);
+      const lines = text.split(/\r?\n/).map(l=> l.replace(/\r$/,'')).filter(l=> l.trim()!=='');
       lines.forEach(line=>{
         const parts = line.split('\t');
         if(parts.length < 3) return;
@@ -1795,7 +1814,7 @@ function wireCreditorsPasteBoxes(container, entries, onUpdate){
     const clearBtn = pmtBox.querySelector('#clearPasteBtn');
     if(importBtn) importBtn.addEventListener('click', ()=>{
       const text = pmtBox.querySelector('#pasteArea').value;
-      const lines = text.split(/\r?\n/).map(l=>l.trim()).filter(Boolean);
+      const lines = text.split(/\r?\n/).map(l=> l.replace(/\r$/,'')).filter(l=> l.trim()!=='');
       lines.forEach(line=>{
         const parts = line.split('\t');
         if(parts.length < 3) return;
@@ -1972,7 +1991,7 @@ function wirePasteBox(host, onImport){
   const importBtn = host.querySelector('#importBtn');
   if(importBtn) importBtn.addEventListener('click', ()=>{
     const text = host.querySelector('#pasteArea').value;
-    const lines = text.split(/\r?\n/).map(l=>l.trim()).filter(Boolean);
+    const lines = text.split(/\r?\n/).map(l=> l.replace(/\r$/,'')).filter(l=> l.trim()!=='');
     onImport(lines.map(l=>l.split('\t')));
   });
   const clearBtn = host.querySelector('#clearPasteBtn');
@@ -2478,7 +2497,7 @@ function renderSingleRateGrid(container, metric, label){
     const clearPasteBtn = box.querySelector('#clearPasteBtn');
     if(importBtn) importBtn.addEventListener('click', ()=>{
       const text = box.querySelector('#pasteArea').value;
-      const lines = text.split(/\r?\n/).map(l=>l.trim()).filter(Boolean);
+      const lines = text.split(/\r?\n/).map(l=> l.replace(/\r$/,'')).filter(l=> l.trim()!=='');
       lines.forEach(line=>{
         const parts = line.split('\t');
         if(parts.length < 2) return;
@@ -2565,7 +2584,7 @@ function renderDiscMarginGst(container){
     const clearBtn = box.querySelector('#clearPasteBtn');
     if(importBtn) importBtn.addEventListener('click', ()=>{
       const text = box.querySelector('#pasteArea').value;
-      const lines = text.split(/\r?\n/).map(l=>l.trim()).filter(Boolean);
+      const lines = text.split(/\r?\n/).map(l=> l.replace(/\r$/,'')).filter(l=> l.trim()!=='');
       lines.forEach(line=>{
         const parts = line.split('\t');
         if(parts.length < 2) return;
