@@ -1523,6 +1523,16 @@ function renderCacInputScreen(container){
   renderSingleRateGrid(host, 'cac', 'CAC % (on GMV)');
 }
 
+function codbRateCardRowHtml(sc, store, columns, groupEndIdx, truncCellStyle){
+  let html = `<tr><td class="stickyleftcol" style="${truncCellStyle}" title="${sc.eanCode||''}">${sc.eanCode||''}</td><td class="stickyleftcol2" style="${truncCellStyle}" title="${sc.name}">${sc.name}</td>`;
+  columns.forEach(({li,pm}, i)=>{
+    const v = store[pm.id][li.id][sc.id];
+    html += `<td${groupEndIdx.has(i)?' class="feegroupend"':''}><input type="number" step="any" class="codbratecell2" data-li="${li.id}" data-pm="${pm.id}" data-sc="${sc.id}" value="${v!==undefined && v!==''? v : ''}"></td>`;
+  });
+  html += `</tr>`;
+  return html;
+}
+
 function renderCodbRateCardScreen(container){
   const pms = DATA.partnerModels;
   const subCats = DATA.productSubCategories;
@@ -1577,6 +1587,8 @@ function renderCodbRateCardScreen(container){
   const stickyColsWidth = 150 + 340;
   const totalTableWidth = stickyColsWidth + columns.length * 150;
   const truncCellStyle = 'text-align:left; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;';
+  const virtualize = subCats.length > MASTER_TABLE_VIRTUALIZE_THRESHOLD;
+  const colSpan = 2 + columns.length;
   html += `<div class="panel" style="max-width:100%;"><div class="scrollbox" style="max-height:75vh; overflow-x:auto;"><table class="ledger compact" style="table-layout:fixed; width:${totalTableWidth}px;"><colgroup><col style="width:150px;"><col style="width:340px;">${columns.map(()=>'<col style="width:150px;">').join('')}</colgroup><thead>`;
   html += `<tr><th class="stickyleftcol"></th><th class="stickyleftcol2"></th>`;
   lineItems.forEach(li=>{
@@ -1586,18 +1598,25 @@ function renderCodbRateCardScreen(container){
   });
   html += `</tr><tr><th class="stickyleftcol" style="text-align:left;">EAN Code</th><th class="stickyleftcol2" style="text-align:left;">Pdt Sub Cat</th>`;
   columns.forEach(({pm}, i)=> html += `<th${groupEndIdx.has(i)?' class="feegroupend"':''}>${channelLabel(pm)}</th>`);
-  html += `</tr></thead><tbody>`;
-  subCats.forEach(sc=>{
-    html += `<tr><td class="stickyleftcol" style="${truncCellStyle}" title="${sc.eanCode||''}">${sc.eanCode||''}</td><td class="stickyleftcol2" style="${truncCellStyle}" title="${sc.name}">${sc.name}</td>`;
-    columns.forEach(({li,pm}, i)=>{
-      const v = store[pm.id][li.id][sc.id];
-      html += `<td${groupEndIdx.has(i)?' class="feegroupend"':''}><input type="number" step="any" class="codbratecell2" data-li="${li.id}" data-pm="${pm.id}" data-sc="${sc.id}" value="${v!==undefined && v!==''? v : ''}"></td>`;
-    });
-    html += `</tr>`;
-  });
+  html += `</tr></thead><tbody id="codbRateCardBody">`;
+  html += virtualize
+    ? virtualizedRowsHtml(container, '_codbRcVirt', subCats.length, colSpan, idx=> codbRateCardRowHtml(subCats[idx], store, columns, groupEndIdx, truncCellStyle))
+    : subCats.map(sc=> codbRateCardRowHtml(sc, store, columns, groupEndIdx, truncCellStyle)).join('');
   html += `</tbody></table></div></div>`;
 
   container.innerHTML = html;
+
+  if(virtualize){
+    const scrollEl = container.querySelector('.scrollbox');
+    if(scrollEl){
+      wireVirtualizedScroll(container, '_codbRcVirt', scrollEl, ()=>{
+        const tbody = container.querySelector('#codbRateCardBody');
+        if(tbody){
+          tbody.innerHTML = virtualizedRowsHtml(container, '_codbRcVirt', subCats.length, colSpan, idx=> codbRateCardRowHtml(subCats[idx], store, columns, groupEndIdx, truncCellStyle));
+        }
+      });
+    }
+  }
 
   const clearBtn = container.querySelector('#clearCodbRcBtn');
   if(clearBtn) clearBtn.addEventListener('click', ()=>{
