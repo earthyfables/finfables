@@ -4408,6 +4408,8 @@ const copyFromSel = panel.querySelector('#cycleCopyFrom');
 }
 
 const MASTER_TAB_KEYS = MASTER_TABS.map(t=>t.key);
+let pendingRenderFrame = null;
+let pendingRenderToken = 0;
 function render(){
   paretoLevelPLCache.clear();
   itemIndexCache = new WeakMap();
@@ -4415,6 +4417,8 @@ function render(){
   totalPLCache.clear();
   filteredPLCache.clear();
   partnerModelPLCache.clear();
+  if(pendingRenderFrame !== null){ cancelAnimationFrame(pendingRenderFrame); pendingRenderFrame = null; }
+  const myToken = ++pendingRenderToken;
   renderCyclePanel();
   document.querySelectorAll('.navitem').forEach(b=>{
     const isActive = b.dataset.tab==='mastersConfig' ? MASTER_TAB_KEYS.includes(activeTab) : b.dataset.tab===activeTab;
@@ -4424,15 +4428,37 @@ function render(){
   document.getElementById('panelTitle').textContent = tab.title;
   document.getElementById('panelSub').textContent = tab.desc;
   const content = document.getElementById('content');
+  const loadingHtml = `<div class="footnote" style="padding:24px;">Loading…</div>`;
+  // The actual tab.render(...) call can be expensive (large tables, P&L
+  // recalculation across many months) - deferring it to the next frame lets
+  // the browser paint the instant stuff above (title, active pill, loading
+  // placeholder) first, so the click itself never gets blamed for blocking.
+  // Cancelling any still-pending frame above (and checking the token here)
+  // guards against rapid tab switching: without it, an earlier switch's
+  // deferred render can fire after a newer switch has already replaced the
+  // DOM it was about to write into, crashing on a null element.
   if(activeTab.startsWith('output')){
-    tab.render(content);
+    content.innerHTML = loadingHtml;
+    pendingRenderFrame = requestAnimationFrame(()=>{
+      pendingRenderFrame = null;
+      if(myToken !== pendingRenderToken) return;
+      tab.render(content);
+    });
   }else if(MASTER_TAB_KEYS.includes(activeTab)){
-    content.innerHTML = renderMasterTabBar(activeTab) + `<div class="panel"><div id="tableHost"></div></div>`;
+    content.innerHTML = renderMasterTabBar(activeTab) + `<div class="panel"><div id="tableHost">${loadingHtml}</div></div>`;
     wireMasterTabBar(content);
-    tab.render(document.getElementById('tableHost'));
+    pendingRenderFrame = requestAnimationFrame(()=>{
+      pendingRenderFrame = null;
+      if(myToken !== pendingRenderToken) return;
+      tab.render(document.getElementById('tableHost'));
+    });
   }else{
-    content.innerHTML = `<div class="panel"><div id="tableHost"></div></div>`;
-    tab.render(document.getElementById('tableHost'));
+    content.innerHTML = `<div class="panel"><div id="tableHost">${loadingHtml}</div></div>`;
+    pendingRenderFrame = requestAnimationFrame(()=>{
+      pendingRenderFrame = null;
+      if(myToken !== pendingRenderToken) return;
+      tab.render(document.getElementById('tableHost'));
+    });
   }
 }
 
