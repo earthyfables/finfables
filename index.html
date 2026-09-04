@@ -535,7 +535,7 @@ const SEED = {
   productCategories:[{id:"PC1",name:"Towels",productGroupId:"PG1"}],
   brandCategoryMapping:[],
   productSubCategories:[{id:"PSC1",name:"Bath Towel",productGroupId:"PG1",productCategoryId:"PC1",amrp:100,acogs:40}],
-  salesInputByCycle:{'':[]}, codbRateCardByCycle:{'':{}}, miscInputsByCycle:{'':{}}, discMarginGstByCycle:{'':{}}, paretoInputByCycle:{'':{}},
+  salesInputByCycle:{'':[]}, codbRateCardByCycle:{'':{}}, miscInputsByCycle:{'':{}}, discMarginGstByCycle:{'':{}}, paretoInputByCycle:{'':{}}, paretoInput:{},
   debtorsByCycle:{'':{}}, debtorsOverrideByCycle:{'':{}}, creditorsByCycle:{'':[]}, inventoryByCycle:{'':{}}, creditorPmtOverrideByCycle:{'':{}}
 };
 
@@ -605,6 +605,28 @@ async function loadData(){
   // into both the default ('') cycle and the currently active cycle, so nothing
   // that was already entered goes missing, then strip the fields off the master.
   if(!DATA.paretoInputByCycle) DATA.paretoInputByCycle = {'':{}};
+  if(!DATA.paretoInput) DATA.paretoInput = {};
+  // Pareto Input (AMRP/ACOGS/GST%) was briefly made cycle-scoped, but it's
+  // really master-level data describing the Sub Category itself, not
+  // something that should differ per planning cycle - move any values
+  // already entered under any cycle into the shared, global bucket instead,
+  // so nothing entered while on one cycle silently disappears when viewing
+  // another. Merges across cycles - the first non-empty value found for each
+  // field wins, so if the same Sub Category has values in more than one
+  // cycle only one copy survives, not multiple conflicting ones.
+  Object.keys(DATA.paretoInputByCycle).forEach(cid=>{
+    const cycleStore = DATA.paretoInputByCycle[cid] || {};
+    Object.keys(cycleStore).forEach(scId=>{
+      const cell = cycleStore[scId] || {};
+      if(!DATA.paretoInput[scId]) DATA.paretoInput[scId] = {};
+      const target = DATA.paretoInput[scId];
+      ['amrp','acogs','gstPct'].forEach(field=>{
+        const already = target[field] !== undefined && target[field] !== '';
+        const incoming = cell[field] !== undefined && cell[field] !== '';
+        if(!already && incoming) target[field] = cell[field];
+      });
+    });
+  });
   if(!DATA.debtorsByCycle) DATA.debtorsByCycle = {'':{}};
   if(!DATA.debtorsOverrideByCycle) DATA.debtorsOverrideByCycle = {'':{}};
   if(!DATA.creditorsByCycle) DATA.creditorsByCycle = {'':[]};
@@ -653,20 +675,15 @@ async function loadData(){
       }
     });
   })();
-  if(!DATA.paretoInputByCycle['']) DATA.paretoInputByCycle[''] = {};
   {
-    const pscMigrateTargets = [''];
-    if(DATA.meta && DATA.meta.activeCycleId && !pscMigrateTargets.includes(DATA.meta.activeCycleId)){
-      pscMigrateTargets.push(DATA.meta.activeCycleId);
-    }
     (DATA.productSubCategories||[]).forEach(sc=>{
       const hasOldFields = sc.amrp!==undefined || sc.acogs!==undefined || sc.gstPct!==undefined;
       if(hasOldFields){
-        pscMigrateTargets.forEach(cid=>{
-          if(!DATA.paretoInputByCycle[cid]) DATA.paretoInputByCycle[cid] = {};
-          if(!DATA.paretoInputByCycle[cid][sc.id]){
-            DATA.paretoInputByCycle[cid][sc.id] = {amrp: sc.amrp, acogs: sc.acogs, gstPct: sc.gstPct};
-          }
+        if(!DATA.paretoInput[sc.id]) DATA.paretoInput[sc.id] = {};
+        const target = DATA.paretoInput[sc.id];
+        ['amrp','acogs','gstPct'].forEach(field=>{
+          const already = target[field] !== undefined && target[field] !== '';
+          if(!already && sc[field] !== undefined) target[field] = sc[field];
         });
         delete sc.amrp; delete sc.acogs; delete sc.gstPct;
       }
@@ -1727,10 +1744,10 @@ function renderParetoInputScreen(container){
     return;
   }
 
-  const store = getCycleObj('paretoInputByCycle'); // {subCatId: {amrp, acogs, gstPct}}
+  const store = DATA.paretoInput; // {subCatId: {amrp, acogs, gstPct}} - master-level, shared across all cycles
   subCats.forEach(sc=>{ if(!store[sc.id]) store[sc.id] = {}; });
 
-  let html = `<div class="footnote" style="margin-bottom:14px;">Auto-populated from Pareto Master — AMRP, ACOGS, and GST% per Product Sub Category, cycle-scoped.</div>`;
+  let html = `<div class="footnote" style="margin-bottom:14px;">Auto-populated from Pareto Master — AMRP, ACOGS, and GST% per Product Sub Category, shared across all cycles.</div>`;
   html += pasteBoxHtml('EAN Code | AMRP | ACOGS | GST%');
 
   const hasData = subCats.some(sc=> Object.values(store[sc.id]).some(v=> v!==undefined && v!==''));
@@ -1753,7 +1770,7 @@ function renderParetoInputScreen(container){
 
   const clearBtn = container.querySelector('#clearParetoInputBtn');
   if(clearBtn) clearBtn.addEventListener('click', ()=>{
-    if(!confirm('Delete all Pareto Input data? This cannot be undone.')) return;
+    if(!confirm('Delete all Pareto Input data? This is shared across all cycles and cannot be undone.')) return;
     subCats.forEach(sc=>{ store[sc.id] = {}; });
     markDirty();
     renderParetoInputScreen(container);
@@ -3166,7 +3183,7 @@ function computeParetoLevelPLUncached(pmId, scId, month){
   const subCats = DATA.productSubCategories;
   const pms = DATA.partnerModels;
   const dmg = getCycleObj('discMarginGstByCycle');
-  const paretoInput = getCycleObj('paretoInputByCycle');
+  const paretoInput = DATA.paretoInput; // master-level, shared across all cycles
 
   // Same GMV-at-Pareto-level formula already used in the Sales Input > Pareto
   // Mix results table: Monthly GMV x Channel Mix% x Pareto Mix%.
@@ -4579,7 +4596,7 @@ function renderCyclePanel(){
     if(!ok) return;
     const idx = DATA.aopCycles.findIndex(c=>c.id===active.id);
     if(idx > -1) DATA.aopCycles.splice(idx,1);
-    ['salesInputByCycle','codbRateCardByCycle','miscInputsByCycle','monthlyGMVByCycle','monthlyGMVByBrandByCycle','channelMixByCycle','categoryMixByCycle','paretoMixByCycle','discMarginGstByCycle','paretoInputByCycle','debtorsByCycle','debtorsOverrideByCycle','creditorsByCycle','creditorPmtOverrideByCycle','inventoryByCycle'].forEach(k=>{
+    ['salesInputByCycle','codbRateCardByCycle','miscInputsByCycle','monthlyGMVByCycle','monthlyGMVByBrandByCycle','channelMixByCycle','categoryMixByCycle','paretoMixByCycle','discMarginGstByCycle','debtorsByCycle','debtorsOverrideByCycle','creditorsByCycle','creditorPmtOverrideByCycle','inventoryByCycle'].forEach(k=>{
       if(DATA[k]) delete DATA[k][active.id];
     });
     if(DATA.meta.activeCycleId === active.id) DATA.meta.activeCycleId = '';
@@ -4609,7 +4626,7 @@ function copyCycleInputData(destCycleId, srcCycleId){
     // Deep-copy with fresh row ids so edits in the new cycle never collide with the source.
     DATA[k][destCycleId] = srcRows.map(r=> ({...r, id: uid('COPY')}));
   });
-  ['monthlyGMVByCycle','monthlyGMVByBrandByCycle','channelMixByCycle','categoryMixByCycle','paretoMixByCycle','discMarginGstByCycle','codbRateCardByCycle','miscInputsByCycle','paretoInputByCycle','debtorsByCycle','debtorsOverrideByCycle','creditorsByCycle','creditorPmtOverrideByCycle','inventoryByCycle'].forEach(k=>{
+  ['monthlyGMVByCycle','monthlyGMVByBrandByCycle','channelMixByCycle','categoryMixByCycle','paretoMixByCycle','discMarginGstByCycle','codbRateCardByCycle','miscInputsByCycle','debtorsByCycle','debtorsOverrideByCycle','creditorsByCycle','creditorPmtOverrideByCycle','inventoryByCycle'].forEach(k=>{
     const srcObj = (DATA[k] && DATA[k][srcCycleId]) || {};
     DATA[k] = DATA[k] || {};
     DATA[k][destCycleId] = JSON.parse(JSON.stringify(srcObj));
