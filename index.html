@@ -960,16 +960,37 @@ function renderMasterTable(container, arr, cols, opts){
       const sampleRow = scrollEl.querySelector('tbody tr:not(.vspacer)');
       if(sampleRow) container._masterTableRowHeight = sampleRow.getBoundingClientRect().height || MASTER_TABLE_ROW_HEIGHT_DEFAULT;
       container._masterTableViewportH = scrollEl.clientHeight || container._masterTableViewportH || 500;
-      scrollEl.scrollTop = prevScrollTopForRestore(container);
       // container.innerHTML above just replaced the whole subtree, so this is
-      // always a brand new element - the listener needs wiring on every call,
-      // not just the first (the old element and its listener are discarded
-      // together when replaced, so there's no risk of double-attaching).
-      let scrollFrame = null;
+      // always a brand new element whose scrollTop starts at 0 - restoring it
+      // to where the user actually was is a real, necessary write, but that
+      // write itself fires a native 'scroll' event since the value changes.
+      // Flagging it here lets the handler below recognize and ignore that
+      // one self-caused event, rather than treating it as further user input
+      // and re-rendering again - which would just recreate the same 0->target
+      // jump and fire another 'scroll' event, forever, fighting any further
+      // real scrolling the user does in between.
+      const targetScrollTop = prevScrollTopForRestore(container);
+      if(scrollEl.scrollTop !== targetScrollTop){
+        container._masterTableIgnoreNextScroll = true;
+        scrollEl.scrollTop = targetScrollTop;
+      }
+      // The listener needs wiring on every call, not just the first - the old
+      // element and its listener are discarded together when replaced by the
+      // innerHTML above, so there's no risk of double-attaching.
+      // The pending-frame flag lives on the container, not as a local
+      // variable here - a single wheel gesture fires several native 'scroll'
+      // events in quick succession, each producing a fresh call to this
+      // function (and a fresh local variable, which would reset to null every
+      // time) - without a guard that survives across those calls, nothing
+      // throttled the resulting innerHTML replacements.
       scrollEl.addEventListener('scroll', ()=>{
-        if(scrollFrame !== null) return; // already have a pending re-render for this scroll burst
-        scrollFrame = requestAnimationFrame(()=>{
-          scrollFrame = null;
+        if(container._masterTableIgnoreNextScroll){
+          container._masterTableIgnoreNextScroll = false;
+          return;
+        }
+        if(container._masterTableScrollFrame !== null && container._masterTableScrollFrame !== undefined) return;
+        container._masterTableScrollFrame = requestAnimationFrame(()=>{
+          container._masterTableScrollFrame = null;
           container._masterTablePendingScrollTop = scrollEl.scrollTop;
           container._masterTableViewportH = scrollEl.clientHeight;
           renderMasterTable(container, container._masterTableArr, container._masterTableCols, container._masterTableOpts);
