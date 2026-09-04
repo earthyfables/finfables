@@ -1389,8 +1389,10 @@ function renderCodbRateCardScreen(container){
     groupEndIdx.add(colCursor - 1);
   });
 
-  html += `<div class="panel" style="max-width:100%;"><div class="scrollbox" style="max-height:75vh; overflow-x:auto;"><table class="ledger compact"><colgroup><col style="width:150px;"><col style="width:250px;">${columns.map(()=>'<col style="width:150px;">').join('')}</colgroup><thead>`;
-  html += `<tr><th class="stickyleftcol" colspan="2"></th>`;
+  const stickyColsWidth = 150 + 250;
+  const totalTableWidth = stickyColsWidth + columns.length * 150;
+  html += `<div class="panel" style="max-width:100%;"><div class="scrollbox" style="max-height:75vh; overflow-x:auto;"><table class="ledger compact" style="table-layout:fixed; width:${totalTableWidth}px;"><colgroup><col style="width:150px;"><col style="width:250px;">${columns.map(()=>'<col style="width:150px;">').join('')}</colgroup><thead>`;
+  html += `<tr><th class="stickyleftcol"></th><th class="stickyleftcol2"></th>`;
   lineItems.forEach(li=>{
     const span = getEffectiveChannels(li, pms).length;
     if(span<=0) return;
