@@ -513,6 +513,20 @@ function getCycleObj(byCycleKey){
   if(!DATA[byCycleKey][ck]) DATA[byCycleKey][ck] = {};
   return DATA[byCycleKey][ck];
 }
+// Every cycle belongs to exactly one Brand - this is the single source of
+// truth for "which Brand is this cycle's data for". Input screens (Pareto
+// Mix %, CODB Rate Card, Pareto Input) and the calculation engine both use
+// this to show/compute only that Brand's Sub Categories, not every Brand in
+// the system mixed together.
+function activeCycleBrandId(){
+  const cycle = DATA.aopCycles.find(c=>c.id===DATA.meta.activeCycleId);
+  return cycle ? cycle.brandId : '';
+}
+function subCategoriesForActiveCycle(){
+  const brandId = activeCycleBrandId();
+  if(!brandId) return DATA.productSubCategories; // no active cycle yet - nothing to filter against
+  return DATA.productSubCategories.filter(sc=> sc.brandId===brandId);
+}
 
 const SEED = {
   meta:{fyLabel:"FY 2026-27", months:DEFAULT_MONTHS, savedAt:null, activeCycleId:''},
@@ -1552,7 +1566,7 @@ function codbRateCardRowHtml(sc, store, columns, groupEndIdx, truncCellStyle){
 
 function renderCodbRateCardScreen(container){
   const pms = DATA.partnerModels;
-  const subCats = DATA.productSubCategories;
+  const subCats = subCategoriesForActiveCycle();
   const excludedNames = ['cac'];
   const lineItems = DATA.codbLineItems.filter(li=>{
     if(excludedNames.includes(normalizeText(li.name))) return false;
@@ -1738,7 +1752,7 @@ function renderMiscInputsScreen(container){
 }
 
 function renderParetoInputScreen(container){
-  const subCats = DATA.productSubCategories;
+  const subCats = subCategoriesForActiveCycle();
   if(!subCats.length){
     container.innerHTML = `<div class="footnote">No Product Sub Categories defined yet — add some in "Pareto Master" first.</div>`;
     return;
@@ -2625,7 +2639,7 @@ function paretoMixResultRowHtml(sc, subCats, mix, pms, chMix, gmv){
 
 function renderParetoMixBody(host){
   const pms = DATA.partnerModels;
-  const subCats = DATA.productSubCategories;
+  const subCats = subCategoriesForActiveCycle();
   const gmv = getCycleObj('monthlyGMVByCycle');
   const chMix = getCycleObj('channelMixByCycle');
   const paretoMixAll = getCycleObj('paretoMixByCycle');
@@ -3180,7 +3194,7 @@ function computeParetoLevelPLUncached(pmId, scId, month){
   const chMix = getCycleObj('channelMixByCycle');
   const paretoMixAll = getCycleObj('paretoMixByCycle');
   const mix = paretoMixAll[pmId] || {};
-  const subCats = DATA.productSubCategories;
+  const subCats = subCategoriesForActiveCycle();
   const pms = DATA.partnerModels;
   const dmg = getCycleObj('discMarginGstByCycle');
   const paretoInput = DATA.paretoInput; // master-level, shared across all cycles
@@ -3255,7 +3269,7 @@ function computeParetoLevelPL(pmId, scId, month){
 
 const PL_SUM_KEYS = ['GMV','Returns','Discount','Margin','GST','NSV','MRPVal','NetQty','GrossQty','COGS','CM1','CODCharges','CODB','CM2','CAC','CM3'];
 function computePartnerModelPLUncached(pmId, month){
-  const subCats = DATA.productSubCategories;
+  const subCats = subCategoriesForActiveCycle();
   const totals = {}; PL_SUM_KEYS.forEach(k=> totals[k]=0);
   const codbByItem = {};
   subCats.forEach(sc=>{
@@ -3406,7 +3420,7 @@ let plOpenDropdownId = null; // preserves which filter dropdown stays open acros
 
 function computeTotalPLUncached(month){
   const pms = DATA.partnerModels;
-  const subCats = DATA.productSubCategories;
+  const subCats = subCategoriesForActiveCycle();
   const totals = {}; PL_SUM_KEYS.forEach(k=> totals[k]=0);
   const codbByItem = {};
   pms.forEach(pm=> subCats.forEach(sc=>{
@@ -3431,7 +3445,7 @@ function computeFilteredPLUncached(month){
     (plFilters.partnerGroup.length===0 || plFilters.partnerGroup.includes(pm.partnerGroup)) &&
     (plFilters.partnerModel.length===0 || plFilters.partnerModel.includes(pm.id))
   );
-  const subCats = DATA.productSubCategories.filter(sc=>
+  const subCats = subCategoriesForActiveCycle().filter(sc=>
     (plFilters.productGroup.length===0 || plFilters.productGroup.includes(sc.productGroupId)) &&
     (plFilters.productCategory.length===0 || plFilters.productCategory.includes(sc.productCategoryId)) &&
     (plFilters.productSubCategory.length===0 || plFilters.productSubCategory.includes(sc.id))
@@ -3477,7 +3491,7 @@ function multiSelectHtml(id, label, options, selected){
 function plFilterBarHtml(){
   const pmOptionsForGroup = plFilters.partnerGroup.length===0 ? DATA.partnerModels : DATA.partnerModels.filter(pm=>plFilters.partnerGroup.includes(pm.partnerGroup));
   const catOptionsForGroup = plFilters.productGroup.length===0 ? DATA.productCategories : DATA.productCategories.filter(c=>plFilters.productGroup.includes(c.productGroupId));
-  const scOptionsForFilters = DATA.productSubCategories.filter(sc=>
+  const scOptionsForFilters = subCategoriesForActiveCycle().filter(sc=>
     (plFilters.productGroup.length===0 || plFilters.productGroup.includes(sc.productGroupId)) &&
     (plFilters.productCategory.length===0 || plFilters.productCategory.includes(sc.productCategoryId))
   );
@@ -3781,7 +3795,7 @@ function computeCodbCreditorAdditions(month){
   let total = 0;
   DATA.partnerModels.forEach(pm=>{
     const dedItemIds = new Set(DATA.marketplaceDeductionMapping.filter(m=> m.brandId===brandId && m.partnerModelId===pm.id).map(m=>m.codbLineItemId));
-    DATA.productSubCategories.forEach(sc=>{
+    subCategoriesForActiveCycle().forEach(sc=>{
       const row = computeParetoLevelPL(pm.id, sc.id, month);
       codbItems.forEach(li=>{
         if(dedItemIds.has(li.id)) return;
@@ -3804,7 +3818,7 @@ function computeCacCreditorAdditions(month){
   DATA.partnerModels.forEach(pm=>{
     const isCacDeducted = cacLi && DATA.marketplaceDeductionMapping.some(m=> m.brandId===brandId && m.partnerModelId===pm.id && m.codbLineItemId===cacLi.id);
     if(isCacDeducted) return;
-    DATA.productSubCategories.forEach(sc=>{
+    subCategoriesForActiveCycle().forEach(sc=>{
       total += computeParetoLevelPL(pm.id, sc.id, month).CAC || 0;
     });
   });
