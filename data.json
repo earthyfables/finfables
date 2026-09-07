@@ -15,7 +15,7 @@
       "Feb",
       "Mar"
     ],
-    "savedAt": "2026-09-07T12:40:09.796Z",
+    "savedAt": "2026-09-07T12:41:11.739Z",
     "activeCycleId": "CYC_xba629"
   },
   "channels": [
@@ -18168,7 +18168,19 @@
         "Apr": 80000
       }
     },
-    "CYC_xba629": {},
+    "CYC_xba629": {
+      "EL_cpucaa": {
+        "Apr": 0
+      },
+      "EL_aaeffh": {},
+      "EL_ry6t0e": {},
+      "EL_hbh005": {},
+      "EL_jzy1qi": {},
+      "EL_mtzob3": {},
+      "EL_5z2vyj": {},
+      "EL_94zxca": {},
+      "EL_qhsirw": {}
+    },
     "CYC_czj5yj": {
       "EL_vpsayp": {
         "Aug": ""
