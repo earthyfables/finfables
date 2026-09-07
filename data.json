@@ -15,7 +15,7 @@
       "Feb",
       "Mar"
     ],
-    "savedAt": "2026-09-07T13:24:17.032Z",
+    "savedAt": "2026-09-07T13:29:08.293Z",
     "activeCycleId": "CYC_xba629"
   },
   "channels": [
@@ -265,6 +265,14 @@
       "gstRate": 18,
       "creditorDays": 30,
       "type": "MISC"
+    },
+    {
+      "id": "EL_siylfn",
+      "name": "Petty Expense ",
+      "category": "Oveheads",
+      "type": "MISC",
+      "gstRate": 18,
+      "creditorDays": 0
     }
   ],
   "codbMaster": [
@@ -41431,7 +41439,16 @@
   },
   "debtorsByCycle": {
     "": {},
-    "CYC_xba629": {},
+    "CYC_xba629": {
+      "PM_lkql7m": {},
+      "PM_8mdlod": {},
+      "PM_zha4pk": {},
+      "PM_rp2j41": {},
+      "PM_w4g7wl": {},
+      "PM_2wvypf": {},
+      "PM_yln11y": {},
+      "PM_znvmp9": {}
+    },
     "CYC_czj5yj": {
       "PM_lkql7m": {},
       "PM_8mdlod": {
