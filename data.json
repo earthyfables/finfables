@@ -15,7 +15,7 @@
       "Feb",
       "Mar"
     ],
-    "savedAt": "2026-09-07T14:06:59.816Z",
+    "savedAt": "2026-09-07T14:07:02.694Z",
     "activeCycleId": "CYC_xba629"
   },
   "channels": [
@@ -18207,7 +18207,8 @@
         "Apr": 0,
         "May": 0,
         "Jun": 0,
-        "Jul": 0
+        "Jul": 0,
+        "Aug": 0
       },
       "EL_hbh005": {
         "Apr": 50000,
