@@ -15,7 +15,7 @@
       "Feb",
       "Mar"
     ],
-    "savedAt": "2026-09-07T14:07:09.711Z",
+    "savedAt": "2026-09-07T14:08:09.556Z",
     "activeCycleId": "CYC_xba629"
   },
   "channels": [
@@ -265,6 +265,14 @@
       "gstRate": 18,
       "creditorDays": 30,
       "type": "MISC"
+    },
+    {
+      "id": "EL_j38xa8",
+      "name": "Petty Expense",
+      "category": "Oveheads",
+      "type": "MISC",
+      "gstRate": 18,
+      "creditorDays": 0
     }
   ],
   "codbMaster": [
@@ -18180,8 +18188,7 @@
         "Dec": 152000,
         "Jan": 152000,
         "Feb": 152000,
-        "Mar": 152000,
-        "Aug": 152000
+        "Mar": 152000
       },
       "EL_aaeffh": {
         "Apr": 22000,
@@ -18205,11 +18212,7 @@
         "Jan": 400000,
         "Feb": 400000,
         "Mar": 400000,
-        "Apr": 0,
-        "May": 0,
-        "Jun": 0,
-        "Jul": 0,
-        "Aug": 0
+        "Apr": 0
       },
       "EL_hbh005": {
         "Apr": 50000,
