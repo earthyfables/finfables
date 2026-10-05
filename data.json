@@ -15,7 +15,7 @@
       "Feb",
       "Mar"
     ],
-    "savedAt": "2026-10-05T11:11:58.905Z",
+    "savedAt": "2026-10-05T11:15:21.698Z",
     "activeCycleId": "CYC_xba629"
   },
   "channels": [
@@ -183,7 +183,7 @@
       "name": "CAC",
       "category": "CAC",
       "gstRate": 18,
-      "creditorDays": 30,
+      "creditorDays": 0,
       "type": "CAC"
     },
     {
