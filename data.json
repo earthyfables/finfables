@@ -15,7 +15,7 @@
       "Feb",
       "Mar"
     ],
-    "savedAt": "2026-10-05T11:17:40.073Z",
+    "savedAt": "2026-10-05T11:17:55.396Z",
     "activeCycleId": "CYC_xba629"
   },
   "channels": [
@@ -191,7 +191,7 @@
       "name": "Salary",
       "category": "Salaries",
       "gstRate": 0,
-      "creditorDays": 0,
+      "creditorDays": 7,
       "type": "MISC"
     },
     {
