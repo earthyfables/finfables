@@ -15,7 +15,7 @@
       "Feb",
       "Mar"
     ],
-    "savedAt": "2026-10-05T11:18:26.121Z",
+    "savedAt": "2026-10-05T11:18:37.739Z",
     "activeCycleId": "CYC_xba629"
   },
   "channels": [
@@ -183,7 +183,7 @@
       "name": "CAC",
       "category": "CAC",
       "gstRate": 18,
-      "creditorDays": 0,
+      "creditorDays": 30,
       "type": "CAC"
     },
     {
@@ -191,7 +191,7 @@
       "name": "Salary",
       "category": "Salaries",
       "gstRate": 0,
-      "creditorDays": 7,
+      "creditorDays": 0,
       "type": "MISC"
     },
     {
@@ -199,7 +199,7 @@
       "name": "WH Salary",
       "category": "WH Expenses",
       "gstRate": 0,
-      "creditorDays": 7,
+      "creditorDays": 0,
       "type": "MISC"
     },
     {
@@ -24567,11 +24567,11 @@
         "Aug": 94.429,
         "Sep": 92,
         "Oct": 89,
-        "Nov": 89,
-        "Dec": 88,
-        "Jan": 87,
-        "Feb": 86,
-        "Mar": 86
+        "Nov": 84,
+        "Dec": 82,
+        "Jan": 81,
+        "Feb": 80,
+        "Mar": 80
       },
       "PM_zha4pk": {},
       "PM_rp2j41": {
@@ -57057,9 +57057,7 @@
     "": {},
     "CYC_xba629": {
       "PM_lkql7m": {},
-      "PM_8mdlod": {
-        "notdue": ""
-      },
+      "PM_8mdlod": {},
       "PM_zha4pk": {},
       "PM_rp2j41": {},
       "PM_w4g7wl": {},
