@@ -15,7 +15,7 @@
       "Feb",
       "Mar"
     ],
-    "savedAt": "2026-10-05T11:15:21.698Z",
+    "savedAt": "2026-10-05T11:17:40.073Z",
     "activeCycleId": "CYC_xba629"
   },
   "channels": [
@@ -199,7 +199,7 @@
       "name": "WH Salary",
       "category": "WH Expenses",
       "gstRate": 0,
-      "creditorDays": 0,
+      "creditorDays": 7,
       "type": "MISC"
     },
     {
