@@ -15,7 +15,7 @@
       "Feb",
       "Mar"
     ],
-    "savedAt": "2026-10-08T08:32:36.037Z",
+    "savedAt": "2026-10-08T08:32:41.007Z",
     "activeCycleId": "CYC_xba629"
   },
   "channels": [
@@ -53658,7 +53658,8 @@
         "Jul": 0.961
       },
       "PM_w4g7wl": {
-        "Mar": 0.5
+        "Mar": 0.5,
+        "Feb": 0.5
       },
       "PM_2wvypf": {
         "Mar": 1,
