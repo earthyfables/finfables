@@ -1044,6 +1044,21 @@ function renderMasterTable(container, arr, cols, opts){
 
   container.innerHTML = html;
 
+  // Format download must include every row, not just the rendered window.
+  if(virtualize){
+    const masterExportTable = container.querySelector('table.mastertable');
+    if(masterExportTable) masterExportTable._exportBodyRows = ()=> arr.map(row=> cols.map(c=>{
+      const val = row[c.key] ?? '';
+      if(c.type==='select' && !c.readOnly){
+        const opts2 = colOptsCache.get(c.key) || [];
+        const hit = opts2.find(o=>o.id===val) || opts2[0];
+        return hit ? hit.label : '';
+      }
+      if(c.type==='number' && !c.readOnly && c.decimals!==undefined && val!=='' && val!==null) return Number(val).toFixed(c.decimals);
+      return val;
+    }));
+  }
+
   function rerender(){ renderMasterTable(container, arr, cols, opts); if(opts.onChange) opts.onChange(); markDirty(); }
 
   if(virtualize){
@@ -1636,6 +1651,15 @@ function renderCodbRateCardScreen(container){
   html += `</tbody></table></div></div>`;
 
   container.innerHTML = html;
+
+  // Format download must include every Sub Category, not just the rendered window.
+  const codbRcTable = container.querySelector('.scrollbox table');
+  if(codbRcTable) codbRcTable._exportBodyRows = ()=> subCats.map(sc=>
+    [sc.eanCode||'', sc.name].concat(columns.map(({li,pm})=>{
+      const v = store[pm.id][li.id][sc.id];
+      return (v!==undefined && v!=='') ? v : '';
+    }))
+  );
 
   if(virtualize){
     const scrollEl = container.querySelector('.scrollbox');
@@ -2394,10 +2418,22 @@ document.addEventListener('click', (e)=>{
       });
       aoa.push(row);
     });
-    const tbodyRows = Array.from(table.querySelectorAll('tbody tr'));
-    tbodyRows.forEach(tr=>{
-      aoa.push(Array.from(tr.children).filter(td=>!isUiOnlyCell(td)).map(cellText));
-    });
+    // Virtualized tables only keep the on-screen window of rows in the DOM, so
+    // reading <tbody> would export just those. Such a table exposes
+    // _exportBodyRows() returning every row from the underlying data instead.
+    // Spacer rows are never real data, so they're skipped in the DOM path too.
+    if(typeof table._exportBodyRows === 'function'){
+      table._exportBodyRows().forEach(r=> aoa.push(r));
+      // Keep non-virtualized footer rows (e.g. a Total row) that live in the DOM.
+      table.querySelectorAll('tbody tr.subtotal').forEach(tr=>{
+        aoa.push(Array.from(tr.children).filter(td=>!isUiOnlyCell(td)).map(cellText));
+      });
+    } else {
+      const tbodyRows = Array.from(table.querySelectorAll('tbody tr:not(.vspacer)'));
+      tbodyRows.forEach(tr=>{
+        aoa.push(Array.from(tr.children).filter(td=>!isUiOnlyCell(td)).map(cellText));
+      });
+    }
   }
 
   if(!aoa.length || !aoa[0].length){
@@ -2700,6 +2736,20 @@ function renderParetoMixBody(host){
   html += `</tbody></table></div></div>`;
 
   host.innerHTML = html;
+
+  // Format download (reads the first table, the editable input) must include
+  // every Sub Category, not just the rendered window.
+  const pmInputTable = host.querySelector('.scrollbox table');
+  if(pmInputTable) pmInputTable._exportBodyRows = ()=> subCats.map((sc,si)=>{
+    const brand = DATA.brands.find(b=>b.id===sc.brandId);
+    const row = [sc.eanCode||'', sc.name + (si===0?' (auto)':''), brand ? brand.name : ''];
+    MONTHS.forEach(m=>{
+      if(si===0){ row.push(getDifferentialPct(subCats, mix, sc.id, m).toFixed(2)); return; }
+      const raw = (mix[sc.id]||{})[m];
+      row.push((raw!==undefined && raw!=='') ? Number(raw).toFixed(2) : '');
+    });
+    return row;
+  });
 
   if(virtualize){
     const inputScrollEl = host.querySelectorAll('.scrollbox')[0];
