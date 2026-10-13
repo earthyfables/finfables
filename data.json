@@ -15,7 +15,7 @@
       "Feb",
       "Mar"
     ],
-    "savedAt": "2026-10-13T09:14:28.882Z",
+    "savedAt": "2026-10-13T09:18:26.175Z",
     "activeCycleId": "CYC_xba629"
   },
   "channels": [
@@ -175,7 +175,7 @@
       "name": "CODB",
       "category": "CODB",
       "gstRate": 18,
-      "creditorDays": 30,
+      "creditorDays": 7,
       "type": "CODB"
     },
     {
