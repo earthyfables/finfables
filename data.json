@@ -15,7 +15,7 @@
       "Feb",
       "Mar"
     ],
-    "savedAt": "2026-10-13T11:17:10.324Z",
+    "savedAt": "2026-10-13T11:17:15.710Z",
     "activeCycleId": "CYC_xba629"
   },
   "channels": [
@@ -151812,7 +151812,8 @@
     "": {},
     "CYC_xba629": {
       "openingGood": 4976000,
-      "openingGstCredit": 2583000
+      "openingGstCredit": 2583000,
+      "openingMuda": 0
     },
     "CYC_czj5yj": {
       "inwards": {
