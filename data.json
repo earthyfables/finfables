@@ -15,7 +15,7 @@
       "Feb",
       "Mar"
     ],
-    "savedAt": "2026-10-13T11:44:38.003Z",
+    "savedAt": "2026-10-13T11:44:58.325Z",
     "activeCycleId": "CYC_xba629"
   },
   "channels": [
@@ -102,13 +102,6 @@
       "model": "B2C",
       "partnerGroup": "Other Offline",
       "partnerCode": "WHS"
-    },
-    {
-      "id": "PM_wd82g2",
-      "partnerCode": "",
-      "partner": "",
-      "model": "B2C",
-      "partnerGroup": "Other Offline"
     }
   ],
   "brandPartnerMapping": [
