@@ -15,7 +15,7 @@
       "Feb",
       "Mar"
     ],
-    "savedAt": "2026-10-13T11:58:56.211Z",
+    "savedAt": "2026-10-13T11:59:02.742Z",
     "activeCycleId": "CYC_xba629"
   },
   "channels": [
@@ -513,8 +513,7 @@
       "structure": "Other",
       "rateBasis": "Rs Per Gross Qty",
       "mappedPartnerModels": [
-        "PM_w4g7wl",
-        "PM_keu40y"
+        "PM_w4g7wl"
       ]
     },
     {
