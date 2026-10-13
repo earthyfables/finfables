@@ -15,7 +15,7 @@
       "Feb",
       "Mar"
     ],
-    "savedAt": "2026-10-13T11:44:58.325Z",
+    "savedAt": "2026-10-13T11:45:18.526Z",
     "activeCycleId": "CYC_xba629"
   },
   "channels": [
@@ -102,6 +102,13 @@
       "model": "B2C",
       "partnerGroup": "Other Offline",
       "partnerCode": "WHS"
+    },
+    {
+      "id": "PM_keu40y",
+      "partnerCode": "FC",
+      "partner": "FIrst Club",
+      "model": "B2B",
+      "partnerGroup": "Other Offline"
     }
   ],
   "brandPartnerMapping": [
