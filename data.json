@@ -15,7 +15,7 @@
       "Feb",
       "Mar"
     ],
-    "savedAt": "2026-10-13T09:18:26.175Z",
+    "savedAt": "2026-10-13T11:09:57.412Z",
     "activeCycleId": "CYC_xba629"
   },
   "channels": [
@@ -151810,7 +151810,9 @@
   },
   "inventoryByCycle": {
     "": {},
-    "CYC_xba629": {},
+    "CYC_xba629": {
+      "openingGood": 4976000
+    },
     "CYC_czj5yj": {
       "inwards": {
         "Aug": 5000000,
