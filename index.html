@@ -370,6 +370,7 @@
   .ap-drop{flex:1 1 320px; border:2px dashed var(--line); border-radius:var(--radius); background:var(--surface); padding:16px 18px; transition:all 0.15s ease;}
   .ap-drop.over{border-color:var(--accent); background:var(--accent-soft);}
   .ap-drop.ok{border-style:solid; border-color:var(--gold); background:var(--gold-soft);}
+  .ap-drop.off{opacity:0.5;}
   .ap-drop.bad{border-style:solid; border-color:var(--neg); background:var(--neg-soft);}
   .ap-drop h3{margin:0 0 4px 0; font-size:14px; color:var(--accent-dark);}
   .ap-drop .hint{font-size:12px; color:var(--ink-soft); font-style:italic; margin-bottom:10px;}
@@ -426,7 +427,7 @@
 
     <div class="navgroup">
       <h4>Actuals Process</h4>
-      <button class="navitem" data-tab="actualsAmazonPL"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg><span>Amazon Actual P&amp;L</span></button>
+      <button class="navitem" data-tab="actualsPL"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg><span>Actual PL</span></button>
     </div>
 
     <div class="sidebarsave">
@@ -591,6 +592,15 @@ async function loadData(){
   // source of truth, so every user always sees the same data. No local
   // browser copy is compared or preferred anymore.
   DATA = fromFile || JSON.parse(JSON.stringify(SEED));
+  // Actuals (monthly file list + saved P&Ls) live in their own file, actuals/actuals.json, not in data.json.
+  try{
+    const r = await apApi({action:'get', path:'actuals/actuals.json'});
+    DATA.actualsProcess = JSON.parse(decodeURIComponent(escape(atob(r.contentBase64))));
+    actualsSync.loaded = true; actualsSync.last = JSON.stringify(DATA.actualsProcess);
+  }catch(e){
+    if(/not found/i.test(e.message)){ actualsSync.loaded = true; actualsSync.last = ''; } // first use: nothing stored yet
+    // any other error: leave actualsSync.loaded false so we never overwrite the stored actuals with an empty copy
+  }
   // Migration: backfill any fields/arrays introduced after this data.json was last saved,
   // so older saved files keep working without losing existing rows.
   ['codbLineItems','marketplaceDeductionMapping','productGroups','productCategories','brandCategoryMapping'].forEach(k=>{ if(!DATA[k]) DATA[k]=[]; });
@@ -850,6 +860,14 @@ function renderEditableTable(container, arr, cols, opts){
   });
 }
 
+const actualsSync = {loaded:false, last:null};
+async function saveActualsFile(){
+  if(!actualsSync.loaded || !DATA.actualsProcess) return;
+  const json = JSON.stringify(DATA.actualsProcess);
+  if(json === actualsSync.last) return;
+  await apApi({action:'put', path:'actuals/actuals.json', contentBase64: btoa(unescape(encodeURIComponent(json)))});
+  actualsSync.last = json;
+}
 let autosaveTimer = null;
 function markDirty(){
   paretoLevelPLCache.clear();
@@ -874,10 +892,13 @@ async function saveToGitHub(){
   try{
     DATA.meta = DATA.meta || {};
     DATA.meta.savedAt = new Date().toISOString();
+    await saveActualsFile();
+    // data.json carries everything except the actuals, which are saved to their own file above
+    const body = JSON.stringify(DATA, (k, v)=> (k === 'actualsProcess' && v === DATA.actualsProcess) ? undefined : v);
     const resp = await fetch('/api/save', {
       method: 'POST',
       headers: {'Content-Type': 'application/json'},
-      body: JSON.stringify(DATA)
+      body
     });
     const result = await resp.json();
     if(!resp.ok) throw new Error(result.error || 'Save failed');
@@ -3123,9 +3144,9 @@ const TABS = {
     render: renderInventoryTabScreen
   },
   outputPLCF:{ title:'P&L & Cash Flow', desc:'Full company total, no filters. Structure matches the reviewed model.', render: renderPLCF },
-  actualsAmazonPL:{
-    title:'Amazon Actual P&L', desc:'Upload the Amazon Business Report and the monthly Transaction Report; the P&L is built by the SOP rules. Cost per unit comes from Pareto Input (matched on SKU).',
-    render: renderAmazonActualPL
+  actualsPL:{
+    title:'Actual PL', desc:'Tick the channels you upload actuals for, pick the month, then upload that month\'s files. Amazon follows the SOP; cost per unit comes from Pareto Input (matched on SKU).',
+    render: renderActualPL
   },
   outputPartnerProductPL:{ title:'Partner and Product wise', desc:'Same P&L, filterable by Partner Group, Partner-Model, Product Group, Product Category, and Product Sub-Category. Runs through CM3 only.', render: renderPartnerProductPL },
 };
@@ -3140,8 +3161,9 @@ const TABS = {
      GST        : GSV / 1.05 x 0.05
      COGS       : units (Business Report) x cost per unit; return COGS = refund qty x cost per unit
      Fee lines  : straight from the Transaction Report columns (see rule text on screen)
-   Everything is parsed and calculated in the browser; the uploaded CSVs are never stored.
-   Only the monthly result the user chooses to Save goes into the data file.
+   Everything is calculated in the browser. The month's source CSVs are stored compressed as separate
+   repo files (actuals/<channel>/<YYYY-MM>/…) via /api/actuals-file; the data file keeps only the file list
+   and the saved monthly P&L.
    ----------------------------------------------------------------*/
 const AMAZON_ACTUALS_DEFAULTS = {saleGstPct:5, feeGstPct:18, includeB2BUnitsInCogs:true};
 function getAmazonActualsStore(){
@@ -3151,6 +3173,9 @@ function getAmazonActualsStore(){
   if(!st.settings) st.settings = {};
   Object.keys(AMAZON_ACTUALS_DEFAULTS).forEach(k=>{ if(st.settings[k] === undefined) st.settings[k] = AMAZON_ACTUALS_DEFAULTS[k]; });
   if(!st.results) st.results = {};
+  if(!st.months) st.months = {};
+  if(!DATA.actualsProcess.channels) DATA.actualsProcess.channels = {};
+  st.channels = DATA.actualsProcess.channels;
   return st;
 }
 
@@ -3403,23 +3428,132 @@ function computeAmazonActualPL(biz, txn, settings, costMap){
 }
 
 // ---- screen ----------------------------------------------------------------
-let amazonActualState = {biz:null, txn:null, bizName:'', txnName:'', bizError:'', txnError:'', label:'', labelFor:''};
+// Source files are stored one file per month in the repo (compressed) through /api/actuals-file,
+// NOT inside the data file (monthly CSVs are too big for it). The data file only keeps the
+// file list per month and the saved P&L snapshot.
+function apBlankFiles(){ return {biz:null, txn:null, bizName:'', txnName:'', bizError:'', txnError:'', bizStore:'', txnStore:'', busy:{biz:false, txn:false}}; }
+let amazonActualState = apBlankFiles();
+let apUI = {view:'channels', month:'', loadToken:0, loading:false, snap:false};
+const AP_CHANNEL_SLUG = 'amazon';
 
-function apReadFile(file, kind, rerender){
-  const reader = new FileReader();
-  reader.onload = ()=>{
-    const text = String(reader.result || '');
-    const res = kind === 'biz' ? parseAmazonBusinessReport(text) : parseAmazonTransactions(text);
-    if(kind === 'biz'){ amazonActualState.bizName = file.name; amazonActualState.biz = res.error ? null : res; amazonActualState.bizError = res.error || ''; }
-    else { amazonActualState.txnName = file.name; amazonActualState.txn = res.error ? null : res; amazonActualState.txnError = res.error || ''; }
-    rerender();
-  };
-  reader.onerror = ()=>{
-    const msg = 'Could not read this file.';
-    if(kind === 'biz') amazonActualState.bizError = msg; else amazonActualState.txnError = msg;
-    rerender();
-  };
-  reader.readAsText(file, 'utf-8');
+function apIsAmazon(pm){ return !!pm && pm.partner === 'Amazon' && pm.model === 'B2C'; }
+function apMonthLabel(key){ const m = /^(\d{4})-(\d{2})$/.exec(key || ''); return m ? AP_MON_NAMES[+m[2] - 1] + ' ' + m[1] : (key || ''); }
+function apFilePath(kind, month){ return 'actuals/' + AP_CHANNEL_SLUG + '/' + month + '/' + (kind === 'biz' ? 'business-report' : 'transactions') + '.csv.gz'; }
+function apKb(n){ return n >= 1048576 ? (n / 1048576).toFixed(1) + ' MB' : Math.max(1, Math.round(n / 1024)) + ' KB'; }
+
+function apBytesToB64(u8){
+  let s = ''; const CH = 0x8000;
+  for(let i = 0; i < u8.length; i += CH) s += String.fromCharCode.apply(null, u8.subarray(i, i + CH));
+  return btoa(s);
+}
+async function apGzipText(text){
+  if(typeof CompressionStream === 'undefined') throw new Error('this browser cannot compress files — use a current Chrome, Edge or Safari');
+  const stream = new Blob([text]).stream().pipeThrough(new CompressionStream('gzip'));
+  return apBytesToB64(new Uint8Array(await new Response(stream).arrayBuffer()));
+}
+async function apGunzipB64(b64){
+  if(typeof DecompressionStream === 'undefined') throw new Error('this browser cannot decompress files');
+  const bin = atob(b64); const u8 = new Uint8Array(bin.length);
+  for(let i = 0; i < bin.length; i++) u8[i] = bin.charCodeAt(i);
+  const stream = new Blob([u8]).stream().pipeThrough(new DecompressionStream('gzip'));
+  return await new Response(stream).text();
+}
+async function apApi(body){
+  let r;
+  try{ r = await fetch('/api/actuals-file', {method:'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify(body)}); }
+  catch(e){ throw new Error('no connection to the server'); }
+  let j = {}; try{ j = await r.json(); }catch(e){}
+  if(!r.ok) throw new Error(j.error || ('server error ' + r.status));
+  return j;
+}
+function apReadText(file){
+  return new Promise((resolve, reject)=>{
+    const rd = new FileReader();
+    rd.onload = ()=> resolve(String(rd.result || ''));
+    rd.onerror = ()=> reject(new Error('Could not read this file.'));
+    rd.readAsText(file, 'utf-8');
+  });
+}
+function apSetParsed(kind, name, text){
+  const res = kind === 'biz' ? parseAmazonBusinessReport(text) : parseAmazonTransactions(text);
+  const s = amazonActualState;
+  if(kind === 'biz'){ s.bizName = name; s.biz = res.error ? null : res; s.bizError = res.error || ''; }
+  else { s.txnName = name; s.txn = res.error ? null : res; s.txnError = res.error || ''; }
+  return res;
+}
+function apDominantMonth(txn){
+  const m = Object.keys((txn && txn.monthCount) || {});
+  if(!m.length) return '';
+  m.sort((a, b)=> txn.monthCount[b] - txn.monthCount[a]);
+  return m[0];
+}
+
+async function apSelectMonth(month, rerender){
+  const token = ++apUI.loadToken;
+  amazonActualState = apBlankFiles(); apUI.month = month; apUI.snap = false; apUI.loading = false;
+  const meta = month ? ((getAmazonActualsStore().months[month] || {}).files || {}) : {};
+  const kinds = ['biz', 'txn'].filter(k=> meta[k]);
+  if(!kinds.length){ rerender(); return; }
+  apUI.loading = true; rerender();
+  for(const k of kinds){
+    try{
+      const r = await apApi({action:'get', path: meta[k].path});
+      const text = await apGunzipB64(r.contentBase64);
+      if(token !== apUI.loadToken) return;
+      apSetParsed(k, meta[k].name, text);
+    }catch(e){
+      if(token !== apUI.loadToken) return;
+      amazonActualState[k + 'Error'] = 'The stored file could not be loaded (' + e.message + '). Upload it again.';
+      amazonActualState[k + 'Name'] = meta[k].name;
+    }
+  }
+  apUI.loading = false; rerender();
+}
+
+async function apHandleFile(file, kind, rerender){
+  const month = apUI.month;
+  if(!month) return;
+  let text;
+  try{ text = await apReadText(file); }
+  catch(e){ amazonActualState[kind + 'Error'] = e.message; amazonActualState[kind + 'Name'] = file.name; rerender(); return; }
+  const res = kind === 'biz' ? parseAmazonBusinessReport(text) : parseAmazonTransactions(text);
+  if(res.error){
+    amazonActualState[kind + 'Error'] = res.error; amazonActualState[kind + 'Name'] = file.name; rerender(); return;
+  }
+  if(kind === 'txn'){
+    const dom = apDominantMonth(res);
+    if(dom && dom !== month && !confirm('This Transaction Report is mostly ' + apMonthLabel(dom) + ', but you selected ' + apMonthLabel(month) + '.\n\nUpload it against ' + apMonthLabel(month) + ' anyway?')) return;
+  }
+  apSetParsed(kind, file.name, text);
+  const S = amazonActualState;
+  S[kind + 'Store'] = ''; S.busy[kind] = true; apUI.snap = true;
+  rerender();
+  const store = getAmazonActualsStore();
+  const path = apFilePath(kind, month);
+  let err = '';
+  try{
+    const b64 = await apGzipText(text);
+    await apApi({action:'put', path, contentBase64: b64});
+    const mm = store.months[month] = store.months[month] || {files:{}};
+    mm.files = mm.files || {};
+    mm.files[kind] = {name: file.name, path, rawSize: text.length, size: Math.round(b64.length * 0.75), at: new Date().toISOString()};
+    markDirty();
+  }catch(e){ err = 'Not stored: ' + e.message; }
+  if(apUI.month === month){ S[kind + 'Store'] = err; S.busy[kind] = false; rerender(); }
+}
+
+async function apRemoveFile(kind, rerender){
+  const month = apUI.month, store = getAmazonActualsStore();
+  const meta = ((store.months[month] || {}).files || {})[kind];
+  const s = amazonActualState;
+  if(meta){
+    try{ await apApi({action:'delete', path: meta.path}); }
+    catch(e){ if(!/not found/i.test(e.message)){ s[kind + 'Store'] = 'Could not remove the stored file: ' + e.message; rerender(); return; } }
+    delete store.months[month].files[kind]; markDirty();
+  }
+  if(kind === 'biz'){ s.biz = null; s.bizName = ''; s.bizError = ''; } else { s.txn = null; s.txnName = ''; s.txnError = ''; }
+  s[kind + 'Store'] = '';
+  rerender();
 }
 
 function apPct(v){ return v === null || v === undefined ? '' : (v*100).toFixed(2) + '%'; }
@@ -3453,13 +3587,58 @@ function apDownloadXlsx(res, label){
   XLSX.writeFile(wb, 'Amazon_Actual_PL_' + apSlug(label) + '.xlsx');
 }
 
-function renderAmazonActualPL(container){
-  const store = getAmazonActualsStore();
-  const st = amazonActualState;
-  const S = store.settings;
-  const rerender = ()=> renderAmazonActualPL(container);
+function apSectionLabel(text, color){
+  return `<div class="cyclelabel" style="color:${color || 'var(--ink-soft)'}; margin:18px 0 8px 0; font-size:11px; text-transform:uppercase; letter-spacing:0.05em; font-weight:700;">${text}</div>`;
+}
 
-  let html = '';
+function renderActualPL(container){
+  const store = getAmazonActualsStore();
+  const channels = store.channels;
+  const pms = DATA.partnerModels || [];
+  const rerender = ()=> renderActualPL(container);
+  const ticked = pms.filter(pm=> channels[pm.id]);
+  if(apUI.view !== 'channels' && !ticked.some(pm=> pm.id === apUI.view)) apUI.view = 'channels';
+
+  let html = `<div class="pillbar" style="margin-bottom:14px;">
+    <button class="pill ${apUI.view === 'channels' ? 'active' : ''}" data-apview="channels">Channels</button>` +
+    ticked.map(pm=> `<button class="pill ${apUI.view === pm.id ? 'active' : ''}" data-apview="${pm.id}">${apEsc(pmLabel(pm))}</button>`).join('') + `</div>`;
+
+  if(apUI.view === 'channels'){
+    html += `<div class="ap-info">Tick the channels for which you will upload actuals. Each ticked channel gets its own pill here.</div>
+    <div class="panel"><table class="ledger"><thead><tr><th style="width:70px;">Upload actuals</th><th>Channel (Partner-Model)</th><th>Actual P&amp;L logic</th></tr></thead><tbody>` +
+    pms.map(pm=> `<tr><td style="text-align:center;"><input type="checkbox" data-apchan="${pm.id}" ${channels[pm.id] ? 'checked' : ''}></td>
+      <td style="text-align:left;">${apEsc(pmLabel(pm))}</td>
+      <td class="ap-rule">${apIsAmazon(pm) ? 'Available — Amazon Business Report + Transaction Report' : 'Not built yet'}</td></tr>`).join('') +
+    `</tbody></table></div>`;
+    if(!pms.length) html += `<div class="ap-warn">No Partner-Models configured yet — add them in Masters → Partner-Model master.</div>`;
+    container.innerHTML = html;
+    wireCommon();
+    container.querySelectorAll('[data-apchan]').forEach(cb=>{
+      cb.addEventListener('change', ()=>{
+        if(cb.checked) channels[cb.dataset.apchan] = true; else delete channels[cb.dataset.apchan];
+        markDirty(); rerender();
+      });
+    });
+    return;
+  }
+
+  const pm = pms.find(p=> p.id === apUI.view);
+  if(!apIsAmazon(pm)){
+    html += `<div class="ap-info"><b>${apEsc(pmLabel(pm))}</b> — the Actual P&amp;L process for this channel has not been built yet. Its rules and upload screen will appear here once they are defined.</div>`;
+    container.innerHTML = html; wireCommon(); return;
+  }
+
+  // ===== Amazon =====
+  const st = amazonActualState, S = store.settings, month = apUI.month;
+  const meta = month ? ((store.months[month] || {}).files || {}) : {};
+
+  // --- 1. month first ---
+  const monthsWithFiles = Object.keys(store.months).filter(k=> Object.keys(store.months[k].files || {}).length).sort().reverse();
+  html += `<div class="ap-settings" style="gap:14px;">
+    <label style="font-size:13px;">1. Month <input type="month" id="apMonth" value="${apEsc(month)}" style="border:1px solid var(--line); border-radius:6px; padding:6px 9px; font-family:inherit; font-size:13px;"></label>` +
+    (monthsWithFiles.length ? `<span class="footnote" style="margin:0;">Months with files stored: ` + monthsWithFiles.map(k=> `<button class="btn-sm" data-apmonth="${k}">${apEsc(apMonthLabel(k))}</button>`).join(' ') + `</span>` : '') +
+    `</div>`;
+
   // --- basis settings ---
   html += `<div class="ap-settings">
     <label>Sale GST % <input type="number" step="any" id="apSaleGst" value="${S.saleGstPct}"></label>
@@ -3468,51 +3647,71 @@ function renderAmazonActualPL(container){
     <span class="footnote" style="margin:0;">Fees in the Transaction Report include GST, so they are divided by (1 + Fee GST %) to get the P&amp;L figure.</span>
   </div>`;
 
-  // --- uploads ---
+  // --- 2. uploads ---
+  if(!month) html += `<div class="ap-info">Choose the month above first — the files you upload are stored against that month.</div>`;
+  if(apUI.loading) html += `<div class="ap-info">Loading the stored files for ${apEsc(apMonthLabel(month))}…</div>`;
   const dz = (kind, step, title, hint, name, err, okText)=>{
-    const cls = err ? 'bad' : (okText ? 'ok' : '');
+    const m = meta[kind], busy = st.busy[kind], storeErr = st[kind + 'Store'];
+    const cls = !month ? 'off' : (err || storeErr ? 'bad' : (okText ? 'ok' : ''));
+    let status = '';
+    if(err) status = `<div class="status bad">✗ ${apEsc(err)}</div>`;
+    else if(name){
+      status = `<div class="status ok">✓ ${apEsc(name)} — ${okText}</div>`;
+      if(busy) status += `<div class="status">Storing…</div>`;
+      else if(storeErr) status += `<div class="status bad">✗ ${apEsc(storeErr)}. The P&amp;L below is still calculated, but the file is not saved — upload it again.</div>`;
+      else if(m) status += `<div class="status ok">💾 Stored for ${apEsc(apMonthLabel(month))} (${apKb(m.size)} compressed, uploaded ${apEsc(new Date(m.at).toLocaleDateString('en-IN'))})</div>`;
+    }
     return `<div class="ap-drop ${cls}" data-drop="${kind}">
       <h3>${step}. ${title}</h3><div class="hint">${hint}</div>
-      <input type="file" accept=".csv,text/csv" data-file="${kind}">
-      ${name ? `<div class="status ${err ? 'bad' : 'ok'}">${err ? '✗ ' + apEsc(err) : '✓ ' + apEsc(name) + ' — ' + okText}</div>` : ''}
+      <input type="file" accept=".csv,text/csv" data-file="${kind}" ${month ? '' : 'disabled'}>
+      ${status}
+      ${(m || name) && month ? `<div style="margin-top:8px;"><button class="btn-sm danger" data-apremove="${kind}">Remove this file</button></div>` : ''}
     </div>`;
   };
   html += `<div class="ap-uploads">` +
-    dz('biz', 1, 'Business Report (CSV)', 'Sales and traffic by SKU — needs SKU, Units Ordered, Ordered Product Sales (and the B2B columns). Drop the file here or choose it.', st.bizName, st.bizError, st.biz ? st.biz.rows.length + ' SKU rows' : '') +
-    dz('txn', 2, 'Transaction Report (CSV)', 'Custom Unified Transaction report for the month. Drop the file here or choose it.', st.txnName, st.txnError, st.txn ? st.txn.rows.length.toLocaleString('en-IN') + ' transactions' : '') +
+    dz('biz', 2, 'Business Report (CSV)', 'Sales and traffic by SKU — needs SKU, Units Ordered, Ordered Product Sales (and the B2B columns). Drop the file here or choose it.', st.bizName, st.bizError, st.biz ? st.biz.rows.length + ' SKU rows' : '') +
+    dz('txn', 3, 'Transaction Report (CSV)', 'Custom Unified Transaction report for the month. Drop the file here or choose it.', st.txnName, st.txnError, st.txn ? st.txn.rows.length.toLocaleString('en-IN') + ' transactions' : '') +
     `</div>`;
 
   let res = null;
-  if(st.biz && st.txn){
+  if(month && st.biz && st.txn){
     res = computeAmazonActualPL(st.biz, st.txn, S, getAmazonSkuCostMap());
-    const label = (st.labelFor === res.period.key && st.label) ? st.label : res.period.label;
-    st.label = label; st.labelFor = res.period.key;
+    const mismatch = res.period.key && res.period.key !== month;
 
     html += `<div class="ap-info"><b>Period in the Transaction Report:</b> ${apEsc(res.period.text || 'dates not readable')}.
       The Business Report carries no dates — make sure it is for the same month.</div>`;
+    if(mismatch) html += `<div class="ap-warn">⚠ The Transaction Report is for ${apEsc(apMonthLabel(res.period.key))} but the month selected is ${apEsc(apMonthLabel(month))}. This P&amp;L is <b>not</b> being saved to the history until the correct file is uploaded.</div>`;
     res.warnings.forEach(w=> html += `<div class="ap-warn">⚠ ${apEsc(w)}</div>`);
 
-    html += `<div class="panel"><table class="ledger"><thead><tr><th>Particulars</th><th>Amount (₹)</th><th>% to sale</th><th class="ap-rule">Rule applied (from the SOP)</th></tr></thead><tbody>`;
+    html += `<div class="panel"><table class="ledger"><thead><tr><th>Particulars — ${apEsc(apMonthLabel(month))}</th><th>Amount (₹)</th><th>% to sale</th><th class="ap-rule">Rule applied (from the SOP)</th></tr></thead><tbody>`;
     res.lines.forEach(l=>{
       const cls = [l.kind || '', (!l.kind && l.indent) ? 'lineitem' : ''].filter(Boolean).join(' ');
       html += `<tr class="${cls}"><td>${apEsc(l.label)}</td><td>${fmt(l.amount)}</td><td class="pct">${apPct(l.pct)}</td><td class="ap-rule">${apEsc(l.rule)}</td></tr>`;
     });
     html += `</tbody></table></div>`;
 
-    const already = !!store.results[res.period.key];
+    // keep the saved month's P&L in step with the files (history table below)
+    let snapNote = '';
+    if(!mismatch){
+      const saved = store.results[month];
+      if(apUI.snap || !saved){
+        store.results[month] = {
+          label: apMonthLabel(month), savedAt: new Date().toISOString(), period: res.period.text,
+          settings: Object.assign({}, S),
+          lines: res.lines.map(l=> ({key:l.key, label:l.label, kind:l.kind || '', indent:!!l.indent, amount: Math.round(l.amount*100)/100, pct: l.pct}))
+        };
+        apUI.snap = false; markDirty();
+      }
+      snapNote = `<span style="font-size:12px; color:var(--ink-soft);">P&amp;L for ${apEsc(apMonthLabel(month))} is saved automatically and updates when you replace a file or change a setting.</span>`;
+    }
     html += `<div class="ap-actions">
-      <button class="btn" id="apDownload">⬇ Download Excel</button>
-      <span style="font-size:12px; font-weight:700; color:var(--ink-soft);">Month label</span>
-      <input type="text" id="apLabel" value="${apEsc(label)}">
-      <button class="btn primary" id="apSave">💾 ${already ? 'Replace saved month' : 'Save this month'}</button>
-      <button class="btn danger" id="apClear">Clear uploads</button>
+      <button class="btn" id="apDownload">⬇ Download Excel</button> ${snapNote}
+      <button class="btn danger" id="apWipeMonth">Remove all files of this month</button>
     </div>`;
 
-    // --- reconciliation ---
-    const rc = res.recon;
-    const okDiff = Math.abs(rc.diff) < 0.01;
-    html += `<div class="cyclelabel" style="color:var(--ink-soft); margin:18px 0 8px 0; font-size:11px; text-transform:uppercase; letter-spacing:0.05em; font-weight:700;">Reconciliation — every row of the Transaction Report is accounted for</div>
-    <div class="panel"><table class="ledger"><thead><tr><th>Transaction Report</th><th>Rows</th><th>Total (₹)</th><th class="ap-rule">Treatment</th></tr></thead><tbody>
+    const rc = res.recon, okDiff = Math.abs(rc.diff) < 0.01;
+    html += apSectionLabel('Reconciliation — every row of the Transaction Report is accounted for') +
+    `<div class="panel"><table class="ledger"><thead><tr><th>Transaction Report</th><th>Rows</th><th>Total (₹)</th><th class="ap-rule">Treatment</th></tr></thead><tbody>
       <tr><td>Transfers</td><td>${rc.transfer.n}</td><td>${fmt(rc.transfer.total)}</td><td class="ap-rule">Deleted — bank payout, not a P&amp;L item</td></tr>
       <tr><td>Cost of Advertising</td><td>${rc.ads.n}</td><td>${fmt(rc.ads.total)}</td><td class="ap-rule">Deleted from fees — shown as CAC (₹ ${fmt(rc.ads.exGst)} ex-GST)</td></tr>
       <tr><td>Refunds</td><td>${rc.refund.n}</td><td>${fmt(rc.refund.total)}</td><td class="ap-rule">Shown as Returns (${rc.returnQty} units)</td></tr>
@@ -3521,23 +3720,22 @@ function renderAmazonActualPL(container){
     </tbody></table></div>
     <div class="footnote">Business Report: ${rc.bizRows} SKU rows · ${rc.units.toLocaleString('en-IN')} B2C units + ${rc.unitsB2B.toLocaleString('en-IN')} B2B units · sales ₹ ${fmt(rc.sales)} B2C + ₹ ${fmt(rc.salesB2B)} B2B · ${rc.skusMatched} of ${rc.skus} SKUs have a cost per unit in the app.</div>`;
 
-    // --- SKUs without cost ---
     if(res.missingList.length){
-      html += `<div class="cyclelabel" style="color:var(--neg); margin:18px 0 8px 0; font-size:11px; text-transform:uppercase; letter-spacing:0.05em; font-weight:700;">SKUs with no cost per unit in the app</div>
-      <div class="panel"><table class="ledger"><thead><tr><th>SKU</th><th>Units</th></tr></thead><tbody>` +
+      html += apSectionLabel('SKUs with no cost per unit in the app', 'var(--neg)') +
+      `<div class="panel"><table class="ledger"><thead><tr><th>SKU</th><th>Units</th></tr></thead><tbody>` +
       res.missingList.map(m=> `<tr><td>${apEsc(m.sku)}</td><td>${m.units}</td></tr>`).join('') + `</tbody></table></div>
       <div class="footnote">For a SKU: add its SKU Code in Pareto Master → Product Sub Category and its cost in Pareto Input (ACOGS), then upload again. A refund row with no SKU means Amazon did not record which item came back, so it cannot be matched to a cost.</div>`;
     }
-  } else {
-    html += `<div class="ap-info">Choose both files to build the P&amp;L. The files are read in your browser only and are not stored — only a month you choose to <b>Save</b> is kept.</div>`;
+  } else if(month && !apUI.loading){
+    html += `<div class="ap-info">Upload both files for ${apEsc(apMonthLabel(month))} to build the P&amp;L. They are stored against this month, so next time you pick the month they load by themselves.</div>`;
   }
 
   // --- saved months ---
   const keys = Object.keys(store.results).sort();
   if(keys.length){
     const lineDefs = (res ? res.lines : store.results[keys[0]].lines.map(l=>({key:l.key, label:l.label, kind:l.kind, indent:l.indent})));
-    html += `<div class="cyclelabel" style="color:var(--ink-soft); margin:22px 0 8px 0; font-size:11px; text-transform:uppercase; letter-spacing:0.05em; font-weight:700;">Saved months</div>
-    <div class="panel" style="overflow-x:auto;"><table class="ledger"><thead><tr><th>Particulars</th>` +
+    html += apSectionLabel('Saved months') +
+    `<div class="panel" style="overflow-x:auto;"><table class="ledger"><thead><tr><th>Particulars</th>` +
       keys.map(k=> `<th>${apEsc(store.results[k].label)}</th>`).join('') + `</tr></thead><tbody>`;
     lineDefs.forEach(def=>{
       const cls = [def.kind || '', (!def.kind && def.indent) ? 'lineitem' : ''].filter(Boolean).join(' ');
@@ -3555,60 +3753,57 @@ function renderAmazonActualPL(container){
   }
 
   container.innerHTML = html;
+  wireCommon();
 
-  // --- wiring ---
+  // --- wiring (Amazon) ---
+  const mEl = container.querySelector('#apMonth');
+  if(mEl) mEl.addEventListener('change', ()=> apSelectMonth(mEl.value, rerender));
+  container.querySelectorAll('[data-apmonth]').forEach(b=> b.addEventListener('click', ()=> apSelectMonth(b.dataset.apmonth, rerender)));
   const num = (id, key)=>{
     const el = container.querySelector(id);
-    if(el) el.addEventListener('change', ()=>{ const v = parseFloat(el.value); S[key] = isNaN(v) ? AMAZON_ACTUALS_DEFAULTS[key] : v; markDirty(); rerender(); });
+    if(el) el.addEventListener('change', ()=>{ const v = parseFloat(el.value); S[key] = isNaN(v) ? AMAZON_ACTUALS_DEFAULTS[key] : v; apUI.snap = true; markDirty(); rerender(); });
   };
   num('#apSaleGst', 'saleGstPct'); num('#apFeeGst', 'feeGstPct');
   const b2b = container.querySelector('#apB2bUnits');
-  if(b2b) b2b.addEventListener('change', ()=>{ S.includeB2BUnitsInCogs = b2b.checked; markDirty(); rerender(); });
+  if(b2b) b2b.addEventListener('change', ()=>{ S.includeB2BUnitsInCogs = b2b.checked; apUI.snap = true; markDirty(); rerender(); });
 
   container.querySelectorAll('input[data-file]').forEach(inp=>{
-    inp.addEventListener('change', ()=>{ if(inp.files && inp.files[0]) apReadFile(inp.files[0], inp.dataset.file, rerender); });
+    inp.addEventListener('change', ()=>{ if(inp.files && inp.files[0]) apHandleFile(inp.files[0], inp.dataset.file, rerender); });
   });
   container.querySelectorAll('.ap-drop').forEach(z=>{
-    z.addEventListener('dragover', e=>{ e.preventDefault(); z.classList.add('over'); });
+    z.addEventListener('dragover', e=>{ e.preventDefault(); if(month) z.classList.add('over'); });
     z.addEventListener('dragleave', ()=> z.classList.remove('over'));
     z.addEventListener('drop', e=>{
       e.preventDefault(); z.classList.remove('over');
       const f = e.dataTransfer && e.dataTransfer.files && e.dataTransfer.files[0];
-      if(f) apReadFile(f, z.dataset.drop, rerender);
+      if(f && month) apHandleFile(f, z.dataset.drop, rerender);
     });
   });
-
-  if(res){
-    const lab = container.querySelector('#apLabel');
-    if(lab) lab.addEventListener('input', ()=>{ st.label = lab.value; });
-    const dl = container.querySelector('#apDownload');
-    if(dl) dl.addEventListener('click', ()=> apDownloadXlsx(res, (lab && lab.value) || res.period.label || 'month'));
-    const sv = container.querySelector('#apSave');
-    if(sv) sv.addEventListener('click', ()=>{
-      const key = res.period.key || ('manual_' + Date.now());
-      if(store.results[key] && !confirm('A result for ' + store.results[key].label + ' is already saved. Replace it?')) return;
-      store.results[key] = {
-        label: (lab && lab.value.trim()) || res.period.label || key,
-        savedAt: new Date().toISOString(),
-        period: res.period.text,
-        settings: Object.assign({}, S),
-        lines: res.lines.map(l=> ({key:l.key, label:l.label, kind:l.kind || '', indent:!!l.indent, amount: Math.round(l.amount*100)/100, pct: l.pct}))
-      };
-      markDirty(); rerender();
+  container.querySelectorAll('[data-apremove]').forEach(b=>{
+    b.addEventListener('click', ()=>{
+      if(confirm('Remove this file from ' + apMonthLabel(month) + '? The saved P&L for the month stays until you remove it from Saved months.')) apRemoveFile(b.dataset.apremove, rerender);
     });
-    const cl = container.querySelector('#apClear');
-    if(cl) cl.addEventListener('click', ()=>{
-      amazonActualState = {biz:null, txn:null, bizName:'', txnName:'', bizError:'', txnError:'', label:'', labelFor:''};
-      rerender();
+  });
+  if(res){
+    const dl = container.querySelector('#apDownload');
+    if(dl) dl.addEventListener('click', ()=> apDownloadXlsx(res, apMonthLabel(month)));
+    const wipe = container.querySelector('#apWipeMonth');
+    if(wipe) wipe.addEventListener('click', async ()=>{
+      if(!confirm('Remove both stored files of ' + apMonthLabel(month) + '?')) return;
+      await apRemoveFile('biz', ()=>{}); await apRemoveFile('txn', ()=>{}); rerender();
     });
   }
   container.querySelectorAll('[data-delmonth]').forEach(btn=>{
     btn.addEventListener('click', ()=>{
       const k = btn.dataset.delmonth;
-      if(!confirm('Remove the saved result for ' + store.results[k].label + '?')) return;
+      if(!confirm('Remove the saved P&L for ' + store.results[k].label + '? (Stored files are not touched.)')) return;
       delete store.results[k]; markDirty(); rerender();
     });
   });
+
+  function wireCommon(){
+    container.querySelectorAll('[data-apview]').forEach(b=> b.addEventListener('click', ()=>{ apUI.view = b.dataset.apview; rerender(); }));
+  }
 }
 
 /* ---------------------------------------------------------------
