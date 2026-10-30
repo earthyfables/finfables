@@ -362,6 +362,26 @@
   .tag.CIDB{background:var(--neg-soft); color:var(--neg);}
   .tag.MISC{background:var(--gold-soft); color:var(--gold);}
 
+  /* Actuals Process */
+  .ap-settings{display:flex; gap:22px; flex-wrap:wrap; align-items:center; padding:12px 16px; margin-bottom:16px; background:var(--surface); border:1px solid var(--line); border-radius:var(--radius);}
+  .ap-settings label{font-size:12px; font-weight:700; color:var(--ink-soft); display:flex; align-items:center; gap:7px;}
+  .ap-settings input[type=number]{width:62px; border:1px solid var(--line); border-radius:5px; padding:5px 7px; font-family:inherit; font-size:13px; text-align:right;}
+  .ap-uploads{display:flex; gap:16px; flex-wrap:wrap; margin-bottom:18px;}
+  .ap-drop{flex:1 1 320px; border:2px dashed var(--line); border-radius:var(--radius); background:var(--surface); padding:16px 18px; transition:all 0.15s ease;}
+  .ap-drop.over{border-color:var(--accent); background:var(--accent-soft);}
+  .ap-drop.ok{border-style:solid; border-color:var(--gold); background:var(--gold-soft);}
+  .ap-drop.bad{border-style:solid; border-color:var(--neg); background:var(--neg-soft);}
+  .ap-drop h3{margin:0 0 4px 0; font-size:14px; color:var(--accent-dark);}
+  .ap-drop .hint{font-size:12px; color:var(--ink-soft); font-style:italic; margin-bottom:10px;}
+  .ap-drop .status{font-size:12.5px; margin-top:8px; font-weight:700;}
+  .ap-drop .status.ok{color:var(--gold);} .ap-drop .status.bad{color:var(--neg);}
+  .ap-warn{border:1px solid #E3B8B8; background:var(--neg-soft); color:var(--neg); border-radius:var(--radius); padding:10px 16px; margin-bottom:14px; font-size:13px; line-height:1.6;}
+  .ap-info{border:1px solid var(--line); background:var(--surface); border-radius:var(--radius); padding:10px 16px; margin-bottom:14px; font-size:13px; line-height:1.6;}
+  .ap-actions{display:flex; gap:10px; flex-wrap:wrap; align-items:center; margin:14px 0;}
+  .ap-actions input[type=text]{border:1px solid var(--line); border-radius:6px; padding:7px 10px; font-family:inherit; font-size:13px; width:150px;}
+  .ledger td.ap-rule{text-align:left; white-space:normal; color:var(--ink-soft); font-size:12px; font-style:italic; min-width:300px; font-variant-numeric:normal;}
+  .ledger th.ap-rule{text-align:left;}
+  .ledger td.ok-cell{color:var(--gold); font-weight:700;}
   .footnote{font-size:12px; color:var(--ink-soft); margin-top:12px; line-height:1.6; font-style:italic;}
   .hidden{display:none !important;}
 
@@ -402,6 +422,11 @@
       <h4>Output</h4>
       <button class="navitem" data-tab="outputPLCF"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg><span>P&amp;L &amp; Cash Flow</span></button>
       <button class="navitem" data-tab="outputPartnerProductPL"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/></svg><span>Partner and Product wise</span></button>
+    </div>
+
+    <div class="navgroup">
+      <h4>Actuals Process</h4>
+      <button class="navitem" data-tab="actualsAmazonPL"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg><span>Amazon Actual P&amp;L</span></button>
     </div>
 
     <div class="sidebarsave">
@@ -727,6 +752,7 @@ async function loadData(){
     if(x.gstRate===undefined) x.gstRate = '';
     if(x.creditorDays===undefined) x.creditorDays = '';
   });
+  getAmazonActualsStore(); // Actuals Process: settings + saved monthly results (global, not cycle-scoped)
   if(!DATA.aopCycles) DATA.aopCycles = [];
   DATA.aopCycles.forEach(c=>{ if(c.published===undefined) c.published = true; });
   if(DATA.meta.activeCycleId===undefined) DATA.meta.activeCycleId = '';
@@ -3097,8 +3123,493 @@ const TABS = {
     render: renderInventoryTabScreen
   },
   outputPLCF:{ title:'P&L & Cash Flow', desc:'Full company total, no filters. Structure matches the reviewed model.', render: renderPLCF },
+  actualsAmazonPL:{
+    title:'Amazon Actual P&L', desc:'Upload the Amazon Business Report and the monthly Transaction Report; the P&L is built by the SOP rules. Cost per unit comes from Pareto Input (matched on SKU).',
+    render: renderAmazonActualPL
+  },
   outputPartnerProductPL:{ title:'Partner and Product wise', desc:'Same P&L, filterable by Partner Group, Partner-Model, Product Group, Product Category, and Product Sub-Category. Runs through CM3 only.', render: renderPartnerProductPL },
 };
+
+/* ---------------------------------------------------------------
+   ACTUALS PROCESS — Amazon actual P&L
+   Rules come from the P&L SOP:
+     Exceptions : Type = Transfer is deleted (bank payouts);
+                  Description = Cost of Advertising is deleted from fees and becomes CAC.
+     Gross Sale : Business Report  Ordered Product Sales + Ordered Product Sales - B2B
+     Return     : Transaction Report rows with Type = Refund
+     GST        : GSV / 1.05 x 0.05
+     COGS       : units (Business Report) x cost per unit; return COGS = refund qty x cost per unit
+     Fee lines  : straight from the Transaction Report columns (see rule text on screen)
+   Everything is parsed and calculated in the browser; the uploaded CSVs are never stored.
+   Only the monthly result the user chooses to Save goes into the data file.
+   ----------------------------------------------------------------*/
+const AMAZON_ACTUALS_DEFAULTS = {saleGstPct:5, feeGstPct:18, includeB2BUnitsInCogs:true};
+function getAmazonActualsStore(){
+  if(!DATA.actualsProcess) DATA.actualsProcess = {};
+  if(!DATA.actualsProcess.amazon) DATA.actualsProcess.amazon = {};
+  const st = DATA.actualsProcess.amazon;
+  if(!st.settings) st.settings = {};
+  Object.keys(AMAZON_ACTUALS_DEFAULTS).forEach(k=>{ if(st.settings[k] === undefined) st.settings[k] = AMAZON_ACTUALS_DEFAULTS[k]; });
+  if(!st.results) st.results = {};
+  return st;
+}
+
+// ---- generic helpers -------------------------------------------------------
+function apEsc(s){
+  return String(s==null?'':s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+}
+// Small RFC-4180 CSV reader: quoted fields, escaped quotes, commas/newlines inside quotes, BOM, CRLF.
+function parseCsvText(text){
+  if(text.charCodeAt(0) === 0xFEFF) text = text.slice(1);
+  const rows = []; let row = [], field = '', inQ = false;
+  for(let i=0; i<text.length; i++){
+    const ch = text[i];
+    if(inQ){
+      if(ch === '"'){ if(text[i+1] === '"'){ field += '"'; i++; } else inQ = false; }
+      else field += ch;
+    } else if(ch === '"') inQ = true;
+    else if(ch === ','){ row.push(field); field = ''; }
+    else if(ch === '\n'){ row.push(field); rows.push(row); row = []; field = ''; }
+    else if(ch !== '\r') field += ch;
+  }
+  if(field !== '' || row.length){ row.push(field); rows.push(row); }
+  return rows;
+}
+// "₹1,85,256.00" -> 185256 ; "-" or "" -> 0
+function apNum(s){
+  if(s === undefined || s === null) return 0;
+  const t = String(s).replace(/[^0-9.\-]/g, '');
+  if(t === '' || t === '-' || t === '.') return 0;
+  const n = parseFloat(t);
+  return isNaN(n) ? 0 : n;
+}
+function apFindHeader(rows, test){
+  for(let i=0; i<Math.min(rows.length, 60); i++){
+    const lc = rows[i].map(c=> String(c).trim().toLowerCase());
+    if(test(lc)) return {idx:i, cols:lc};
+  }
+  return null;
+}
+// Amazon writes "31 Jul 2026 6:32:14 pm UTC" (and "Sept" in some places). Returns UTC milliseconds.
+const AP_MONTHS = {jan:0,feb:1,mar:2,apr:3,may:4,jun:5,jul:6,aug:7,sep:8,oct:9,nov:10,dec:11};
+function apParseAmazonDate(s){
+  const m = /(\d{1,2})\s+([A-Za-z]+)\s+(\d{4})\s+(\d{1,2}):(\d{2}):(\d{2})\s*(am|pm)/i.exec(s || '');
+  if(!m) return null;
+  const mon = AP_MONTHS[m[2].slice(0,3).toLowerCase()];
+  if(mon === undefined) return null;
+  let hr = (+m[4]) % 12; if(m[7].toLowerCase() === 'pm') hr += 12;
+  return Date.UTC(+m[3], mon, +m[1], hr, +m[5], +m[6]);
+}
+const AP_IST_OFFSET_MS = 19800000; // UTC+05:30 — month boundaries follow Indian time
+const AP_MON_NAMES = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+function apIstParts(ts){ const d = new Date(ts + AP_IST_OFFSET_MS); return {y:d.getUTCFullYear(), m:d.getUTCMonth(), d:d.getUTCDate()}; }
+function apCleanSku(s){
+  let t = String(s || '').trim().toUpperCase();
+  if(t.indexOf('FBA_') === 0) t = t.slice(4); // Amazon prefixes FBA-fulfilled SKUs
+  return t;
+}
+
+// ---- file parsers ----------------------------------------------------------
+function parseAmazonBusinessReport(text){
+  const rows = parseCsvText(text);
+  const h = apFindHeader(rows, lc=> lc.includes('sku') && lc.includes('units ordered') && lc.includes('ordered product sales'));
+  if(!h) return {error:'This does not look like the Amazon Business Report — it needs SKU, Units Ordered and Ordered Product Sales columns.'};
+  const ix = n=> h.cols.indexOf(n);
+  const iSku = ix('sku'), iTitle = ix('title'), iU = ix('units ordered'), iUB = ix('units ordered - b2b'), iS = ix('ordered product sales'), iSB = ix('ordered product sales - b2b');
+  const out = [];
+  for(let r=h.idx+1; r<rows.length; r++){
+    const row = rows[r];
+    const sku = String(row[iSku] || '').trim();
+    if(!sku) continue;
+    out.push({sku, title: iTitle>=0 ? String(row[iTitle]||'') : '', units: apNum(row[iU]), unitsB2B: iUB>=0 ? apNum(row[iUB]) : 0, sales: apNum(row[iS]), salesB2B: iSB>=0 ? apNum(row[iSB]) : 0});
+  }
+  if(!out.length) return {error:'The Business Report has a header but no SKU rows.'};
+  return {rows: out};
+}
+function parseAmazonTransactions(text){
+  const rows = parseCsvText(text);
+  const h = apFindHeader(rows, lc=> lc[0] === 'date/time' && lc.includes('type') && lc.includes('total'));
+  if(!h) return {error:'This does not look like the Amazon Unified Transaction report — it needs date/time, type and total columns.'};
+  const ix = n=> h.cols.indexOf(n);
+  const need = ['type','description','sku','quantity','shipping credits','gift wrap credits','promotional rebates','selling fees','fba fees','other transaction fees','other','total'];
+  const missing = need.filter(n=> ix(n) < 0);
+  if(missing.length) return {error:'Transaction report is missing column(s): ' + missing.join(', ') + '.'};
+  const c = {dt:ix('date/time'), type:ix('type'), desc:ix('description'), sku:ix('sku'), qty:ix('quantity'), ship:ix('shipping credits'), gift:ix('gift wrap credits'), promo:ix('promotional rebates'), sell:ix('selling fees'), fba:ix('fba fees'), otf:ix('other transaction fees'), other:ix('other'), total:ix('total')};
+  const out = [];
+  let minTs = null, maxTs = null; const monthCount = {};
+  for(let r=h.idx+1; r<rows.length; r++){
+    const row = rows[r];
+    const type = String(row[c.type] || '').trim();
+    if(!type) continue;
+    const ts = apParseAmazonDate(row[c.dt]);
+    if(ts !== null){
+      if(minTs === null || ts < minTs) minTs = ts;
+      if(maxTs === null || ts > maxTs) maxTs = ts;
+      const p = apIstParts(ts); const k = p.y + '-' + String(p.m+1).padStart(2,'0');
+      monthCount[k] = (monthCount[k]||0) + 1;
+    }
+    out.push({type, desc:String(row[c.desc]||'').trim(), sku:String(row[c.sku]||'').trim(), qty:apNum(row[c.qty]),
+      ship:apNum(row[c.ship]), gift:apNum(row[c.gift]), promo:apNum(row[c.promo]), sell:apNum(row[c.sell]), fba:apNum(row[c.fba]),
+      otf:apNum(row[c.otf]), other:apNum(row[c.other]), total:apNum(row[c.total])});
+  }
+  if(!out.length) return {error:'The transaction report has a header but no transaction rows.'};
+  return {rows: out, minTs, maxTs, monthCount};
+}
+
+// ---- cost per unit: the app's own masters (SKU Code on the Sub Category + ACOGS on Pareto Input) ----
+function getAmazonSkuCostMap(){
+  const m = new Map();
+  (DATA.productSubCategories || []).forEach(sc=>{
+    const k = apCleanSku(sc.skuCode);
+    if(!k || m.has(k)) return;
+    const raw = ((DATA.paretoInput || {})[sc.id] || {}).acogs;
+    const cost = (raw === undefined || raw === null || raw === '') ? null : +raw;
+    m.set(k, {cost: (cost === null || isNaN(cost)) ? null : cost, name: sc.name, scId: sc.id});
+  });
+  return m;
+}
+
+// ---- the SOP calculation (pure: no DOM, no DATA reads except what's passed in) ----
+function computeAmazonActualPL(biz, txn, settings, costMap){
+  const saleG = +settings.saleGstPct || 0, feeG = +settings.feeGstPct || 0, f = 1 + feeG/100;
+  const warnings = [];
+
+  // Business report -> Gross Sale and Gross COGS
+  let sales = 0, salesB2B = 0, units = 0, unitsB2B = 0, grossCogs = 0;
+  const skuMap = new Map(); // clean sku -> aggregated row
+  biz.rows.forEach(r=>{
+    sales += r.sales; salesB2B += r.salesB2B; units += r.units; unitsB2B += r.unitsB2B;
+    const k = apCleanSku(r.sku);
+    const a = skuMap.get(k) || {sku:k, name:r.title, units:0, unitsB2B:0};
+    a.units += r.units; a.unitsB2B += r.unitsB2B; skuMap.set(k, a);
+  });
+  const skuRows = [];
+  const missingCost = new Map(); // sku -> units without a cost
+  skuMap.forEach(a=>{
+    const info = costMap.get(a.sku);
+    const cost = info ? info.cost : null;
+    const qty = a.units + (settings.includeB2BUnitsInCogs ? a.unitsB2B : 0);
+    const cogs = cost === null ? 0 : qty * cost;
+    grossCogs += cogs;
+    if(cost === null) missingCost.set(a.sku, (missingCost.get(a.sku)||0) + qty);
+    skuRows.push({sku:a.sku, name: info ? info.name : a.name, units:a.units, unitsB2B:a.unitsB2B, qty, cost, cogs, matched: !!info});
+  });
+  skuRows.sort((x,y)=> y.cogs - x.cogs);
+
+  // Transaction report -> buckets
+  const T = {transfer:{n:0,total:0}, ads:{n:0,total:0,exGst:0,other:0}, refund:{n:0,total:0}, base:{n:0,total:0}};
+  const B = {sell:0, fba:0, otf:0, credits:0, other:0};
+  const storage = {n:0, amt:0}, pickup = {n:0, amt:0, other:0}, reimb = {n:0, amt:0, other:0};
+  let fileTotal = 0, returnCogs = 0, returnQty = 0;
+  const returnMap = new Map();
+  txn.rows.forEach(r=>{
+    fileTotal += r.total;
+    const type = r.type.toLowerCase(), desc = r.desc.toLowerCase();
+    if(type === 'transfer'){ T.transfer.n++; T.transfer.total += r.total; return; }                       // SOP exception: bank transfers
+    if(desc === 'cost of advertising'){ T.ads.n++; T.ads.total += r.total; T.ads.exGst += r.otf; T.ads.other += r.other; return; } // SOP exception: advertising -> CAC
+    if(type === 'refund'){
+      T.refund.n++; T.refund.total += r.total;
+      const q = Math.abs(r.qty); returnQty += q;
+      const k = apCleanSku(r.sku); const info = costMap.get(k);
+      const cost = info ? info.cost : null;
+      const a = returnMap.get(k) || {sku:k, name: info ? info.name : '', qty:0, cost, cogs:0};
+      a.qty += q; a.cogs += (cost === null ? 0 : q*cost); returnMap.set(k, a);
+      if(cost === null) missingCost.set(k || '(refund row with no SKU)', (missingCost.get(k || '(refund row with no SKU)')||0) + q);
+      returnCogs += (cost === null ? 0 : q*cost);
+      return;
+    }
+    T.base.n++; T.base.total += r.total;
+    B.sell += r.sell; B.fba += r.fba; B.otf += r.otf; B.credits += r.ship + r.gift + r.promo; B.other += r.other;
+    if(/inventory storage fee/i.test(r.desc)){ storage.n++; storage.amt += r.fba; }
+    if(desc === 'fba inbound pickup service'){ pickup.n++; pickup.other += r.other; }
+    if(desc.indexOf('fba inventory reimbursement') === 0){ reimb.n++; reimb.other += r.other; }
+  });
+
+  const grossSale = sales + salesB2B;
+  const ret = T.refund.total;
+  const gsv = grossSale + ret;
+  const gst = gsv / (1 + saleG/100) * (saleG/100);
+  const nsv = gsv - gst;
+  const netCogs = -grossCogs + returnCogs;
+  const cm1 = nsv + netCogs;
+  const selling = B.sell / f;
+  const fbaFees = (B.fba - storage.amt) / f;
+  const txnFees = B.otf / f;
+  const credits = B.credits / f;
+  const otherCharges = B.other - pickup.other - reimb.other;
+  const pickupAmt = pickup.other / f;
+  const reimbAmt = reimb.other;
+  const storageAmt = storage.amt / f;
+  const mp = selling + fbaFees + txnFees + credits + otherCharges + pickupAmt + reimbAmt + storageAmt;
+  const cm2 = cm1 + mp;
+  const cac = T.ads.exGst;
+  const cm3 = cm2 + cac;
+
+  const gstTxt = (x)=> (+x).toString().replace(/\.0+$/,'');
+  const lines = [
+    {key:'grossSale', label:'Gross Sale', amount:grossSale, rule:'Business Report: Ordered Product Sales + Ordered Product Sales – B2B'},
+    {key:'returns', label:'Less: Return', amount:ret, rule:'Transaction Report, Type = Refund (total of those rows)', indent:true},
+    {key:'gsv', label:'GSV', amount:gsv, kind:'subtotal', rule:'Gross Sale less Returns'},
+    {key:'gst', label:'GST', amount:-gst, rule:'GSV ÷ ' + (1+saleG/100).toFixed(2) + ' × ' + (saleG/100).toFixed(2), indent:true},
+    {key:'nsv', label:'NSV', amount:nsv, kind:'subtotal', rule:'GSV – GST'},
+    {key:'grossCogs', label:'Gross COGS', amount:-grossCogs, rule:'Units ordered in the Business Report' + (settings.includeB2BUnitsInCogs ? ' (B2C + B2B)' : ' (B2C only)') + ' × cost per unit', indent:true},
+    {key:'returnCogs', label:'Customer return COGS', amount:returnCogs, rule:'Refund quantity × cost per unit (added back)', indent:true},
+    {key:'netCogs', label:'Net COGS', amount:netCogs, rule:'Gross COGS less Customer return COGS'},
+    {key:'cm1', label:'CM1 (Contribution Margin 1)', amount:cm1, kind:'subtotal', rule:'NSV – Net COGS'},
+    {key:'selling', label:'Selling fees', amount:selling, rule:'Transaction Report “selling fees” ÷ ' + (f).toFixed(2), indent:true},
+    {key:'fba', label:'FBA fees', amount:fbaFees, rule:'“fba fees” (weight handling, pick & pack) excluding the storage fee, ÷ ' + f.toFixed(2), indent:true},
+    {key:'txnFees', label:'Transaction fees', amount:txnFees, rule:'“other transaction fees” (closing & technology) ÷ ' + f.toFixed(2), indent:true},
+    {key:'credits', label:'Credit and promotional rebate', amount:credits, rule:'Shipping credits + gift wrap credits + promotional rebates ÷ ' + f.toFixed(2), indent:true},
+    {key:'otherCharges', label:'Other charges', amount:otherCharges, rule:'Balance of the “other” column after pickup and reimbursement', indent:true},
+    {key:'pickup', label:'FBA Inbound Pickup Service', amount:pickupAmt, rule:'Description = FBA Inbound Pickup Service, ÷ ' + f.toFixed(2), indent:true},
+    {key:'reimb', label:'FBA Inventory Reimbursement', amount:reimbAmt, rule:'Description starts “FBA Inventory Reimbursement” (no GST)', indent:true},
+    {key:'storage', label:'FBA storage fees', amount:storageAmt, rule:'Description = Fulfilment by Amazon (FBA) Inventory Storage Fee, ÷ ' + f.toFixed(2), indent:true},
+    {key:'cm2', label:'CM2 (Contribution Margin 2)', amount:cm2, kind:'subtotal', rule:'CM1 less marketplace costs'},
+    {key:'cac', label:'CAC', amount:cac, rule:'Cost of Advertising rows (ex-GST) — Amazon marketing spend', indent:true},
+    {key:'cm3', label:'CM3 (Contribution Margin 3)', amount:cm3, kind:'grand', rule:'CM2 – CAC'}
+  ];
+  lines.forEach(l=>{ l.pct = grossSale ? l.amount / grossSale : null; });
+  const map = {}; lines.forEach(l=>{ map[l.key] = l.amount; });
+
+  // ---- checks & warnings ----
+  const partsTotal = T.transfer.total + T.ads.total + T.refund.total + T.base.total;
+  const reconDiff = fileTotal - partsTotal;
+  if(T.ads.n && T.ads.exGst && Math.abs(T.ads.other / T.ads.exGst - feeG/100) > 0.01){
+    warnings.push('Advertising GST is not ' + gstTxt(feeG) + '% of the advertising amount (' + (T.ads.other / T.ads.exGst * 100).toFixed(1) + '%) — CAC is taken ex-GST as reported; please check.');
+  }
+  if(missingCost.size){
+    let u = 0; missingCost.forEach(v=>{ u += v; });
+    warnings.push(missingCost.size + ' SKU(s)/row(s) have no cost per unit (' + u + ' units in total) — their COGS is counted as 0, so CM1 onwards is slightly overstated. See the list below.');
+  }
+  const months = Object.keys(txn.monthCount || {});
+  if(months.length > 1) warnings.push('The transaction file spans more than one month (' + months.join(', ') + ' in Indian time). A monthly P&L normally uses one month.');
+
+  let periodLabel = '', periodKey = '', periodText = '';
+  if(months.length){
+    months.sort((a,b)=> txn.monthCount[b] - txn.monthCount[a]);
+    periodKey = months[0]; const [yy, mm] = periodKey.split('-');
+    periodLabel = AP_MON_NAMES[+mm - 1] + ' ' + yy;
+    const a = apIstParts(txn.minTs), z = apIstParts(txn.maxTs);
+    periodText = a.d + ' ' + AP_MON_NAMES[a.m] + ' ' + a.y + ' – ' + z.d + ' ' + AP_MON_NAMES[z.m] + ' ' + z.y + ' (Indian time)';
+  }
+  const missingList = []; missingCost.forEach((u, k)=> missingList.push({sku:k, units:u}));
+  return {
+    lines, map, warnings, skuRows, returnRows: Array.from(returnMap.values()).sort((x,y)=> y.cogs - x.cogs), missingList,
+    period: {key:periodKey, label:periodLabel, text:periodText},
+    recon: {fileRows: txn.rows.length, fileTotal, transfer:T.transfer, ads:T.ads, refund:T.refund, base:T.base, diff:reconDiff,
+      storage:{n:storage.n}, pickup:{n:pickup.n}, reimb:{n:reimb.n}, returnQty,
+      bizRows: biz.rows.length, units, unitsB2B, sales, salesB2B, skus: skuMap.size, skusMatched: skuRows.filter(r=>r.matched && r.cost !== null).length}
+  };
+}
+
+// ---- screen ----------------------------------------------------------------
+let amazonActualState = {biz:null, txn:null, bizName:'', txnName:'', bizError:'', txnError:'', label:'', labelFor:''};
+
+function apReadFile(file, kind, rerender){
+  const reader = new FileReader();
+  reader.onload = ()=>{
+    const text = String(reader.result || '');
+    const res = kind === 'biz' ? parseAmazonBusinessReport(text) : parseAmazonTransactions(text);
+    if(kind === 'biz'){ amazonActualState.bizName = file.name; amazonActualState.biz = res.error ? null : res; amazonActualState.bizError = res.error || ''; }
+    else { amazonActualState.txnName = file.name; amazonActualState.txn = res.error ? null : res; amazonActualState.txnError = res.error || ''; }
+    rerender();
+  };
+  reader.onerror = ()=>{
+    const msg = 'Could not read this file.';
+    if(kind === 'biz') amazonActualState.bizError = msg; else amazonActualState.txnError = msg;
+    rerender();
+  };
+  reader.readAsText(file, 'utf-8');
+}
+
+function apPct(v){ return v === null || v === undefined ? '' : (v*100).toFixed(2) + '%'; }
+function apSlug(s){ return String(s||'').replace(/[^a-z0-9]+/gi,'_').replace(/^_+|_+$/g,''); }
+
+function apDownloadXlsx(res, label){
+  if(typeof XLSX === 'undefined'){ alert('The Excel library has not loaded — check the internet connection and try again.'); return; }
+  const r2 = n=> Math.round((+n||0)*100)/100;
+  const wb = XLSX.utils.book_new();
+  const pl = [['Amazon Actual P&L — ' + label], [], ['Particulars','Amount (₹)','% to Gross Sale','Rule applied']];
+  res.lines.forEach(l=> pl.push([l.label, r2(l.amount), l.pct === null ? '' : Math.round(l.pct*10000)/10000, l.rule]));
+  XLSX.utils.book_append_sheet(wb, XLSX.utils.aoa_to_sheet(pl), 'P&L');
+  const rc = res.recon;
+  const rec = [['Reconciliation'], [],
+    ['Transaction report','Rows','Total (₹)'],
+    ['Transfers — deleted (bank payouts)', rc.transfer.n, r2(rc.transfer.total)],
+    ['Cost of Advertising — deleted from fees, shown as CAC', rc.ads.n, r2(rc.ads.total)],
+    ['Refunds — shown as Returns', rc.refund.n, r2(rc.refund.total)],
+    ['All other rows — fee lines', rc.base.n, r2(rc.base.total)],
+    ['File total', rc.fileRows, r2(rc.fileTotal)],
+    ['Difference (must be 0)', '', r2(rc.diff)], [],
+    ['Business report'], ['SKU rows', rc.bizRows], ['Units — B2C', rc.units], ['Units — B2B', rc.unitsB2B],
+    ['Sales — B2C (₹)', r2(rc.sales)], ['Sales — B2B (₹)', r2(rc.salesB2B)]];
+  XLSX.utils.book_append_sheet(wb, XLSX.utils.aoa_to_sheet(rec), 'Reconciliation');
+  const sk = [['SKU','Item','Units B2C','Units B2B','Units used for COGS','Cost per unit','COGS']];
+  res.skuRows.forEach(x=> sk.push([x.sku, x.name, x.units, x.unitsB2B, x.qty, x.cost === null ? 'NOT FOUND' : x.cost, r2(x.cogs)]));
+  XLSX.utils.book_append_sheet(wb, XLSX.utils.aoa_to_sheet(sk), 'Gross COGS by SKU');
+  const rt = [['SKU','Item','Refund qty','Cost per unit','Return COGS']];
+  res.returnRows.forEach(x=> rt.push([x.sku, x.name, x.qty, x.cost === null ? 'NOT FOUND' : x.cost, r2(x.cogs)]));
+  XLSX.utils.book_append_sheet(wb, XLSX.utils.aoa_to_sheet(rt), 'Return COGS by SKU');
+  XLSX.writeFile(wb, 'Amazon_Actual_PL_' + apSlug(label) + '.xlsx');
+}
+
+function renderAmazonActualPL(container){
+  const store = getAmazonActualsStore();
+  const st = amazonActualState;
+  const S = store.settings;
+  const rerender = ()=> renderAmazonActualPL(container);
+
+  let html = '';
+  // --- basis settings ---
+  html += `<div class="ap-settings">
+    <label>Sale GST % <input type="number" step="any" id="apSaleGst" value="${S.saleGstPct}"></label>
+    <label>Fee GST % <input type="number" step="any" id="apFeeGst" value="${S.feeGstPct}"></label>
+    <label><input type="checkbox" id="apB2bUnits" ${S.includeB2BUnitsInCogs ? 'checked' : ''}> Include B2B units in Gross COGS</label>
+    <span class="footnote" style="margin:0;">Fees in the Transaction Report include GST, so they are divided by (1 + Fee GST %) to get the P&amp;L figure.</span>
+  </div>`;
+
+  // --- uploads ---
+  const dz = (kind, step, title, hint, name, err, okText)=>{
+    const cls = err ? 'bad' : (okText ? 'ok' : '');
+    return `<div class="ap-drop ${cls}" data-drop="${kind}">
+      <h3>${step}. ${title}</h3><div class="hint">${hint}</div>
+      <input type="file" accept=".csv,text/csv" data-file="${kind}">
+      ${name ? `<div class="status ${err ? 'bad' : 'ok'}">${err ? '✗ ' + apEsc(err) : '✓ ' + apEsc(name) + ' — ' + okText}</div>` : ''}
+    </div>`;
+  };
+  html += `<div class="ap-uploads">` +
+    dz('biz', 1, 'Business Report (CSV)', 'Sales and traffic by SKU — needs SKU, Units Ordered, Ordered Product Sales (and the B2B columns). Drop the file here or choose it.', st.bizName, st.bizError, st.biz ? st.biz.rows.length + ' SKU rows' : '') +
+    dz('txn', 2, 'Transaction Report (CSV)', 'Custom Unified Transaction report for the month. Drop the file here or choose it.', st.txnName, st.txnError, st.txn ? st.txn.rows.length.toLocaleString('en-IN') + ' transactions' : '') +
+    `</div>`;
+
+  let res = null;
+  if(st.biz && st.txn){
+    res = computeAmazonActualPL(st.biz, st.txn, S, getAmazonSkuCostMap());
+    const label = (st.labelFor === res.period.key && st.label) ? st.label : res.period.label;
+    st.label = label; st.labelFor = res.period.key;
+
+    html += `<div class="ap-info"><b>Period in the Transaction Report:</b> ${apEsc(res.period.text || 'dates not readable')}.
+      The Business Report carries no dates — make sure it is for the same month.</div>`;
+    res.warnings.forEach(w=> html += `<div class="ap-warn">⚠ ${apEsc(w)}</div>`);
+
+    html += `<div class="panel"><table class="ledger"><thead><tr><th>Particulars</th><th>Amount (₹)</th><th>% to sale</th><th class="ap-rule">Rule applied (from the SOP)</th></tr></thead><tbody>`;
+    res.lines.forEach(l=>{
+      const cls = [l.kind || '', (!l.kind && l.indent) ? 'lineitem' : ''].filter(Boolean).join(' ');
+      html += `<tr class="${cls}"><td>${apEsc(l.label)}</td><td>${fmt(l.amount)}</td><td class="pct">${apPct(l.pct)}</td><td class="ap-rule">${apEsc(l.rule)}</td></tr>`;
+    });
+    html += `</tbody></table></div>`;
+
+    const already = !!store.results[res.period.key];
+    html += `<div class="ap-actions">
+      <button class="btn" id="apDownload">⬇ Download Excel</button>
+      <span style="font-size:12px; font-weight:700; color:var(--ink-soft);">Month label</span>
+      <input type="text" id="apLabel" value="${apEsc(label)}">
+      <button class="btn primary" id="apSave">💾 ${already ? 'Replace saved month' : 'Save this month'}</button>
+      <button class="btn danger" id="apClear">Clear uploads</button>
+    </div>`;
+
+    // --- reconciliation ---
+    const rc = res.recon;
+    const okDiff = Math.abs(rc.diff) < 0.01;
+    html += `<div class="cyclelabel" style="color:var(--ink-soft); margin:18px 0 8px 0; font-size:11px; text-transform:uppercase; letter-spacing:0.05em; font-weight:700;">Reconciliation — every row of the Transaction Report is accounted for</div>
+    <div class="panel"><table class="ledger"><thead><tr><th>Transaction Report</th><th>Rows</th><th>Total (₹)</th><th class="ap-rule">Treatment</th></tr></thead><tbody>
+      <tr><td>Transfers</td><td>${rc.transfer.n}</td><td>${fmt(rc.transfer.total)}</td><td class="ap-rule">Deleted — bank payout, not a P&amp;L item</td></tr>
+      <tr><td>Cost of Advertising</td><td>${rc.ads.n}</td><td>${fmt(rc.ads.total)}</td><td class="ap-rule">Deleted from fees — shown as CAC (₹ ${fmt(rc.ads.exGst)} ex-GST)</td></tr>
+      <tr><td>Refunds</td><td>${rc.refund.n}</td><td>${fmt(rc.refund.total)}</td><td class="ap-rule">Shown as Returns (${rc.returnQty} units)</td></tr>
+      <tr><td>All other rows</td><td>${rc.base.n}</td><td>${fmt(rc.base.total)}</td><td class="ap-rule">Fee lines (pickup ${rc.pickup.n} rows, reimbursement ${rc.reimb.n}, storage ${rc.storage.n})</td></tr>
+      <tr class="subtotal"><td>File total</td><td>${rc.fileRows}</td><td>${fmt(rc.fileTotal)}</td><td class="ap-rule ${okDiff ? 'ok-cell' : ''}" style="${okDiff ? '' : 'color:var(--neg);'}">${okDiff ? '✓ ties to the file — nothing dropped' : '✗ difference ₹ ' + fmt(rc.diff)}</td></tr>
+    </tbody></table></div>
+    <div class="footnote">Business Report: ${rc.bizRows} SKU rows · ${rc.units.toLocaleString('en-IN')} B2C units + ${rc.unitsB2B.toLocaleString('en-IN')} B2B units · sales ₹ ${fmt(rc.sales)} B2C + ₹ ${fmt(rc.salesB2B)} B2B · ${rc.skusMatched} of ${rc.skus} SKUs have a cost per unit in the app.</div>`;
+
+    // --- SKUs without cost ---
+    if(res.missingList.length){
+      html += `<div class="cyclelabel" style="color:var(--neg); margin:18px 0 8px 0; font-size:11px; text-transform:uppercase; letter-spacing:0.05em; font-weight:700;">SKUs with no cost per unit in the app</div>
+      <div class="panel"><table class="ledger"><thead><tr><th>SKU</th><th>Units</th></tr></thead><tbody>` +
+      res.missingList.map(m=> `<tr><td>${apEsc(m.sku)}</td><td>${m.units}</td></tr>`).join('') + `</tbody></table></div>
+      <div class="footnote">For a SKU: add its SKU Code in Pareto Master → Product Sub Category and its cost in Pareto Input (ACOGS), then upload again. A refund row with no SKU means Amazon did not record which item came back, so it cannot be matched to a cost.</div>`;
+    }
+  } else {
+    html += `<div class="ap-info">Choose both files to build the P&amp;L. The files are read in your browser only and are not stored — only a month you choose to <b>Save</b> is kept.</div>`;
+  }
+
+  // --- saved months ---
+  const keys = Object.keys(store.results).sort();
+  if(keys.length){
+    const lineDefs = (res ? res.lines : store.results[keys[0]].lines.map(l=>({key:l.key, label:l.label, kind:l.kind, indent:l.indent})));
+    html += `<div class="cyclelabel" style="color:var(--ink-soft); margin:22px 0 8px 0; font-size:11px; text-transform:uppercase; letter-spacing:0.05em; font-weight:700;">Saved months</div>
+    <div class="panel" style="overflow-x:auto;"><table class="ledger"><thead><tr><th>Particulars</th>` +
+      keys.map(k=> `<th>${apEsc(store.results[k].label)}</th>`).join('') + `</tr></thead><tbody>`;
+    lineDefs.forEach(def=>{
+      const cls = [def.kind || '', (!def.kind && def.indent) ? 'lineitem' : ''].filter(Boolean).join(' ');
+      html += `<tr class="${cls}"><td>${apEsc(def.label)}</td>` + keys.map(k=>{
+        const l = (store.results[k].lines || []).find(x=> x.key === def.key);
+        return `<td>${l ? fmt(l.amount) : '—'}</td>`;
+      }).join('') + `</tr>`;
+    });
+    html += `<tr><td class="pct">CM3 % to Gross Sale</td>` + keys.map(k=>{
+      const l = (store.results[k].lines || []).find(x=> x.key === 'cm3');
+      return `<td class="pct">${l ? apPct(l.pct) : '—'}</td>`;
+    }).join('') + `</tr>`;
+    html += `<tr><td></td>` + keys.map(k=> `<td><button class="btn-sm danger" data-delmonth="${apEsc(k)}">Remove</button></td>`).join('') + `</tr>`;
+    html += `</tbody></table></div>`;
+  }
+
+  container.innerHTML = html;
+
+  // --- wiring ---
+  const num = (id, key)=>{
+    const el = container.querySelector(id);
+    if(el) el.addEventListener('change', ()=>{ const v = parseFloat(el.value); S[key] = isNaN(v) ? AMAZON_ACTUALS_DEFAULTS[key] : v; markDirty(); rerender(); });
+  };
+  num('#apSaleGst', 'saleGstPct'); num('#apFeeGst', 'feeGstPct');
+  const b2b = container.querySelector('#apB2bUnits');
+  if(b2b) b2b.addEventListener('change', ()=>{ S.includeB2BUnitsInCogs = b2b.checked; markDirty(); rerender(); });
+
+  container.querySelectorAll('input[data-file]').forEach(inp=>{
+    inp.addEventListener('change', ()=>{ if(inp.files && inp.files[0]) apReadFile(inp.files[0], inp.dataset.file, rerender); });
+  });
+  container.querySelectorAll('.ap-drop').forEach(z=>{
+    z.addEventListener('dragover', e=>{ e.preventDefault(); z.classList.add('over'); });
+    z.addEventListener('dragleave', ()=> z.classList.remove('over'));
+    z.addEventListener('drop', e=>{
+      e.preventDefault(); z.classList.remove('over');
+      const f = e.dataTransfer && e.dataTransfer.files && e.dataTransfer.files[0];
+      if(f) apReadFile(f, z.dataset.drop, rerender);
+    });
+  });
+
+  if(res){
+    const lab = container.querySelector('#apLabel');
+    if(lab) lab.addEventListener('input', ()=>{ st.label = lab.value; });
+    const dl = container.querySelector('#apDownload');
+    if(dl) dl.addEventListener('click', ()=> apDownloadXlsx(res, (lab && lab.value) || res.period.label || 'month'));
+    const sv = container.querySelector('#apSave');
+    if(sv) sv.addEventListener('click', ()=>{
+      const key = res.period.key || ('manual_' + Date.now());
+      if(store.results[key] && !confirm('A result for ' + store.results[key].label + ' is already saved. Replace it?')) return;
+      store.results[key] = {
+        label: (lab && lab.value.trim()) || res.period.label || key,
+        savedAt: new Date().toISOString(),
+        period: res.period.text,
+        settings: Object.assign({}, S),
+        lines: res.lines.map(l=> ({key:l.key, label:l.label, kind:l.kind || '', indent:!!l.indent, amount: Math.round(l.amount*100)/100, pct: l.pct}))
+      };
+      markDirty(); rerender();
+    });
+    const cl = container.querySelector('#apClear');
+    if(cl) cl.addEventListener('click', ()=>{
+      amazonActualState = {biz:null, txn:null, bizName:'', txnName:'', bizError:'', txnError:'', label:'', labelFor:''};
+      rerender();
+    });
+  }
+  container.querySelectorAll('[data-delmonth]').forEach(btn=>{
+    btn.addEventListener('click', ()=>{
+      const k = btn.dataset.delmonth;
+      if(!confirm('Remove the saved result for ' + store.results[k].label + '?')) return;
+      delete store.results[k]; markDirty(); rerender();
+    });
+  });
+}
 
 /* ---------------------------------------------------------------
    CALCULATION ENGINE
